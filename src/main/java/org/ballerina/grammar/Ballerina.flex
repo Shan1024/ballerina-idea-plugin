@@ -25,16 +25,10 @@ import static org.ballerina.psi.BallerinaTypes.*;
 LETTER = [:letter:] | "_"
 DIGIT =  [:digit:]
 
-IDENT = {LETTER} ({LETTER} | {DIGIT} )*
+IDENT = {LETTER} ({LETTER} | {DIGIT})*
 
-
-EOL=\R
 WHITE_SPACE=\s+
 
-LETTER=[a-zA-Z_]
-LETTERORDIGIT=[a-zA-Z0-9_]
-WS=[ \t]+
-NEW_LINE=[\r\n\u000C]+
 LINE_COMMENT = "//" [^\r\n]*
 
 %%
@@ -101,8 +95,9 @@ LINE_COMMENT = "//" [^\r\n]*
   "bind"                { return BIND; }
   "in"                  { return IN; }
   "lock"                { return LOCK; }
+  "version"             { return VERSION; }
   ";"                   { return SEMICOLON; }
-  "="                   { return COLON; }
+  ":"                   { return COLON; }
   "."                   { return DOT; }
   ","                   { return COMMA; }
   "{"                   { return LEFT_BRACE; }
@@ -133,15 +128,12 @@ LINE_COMMENT = "//" [^\r\n]*
   "@"                   { return AT; }
   "`"                   { return BACKTICK; }
   ".."                  { return RANGE; }
-  "VERSION"             { return VERSION; }
   "structBody"          { return STRUCTBODY; }
   "xmlNamespaceName"    { return XMLNAMESPACENAME; }
   "xmlLocalName"        { return XMLLOCALNAME; }
   "index"               { return INDEX; }
 
   {IDENT}               { return IDENTIFIER; }
-  {WS}                  { return WS; }
-  {NEW_LINE}            { return NEW_LINE; }
   {LINE_COMMENT}        { return LINE_COMMENT; }
 
 }

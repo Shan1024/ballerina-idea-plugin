@@ -23,7 +23,7 @@
     NEW_LINE = 'regexp:[\r\n\u000C]+'
     LINE_COMMENT = 'regexp://~[\r\n]*'
 
-
+    // Todo -  remove after uncommenting all parser rules
     PACKAGE     = 'package'
     IMPORT      = 'import'
     AS          = 'as'
