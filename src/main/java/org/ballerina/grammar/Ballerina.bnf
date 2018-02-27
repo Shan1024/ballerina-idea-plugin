@@ -1,0 +1,692 @@
+{
+
+  parserClass="org.ballerina.parser.BallerinaParser"
+  classHeader='CopyrightHeader.txt'
+
+  extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+
+  psiClassPrefix="Ballerina"
+  psiImplClassSuffix="Impl"
+  psiPackage="org.ballerina.psi"
+  psiImplPackage="org.ballerina.psi.impl"
+
+  elementTypeHolderClass="org.ballerina.psi.BallerinaTypes"
+  elementTypeClass="org.ballerina.psi.BallerinaElementType"
+  tokenTypeClass="org.ballerina.psi.BallerinaTokenType"
+
+
+  tokens=[
+
+//    Letter = 'regexp:[a-zA-Z_]'
+//    LetterOrDigit = 'regexp:[a-zA-Z0-9_]'
+    WS = 'regexp:[ \t]+'
+    NEW_LINE = 'regexp:[\r\n\u000C]+'
+    LINE_COMMENT = 'regexp://~[\r\n]*'
+
+
+    PACKAGE     = 'package'
+    IMPORT      = 'import'
+    AS          = 'as'
+    PUBLIC      = 'public'
+    PRIVATE      = 'private'
+    NATIVE      = 'native'
+    SERVICE     = 'service'
+    RESOURCE    = 'resource'
+    FUNCTION    = 'function'
+    CONNECTOR   = 'connector'
+    ACTION      = 'action'
+    STRUCT      = 'struct'
+    ANNOTATION  = 'annotation'
+    ENUM        = 'enum'
+//    PARAMETER   = 'parameter'
+    CONST       = 'const'
+    TRANSFORMER = 'transformer'
+    WORKER      = 'worker'
+    ENDPOINT    = 'endpoint'
+    XMLNS       = 'xmlns'
+    RETURNS     = 'returns'
+//    VERSION     = 'version'
+
+    TYPE_INT        = 'int'
+    TYPE_FLOAT      = 'float'
+    TYPE_BOOL       = 'boolean'
+    TYPE_STRING     = 'string'
+    TYPE_BLOB       = 'blob'
+    TYPE_MAP        = 'map'
+    TYPE_JSON       = 'json'
+    TYPE_XML        = 'xml'
+    TYPE_TABLE      = 'table'
+    TYPE_ANY        = 'any'
+    TYPE_TYPE       = 'type'
+
+    VAR         = 'var'
+    CREATE      = 'create'
+    ATTACH      = 'attach'
+    IF          = 'if'
+    ELSE        = 'else'
+    FOREACH     = 'foreach'
+    WHILE       = 'while'
+    NEXT        = 'next'
+    BREAK       = 'break'
+    FORK        = 'fork'
+    JOIN        = 'join'
+    SOME        = 'some'
+    ALL         = 'all'
+    TIMEOUT     = 'timeout'
+    TRY         = 'try'
+    CATCH       = 'catch'
+    FINALLY     = 'finally'
+    THROW       = 'throw'
+    RETURN      = 'return'
+    TRANSACTION = 'transaction'
+    ABORT       = 'abort'
+    FAILED      = 'failed'
+    RETRIES     = 'retries'
+    LENGTHOF    = 'lengthof'
+    TYPEOF      = 'typeof'
+    WITH        = 'with'
+    BIND        = 'bind'
+    IN          = 'in'
+    LOCK        = 'lock'
+
+    // Separators
+
+    SEMICOLON           = ';'
+    COLON               = ':'
+    DOT                 = '.'
+    COMMA               = ','
+    LEFT_BRACE          = '{'
+    RIGHT_BRACE         = '}'
+    LEFT_PARENTHESIS    = '('
+    RIGHT_PARENTHESIS   = ')'
+    LEFT_BRACKET        = '['
+    RIGHT_BRACKET       = ']'
+    QUESTION_MARK       = '?'
+
+    // Arithmetic operators
+
+    ASSIGN  = '='
+    ADD     = '+'
+    SUB     = '-'
+    MUL     = '*'
+    DIV     = '/'
+    POW     = '^'
+    MOD     = '%'
+
+    // Relational operators
+
+    NOT         = '!'
+    EQUAL       = '=='
+    NOT_EQUAL   = '!='
+    GT          = '>'
+    LT          = '<'
+    GT_EQUAL    = '>='
+    LT_EQUAL    = '<='
+    AND         = '&&'
+    OR          = '||'
+
+    // Additional symbols
+
+    RARROW      = '->'
+    LARROW      = '<-'
+    AT          = '@'
+    BACKTICK    = '`'
+    RANGE       = '..'
+
+
+  
+  ]
+
+
+}
+
+CompilationUnit ::= PackageDeclaration? (ImportDeclaration /*| namespaceDeclaration*/)* (/*annotationAttachment**/ Definition)*
+
+PackageDeclaration ::= package PackageName SEMICOLON {pin(".*")=1}
+
+PackageName ::= identifier (DOT identifier)* Version? {pin(".*")=1}
+
+private Version ::= (VERSION identifier){pin(".*")=1};
+
+ImportDeclaration ::= IMPORT PackageName (AS identifier)? SEMICOLON {pin(".*")=1}
+
+Definition ::= ServiceDefinition | FunctionDefinition /*| connectorDefinition | structDefinition | enumDefinition |
+ constantDefinition | annotationDefinition | globalVariableDefinition | transformerDefinition*/
+ {recoverWhile=TopLevelDefinitionRecover}
+
+private TopLevelDefinitionRecover ::= !(FUNCTION | SERVICE)
+
+ServiceDefinition ::= SERVICE (LT identifier GT) identifier ServiceBody {pin=1}
+ServiceBody ::=   LEFT_BRACE /*endpointDeclaration**/ VariableDefinitionStatement* ResourceDefinition* RIGHT_BRACE
+
+ResourceDefinition ::= /*annotationAttachment**/ RESOURCE identifier LEFT_PARENTHESIS ParameterList RIGHT_PARENTHESIS CallableUnitBody {pin=1}
+
+
+CallableUnitBody ::= LEFT_BRACE /*endpointDeclaration**/ Statement* RIGHT_BRACE
+    /*| LEFT_BRACE endpointDeclaration* workerDeclaration+ RIGHT_BRACE*/
+
+FunctionDefinition ::= NativeFunctionDefinition | NonNativeFunctionDefinition
+NativeFunctionDefinition ::= (PUBLIC)? NATIVE FUNCTION (LT Parameter GT)? CallableUnitSignature SEMICOLON {pin=3}
+NonNativeFunctionDefinition ::= (PUBLIC)? FUNCTION (LT Parameter GT)? CallableUnitSignature CallableUnitBody {pin=2}
+
+
+LambdaFunction ::= FUNCTION LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ReturnParameters? CallableUnitBody
+
+CallableUnitSignature ::= identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ReturnParameters? {pin=1}
+
+//connectorDefinition
+//    :   (PUBLIC)? CONNECTOR identifier LEFT_PARENTHESIS parameterList? RIGHT_PARENTHESIS connectorBody
+//    ;
+//
+//connectorBody
+//    :   LEFT_BRACE endpointDeclaration* variableDefinitionStatement* actionDefinition* RIGHT_BRACE
+//    ;
+//
+//actionDefinition
+//    :   annotationAttachment* NATIVE ACTION  callableUnitSignature SEMICOLON
+//    |   annotationAttachment* ACTION callableUnitSignature callableUnitBody
+//    ;
+//
+//structDefinition
+//    :   (PUBLIC)? STRUCT identifier structBody
+//    ;
+//
+//structBody
+//    :   LEFT_BRACE fieldDefinition* privateStructBody? RIGHT_BRACE
+//    ;
+//
+//
+//privateStructBody
+//    :   PRIVATE COLON fieldDefinition*
+//    ;
+//
+//annotationDefinition
+//    : (PUBLIC)? ANNOTATION identifier (ATTACH attachmentPoint (COMMA attachmentPoint)*)? annotationBody
+//
+//    ;
+//
+//enumDefinition
+//    : (PUBLIC)? ENUM identifier LEFT_BRACE enumerator (COMMA enumerator)* RIGHT_BRACE
+//    ;
+//
+//enumerator
+//    : identifier
+//    ;
+//
+//globalVariableDefinition
+//    :   (PUBLIC)? typeName identifier (ASSIGN expression )? SEMICOLON
+//    ;
+//
+//transformerDefinition
+//    :   (PUBLIC)? TRANSFORMER LT parameterList GT (identifier LEFT_PARENTHESIS parameterList? RIGHT_PARENTHESIS)? callableUnitBody
+//    ;
+//
+//attachmentPoint
+//     : SERVICE (LT identifier? GT)?         # serviceAttachPoint
+//     | RESOURCE                             # resourceAttachPoint
+//     | CONNECTOR                            # connectorAttachPoint
+//     | ACTION                               # actionAttachPoint
+//     | FUNCTION                             # functionAttachPoint
+//     | STRUCT                               # structAttachPoint
+//     | ENUM                                 # enumAttachPoint
+//     | CONST                                # constAttachPoint
+//     | PARAMETER                            # parameterAttachPoint
+//     | ANNOTATION                           # annotationAttachPoint
+//     | TRANSFORMER                          # transformerAttachPoint
+//     ;
+//
+//annotationBody
+//    :  LEFT_BRACE fieldDefinition* RIGHT_BRACE
+//    ;
+//
+//constantDefinition
+//    :   (PUBLIC)? CONST valueTypeName identifier ASSIGN expression SEMICOLON
+//    ;
+//
+//workerDeclaration
+//    :   workerDefinition LEFT_BRACE statement* RIGHT_BRACE
+//    ;
+//
+//workerDefinition
+//    :   WORKER identifier
+//    ;
+
+TypeName ::= TYPE_ANY |TYPE_TYPE | ValueTypeName | ReferenceTypeName /*| typeName*/ (LEFT_BRACKET RIGHT_BRACKET)+
+
+BuiltInTypeName ::= TYPE_ANY | TYPE_TYPE | ValueTypeName | BuiltInReferenceTypeName | TypeName (LEFT_BRACKET RIGHT_BRACKET)+
+
+ReferenceTypeName ::= BuiltInReferenceTypeName | UserDefineTypeName | AnonStructTypeName
+
+UserDefineTypeName ::= NameReference
+
+AnonStructTypeName ::= STRUCT structBody
+
+
+ValueTypeName ::=   TYPE_BOOL | TYPE_INT | TYPE_FLOAT | TYPE_STRING |TYPE_BLOB
+
+BuiltInReferenceTypeName
+    ::=   TYPE_MAP (LT TypeName GT)?
+    |   TYPE_XML (LT (LEFT_BRACE xmlNamespaceName RIGHT_BRACE)? xmlLocalName GT)?
+    |   TYPE_JSON (LT NameReference GT)?
+    |   TYPE_TABLE (LT NameReference GT)?
+    |   FunctionTypeName
+
+FunctionTypeName ::= FUNCTION LEFT_PARENTHESIS (ParameterList | TypeList)? RIGHT_PARENTHESIS ReturnParameters?
+
+//xmlNamespaceName
+//    :   QuotedStringLiteral
+//    ;
+//
+//xmlLocalName
+//    :   identifier
+//    ;
+//
+// annotationAttachment
+//     :   AT nameReference LEFT_BRACE annotationAttributeList? RIGHT_BRACE
+//     ;
+//
+// annotationAttributeList
+//     :   annotationAttribute (COMMA annotationAttribute)*
+//     ;
+//
+// annotationAttribute
+//     :    identifier COLON annotationAttributeValue
+//     ;
+//
+// annotationAttributeValue
+//     :   simpleLiteral
+//     |   nameReference
+//     |   annotationAttachment
+//     |   annotationAttributeArray
+//     ;
+//
+// annotationAttributeArray
+//     :   LEFT_BRACKET (annotationAttributeValue (COMMA annotationAttributeValue)*)? RIGHT_BRACKET
+//     ;
+//
+// //============================================================================================================
+//// STATEMENTS / BLOCKS
+
+Statement
+    ::=   VariableDefinitionStatement
+    |   AssignmentStatement
+    /*|   bindStatement
+    |   ifElseStatement
+    |   foreachStatement
+    |   whileStatement
+    |   nextStatement
+    |   breakStatement
+    |   forkJoinStatement
+    |   tryCatchStatement
+    |   throwStatement
+    |   returnStatement
+    |   workerInteractionStatement
+    |   expressionStmt
+    |   transactionStatement
+    |   abortStatement
+    |   lockStatement
+    |   namespaceDeclarationStatement*/
+
+
+
+VariableDefinitionStatement ::= TypeName identifier (ASSIGN Expression)? SEMICOLON
+
+
+//recordLiteral
+//    :   LEFT_BRACE (recordKeyValue (COMMA recordKeyValue)*)? RIGHT_BRACE
+//    ;
+//
+//recordKeyValue
+//    :   recordKey COLON expression
+//    ;
+//
+//recordKey
+//    :   identifier
+//    |   simpleLiteral
+//    ;
+//
+//arrayLiteral
+//    :   LEFT_BRACKET expressionList? RIGHT_BRACKET
+//    ;
+//
+//connectorInit
+//    :   CREATE userDefineTypeName LEFT_PARENTHESIS expressionList? RIGHT_PARENTHESIS
+//    ;
+//
+//endpointDeclaration
+//    :   endpointDefinition LEFT_BRACE ((variableReference | connectorInit) SEMICOLON)? RIGHT_BRACE
+//    ;
+//
+//endpointDefinition
+//    :   ENDPOINT (LT nameReference GT) identifier
+//    ;
+
+AssignmentStatement ::= (VAR)? VariableReferenceList ASSIGN Expression SEMICOLON
+
+//bindStatement
+//    :   BIND expression WITH identifier SEMICOLON
+//    ;
+
+VariableReferenceList ::= VariableReference (COMMA VariableReference)*
+
+
+//ifElseStatement
+//    :  ifClause elseIfClause* elseClause?
+//    ;
+//
+//ifClause
+//    :   IF LEFT_PARENTHESIS expression RIGHT_PARENTHESIS LEFT_BRACE statement* RIGHT_BRACE
+//    ;
+//
+//elseIfClause
+//    :   ELSE IF LEFT_PARENTHESIS expression RIGHT_PARENTHESIS LEFT_BRACE statement* RIGHT_BRACE
+//    ;
+//
+//elseClause
+//    :   ELSE LEFT_BRACE statement*RIGHT_BRACE
+//    ;
+//
+//foreachStatement
+//    :   FOREACH LEFT_PARENTHESIS? variableReferenceList IN  (expression | intRangeExpression) RIGHT_PARENTHESIS? LEFT_BRACE statement* RIGHT_BRACE
+//    ;
+//
+//intRangeExpression
+//    : expression RANGE expression
+//    | (LEFT_BRACKET|LEFT_PARENTHESIS) expression RANGE expression (RIGHT_BRACKET|RIGHT_PARENTHESIS)
+//    ;
+//
+//whileStatement
+//    :   WHILE LEFT_PARENTHESIS expression RIGHT_PARENTHESIS LEFT_BRACE statement* RIGHT_BRACE
+//    ;
+//
+//nextStatement
+//    :   NEXT SEMICOLON
+//    ;
+//
+//breakStatement
+//    :   BREAK SEMICOLON
+//    ;
+//
+//// typeName is only message
+//forkJoinStatement
+//    : FORK LEFT_BRACE workerDeclaration* RIGHT_BRACE joinClause? timeoutClause?
+//    ;
+//
+//// below typeName is only 'message[]'
+//joinClause
+//    :   JOIN (LEFT_PARENTHESIS joinConditions RIGHT_PARENTHESIS)? LEFT_PARENTHESIS typeName identifier RIGHT_PARENTHESIS LEFT_BRACE statement* RIGHT_BRACE
+//    ;
+//
+//joinConditions
+//    : SOME IntegerLiteral (identifier (COMMA identifier)*)?     # anyJoinCondition
+//    | ALL (identifier (COMMA identifier)*)?                     # allJoinCondition
+//    ;
+//
+//// below typeName is only 'message[]'
+//timeoutClause
+//    :   TIMEOUT LEFT_PARENTHESIS expression RIGHT_PARENTHESIS LEFT_PARENTHESIS typeName identifier RIGHT_PARENTHESIS  LEFT_BRACE statement* RIGHT_BRACE
+//    ;
+//
+//tryCatchStatement
+//    :   TRY LEFT_BRACE statement* RIGHT_BRACE catchClauses
+//    ;
+//
+//catchClauses
+//    : catchClause+ finallyClause?
+//    | finallyClause
+//    ;
+//
+//catchClause
+//    :  CATCH LEFT_PARENTHESIS typeName identifier RIGHT_PARENTHESIS LEFT_BRACE statement* RIGHT_BRACE
+//    ;
+//
+//finallyClause
+//    : FINALLY LEFT_BRACE statement* RIGHT_BRACE
+//    ;
+//
+//throwStatement
+//    :   THROW expression SEMICOLON
+//    ;
+//
+//returnStatement
+//    :   RETURN expressionList? SEMICOLON
+//    ;
+//
+//workerInteractionStatement
+//    :   triggerWorker
+//    |   workerReply
+//    ;
+//
+//// below left identifier is of type TYPE_MESSAGE and the right identifier is of type WORKER
+//triggerWorker
+//    :   expressionList RARROW identifier SEMICOLON #invokeWorker
+//    |   expressionList RARROW FORK SEMICOLON     #invokeFork
+//    ;
+//
+//// below left identifier is of type WORKER and the right identifier is of type message
+//workerReply
+//    :   expressionList LARROW identifier SEMICOLON
+//    ;
+
+VariableReference ::= FunctionInvocation | NameReference
+
+
+
+
+    |   VariableReference index
+//    |   variableReference field
+//    |   variableReference xmlAttrib
+//    |   variableReference invocation
+
+
+//field
+//    : DOT identifier
+//    ;
+//
+//index
+//    : LEFT_BRACKET expression RIGHT_BRACKET
+//    ;
+//
+//xmlAttrib
+//    : AT (LEFT_BRACKET expression RIGHT_BRACKET)?
+//    ;
+//
+FunctionInvocation ::= NameReference LEFT_PARENTHESIS ExpressionList? RIGHT_PARENTHESIS {pin=2}
+//
+//invocation
+//    : DOT anyIdentifierName LEFT_PARENTHESIS expressionList? RIGHT_PARENTHESIS
+//    ;
+
+ExpressionList ::= Expression (COMMA Expression)*
+
+
+ExpressionStmt
+    ::=   VariableReference SEMICOLON
+    
+//
+//transactionStatement
+//    :   transactionClause failedClause?
+//    ;
+//
+//transactionClause
+//    : TRANSACTION (WITH transactionPropertyInitStatementList)? LEFT_BRACE statement* RIGHT_BRACE
+//    ;
+//
+//transactionPropertyInitStatement
+//    : retriesStatement
+//    ;
+//
+//transactionPropertyInitStatementList
+//    : transactionPropertyInitStatement (COMMA transactionPropertyInitStatement)*
+//    ;
+//
+//lockStatement
+//    : LOCK LEFT_BRACE statement* RIGHT_BRACE
+//    ;
+//
+//failedClause
+//    :   FAILED LEFT_BRACE statement* RIGHT_BRACE
+//    ;
+//abortStatement
+//    :   ABORT SEMICOLON
+//    ;
+//
+//retriesStatement
+//    :   RETRIES LEFT_PARENTHESIS expression RIGHT_PARENTHESIS
+//    ;
+//
+//namespaceDeclarationStatement
+//    :   namespaceDeclaration
+//    ;
+//
+//namespaceDeclaration
+//    :   XMLNS QuotedStringLiteral (AS identifier)? SEMICOLON
+//    ;
+//
+Expression
+    ::=  /* simpleLiteral
+    |   arrayLiteral
+    |   recordLiteral
+    |   xmlLiteral
+    |   stringTemplateLiteral
+    |   valueTypeName DOT identifier
+    |   builtInReferenceTypeName DOT identifier  */
+//    |
+       VariableReference
+//    |   lambdaFunction                                                      # lambdaFunctionExpression
+//    |   connectorInit                                                       # connectorInitExpression
+//    |   LEFT_PARENTHESIS typeName RIGHT_PARENTHESIS expression              # typeCastingExpression
+//    |   LT typeName (COMMA functionInvocation)? GT expression               # typeConversionExpression
+//    |   TYPEOF builtInTypeName                                              # typeAccessExpression
+//    |   (ADD | SUB | NOT | LENGTHOF | TYPEOF) expression                    # unaryExpression
+//    |   LEFT_PARENTHESIS expression RIGHT_PARENTHESIS                       # bracedExpression
+//    |   expression POW expression                                           # binaryPowExpression
+//    |   expression (DIV | MUL | MOD) expression                             # binaryDivMulModExpression
+//    |   expression (ADD | SUB) expression                                   # binaryAddSubExpression
+//    |   expression (LT_EQUAL | GT_EQUAL | GT | LT) expression               # binaryCompareExpression
+//    |   expression (EQUAL | NOT_EQUAL) expression                           # binaryEqualExpression
+//    |   expression AND expression                                           # binaryAndExpression
+//    |   expression OR expression                                            # binaryOrExpression
+//    |   expression QUESTION_MARK expression COLON expression                # ternaryExpression
+
+
+////reusable productions
+
+NameReference ::= (identifier COLON)? identifier
+
+ReturnParameters ::= RETURNS? LEFT_PARENTHESIS (ParameterList | TypeList) RIGHT_PARENTHESIS {pin=3}
+
+private TypeList ::= TypeName (COMMA TypeName)* {pin=1}
+
+ParameterList ::= Parameter (COMMA Parameter)* {pin=1}
+
+Parameter ::= /*annotationAttachment**/ TypeName identifier
+
+//fieldDefinition
+//    :   typeName identifier (ASSIGN simpleLiteral)? SEMICOLON
+//    ;
+//
+//simpleLiteral
+//    :   (SUB)? IntegerLiteral
+//    |   (SUB)? FloatingPointLiteral
+//    |   QuotedStringLiteral
+//    |   BooleanLiteral
+//    |   NullLiteral
+//    ;
+//
+//// XML parsing
+//
+//xmlLiteral
+//    :   XMLLiteralStart xmlItem XMLLiteralEnd
+//    ;
+//
+//xmlItem
+//    :   element
+//    |   procIns
+//    |   comment
+//    |   text
+//    |   CDATA
+//    ;
+//
+//content
+//    :   text? ((element | CDATA | procIns | comment) text?)*
+//    ;
+//
+//comment
+//    :   XML_COMMENT_START (XMLCommentTemplateText expression ExpressionEnd)* XMLCommentText
+//    ;
+//
+//element
+//    :   startTag content closeTag
+//    |   emptyTag
+//    ;
+//
+//startTag
+//    :   XML_TAG_OPEN xmlQualifiedName attribute* XML_TAG_CLOSE
+//    ;
+//
+//closeTag
+//    :   XML_TAG_OPEN_SLASH xmlQualifiedName XML_TAG_CLOSE
+//    ;
+//
+//emptyTag
+//    :   XML_TAG_OPEN xmlQualifiedName attribute* XML_TAG_SLASH_CLOSE
+//    ;
+//
+//procIns
+//    :   XML_TAG_SPECIAL_OPEN (XMLPITemplateText expression ExpressionEnd)* XMLPIText
+//    ;
+//
+//attribute
+//    :   xmlQualifiedName EQUALS xmlQuotedString;
+//
+//text
+//    :   (XMLTemplateText expression ExpressionEnd)+ XMLText?
+//    |   XMLText
+//    ;
+//
+//xmlQuotedString
+//    :   xmlSingleQuotedString
+//    |   xmlDoubleQuotedString
+//    ;
+//
+//xmlSingleQuotedString
+//    :   SINGLE_QUOTE (XMLSingleQuotedTemplateString expression ExpressionEnd)* XMLSingleQuotedString? SINGLE_QUOTE_END
+//    ;
+//
+//xmlDoubleQuotedString
+//    :   DOUBLE_QUOTE (XMLDoubleQuotedTemplateString expression ExpressionEnd)* XMLDoubleQuotedString? DOUBLE_QUOTE_END
+//    ;
+//
+//xmlQualifiedName
+//    :   (XMLQName QNAME_SEPARATOR)? XMLQName
+//    |   XMLTagExpressionStart expression ExpressionEnd
+//    ;
+//
+//stringTemplateLiteral
+//    :   StringTemplateLiteralStart stringTemplateContent? StringTemplateLiteralEnd
+//    ;
+//
+//stringTemplateContent
+//    :   (StringTemplateExpressionStart expression ExpressionEnd)+ StringTemplateText?
+//    |   StringTemplateText
+//    ;
+//
+//anyIdentifierName
+//    : identifier
+//    | reservedWord
+//    ;
+//
+//reservedWord
+//    :   FOREACH
+//    |   TYPE_MAP
+//    ;
+//
+
+// lexer
+
+//identifier ::=  (Letter+ LetterOrDigit*) /*| IdentifierLiteral*/
+
+//private IdentifierLiteral ::= '|' IdentifierLiteralChar+ '|' ;
+//
+//private IdentifierLiteralChar ::= ![|\\\b\f\n\r\t] //| IdentifierLiteralEscapeSequence

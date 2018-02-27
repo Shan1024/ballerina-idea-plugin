@@ -24,30 +24,13 @@
 
     <extensions defaultExtensionNs="com.intellij">
 
-        <fileTypeFactory implementation="com.simpleplugin.SimpleFileTypeFactory"/>
+        <fileTypeFactory implementation="org.ballerina.BallerinaFileTypeFactory"/>
 
-        <lang.parserDefinition language="Simple" implementationClass="com.simpleplugin.SimpleParserDefinition"/>
+        <lang.parserDefinition language="Ballerina" implementationClass="org.ballerina.BallerinaParserDefinition"/>
 
-        <!--<lang.syntaxHighlighterFactory language="Simple"-->
-                                       <!--implementationClass="com.simpleplugin.highlighting.SimpleSyntaxHighlighterFactory"/>-->
-        <!--<annotator language="JAVA" implementationClass="com.simpleplugin.SimpleAnnotator"/>-->
+        <lang.syntaxHighlighterFactory language="Ballerina"
+                                       implementationClass="org.ballerina.highlighting.BallerinaSyntaxHighlighterFactory"/>
 
-        <!--<codeInsight.lineMarkerProvider language="JAVA"-->
-                                        <!--implementationClass="com.simpleplugin.SimpleLineMarkerProvider"/>-->
-        <!--<completion.contributor language="Simple"-->
-                                <!--implementationClass="com.simpleplugin.completion.SimpleCompletionContributor"/>-->
-        <!--<psi.referenceContributor implementation="com.simpleplugin.SimpleReferenceContributor"/>-->
-
-        <!--<lang.refactoringSupport language="Simple"-->
-                                 <!--implementationClass="com.simpleplugin.refactoring.SimpleRefactoringSupportProvider"/>-->
-        <!--<lang.findUsagesProvider language="Simple" implementationClass="com.simpleplugin.SimpleFindUsagesProvider"/>-->
     </extensions>
-
-    <actions>
-        <group id="MyPlugin.SampleMenu" text="Greeting" description="Greeting menu">
-            <add-to-group group-id="MainMenu" anchor="last"/>
-            <action id="Myplugin.Textboxes" class="com.simpleplugin.actions.HelloAction" text="Hello" description="Says hello"/>
-        </group>
-    </actions>
 
 </idea-plugin>
