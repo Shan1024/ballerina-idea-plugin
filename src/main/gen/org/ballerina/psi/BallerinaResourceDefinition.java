@@ -29,4 +29,7 @@ public interface BallerinaResourceDefinition extends PsiElement {
   @Nullable
   BallerinaParameterList getParameterList();
 
+  @Nullable
+  PsiElement getIdentifier();
+
 }

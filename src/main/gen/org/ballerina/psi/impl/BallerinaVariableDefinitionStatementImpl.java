@@ -54,4 +54,10 @@ public class BallerinaVariableDefinitionStatementImpl extends ASTWrapperPsiEleme
     return findNotNullChildByClass(BallerinaTypeName.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getIdentifier() {
+    return findNotNullChildByType(IDENTIFIER);
+  }
+
 }

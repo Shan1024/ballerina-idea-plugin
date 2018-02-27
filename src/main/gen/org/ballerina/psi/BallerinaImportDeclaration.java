@@ -26,4 +26,7 @@ public interface BallerinaImportDeclaration extends PsiElement {
   @Nullable
   BallerinaPackageName getPackageName();
 
+  @Nullable
+  PsiElement getIdentifier();
+
 }

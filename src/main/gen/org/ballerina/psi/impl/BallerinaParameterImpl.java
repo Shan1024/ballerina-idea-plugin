@@ -48,4 +48,10 @@ public class BallerinaParameterImpl extends ASTWrapperPsiElement implements Ball
     return findNotNullChildByClass(BallerinaTypeName.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getIdentifier() {
+    return findNotNullChildByType(IDENTIFIER);
+  }
+
 }

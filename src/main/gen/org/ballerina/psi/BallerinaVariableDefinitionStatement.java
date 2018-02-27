@@ -29,4 +29,7 @@ public interface BallerinaVariableDefinitionStatement extends PsiElement {
   @NotNull
   BallerinaTypeName getTypeName();
 
+  @NotNull
+  PsiElement getIdentifier();
+
 }

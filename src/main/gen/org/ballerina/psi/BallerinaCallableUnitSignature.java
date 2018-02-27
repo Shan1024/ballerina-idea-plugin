@@ -29,4 +29,7 @@ public interface BallerinaCallableUnitSignature extends PsiElement {
   @Nullable
   BallerinaReturnParameters getReturnParameters();
 
+  @NotNull
+  PsiElement getIdentifier();
+
 }

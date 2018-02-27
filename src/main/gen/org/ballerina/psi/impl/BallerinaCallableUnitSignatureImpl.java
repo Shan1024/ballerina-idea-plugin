@@ -54,4 +54,10 @@ public class BallerinaCallableUnitSignatureImpl extends ASTWrapperPsiElement imp
     return findChildByClass(BallerinaReturnParameters.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getIdentifier() {
+    return findNotNullChildByType(IDENTIFIER);
+  }
+
 }

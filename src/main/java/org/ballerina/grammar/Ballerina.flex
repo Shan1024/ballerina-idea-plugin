@@ -25,7 +25,7 @@ import static org.ballerina.psi.BallerinaTypes.*;
 LETTER = [:letter:] | "_"
 DIGIT =  [:digit:]
 
-IDENT = {LETTER} ({LETTER} | {DIGIT})*
+IDENTIFIER = {LETTER} ({LETTER} | {DIGIT})*
 
 WHITE_SPACE=\s+
 
@@ -133,7 +133,7 @@ LINE_COMMENT = "//" [^\r\n]*
   "xmlLocalName"        { return XMLLOCALNAME; }
   "index"               { return INDEX; }
 
-  {IDENT}               { return IDENTIFIER; }
+  {IDENTIFIER}          { return IDENTIFIER; }
   {LINE_COMMENT}        { return LINE_COMMENT; }
 
 }

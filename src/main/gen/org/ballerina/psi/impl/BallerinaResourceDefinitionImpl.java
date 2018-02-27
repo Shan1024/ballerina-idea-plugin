@@ -54,4 +54,10 @@ public class BallerinaResourceDefinitionImpl extends ASTWrapperPsiElement implem
     return findChildByClass(BallerinaParameterList.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
+  }
+
 }
