@@ -44,8 +44,20 @@ public class BallerinaCallableUnitBodyImpl extends ASTWrapperPsiElement implemen
 
   @Override
   @NotNull
+  public List<BallerinaEndpointDeclaration> getEndpointDeclarationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaEndpointDeclaration.class);
+  }
+
+  @Override
+  @NotNull
   public List<BallerinaStatement> getStatementList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaStatement.class);
+  }
+
+  @Override
+  @NotNull
+  public List<BallerinaWorkerDeclaration> getWorkerDeclarationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaWorkerDeclaration.class);
   }
 
 }

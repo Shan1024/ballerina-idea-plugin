@@ -44,14 +44,104 @@ public class BallerinaStatementImpl extends ASTWrapperPsiElement implements Ball
 
   @Override
   @Nullable
+  public BallerinaAbortStatement getAbortStatement() {
+    return findChildByClass(BallerinaAbortStatement.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaAssignmentStatement getAssignmentStatement() {
     return findChildByClass(BallerinaAssignmentStatement.class);
   }
 
   @Override
   @Nullable
+  public BallerinaBindStatement getBindStatement() {
+    return findChildByClass(BallerinaBindStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaBreakStatement getBreakStatement() {
+    return findChildByClass(BallerinaBreakStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaExpressionStmt getExpressionStmt() {
+    return findChildByClass(BallerinaExpressionStmt.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaForeachStatement getForeachStatement() {
+    return findChildByClass(BallerinaForeachStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaIfElseStatement getIfElseStatement() {
+    return findChildByClass(BallerinaIfElseStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaLockStatement getLockStatement() {
+    return findChildByClass(BallerinaLockStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaNamespaceDeclarationStatement getNamespaceDeclarationStatement() {
+    return findChildByClass(BallerinaNamespaceDeclarationStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaNextStatement getNextStatement() {
+    return findChildByClass(BallerinaNextStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaReturnStatement getReturnStatement() {
+    return findChildByClass(BallerinaReturnStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaThrowStatement getThrowStatement() {
+    return findChildByClass(BallerinaThrowStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaTransactionStatement getTransactionStatement() {
+    return findChildByClass(BallerinaTransactionStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaTryCatchStatement getTryCatchStatement() {
+    return findChildByClass(BallerinaTryCatchStatement.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaVariableDefinitionStatement getVariableDefinitionStatement() {
     return findChildByClass(BallerinaVariableDefinitionStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaWhileStatement getWhileStatement() {
+    return findChildByClass(BallerinaWhileStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaWorkerInteractionStatement getWorkerInteractionStatement() {
+    return findChildByClass(BallerinaWorkerInteractionStatement.class);
   }
 
 }

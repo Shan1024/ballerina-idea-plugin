@@ -44,6 +44,12 @@ public class BallerinaServiceBodyImpl extends ASTWrapperPsiElement implements Ba
 
   @Override
   @NotNull
+  public List<BallerinaEndpointDeclaration> getEndpointDeclarationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaEndpointDeclaration.class);
+  }
+
+  @Override
+  @NotNull
   public List<BallerinaResourceDefinition> getResourceDefinitionList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaResourceDefinition.class);
   }

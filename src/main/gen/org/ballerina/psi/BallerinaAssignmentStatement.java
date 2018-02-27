@@ -23,7 +23,7 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaAssignmentStatement extends PsiElement {
 
-  @NotNull
+  @Nullable
   BallerinaExpression getExpression();
 
   @NotNull

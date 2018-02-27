@@ -24,9 +24,30 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaDefinition extends PsiElement {
 
   @Nullable
+  BallerinaAnnotationDefinition getAnnotationDefinition();
+
+  @Nullable
   BallerinaFunctionDefinition getFunctionDefinition();
 
   @Nullable
+  BallerinaGlobalVariableDefinition getGlobalVariableDefinition();
+
+  @Nullable
   BallerinaServiceDefinition getServiceDefinition();
+
+  @Nullable
+  BallerinaTransformerDefinition getTransformerDefinition();
+
+  @Nullable
+  BallerinaConnectorDefinition getConnectorDefinition();
+
+  @Nullable
+  BallerinaConstantDefinition getConstantDefinition();
+
+  @Nullable
+  BallerinaEnumDefinition getEnumDefinition();
+
+  @Nullable
+  BallerinaStructDefinition getStructDefinition();
 
 }

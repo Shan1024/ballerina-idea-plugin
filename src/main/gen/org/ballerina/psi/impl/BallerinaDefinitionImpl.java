@@ -44,14 +44,56 @@ public class BallerinaDefinitionImpl extends ASTWrapperPsiElement implements Bal
 
   @Override
   @Nullable
+  public BallerinaAnnotationDefinition getAnnotationDefinition() {
+    return findChildByClass(BallerinaAnnotationDefinition.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaFunctionDefinition getFunctionDefinition() {
     return findChildByClass(BallerinaFunctionDefinition.class);
   }
 
   @Override
   @Nullable
+  public BallerinaGlobalVariableDefinition getGlobalVariableDefinition() {
+    return findChildByClass(BallerinaGlobalVariableDefinition.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaServiceDefinition getServiceDefinition() {
     return findChildByClass(BallerinaServiceDefinition.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaTransformerDefinition getTransformerDefinition() {
+    return findChildByClass(BallerinaTransformerDefinition.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaConnectorDefinition getConnectorDefinition() {
+    return findChildByClass(BallerinaConnectorDefinition.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaConstantDefinition getConstantDefinition() {
+    return findChildByClass(BallerinaConstantDefinition.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaEnumDefinition getEnumDefinition() {
+    return findChildByClass(BallerinaEnumDefinition.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaStructDefinition getStructDefinition() {
+    return findChildByClass(BallerinaStructDefinition.class);
   }
 
 }

@@ -24,9 +24,54 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaStatement extends PsiElement {
 
   @Nullable
+  BallerinaAbortStatement getAbortStatement();
+
+  @Nullable
   BallerinaAssignmentStatement getAssignmentStatement();
 
   @Nullable
+  BallerinaBindStatement getBindStatement();
+
+  @Nullable
+  BallerinaBreakStatement getBreakStatement();
+
+  @Nullable
+  BallerinaExpressionStmt getExpressionStmt();
+
+  @Nullable
+  BallerinaForeachStatement getForeachStatement();
+
+  @Nullable
+  BallerinaIfElseStatement getIfElseStatement();
+
+  @Nullable
+  BallerinaLockStatement getLockStatement();
+
+  @Nullable
+  BallerinaNamespaceDeclarationStatement getNamespaceDeclarationStatement();
+
+  @Nullable
+  BallerinaNextStatement getNextStatement();
+
+  @Nullable
+  BallerinaReturnStatement getReturnStatement();
+
+  @Nullable
+  BallerinaThrowStatement getThrowStatement();
+
+  @Nullable
+  BallerinaTransactionStatement getTransactionStatement();
+
+  @Nullable
+  BallerinaTryCatchStatement getTryCatchStatement();
+
+  @Nullable
   BallerinaVariableDefinitionStatement getVariableDefinitionStatement();
+
+  @Nullable
+  BallerinaWhileStatement getWhileStatement();
+
+  @Nullable
+  BallerinaWorkerInteractionStatement getWorkerInteractionStatement();
 
 }

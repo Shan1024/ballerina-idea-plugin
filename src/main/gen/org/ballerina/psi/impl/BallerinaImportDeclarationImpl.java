@@ -44,14 +44,20 @@ public class BallerinaImportDeclarationImpl extends ASTWrapperPsiElement impleme
 
   @Override
   @Nullable
+  public BallerinaAlias getAlias() {
+    return findChildByClass(BallerinaAlias.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaPackageName getPackageName() {
     return findChildByClass(BallerinaPackageName.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
+  public BallerinaPackageVersion getPackageVersion() {
+    return findChildByClass(BallerinaPackageVersion.class);
   }
 
 }

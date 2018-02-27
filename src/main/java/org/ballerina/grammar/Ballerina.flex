@@ -22,6 +22,17 @@ import static org.ballerina.psi.BallerinaTypes.*;
 %type IElementType
 %unicode
 
+//EscapeSequence = '\\' [btnfr\"'\\]
+//StringCharacter = ~[\"\\] | {EscapeSequence}
+//StringCharacters = {StringCharacter}+
+//QuotedStringLiteral ='\"' {StringCharacters}? '\"'
+
+//QuotedStringLiteral ='\"' ((~[\"\\] | '\\' [btnfr\"'\\])+)? '\"'
+
+STR =      "\""
+QuotedStringLiteral = {STR} ( [^\"\\\n\r] | "\\" ("\\" | {STR} | {ESCAPES} | [0-8xuU] ) )* {STR}?
+ESCAPES = [abfnrtv]
+
 LETTER = [:letter:] | "_"
 DIGIT =  [:digit:]
 
@@ -128,14 +139,10 @@ LINE_COMMENT = "//" [^\r\n]*
   "@"                   { return AT; }
   "`"                   { return BACKTICK; }
   ".."                  { return RANGE; }
-  "structBody"          { return STRUCTBODY; }
-  "xmlNamespaceName"    { return XMLNAMESPACENAME; }
-  "xmlLocalName"        { return XMLLOCALNAME; }
-  "index"               { return INDEX; }
 
   {IDENTIFIER}          { return IDENTIFIER; }
   {LINE_COMMENT}        { return LINE_COMMENT; }
-
+  {QuotedStringLiteral} { return QUOTEDSTRINGLITERAL; }
 }
 
 [^] { return BAD_CHARACTER; }

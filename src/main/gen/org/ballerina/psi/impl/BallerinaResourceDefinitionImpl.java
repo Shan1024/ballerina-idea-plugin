@@ -43,6 +43,12 @@ public class BallerinaResourceDefinitionImpl extends ASTWrapperPsiElement implem
   }
 
   @Override
+  @NotNull
+  public List<BallerinaAnnotationAttachment> getAnnotationAttachmentList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaAnnotationAttachment.class);
+  }
+
+  @Override
   @Nullable
   public BallerinaCallableUnitBody getCallableUnitBody() {
     return findChildByClass(BallerinaCallableUnitBody.class);

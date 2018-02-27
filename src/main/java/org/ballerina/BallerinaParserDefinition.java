@@ -19,6 +19,7 @@ import org.ballerina.psi.BallerinaTypes;
 import org.jetbrains.annotations.NotNull;
 
 import static org.ballerina.psi.BallerinaTypes.FUNCTION;
+import static org.ballerina.psi.BallerinaTypes.QUOTEDSTRINGLITERAL;
 
 public class BallerinaParserDefinition implements ParserDefinition {
 
@@ -26,6 +27,8 @@ public class BallerinaParserDefinition implements ParserDefinition {
 
     public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
     public static final TokenSet COMMENTS = TokenSet.create(LINE_COMMENT);
+
+    public static final TokenSet STRING = TokenSet.create(QUOTEDSTRINGLITERAL);
 
     public static final TokenSet KEYWORDS = TokenSet.create(FUNCTION);
 

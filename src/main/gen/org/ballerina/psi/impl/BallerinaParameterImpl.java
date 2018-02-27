@@ -44,6 +44,12 @@ public class BallerinaParameterImpl extends ASTWrapperPsiElement implements Ball
 
   @Override
   @NotNull
+  public List<BallerinaAnnotationAttachment> getAnnotationAttachmentList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaAnnotationAttachment.class);
+  }
+
+  @Override
+  @NotNull
   public BallerinaTypeName getTypeName() {
     return findNotNullChildByClass(BallerinaTypeName.class);
   }

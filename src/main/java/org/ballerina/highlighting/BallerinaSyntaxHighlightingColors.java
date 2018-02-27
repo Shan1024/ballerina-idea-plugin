@@ -11,4 +11,7 @@ public class BallerinaSyntaxHighlightingColors {
             DefaultLanguageHighlighterColors.LINE_COMMENT);
     public static final TextAttributesKey KEYWORD = createTextAttributesKey("BALLERINA_KEYWORD",
             DefaultLanguageHighlighterColors.KEYWORD);
+    public static final TextAttributesKey STRING = createTextAttributesKey("BALLERINA_STRING",
+            DefaultLanguageHighlighterColors.STRING);
+
 }

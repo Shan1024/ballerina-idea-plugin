@@ -24,6 +24,9 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaParameter extends PsiElement {
 
   @NotNull
+  List<BallerinaAnnotationAttachment> getAnnotationAttachmentList();
+
+  @NotNull
   BallerinaTypeName getTypeName();
 
   @NotNull

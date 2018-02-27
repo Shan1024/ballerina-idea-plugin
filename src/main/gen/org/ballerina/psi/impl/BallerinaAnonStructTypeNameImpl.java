@@ -42,4 +42,10 @@ public class BallerinaAnonStructTypeNameImpl extends ASTWrapperPsiElement implem
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public BallerinaStructBody getStructBody() {
+    return findNotNullChildByClass(BallerinaStructBody.class);
+  }
+
 }

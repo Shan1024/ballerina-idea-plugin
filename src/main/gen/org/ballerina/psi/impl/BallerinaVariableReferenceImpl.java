@@ -54,10 +54,4 @@ public class BallerinaVariableReferenceImpl extends ASTWrapperPsiElement impleme
     return findChildByClass(BallerinaNameReference.class);
   }
 
-  @Override
-  @Nullable
-  public BallerinaVariableReference getVariableReference() {
-    return findChildByClass(BallerinaVariableReference.class);
-  }
-
 }

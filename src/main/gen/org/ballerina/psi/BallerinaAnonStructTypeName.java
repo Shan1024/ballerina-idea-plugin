@@ -23,4 +23,7 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaAnonStructTypeName extends PsiElement {
 
+  @NotNull
+  BallerinaStructBody getStructBody();
+
 }

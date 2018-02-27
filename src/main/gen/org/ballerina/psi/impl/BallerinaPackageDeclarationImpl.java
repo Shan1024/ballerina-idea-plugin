@@ -48,4 +48,10 @@ public class BallerinaPackageDeclarationImpl extends ASTWrapperPsiElement implem
     return findChildByClass(BallerinaPackageName.class);
   }
 
+  @Override
+  @Nullable
+  public BallerinaPackageVersion getPackageVersion() {
+    return findChildByClass(BallerinaPackageVersion.class);
+  }
+
 }

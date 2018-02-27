@@ -13,6 +13,7 @@ import java.util.Map;
 
 import static org.ballerina.highlighting.BallerinaSyntaxHighlightingColors.KEYWORD;
 import static org.ballerina.highlighting.BallerinaSyntaxHighlightingColors.LINE_COMMENT;
+import static org.ballerina.highlighting.BallerinaSyntaxHighlightingColors.STRING;
 
 public class BallerinaSyntaxHighlighter extends SyntaxHighlighterBase {
 
@@ -21,6 +22,7 @@ public class BallerinaSyntaxHighlighter extends SyntaxHighlighterBase {
     static {
         fillMap(ATTRIBUTES, LINE_COMMENT, BallerinaParserDefinition.LINE_COMMENT);
         fillMap(ATTRIBUTES, BallerinaParserDefinition.KEYWORDS, KEYWORD);
+        fillMap(ATTRIBUTES, BallerinaParserDefinition.STRING, STRING);
     }
 
     @NotNull

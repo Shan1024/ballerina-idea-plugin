@@ -43,9 +43,9 @@ public class BallerinaAssignmentStatementImpl extends ASTWrapperPsiElement imple
   }
 
   @Override
-  @NotNull
+  @Nullable
   public BallerinaExpression getExpression() {
-    return findNotNullChildByClass(BallerinaExpression.class);
+    return findChildByClass(BallerinaExpression.class);
   }
 
   @Override

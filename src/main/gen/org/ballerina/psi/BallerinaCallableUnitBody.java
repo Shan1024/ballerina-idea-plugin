@@ -24,6 +24,12 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaCallableUnitBody extends PsiElement {
 
   @NotNull
+  List<BallerinaEndpointDeclaration> getEndpointDeclarationList();
+
+  @NotNull
   List<BallerinaStatement> getStatementList();
+
+  @NotNull
+  List<BallerinaWorkerDeclaration> getWorkerDeclarationList();
 
 }

@@ -60,4 +60,16 @@ public class BallerinaBuiltInReferenceTypeNameImpl extends ASTWrapperPsiElement 
     return findChildByClass(BallerinaTypeName.class);
   }
 
+  @Override
+  @Nullable
+  public BallerinaXmlLocalName getXmlLocalName() {
+    return findChildByClass(BallerinaXmlLocalName.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaXmlNamespaceName getXmlNamespaceName() {
+    return findChildByClass(BallerinaXmlNamespaceName.class);
+  }
+
 }

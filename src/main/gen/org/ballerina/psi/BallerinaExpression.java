@@ -23,7 +23,43 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaExpression extends PsiElement {
 
-  @NotNull
+  @Nullable
+  BallerinaArrayLiteral getArrayLiteral();
+
+  @Nullable
+  BallerinaBuiltInReferenceTypeName getBuiltInReferenceTypeName();
+
+  @Nullable
+  BallerinaBuiltInTypeName getBuiltInTypeName();
+
+  @Nullable
+  BallerinaConnectorInit getConnectorInit();
+
+  @Nullable
+  BallerinaExpression getExpression();
+
+  @Nullable
+  BallerinaFunctionInvocation getFunctionInvocation();
+
+  @Nullable
+  BallerinaLambdaFunction getLambdaFunction();
+
+  @Nullable
+  BallerinaRecordLiteral getRecordLiteral();
+
+  @Nullable
+  BallerinaSimpleLiteral getSimpleLiteral();
+
+  @Nullable
+  BallerinaTypeName getTypeName();
+
+  @Nullable
+  BallerinaValueTypeName getValueTypeName();
+
+  @Nullable
   BallerinaVariableReference getVariableReference();
+
+  @Nullable
+  PsiElement getIdentifier();
 
 }

@@ -32,4 +32,10 @@ public interface BallerinaBuiltInReferenceTypeName extends PsiElement {
   @Nullable
   BallerinaTypeName getTypeName();
 
+  @Nullable
+  BallerinaXmlLocalName getXmlLocalName();
+
+  @Nullable
+  BallerinaXmlNamespaceName getXmlNamespaceName();
+
 }

@@ -43,9 +43,81 @@ public class BallerinaExpressionImpl extends ASTWrapperPsiElement implements Bal
   }
 
   @Override
-  @NotNull
+  @Nullable
+  public BallerinaArrayLiteral getArrayLiteral() {
+    return findChildByClass(BallerinaArrayLiteral.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaBuiltInReferenceTypeName getBuiltInReferenceTypeName() {
+    return findChildByClass(BallerinaBuiltInReferenceTypeName.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaBuiltInTypeName getBuiltInTypeName() {
+    return findChildByClass(BallerinaBuiltInTypeName.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaConnectorInit getConnectorInit() {
+    return findChildByClass(BallerinaConnectorInit.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaExpression getExpression() {
+    return findChildByClass(BallerinaExpression.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaFunctionInvocation getFunctionInvocation() {
+    return findChildByClass(BallerinaFunctionInvocation.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaLambdaFunction getLambdaFunction() {
+    return findChildByClass(BallerinaLambdaFunction.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaRecordLiteral getRecordLiteral() {
+    return findChildByClass(BallerinaRecordLiteral.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaSimpleLiteral getSimpleLiteral() {
+    return findChildByClass(BallerinaSimpleLiteral.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaTypeName getTypeName() {
+    return findChildByClass(BallerinaTypeName.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaValueTypeName getValueTypeName() {
+    return findChildByClass(BallerinaValueTypeName.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaVariableReference getVariableReference() {
-    return findNotNullChildByClass(BallerinaVariableReference.class);
+    return findChildByClass(BallerinaVariableReference.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
   }
 
 }

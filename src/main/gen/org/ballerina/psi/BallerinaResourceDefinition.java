@@ -23,6 +23,9 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaResourceDefinition extends PsiElement {
 
+  @NotNull
+  List<BallerinaAnnotationAttachment> getAnnotationAttachmentList();
+
   @Nullable
   BallerinaCallableUnitBody getCallableUnitBody();
 

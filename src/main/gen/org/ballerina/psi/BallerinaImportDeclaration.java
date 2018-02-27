@@ -24,9 +24,12 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaImportDeclaration extends PsiElement {
 
   @Nullable
+  BallerinaAlias getAlias();
+
+  @Nullable
   BallerinaPackageName getPackageName();
 
   @Nullable
-  PsiElement getIdentifier();
+  BallerinaPackageVersion getPackageVersion();
 
 }

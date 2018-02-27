@@ -29,7 +29,4 @@ public interface BallerinaVariableReference extends PsiElement {
   @Nullable
   BallerinaNameReference getNameReference();
 
-  @Nullable
-  BallerinaVariableReference getVariableReference();
-
 }
