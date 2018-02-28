@@ -27,14 +27,14 @@ import static org.ballerina.psi.BallerinaTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.ballerina.psi.*;
 
-public abstract class BallerinaExpressionImpl extends ASTWrapperPsiElement implements BallerinaExpression {
+public class BallerinaReservedWordImpl extends ASTWrapperPsiElement implements BallerinaReservedWord {
 
-  public BallerinaExpressionImpl(ASTNode node) {
+  public BallerinaReservedWordImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitExpression(this);
+    visitor.visitReservedWord(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

@@ -129,6 +129,12 @@
         quotedStringLiteral = "regexp:\"(.*)\""
         integerLiteral = "regexp:\d+"
     ]
+
+//     extends("(BinaryPow|And|Add|Conversion|Mul|Selector|Conditional)Expression")=BinaryExpression
+      extends("(functionInvocation|simpleVariable|mapArrayVariable|fieldVariable|xmlAttribVariable|invocation)Reference")=VariableReference
+      extends("((ValueTypeType|BuiltInReferenceTypeType|VariableReference|LambdaFunction|ConnectorInit|TypeCasting|TypeConversion|TypeAccess|Unary|Braced|BinaryPow|BinaryDivMulMod|BinaryAddSub|BinaryCompare|BinaryEqual|BinaryAnd|BinaryOr|Ternary)Expression)")=Expression
+      extends("((Simple|Array|Record)Literal)")=Expression
+
 }
 
 CompilationUnit ::= PackageDeclaration? (ImportDeclaration | NamespaceDeclaration)* (AnnotationAttachment* Definition)*
@@ -238,6 +244,7 @@ AnnotationAttributeArray ::= LEFT_BRACKET (AnnotationAttributeValue (COMMA Annot
 // //============================================================================================================
 //// STATEMENTS / BLOCKS
 
+// Todo - Add recover rules
 Statement
     ::= VariableDefinitionStatement
     |   AssignmentStatement
@@ -306,7 +313,7 @@ ForkJoinStatement ::= fork LEFT_BRACE WorkerDeclaration* RIGHT_BRACE JoinClause?
 // below typeName is only 'message[]'
 JoinClause ::= join (LEFT_PARENTHESIS JoinConditions RIGHT_PARENTHESIS)? LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Statement* RIGHT_BRACE
 
-JoinConditions ::= some IntegerLiteral (identifier (COMMA identifier)*)? | all (identifier (COMMA identifier)*)?
+JoinConditions ::= some integerLiteral (identifier (COMMA identifier)*)? | all (identifier (COMMA identifier)*)?
 
 // below typeName is only 'message[]'
 TimeoutClause ::= timeout LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Statement* RIGHT_BRACE
@@ -331,12 +338,16 @@ TriggerWorker ::= ExpressionList RARROW identifier SEMICOLON | ExpressionList RA
 // below left identifier is of type WORKER and the right identifier is of type message
 WorkerReply ::= ExpressionList LARROW identifier SEMICOLON
 
-// Todo - remove left recursion
-VariableReference ::= FunctionInvocation | NameReference
-//    |   VariableReference index
-//    |   variableReference field
-//    |   variableReference xmlAttrib
-//    |   variableReference invocation
+// Note - Order of 'simpleVariableReference' and 'functionInvocationReference' because otherwise all function
+// invocations will match simpleVariableReference first.
+VariableReference ::= functionInvocationReference | simpleVariableReference | mapArrayVariableReference | fieldVariableReference | xmlAttribVariableReference | invocationReference
+
+functionInvocationReference ::= FunctionInvocation
+simpleVariableReference ::= NameReference
+mapArrayVariableReference ::= VariableReference Index
+fieldVariableReference ::= VariableReference Field
+xmlAttribVariableReference ::= VariableReference XmlAttrib
+invocationReference ::= VariableReference Invocation
 
 Field ::= DOT identifier
 
@@ -372,32 +383,53 @@ NamespaceDeclarationStatement ::= NamespaceDeclaration
 
 NamespaceDeclaration ::= xmlns quotedStringLiteral (as identifier)? SEMICOLON {pin=1}
 
-// Todo - Remove left recursion
 Expression
     ::=  SimpleLiteral
     |   ArrayLiteral
     |   RecordLiteral
 //    |   XmlLiteral
 //    |   StringTemplateLiteral
-    |   ValueTypeName DOT identifier
-    |   BuiltInReferenceTypeName DOT identifier
-    |   VariableReference
-    |   LambdaFunction
-    |   ConnectorInit
-    |   LEFT_PARENTHESIS TypeName RIGHT_PARENTHESIS Expression
-    |   LT TypeName (COMMA FunctionInvocation)? GT Expression
-    |   typeof BuiltInTypeName
-    |   (ADD | SUB | NOT | lengthof | typeof) Expression
-    |   LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS
-//    |   expression POW expression
-//    |   expression (DIV | MUL | MOD) expression                             # binaryDivMulModExpression
-//    |   expression (ADD | SUB) expression                                   # binaryAddSubExpression
-//    |   expression (LT_EQUAL | GT_EQUAL | GT | LT) expression               # binaryCompareExpression
-//    |   expression (EQUAL | NOT_EQUAL) expression                           # binaryEqualExpression
-//    |   expression AND expression                                           # binaryAndExpression
-//    |   expression OR expression                                            # binaryOrExpression
-//    |   expression QUESTION_MARK expression COLON expression                # ternaryExpression
+    |   ValueTypeTypeExpression
+    |   BuiltInReferenceTypeTypeExpression
+    |   VariableReferenceExpression
+    |   LambdaFunctionExpression
+    |   ConnectorInitExpression
+    |   TypeCastingExpression
+    |   TypeConversionExpression
+    |   TypeAccessExpression
+    |   UnaryExpression
+    |   BracedExpression
+    |   BinaryPowExpression
+    |   BinaryDivMulModExpression
+    |   BinaryAddSubExpression
+    |   BinaryCompareExpression
+    |   BinaryEqualExpression
+    |   BinaryAndExpression
+    |   BinaryOrExpression
+    |   TernaryExpression
 
+//fake BinaryExpression ::= Expression+ {
+//  methods=[left="Expression[0]" right="Expression[1]" getOperator]
+//}
+
+ValueTypeTypeExpression ::= ValueTypeName DOT identifier
+BuiltInReferenceTypeTypeExpression ::= BuiltInReferenceTypeName DOT identifier
+VariableReferenceExpression ::= VariableReference
+LambdaFunctionExpression ::= LambdaFunction
+ConnectorInitExpression ::= ConnectorInit
+TypeCastingExpression ::= LEFT_PARENTHESIS TypeName RIGHT_PARENTHESIS Expression
+TypeConversionExpression ::= LT TypeName (COMMA FunctionInvocation)? GT Expression
+TypeAccessExpression ::= typeof BuiltInTypeName
+UnaryExpression ::= (ADD | SUB | NOT | lengthof | typeof) Expression
+BracedExpression ::= LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS
+BinaryPowExpression ::= Expression POW Expression
+BinaryDivMulModExpression ::= Expression (DIV | MUL | MOD) Expression
+BinaryAddSubExpression ::= Expression (ADD | SUB) Expression
+BinaryCompareExpression ::= Expression (LT_EQUAL | GT_EQUAL | GT | LT) Expression
+BinaryEqualExpression ::= Expression (EQUAL | NOT_EQUAL) Expression
+BinaryAndExpression ::= Expression AND Expression
+BinaryOrExpression ::= Expression OR Expression
+TernaryExpression ::= Expression QUESTION_MARK Expression COLON Expression
 
 ////reusable productions
 
@@ -493,6 +525,6 @@ SimpleLiteral ::= (ADD|SUB)? integerLiteral /*| (ADD|SUB)? floatingPointLiteral*
 //    |   StringTemplateText
 //    ;
 
-//AnyIdentifierName ::= identifier | ReservedWord
+AnyIdentifierName ::= identifier | ReservedWord
 
-//ReservedWord ::= foreach | map
+ReservedWord ::= foreach | map

@@ -37,7 +37,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
 
   public void parseLight(IElementType t, PsiBuilder b) {
     boolean r;
-    b = adapt_builder_(t, b, this, null);
+    b = adapt_builder_(t, b, this, EXTENDS_SETS_);
     Marker m = enter_section_(b, 0, _COLLAPSE_, null);
     if (t == ABORT_STATEMENT) {
       r = AbortStatement(b, 0);
@@ -69,8 +69,8 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == ANON_STRUCT_TYPE_NAME) {
       r = AnonStructTypeName(b, 0);
     }
-    else if (t == ARRAY_LITERAL) {
-      r = ArrayLiteral(b, 0);
+    else if (t == ANY_IDENTIFIER_NAME) {
+      r = AnyIdentifierName(b, 0);
     }
     else if (t == ASSIGNMENT_STATEMENT) {
       r = AssignmentStatement(b, 0);
@@ -127,7 +127,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
       r = Enumerator(b, 0);
     }
     else if (t == EXPRESSION) {
-      r = Expression(b, 0);
+      r = Expression(b, 0, -1);
     }
     else if (t == EXPRESSION_LIST) {
       r = ExpressionList(b, 0);
@@ -243,11 +243,11 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == RECORD_KEY_VALUE) {
       r = RecordKeyValue(b, 0);
     }
-    else if (t == RECORD_LITERAL) {
-      r = RecordLiteral(b, 0);
-    }
     else if (t == REFERENCE_TYPE_NAME) {
       r = ReferenceTypeName(b, 0);
+    }
+    else if (t == RESERVED_WORD) {
+      r = ReservedWord(b, 0);
     }
     else if (t == RESOURCE_DEFINITION) {
       r = ResourceDefinition(b, 0);
@@ -266,9 +266,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     }
     else if (t == SERVICE_DEFINITION) {
       r = ServiceDefinition(b, 0);
-    }
-    else if (t == SIMPLE_LITERAL) {
-      r = SimpleLiteral(b, 0);
     }
     else if (t == STATEMENT) {
       r = Statement(b, 0);
@@ -316,7 +313,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
       r = VariableDefinitionStatement(b, 0);
     }
     else if (t == VARIABLE_REFERENCE) {
-      r = VariableReference(b, 0);
+      r = VariableReference(b, 0, -1);
     }
     else if (t == VARIABLE_REFERENCE_LIST) {
       r = VariableReferenceList(b, 0);
@@ -369,6 +366,17 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   protected boolean parse_root_(IElementType t, PsiBuilder b, int l) {
     return CompilationUnit(b, l + 1);
   }
+
+  public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
+    create_token_set_(FIELD_VARIABLE_REFERENCE, FUNCTION_INVOCATION_REFERENCE, INVOCATION_REFERENCE, MAP_ARRAY_VARIABLE_REFERENCE,
+      SIMPLE_VARIABLE_REFERENCE, VARIABLE_REFERENCE, XML_ATTRIB_VARIABLE_REFERENCE),
+    create_token_set_(ARRAY_LITERAL, BINARY_ADD_SUB_EXPRESSION, BINARY_AND_EXPRESSION, BINARY_COMPARE_EXPRESSION,
+      BINARY_DIV_MUL_MOD_EXPRESSION, BINARY_EQUAL_EXPRESSION, BINARY_OR_EXPRESSION, BINARY_POW_EXPRESSION,
+      BRACED_EXPRESSION, BUILT_IN_REFERENCE_TYPE_TYPE_EXPRESSION, CONNECTOR_INIT_EXPRESSION, EXPRESSION,
+      LAMBDA_FUNCTION_EXPRESSION, RECORD_LITERAL, SIMPLE_LITERAL, TERNARY_EXPRESSION,
+      TYPE_ACCESS_EXPRESSION, TYPE_CASTING_EXPRESSION, TYPE_CONVERSION_EXPRESSION, UNARY_EXPRESSION,
+      VALUE_TYPE_TYPE_EXPRESSION, VARIABLE_REFERENCE_EXPRESSION),
+  };
 
   /* ********************************************************** */
   // abort SEMICOLON
@@ -619,24 +627,15 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LEFT_BRACKET ExpressionList? RIGHT_BRACKET
-  public static boolean ArrayLiteral(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ArrayLiteral")) return false;
-    if (!nextTokenIs(b, LEFT_BRACKET)) return false;
+  // identifier | ReservedWord
+  public static boolean AnyIdentifierName(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AnyIdentifierName")) return false;
     boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, LEFT_BRACKET);
-    r = r && ArrayLiteral_1(b, l + 1);
-    r = r && consumeToken(b, RIGHT_BRACKET);
-    exit_section_(b, m, ARRAY_LITERAL, r);
+    Marker m = enter_section_(b, l, _NONE_, ANY_IDENTIFIER_NAME, "<any identifier name>");
+    r = consumeToken(b, IDENTIFIER);
+    if (!r) r = ReservedWord(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
-  }
-
-  // ExpressionList?
-  private static boolean ArrayLiteral_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ArrayLiteral_1")) return false;
-    ExpressionList(b, l + 1);
-    return true;
   }
 
   /* ********************************************************** */
@@ -650,7 +649,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     r = r && VariableReferenceList(b, l + 1);
     p = r; // pin = 2
     r = r && report_error_(b, consumeToken(b, ASSIGN));
-    r = p && report_error_(b, Expression(b, l + 1)) && r;
+    r = p && report_error_(b, Expression(b, l + 1, -1)) && r;
     r = p && consumeToken(b, SEMICOLON) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -730,7 +729,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, BIND_STATEMENT, null);
     r = consumeToken(b, BIND);
     p = r; // pin = 1
-    r = r && report_error_(b, Expression(b, l + 1));
+    r = r && report_error_(b, Expression(b, l + 1, -1));
     r = p && report_error_(b, consumeTokens(b, -1, WITH, IDENTIFIER, SEMICOLON)) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -1366,7 +1365,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, ELSE_IF_CLAUSE, null);
     r = consumeTokens(b, 2, ELSE, IF, LEFT_PARENTHESIS);
     p = r; // pin = 2
-    r = r && report_error_(b, Expression(b, l + 1));
+    r = r && report_error_(b, Expression(b, l + 1, -1));
     r = p && report_error_(b, consumeTokens(b, -1, RIGHT_PARENTHESIS, LEFT_BRACE)) && r;
     r = p && report_error_(b, ElseIfClause_6(b, l + 1)) && r;
     r = p && consumeToken(b, RIGHT_BRACE) && r;
@@ -1426,7 +1425,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "EndpointDeclaration_2_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = VariableReference(b, l + 1);
+    r = VariableReference(b, l + 1, -1);
     if (!r) r = ConnectorInit(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -1472,164 +1471,12 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // SimpleLiteral
-  //     |   ArrayLiteral
-  //     |   RecordLiteral
-  // //    |   XmlLiteral
-  // //    |   StringTemplateLiteral
-  //     |   ValueTypeName DOT identifier
-  //     |   BuiltInReferenceTypeName DOT identifier
-  //     |   VariableReference
-  //     |   LambdaFunction
-  //     |   ConnectorInit
-  //     |   LEFT_PARENTHESIS TypeName RIGHT_PARENTHESIS Expression
-  //     |   LT TypeName (COMMA FunctionInvocation)? GT Expression
-  //     |   typeof BuiltInTypeName
-  //     |   (ADD | SUB | NOT | lengthof | typeof) Expression
-  //     |   LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS
-  public static boolean Expression(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _COLLAPSE_, EXPRESSION, "<expression>");
-    r = SimpleLiteral(b, l + 1);
-    if (!r) r = ArrayLiteral(b, l + 1);
-    if (!r) r = RecordLiteral(b, l + 1);
-    if (!r) r = Expression_3(b, l + 1);
-    if (!r) r = Expression_4(b, l + 1);
-    if (!r) r = VariableReference(b, l + 1);
-    if (!r) r = LambdaFunction(b, l + 1);
-    if (!r) r = ConnectorInit(b, l + 1);
-    if (!r) r = Expression_8(b, l + 1);
-    if (!r) r = Expression_9(b, l + 1);
-    if (!r) r = Expression_10(b, l + 1);
-    if (!r) r = Expression_11(b, l + 1);
-    if (!r) r = Expression_12(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // ValueTypeName DOT identifier
-  private static boolean Expression_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression_3")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = ValueTypeName(b, l + 1);
-    r = r && consumeTokens(b, 0, DOT, IDENTIFIER);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // BuiltInReferenceTypeName DOT identifier
-  private static boolean Expression_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression_4")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = BuiltInReferenceTypeName(b, l + 1);
-    r = r && consumeTokens(b, 0, DOT, IDENTIFIER);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // LEFT_PARENTHESIS TypeName RIGHT_PARENTHESIS Expression
-  private static boolean Expression_8(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression_8")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, LEFT_PARENTHESIS);
-    r = r && TypeName(b, l + 1);
-    r = r && consumeToken(b, RIGHT_PARENTHESIS);
-    r = r && Expression(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // LT TypeName (COMMA FunctionInvocation)? GT Expression
-  private static boolean Expression_9(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression_9")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, LT);
-    r = r && TypeName(b, l + 1);
-    r = r && Expression_9_2(b, l + 1);
-    r = r && consumeToken(b, GT);
-    r = r && Expression(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (COMMA FunctionInvocation)?
-  private static boolean Expression_9_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression_9_2")) return false;
-    Expression_9_2_0(b, l + 1);
-    return true;
-  }
-
-  // COMMA FunctionInvocation
-  private static boolean Expression_9_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression_9_2_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && FunctionInvocation(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // typeof BuiltInTypeName
-  private static boolean Expression_10(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression_10")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, TYPEOF);
-    r = r && BuiltInTypeName(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (ADD | SUB | NOT | lengthof | typeof) Expression
-  private static boolean Expression_11(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression_11")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = Expression_11_0(b, l + 1);
-    r = r && Expression(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // ADD | SUB | NOT | lengthof | typeof
-  private static boolean Expression_11_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression_11_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, ADD);
-    if (!r) r = consumeToken(b, SUB);
-    if (!r) r = consumeToken(b, NOT);
-    if (!r) r = consumeToken(b, LENGTHOF);
-    if (!r) r = consumeToken(b, TYPEOF);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS
-  private static boolean Expression_12(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Expression_12")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, LEFT_PARENTHESIS);
-    r = r && Expression(b, l + 1);
-    r = r && consumeToken(b, RIGHT_PARENTHESIS);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
   // Expression (COMMA Expression)*
   public static boolean ExpressionList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExpressionList")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, EXPRESSION_LIST, "<expression list>");
-    r = Expression(b, l + 1);
+    r = Expression(b, l + 1, -1);
     r = r && ExpressionList_1(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
@@ -1653,7 +1500,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COMMA);
-    r = r && Expression(b, l + 1);
+    r = r && Expression(b, l + 1, -1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -1665,7 +1512,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = VariableReference(b, l + 1);
+    r = VariableReference(b, l + 1, -1);
     r = r && consumeToken(b, SEMICOLON);
     exit_section_(b, m, EXPRESSION_STMT, r);
     return r;
@@ -1801,7 +1648,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "ForeachStatement_4")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Expression(b, l + 1);
+    r = Expression(b, l + 1, -1);
     if (!r) r = IntRangeExpression(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -1979,7 +1826,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, ASSIGN);
-    r = r && Expression(b, l + 1);
+    r = r && Expression(b, l + 1, -1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -1993,7 +1840,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, IF_CLAUSE, null);
     r = consumeTokens(b, 1, IF, LEFT_PARENTHESIS);
     p = r; // pin = 1
-    r = r && report_error_(b, Expression(b, l + 1));
+    r = r && report_error_(b, Expression(b, l + 1, -1));
     r = p && report_error_(b, consumeTokens(b, -1, RIGHT_PARENTHESIS, LEFT_BRACE)) && r;
     r = p && report_error_(b, IfClause_5(b, l + 1)) && r;
     r = p && consumeToken(b, RIGHT_BRACE) && r;
@@ -2085,7 +1932,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, LEFT_BRACKET);
-    r = r && Expression(b, l + 1);
+    r = r && Expression(b, l + 1, -1);
     r = r && consumeToken(b, RIGHT_BRACKET);
     exit_section_(b, m, INDEX, r);
     return r;
@@ -2108,9 +1955,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "IntRangeExpression_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Expression(b, l + 1);
+    r = Expression(b, l + 1, -1);
     r = r && consumeToken(b, RANGE);
-    r = r && Expression(b, l + 1);
+    r = r && Expression(b, l + 1, -1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -2121,9 +1968,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = IntRangeExpression_1_0(b, l + 1);
-    r = r && Expression(b, l + 1);
+    r = r && Expression(b, l + 1, -1);
     r = r && consumeToken(b, RANGE);
-    r = r && Expression(b, l + 1);
+    r = r && Expression(b, l + 1, -1);
     r = r && IntRangeExpression_1_4(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -2158,7 +2005,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!nextTokenIs(b, DOT)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, DOT, ANYIDENTIFIERNAME, LEFT_PARENTHESIS);
+    r = consumeToken(b, DOT);
+    r = r && AnyIdentifierName(b, l + 1);
+    r = r && consumeToken(b, LEFT_PARENTHESIS);
     r = r && Invocation_3(b, l + 1);
     r = r && consumeToken(b, RIGHT_PARENTHESIS);
     exit_section_(b, m, INVOCATION, r);
@@ -2222,7 +2071,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // some IntegerLiteral (identifier (COMMA identifier)*)? | all (identifier (COMMA identifier)*)?
+  // some integerLiteral (identifier (COMMA identifier)*)? | all (identifier (COMMA identifier)*)?
   public static boolean JoinConditions(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "JoinConditions")) return false;
     if (!nextTokenIs(b, "<join conditions>", ALL, SOME)) return false;
@@ -2234,7 +2083,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // some IntegerLiteral (identifier (COMMA identifier)*)?
+  // some integerLiteral (identifier (COMMA identifier)*)?
   private static boolean JoinConditions_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "JoinConditions_0")) return false;
     boolean r;
@@ -2800,63 +2649,8 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, RECORD_KEY_VALUE, "<record key value>");
     r = RecordKey(b, l + 1);
     r = r && consumeToken(b, COLON);
-    r = r && Expression(b, l + 1);
+    r = r && Expression(b, l + 1, -1);
     exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // LEFT_BRACE (RecordKeyValue (COMMA RecordKeyValue)*)? RIGHT_BRACE
-  public static boolean RecordLiteral(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "RecordLiteral")) return false;
-    if (!nextTokenIs(b, LEFT_BRACE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, LEFT_BRACE);
-    r = r && RecordLiteral_1(b, l + 1);
-    r = r && consumeToken(b, RIGHT_BRACE);
-    exit_section_(b, m, RECORD_LITERAL, r);
-    return r;
-  }
-
-  // (RecordKeyValue (COMMA RecordKeyValue)*)?
-  private static boolean RecordLiteral_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "RecordLiteral_1")) return false;
-    RecordLiteral_1_0(b, l + 1);
-    return true;
-  }
-
-  // RecordKeyValue (COMMA RecordKeyValue)*
-  private static boolean RecordLiteral_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "RecordLiteral_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = RecordKeyValue(b, l + 1);
-    r = r && RecordLiteral_1_0_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (COMMA RecordKeyValue)*
-  private static boolean RecordLiteral_1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "RecordLiteral_1_0_1")) return false;
-    int c = current_position_(b);
-    while (true) {
-      if (!RecordLiteral_1_0_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "RecordLiteral_1_0_1", c)) break;
-      c = current_position_(b);
-    }
-    return true;
-  }
-
-  // COMMA RecordKeyValue
-  private static boolean RecordLiteral_1_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "RecordLiteral_1_0_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && RecordKeyValue(b, l + 1);
-    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -2869,6 +2663,19 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     r = BuiltInReferenceTypeName(b, l + 1);
     if (!r) r = UserDefineTypeName(b, l + 1);
     if (!r) r = AnonStructTypeName(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // foreach | map
+  public static boolean ReservedWord(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ReservedWord")) return false;
+    if (!nextTokenIs(b, "<reserved word>", FOREACH, MAP)) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, RESERVED_WORD, "<reserved word>");
+    r = consumeToken(b, FOREACH);
+    if (!r) r = consumeToken(b, MAP);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -2911,7 +2718,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, RETRIES_STATEMENT, null);
     r = consumeTokens(b, 1, RETRIES, LEFT_PARENTHESIS);
     p = r; // pin = 1
-    r = r && report_error_(b, Expression(b, l + 1));
+    r = r && report_error_(b, Expression(b, l + 1, -1));
     r = p && consumeToken(b, RIGHT_PARENTHESIS) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -3051,47 +2858,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (ADD|SUB)? integerLiteral /*| (ADD|SUB)? floatingPointLiteral*/ | quotedStringLiteral
-  public static boolean SimpleLiteral(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SimpleLiteral")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, SIMPLE_LITERAL, "<simple literal>");
-    r = SimpleLiteral_0(b, l + 1);
-    if (!r) r = consumeToken(b, QUOTEDSTRINGLITERAL);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // (ADD|SUB)? integerLiteral
-  private static boolean SimpleLiteral_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SimpleLiteral_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = SimpleLiteral_0_0(b, l + 1);
-    r = r && consumeToken(b, INTEGERLITERAL);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (ADD|SUB)?
-  private static boolean SimpleLiteral_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SimpleLiteral_0_0")) return false;
-    SimpleLiteral_0_0_0(b, l + 1);
-    return true;
-  }
-
-  // ADD|SUB
-  private static boolean SimpleLiteral_0_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SimpleLiteral_0_0_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, ADD);
-    if (!r) r = consumeToken(b, SUB);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
   // VariableDefinitionStatement
   //     |   AssignmentStatement
   //     |   BindStatement
@@ -3178,7 +2944,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, THROW);
-    r = r && Expression(b, l + 1);
+    r = r && Expression(b, l + 1, -1);
     r = r && consumeToken(b, SEMICOLON);
     exit_section_(b, m, THROW_STATEMENT, r);
     return r;
@@ -3192,7 +2958,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = consumeTokens(b, 0, TIMEOUT, LEFT_PARENTHESIS);
-    r = r && Expression(b, l + 1);
+    r = r && Expression(b, l + 1, -1);
     r = r && consumeTokens(b, 0, RIGHT_PARENTHESIS, LEFT_PARENTHESIS);
     r = r && TypeName(b, l + 1);
     r = r && consumeTokens(b, 0, IDENTIFIER, RIGHT_PARENTHESIS, LEFT_BRACE);
@@ -3602,22 +3368,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, ASSIGN);
     p = r; // pin = 1
-    r = r && Expression(b, l + 1);
+    r = r && Expression(b, l + 1, -1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
-  }
-
-  /* ********************************************************** */
-  // FunctionInvocation | NameReference
-  public static boolean VariableReference(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "VariableReference")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = FunctionInvocation(b, l + 1);
-    if (!r) r = NameReference(b, l + 1);
-    exit_section_(b, m, VARIABLE_REFERENCE, r);
-    return r;
   }
 
   /* ********************************************************** */
@@ -3627,7 +3380,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = VariableReference(b, l + 1);
+    r = VariableReference(b, l + 1, -1);
     r = r && VariableReferenceList_1(b, l + 1);
     exit_section_(b, m, VARIABLE_REFERENCE_LIST, r);
     return r;
@@ -3651,7 +3404,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COMMA);
-    r = r && VariableReference(b, l + 1);
+    r = r && VariableReference(b, l + 1, -1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -3665,7 +3418,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, WHILE_STATEMENT, null);
     r = consumeTokens(b, 1, WHILE, LEFT_PARENTHESIS);
     p = r; // pin = 1
-    r = r && report_error_(b, Expression(b, l + 1));
+    r = r && report_error_(b, Expression(b, l + 1, -1));
     r = p && report_error_(b, consumeTokens(b, -1, RIGHT_PARENTHESIS, LEFT_BRACE)) && r;
     r = p && report_error_(b, WhileStatement_5(b, l + 1)) && r;
     r = p && consumeToken(b, RIGHT_BRACE) && r;
@@ -3774,7 +3527,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, LEFT_BRACKET);
-    r = r && Expression(b, l + 1);
+    r = r && Expression(b, l + 1, -1);
     r = r && consumeToken(b, RIGHT_BRACKET);
     exit_section_(b, m, null, r);
     return r;
@@ -3883,7 +3636,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     p = r; // pin = 2
     r = r && report_error_(b, ValueTypeName(b, l + 1));
     r = p && report_error_(b, consumeTokens(b, -1, IDENTIFIER, ASSIGN)) && r;
-    r = p && report_error_(b, Expression(b, l + 1)) && r;
+    r = p && report_error_(b, Expression(b, l + 1, -1)) && r;
     r = p && consumeToken(b, SEMICOLON) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -3962,6 +3715,518 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "structDefinition_0")) return false;
     consumeToken(b, PUBLIC);
     return true;
+  }
+
+  /* ********************************************************** */
+  // Expression root: Expression
+  // Operator priority table:
+  // 0: ATOM(SimpleLiteral)
+  // 1: ATOM(ArrayLiteral)
+  // 2: ATOM(RecordLiteral)
+  // 3: ATOM(ValueTypeTypeExpression)
+  // 4: ATOM(BuiltInReferenceTypeTypeExpression)
+  // 5: ATOM(VariableReferenceExpression)
+  // 6: ATOM(LambdaFunctionExpression)
+  // 7: ATOM(ConnectorInitExpression)
+  // 8: PREFIX(TypeCastingExpression)
+  // 9: PREFIX(TypeConversionExpression)
+  // 10: ATOM(TypeAccessExpression)
+  // 11: PREFIX(UnaryExpression)
+  // 12: PREFIX(BracedExpression)
+  // 13: BINARY(BinaryPowExpression)
+  // 14: BINARY(BinaryDivMulModExpression)
+  // 15: BINARY(BinaryAddSubExpression)
+  // 16: BINARY(BinaryCompareExpression)
+  // 17: BINARY(BinaryEqualExpression)
+  // 18: BINARY(BinaryAndExpression)
+  // 19: BINARY(BinaryOrExpression)
+  // 20: BINARY(TernaryExpression)
+  public static boolean Expression(PsiBuilder b, int l, int g) {
+    if (!recursion_guard_(b, l, "Expression")) return false;
+    addVariant(b, "<expression>");
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, "<expression>");
+    r = SimpleLiteral(b, l + 1);
+    if (!r) r = ArrayLiteral(b, l + 1);
+    if (!r) r = RecordLiteral(b, l + 1);
+    if (!r) r = ValueTypeTypeExpression(b, l + 1);
+    if (!r) r = BuiltInReferenceTypeTypeExpression(b, l + 1);
+    if (!r) r = VariableReferenceExpression(b, l + 1);
+    if (!r) r = LambdaFunctionExpression(b, l + 1);
+    if (!r) r = ConnectorInitExpression(b, l + 1);
+    if (!r) r = TypeCastingExpression(b, l + 1);
+    if (!r) r = TypeConversionExpression(b, l + 1);
+    if (!r) r = TypeAccessExpression(b, l + 1);
+    if (!r) r = UnaryExpression(b, l + 1);
+    if (!r) r = BracedExpression(b, l + 1);
+    p = r;
+    r = r && Expression_0(b, l + 1, g);
+    exit_section_(b, l, m, null, r, p, null);
+    return r || p;
+  }
+
+  public static boolean Expression_0(PsiBuilder b, int l, int g) {
+    if (!recursion_guard_(b, l, "Expression_0")) return false;
+    boolean r = true;
+    while (true) {
+      Marker m = enter_section_(b, l, _LEFT_, null);
+      if (g < 13 && consumeTokenSmart(b, POW)) {
+        r = Expression(b, l, 13);
+        exit_section_(b, l, m, BINARY_POW_EXPRESSION, r, true, null);
+      }
+      else if (g < 14 && BinaryDivMulModExpression_0(b, l + 1)) {
+        r = Expression(b, l, 14);
+        exit_section_(b, l, m, BINARY_DIV_MUL_MOD_EXPRESSION, r, true, null);
+      }
+      else if (g < 15 && BinaryAddSubExpression_0(b, l + 1)) {
+        r = Expression(b, l, 15);
+        exit_section_(b, l, m, BINARY_ADD_SUB_EXPRESSION, r, true, null);
+      }
+      else if (g < 16 && BinaryCompareExpression_0(b, l + 1)) {
+        r = Expression(b, l, 16);
+        exit_section_(b, l, m, BINARY_COMPARE_EXPRESSION, r, true, null);
+      }
+      else if (g < 17 && BinaryEqualExpression_0(b, l + 1)) {
+        r = Expression(b, l, 17);
+        exit_section_(b, l, m, BINARY_EQUAL_EXPRESSION, r, true, null);
+      }
+      else if (g < 18 && consumeTokenSmart(b, AND)) {
+        r = Expression(b, l, 18);
+        exit_section_(b, l, m, BINARY_AND_EXPRESSION, r, true, null);
+      }
+      else if (g < 19 && consumeTokenSmart(b, OR)) {
+        r = Expression(b, l, 19);
+        exit_section_(b, l, m, BINARY_OR_EXPRESSION, r, true, null);
+      }
+      else if (g < 20 && consumeTokenSmart(b, QUESTION_MARK)) {
+        r = report_error_(b, Expression(b, l, 20));
+        r = TernaryExpression_1(b, l + 1) && r;
+        exit_section_(b, l, m, TERNARY_EXPRESSION, r, true, null);
+      }
+      else {
+        exit_section_(b, l, m, null, false, false, null);
+        break;
+      }
+    }
+    return r;
+  }
+
+  // (ADD|SUB)? integerLiteral /*| (ADD|SUB)? floatingPointLiteral*/ | quotedStringLiteral
+  public static boolean SimpleLiteral(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SimpleLiteral")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, SIMPLE_LITERAL, "<simple literal>");
+    r = SimpleLiteral_0(b, l + 1);
+    if (!r) r = consumeTokenSmart(b, QUOTEDSTRINGLITERAL);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // (ADD|SUB)? integerLiteral
+  private static boolean SimpleLiteral_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SimpleLiteral_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = SimpleLiteral_0_0(b, l + 1);
+    r = r && consumeToken(b, INTEGERLITERAL);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (ADD|SUB)?
+  private static boolean SimpleLiteral_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SimpleLiteral_0_0")) return false;
+    SimpleLiteral_0_0_0(b, l + 1);
+    return true;
+  }
+
+  // ADD|SUB
+  private static boolean SimpleLiteral_0_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SimpleLiteral_0_0_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, ADD);
+    if (!r) r = consumeTokenSmart(b, SUB);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // LEFT_BRACKET ExpressionList? RIGHT_BRACKET
+  public static boolean ArrayLiteral(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ArrayLiteral")) return false;
+    if (!nextTokenIsSmart(b, LEFT_BRACKET)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, LEFT_BRACKET);
+    r = r && ArrayLiteral_1(b, l + 1);
+    r = r && consumeToken(b, RIGHT_BRACKET);
+    exit_section_(b, m, ARRAY_LITERAL, r);
+    return r;
+  }
+
+  // ExpressionList?
+  private static boolean ArrayLiteral_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ArrayLiteral_1")) return false;
+    ExpressionList(b, l + 1);
+    return true;
+  }
+
+  // LEFT_BRACE (RecordKeyValue (COMMA RecordKeyValue)*)? RIGHT_BRACE
+  public static boolean RecordLiteral(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RecordLiteral")) return false;
+    if (!nextTokenIsSmart(b, LEFT_BRACE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, LEFT_BRACE);
+    r = r && RecordLiteral_1(b, l + 1);
+    r = r && consumeToken(b, RIGHT_BRACE);
+    exit_section_(b, m, RECORD_LITERAL, r);
+    return r;
+  }
+
+  // (RecordKeyValue (COMMA RecordKeyValue)*)?
+  private static boolean RecordLiteral_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RecordLiteral_1")) return false;
+    RecordLiteral_1_0(b, l + 1);
+    return true;
+  }
+
+  // RecordKeyValue (COMMA RecordKeyValue)*
+  private static boolean RecordLiteral_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RecordLiteral_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = RecordKeyValue(b, l + 1);
+    r = r && RecordLiteral_1_0_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (COMMA RecordKeyValue)*
+  private static boolean RecordLiteral_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RecordLiteral_1_0_1")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!RecordLiteral_1_0_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "RecordLiteral_1_0_1", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // COMMA RecordKeyValue
+  private static boolean RecordLiteral_1_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RecordLiteral_1_0_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, COMMA);
+    r = r && RecordKeyValue(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ValueTypeName DOT identifier
+  public static boolean ValueTypeTypeExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ValueTypeTypeExpression")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, VALUE_TYPE_TYPE_EXPRESSION, "<value type type expression>");
+    r = ValueTypeName(b, l + 1);
+    r = r && consumeTokensSmart(b, 0, DOT, IDENTIFIER);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // BuiltInReferenceTypeName DOT identifier
+  public static boolean BuiltInReferenceTypeTypeExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BuiltInReferenceTypeTypeExpression")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, BUILT_IN_REFERENCE_TYPE_TYPE_EXPRESSION, "<built in reference type type expression>");
+    r = BuiltInReferenceTypeName(b, l + 1);
+    r = r && consumeTokensSmart(b, 0, DOT, IDENTIFIER);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // VariableReference
+  public static boolean VariableReferenceExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "VariableReferenceExpression")) return false;
+    if (!nextTokenIsSmart(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = VariableReference(b, l + 1, -1);
+    exit_section_(b, m, VARIABLE_REFERENCE_EXPRESSION, r);
+    return r;
+  }
+
+  // LambdaFunction
+  public static boolean LambdaFunctionExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "LambdaFunctionExpression")) return false;
+    if (!nextTokenIsSmart(b, FUNCTION)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = LambdaFunction(b, l + 1);
+    exit_section_(b, m, LAMBDA_FUNCTION_EXPRESSION, r);
+    return r;
+  }
+
+  // ConnectorInit
+  public static boolean ConnectorInitExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ConnectorInitExpression")) return false;
+    if (!nextTokenIsSmart(b, CREATE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = ConnectorInit(b, l + 1);
+    exit_section_(b, m, CONNECTOR_INIT_EXPRESSION, r);
+    return r;
+  }
+
+  public static boolean TypeCastingExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeCastingExpression")) return false;
+    if (!nextTokenIsSmart(b, LEFT_PARENTHESIS)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = TypeCastingExpression_0(b, l + 1);
+    p = r;
+    r = p && Expression(b, l, 8);
+    exit_section_(b, l, m, TYPE_CASTING_EXPRESSION, r, p, null);
+    return r || p;
+  }
+
+  // LEFT_PARENTHESIS TypeName RIGHT_PARENTHESIS
+  private static boolean TypeCastingExpression_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeCastingExpression_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, LEFT_PARENTHESIS);
+    r = r && TypeName(b, l + 1);
+    r = r && consumeToken(b, RIGHT_PARENTHESIS);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  public static boolean TypeConversionExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeConversionExpression")) return false;
+    if (!nextTokenIsSmart(b, LT)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = TypeConversionExpression_0(b, l + 1);
+    p = r;
+    r = p && Expression(b, l, 9);
+    exit_section_(b, l, m, TYPE_CONVERSION_EXPRESSION, r, p, null);
+    return r || p;
+  }
+
+  // LT TypeName (COMMA FunctionInvocation)? GT
+  private static boolean TypeConversionExpression_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeConversionExpression_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, LT);
+    r = r && TypeName(b, l + 1);
+    r = r && TypeConversionExpression_0_2(b, l + 1);
+    r = r && consumeToken(b, GT);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (COMMA FunctionInvocation)?
+  private static boolean TypeConversionExpression_0_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeConversionExpression_0_2")) return false;
+    TypeConversionExpression_0_2_0(b, l + 1);
+    return true;
+  }
+
+  // COMMA FunctionInvocation
+  private static boolean TypeConversionExpression_0_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeConversionExpression_0_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, COMMA);
+    r = r && FunctionInvocation(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // typeof BuiltInTypeName
+  public static boolean TypeAccessExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeAccessExpression")) return false;
+    if (!nextTokenIsSmart(b, TYPEOF)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, TYPEOF);
+    r = r && BuiltInTypeName(b, l + 1);
+    exit_section_(b, m, TYPE_ACCESS_EXPRESSION, r);
+    return r;
+  }
+
+  public static boolean UnaryExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnaryExpression")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = UnaryExpression_0(b, l + 1);
+    p = r;
+    r = p && Expression(b, l, 11);
+    exit_section_(b, l, m, UNARY_EXPRESSION, r, p, null);
+    return r || p;
+  }
+
+  // ADD | SUB | NOT | lengthof | typeof
+  private static boolean UnaryExpression_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "UnaryExpression_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, ADD);
+    if (!r) r = consumeTokenSmart(b, SUB);
+    if (!r) r = consumeTokenSmart(b, NOT);
+    if (!r) r = consumeTokenSmart(b, LENGTHOF);
+    if (!r) r = consumeTokenSmart(b, TYPEOF);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  public static boolean BracedExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BracedExpression")) return false;
+    if (!nextTokenIsSmart(b, LEFT_PARENTHESIS)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, null);
+    r = consumeTokenSmart(b, LEFT_PARENTHESIS);
+    p = r;
+    r = p && Expression(b, l, 12);
+    r = p && report_error_(b, consumeToken(b, RIGHT_PARENTHESIS)) && r;
+    exit_section_(b, l, m, BRACED_EXPRESSION, r, p, null);
+    return r || p;
+  }
+
+  // DIV | MUL | MOD
+  private static boolean BinaryDivMulModExpression_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BinaryDivMulModExpression_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, DIV);
+    if (!r) r = consumeTokenSmart(b, MUL);
+    if (!r) r = consumeTokenSmart(b, MOD);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // ADD | SUB
+  private static boolean BinaryAddSubExpression_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BinaryAddSubExpression_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, ADD);
+    if (!r) r = consumeTokenSmart(b, SUB);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // LT_EQUAL | GT_EQUAL | GT | LT
+  private static boolean BinaryCompareExpression_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BinaryCompareExpression_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, LT_EQUAL);
+    if (!r) r = consumeTokenSmart(b, GT_EQUAL);
+    if (!r) r = consumeTokenSmart(b, GT);
+    if (!r) r = consumeTokenSmart(b, LT);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // EQUAL | NOT_EQUAL
+  private static boolean BinaryEqualExpression_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BinaryEqualExpression_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, EQUAL);
+    if (!r) r = consumeTokenSmart(b, NOT_EQUAL);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // COLON Expression
+  private static boolean TernaryExpression_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TernaryExpression_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COLON);
+    r = r && Expression(b, l + 1, -1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // Expression root: VariableReference
+  // Operator priority table:
+  // 0: ATOM(functionInvocationReference)
+  // 1: ATOM(simpleVariableReference)
+  // 2: POSTFIX(mapArrayVariableReference)
+  // 3: POSTFIX(fieldVariableReference)
+  // 4: POSTFIX(xmlAttribVariableReference)
+  // 5: POSTFIX(invocationReference)
+  public static boolean VariableReference(PsiBuilder b, int l, int g) {
+    if (!recursion_guard_(b, l, "VariableReference")) return false;
+    addVariant(b, "<variable reference>");
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, "<variable reference>");
+    r = functionInvocationReference(b, l + 1);
+    if (!r) r = simpleVariableReference(b, l + 1);
+    p = r;
+    r = r && VariableReference_0(b, l + 1, g);
+    exit_section_(b, l, m, null, r, p, null);
+    return r || p;
+  }
+
+  public static boolean VariableReference_0(PsiBuilder b, int l, int g) {
+    if (!recursion_guard_(b, l, "VariableReference_0")) return false;
+    boolean r = true;
+    while (true) {
+      Marker m = enter_section_(b, l, _LEFT_, null);
+      if (g < 2 && Index(b, l + 1)) {
+        r = true;
+        exit_section_(b, l, m, MAP_ARRAY_VARIABLE_REFERENCE, r, true, null);
+      }
+      else if (g < 3 && Field(b, l + 1)) {
+        r = true;
+        exit_section_(b, l, m, FIELD_VARIABLE_REFERENCE, r, true, null);
+      }
+      else if (g < 4 && XmlAttrib(b, l + 1)) {
+        r = true;
+        exit_section_(b, l, m, XML_ATTRIB_VARIABLE_REFERENCE, r, true, null);
+      }
+      else if (g < 5 && Invocation(b, l + 1)) {
+        r = true;
+        exit_section_(b, l, m, INVOCATION_REFERENCE, r, true, null);
+      }
+      else {
+        exit_section_(b, l, m, null, false, false, null);
+        break;
+      }
+    }
+    return r;
+  }
+
+  // FunctionInvocation
+  public static boolean functionInvocationReference(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "functionInvocationReference")) return false;
+    if (!nextTokenIsSmart(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = FunctionInvocation(b, l + 1);
+    exit_section_(b, m, FUNCTION_INVOCATION_REFERENCE, r);
+    return r;
+  }
+
+  // NameReference
+  public static boolean simpleVariableReference(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "simpleVariableReference")) return false;
+    if (!nextTokenIsSmart(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = NameReference(b, l + 1);
+    exit_section_(b, m, SIMPLE_VARIABLE_REFERENCE, r);
+    return r;
   }
 
   final static Parser TopLevelDefinitionRecover_parser_ = new Parser() {

@@ -23,6 +23,9 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaInvocation extends PsiElement {
 
+  @NotNull
+  BallerinaAnyIdentifierName getAnyIdentifierName();
+
   @Nullable
   BallerinaExpressionList getExpressionList();
 

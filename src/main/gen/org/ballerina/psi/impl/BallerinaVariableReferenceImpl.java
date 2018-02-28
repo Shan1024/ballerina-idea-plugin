@@ -27,7 +27,7 @@ import static org.ballerina.psi.BallerinaTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.ballerina.psi.*;
 
-public class BallerinaVariableReferenceImpl extends ASTWrapperPsiElement implements BallerinaVariableReference {
+public abstract class BallerinaVariableReferenceImpl extends ASTWrapperPsiElement implements BallerinaVariableReference {
 
   public BallerinaVariableReferenceImpl(ASTNode node) {
     super(node);
@@ -40,18 +40,6 @@ public class BallerinaVariableReferenceImpl extends ASTWrapperPsiElement impleme
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof BallerinaVisitor) accept((BallerinaVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaFunctionInvocation getFunctionInvocation() {
-    return findChildByClass(BallerinaFunctionInvocation.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaNameReference getNameReference() {
-    return findChildByClass(BallerinaNameReference.class);
   }
 
 }

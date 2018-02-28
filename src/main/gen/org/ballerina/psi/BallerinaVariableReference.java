@@ -23,10 +23,4 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaVariableReference extends PsiElement {
 
-  @Nullable
-  BallerinaFunctionInvocation getFunctionInvocation();
-
-  @Nullable
-  BallerinaNameReference getNameReference();
-
 }

@@ -43,6 +43,12 @@ public class BallerinaInvocationImpl extends ASTWrapperPsiElement implements Bal
   }
 
   @Override
+  @NotNull
+  public BallerinaAnyIdentifierName getAnyIdentifierName() {
+    return findNotNullChildByClass(BallerinaAnyIdentifierName.class);
+  }
+
+  @Override
   @Nullable
   public BallerinaExpressionList getExpressionList() {
     return findChildByClass(BallerinaExpressionList.class);

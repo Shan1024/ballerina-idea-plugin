@@ -24,22 +24,33 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerina.psi.BallerinaTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.ballerina.psi.*;
 
-public abstract class BallerinaExpressionImpl extends ASTWrapperPsiElement implements BallerinaExpression {
+public class BallerinaBuiltInReferenceTypeTypeExpressionImpl extends BallerinaExpressionImpl implements BallerinaBuiltInReferenceTypeTypeExpression {
 
-  public BallerinaExpressionImpl(ASTNode node) {
+  public BallerinaBuiltInReferenceTypeTypeExpressionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitExpression(this);
+    visitor.visitBuiltInReferenceTypeTypeExpression(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof BallerinaVisitor) accept((BallerinaVisitor)visitor);
     else super.accept(visitor);
+  }
+
+  @Override
+  @NotNull
+  public BallerinaBuiltInReferenceTypeName getBuiltInReferenceTypeName() {
+    return findNotNullChildByClass(BallerinaBuiltInReferenceTypeName.class);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getIdentifier() {
+    return findNotNullChildByType(IDENTIFIER);
   }
 
 }

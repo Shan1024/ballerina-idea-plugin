@@ -24,10 +24,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerina.psi.BallerinaTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.ballerina.psi.*;
 
-public class BallerinaSimpleLiteralImpl extends ASTWrapperPsiElement implements BallerinaSimpleLiteral {
+public class BallerinaSimpleLiteralImpl extends BallerinaExpressionImpl implements BallerinaSimpleLiteral {
 
   public BallerinaSimpleLiteralImpl(ASTNode node) {
     super(node);

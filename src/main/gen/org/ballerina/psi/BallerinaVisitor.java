@@ -63,8 +63,12 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
-  public void visitArrayLiteral(@NotNull BallerinaArrayLiteral o) {
+  public void visitAnyIdentifierName(@NotNull BallerinaAnyIdentifierName o) {
     visitPsiElement(o);
+  }
+
+  public void visitArrayLiteral(@NotNull BallerinaArrayLiteral o) {
+    visitExpression(o);
   }
 
   public void visitAssignmentStatement(@NotNull BallerinaAssignmentStatement o) {
@@ -75,8 +79,40 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitBinaryAddSubExpression(@NotNull BallerinaBinaryAddSubExpression o) {
+    visitExpression(o);
+  }
+
+  public void visitBinaryAndExpression(@NotNull BallerinaBinaryAndExpression o) {
+    visitExpression(o);
+  }
+
+  public void visitBinaryCompareExpression(@NotNull BallerinaBinaryCompareExpression o) {
+    visitExpression(o);
+  }
+
+  public void visitBinaryDivMulModExpression(@NotNull BallerinaBinaryDivMulModExpression o) {
+    visitExpression(o);
+  }
+
+  public void visitBinaryEqualExpression(@NotNull BallerinaBinaryEqualExpression o) {
+    visitExpression(o);
+  }
+
+  public void visitBinaryOrExpression(@NotNull BallerinaBinaryOrExpression o) {
+    visitExpression(o);
+  }
+
+  public void visitBinaryPowExpression(@NotNull BallerinaBinaryPowExpression o) {
+    visitExpression(o);
+  }
+
   public void visitBindStatement(@NotNull BallerinaBindStatement o) {
     visitPsiElement(o);
+  }
+
+  public void visitBracedExpression(@NotNull BallerinaBracedExpression o) {
+    visitExpression(o);
   }
 
   public void visitBreakStatement(@NotNull BallerinaBreakStatement o) {
@@ -85,6 +121,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
 
   public void visitBuiltInReferenceTypeName(@NotNull BallerinaBuiltInReferenceTypeName o) {
     visitPsiElement(o);
+  }
+
+  public void visitBuiltInReferenceTypeTypeExpression(@NotNull BallerinaBuiltInReferenceTypeTypeExpression o) {
+    visitExpression(o);
   }
 
   public void visitBuiltInTypeName(@NotNull BallerinaBuiltInTypeName o) {
@@ -113,6 +153,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
 
   public void visitConnectorInit(@NotNull BallerinaConnectorInit o) {
     visitPsiElement(o);
+  }
+
+  public void visitConnectorInitExpression(@NotNull BallerinaConnectorInitExpression o) {
+    visitExpression(o);
   }
 
   public void visitDefinition(@NotNull BallerinaDefinition o) {
@@ -227,6 +271,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitLambdaFunctionExpression(@NotNull BallerinaLambdaFunctionExpression o) {
+    visitExpression(o);
+  }
+
   public void visitLockStatement(@NotNull BallerinaLockStatement o) {
     visitPsiElement(o);
   }
@@ -296,10 +344,14 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitRecordLiteral(@NotNull BallerinaRecordLiteral o) {
-    visitPsiElement(o);
+    visitExpression(o);
   }
 
   public void visitReferenceTypeName(@NotNull BallerinaReferenceTypeName o) {
+    visitPsiElement(o);
+  }
+
+  public void visitReservedWord(@NotNull BallerinaReservedWord o) {
     visitPsiElement(o);
   }
 
@@ -328,7 +380,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitSimpleLiteral(@NotNull BallerinaSimpleLiteral o) {
-    visitPsiElement(o);
+    visitExpression(o);
   }
 
   public void visitStatement(@NotNull BallerinaStatement o) {
@@ -337,6 +389,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
 
   public void visitStructBody(@NotNull BallerinaStructBody o) {
     visitPsiElement(o);
+  }
+
+  public void visitTernaryExpression(@NotNull BallerinaTernaryExpression o) {
+    visitExpression(o);
   }
 
   public void visitThrowStatement(@NotNull BallerinaThrowStatement o) {
@@ -375,8 +431,24 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitTypeAccessExpression(@NotNull BallerinaTypeAccessExpression o) {
+    visitExpression(o);
+  }
+
+  public void visitTypeCastingExpression(@NotNull BallerinaTypeCastingExpression o) {
+    visitExpression(o);
+  }
+
+  public void visitTypeConversionExpression(@NotNull BallerinaTypeConversionExpression o) {
+    visitExpression(o);
+  }
+
   public void visitTypeName(@NotNull BallerinaTypeName o) {
     visitPsiElement(o);
+  }
+
+  public void visitUnaryExpression(@NotNull BallerinaUnaryExpression o) {
+    visitExpression(o);
   }
 
   public void visitUserDefineTypeName(@NotNull BallerinaUserDefineTypeName o) {
@@ -387,12 +459,20 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitValueTypeTypeExpression(@NotNull BallerinaValueTypeTypeExpression o) {
+    visitExpression(o);
+  }
+
   public void visitVariableDefinitionStatement(@NotNull BallerinaVariableDefinitionStatement o) {
     visitPsiElement(o);
   }
 
   public void visitVariableReference(@NotNull BallerinaVariableReference o) {
     visitPsiElement(o);
+  }
+
+  public void visitVariableReferenceExpression(@NotNull BallerinaVariableReferenceExpression o) {
+    visitExpression(o);
   }
 
   public void visitVariableReferenceList(@NotNull BallerinaVariableReferenceList o) {
@@ -447,8 +527,32 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitFieldVariableReference(@NotNull BallerinaFieldVariableReference o) {
+    visitVariableReference(o);
+  }
+
+  public void visitFunctionInvocationReference(@NotNull BallerinaFunctionInvocationReference o) {
+    visitVariableReference(o);
+  }
+
+  public void visitInvocationReference(@NotNull BallerinaInvocationReference o) {
+    visitVariableReference(o);
+  }
+
+  public void visitMapArrayVariableReference(@NotNull BallerinaMapArrayVariableReference o) {
+    visitVariableReference(o);
+  }
+
+  public void visitSimpleVariableReference(@NotNull BallerinaSimpleVariableReference o) {
+    visitVariableReference(o);
+  }
+
   public void visitStructDefinition(@NotNull BallerinaStructDefinition o) {
     visitPsiElement(o);
+  }
+
+  public void visitXmlAttribVariableReference(@NotNull BallerinaXmlAttribVariableReference o) {
+    visitVariableReference(o);
   }
 
   public void visitPsiElement(@NotNull PsiElement o) {

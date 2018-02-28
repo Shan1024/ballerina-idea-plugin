@@ -27,19 +27,31 @@ import static org.ballerina.psi.BallerinaTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.ballerina.psi.*;
 
-public abstract class BallerinaExpressionImpl extends ASTWrapperPsiElement implements BallerinaExpression {
+public class BallerinaAnyIdentifierNameImpl extends ASTWrapperPsiElement implements BallerinaAnyIdentifierName {
 
-  public BallerinaExpressionImpl(ASTNode node) {
+  public BallerinaAnyIdentifierNameImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitExpression(this);
+    visitor.visitAnyIdentifierName(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof BallerinaVisitor) accept((BallerinaVisitor)visitor);
     else super.accept(visitor);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaReservedWord getReservedWord() {
+    return findChildByClass(BallerinaReservedWord.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
   }
 
 }

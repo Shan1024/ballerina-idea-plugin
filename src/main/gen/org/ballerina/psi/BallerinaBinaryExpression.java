@@ -15,31 +15,21 @@
  */
 
 // This is a generated file. Not intended for manual editing.
-package org.ballerina.psi.impl;
+package org.ballerina.psi;
 
 import java.util.List;
 import org.jetbrains.annotations.*;
-import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementVisitor;
-import com.intellij.psi.util.PsiTreeUtil;
-import static org.ballerina.psi.BallerinaTypes.*;
-import com.intellij.extapi.psi.ASTWrapperPsiElement;
-import org.ballerina.psi.*;
 
-public abstract class BallerinaExpressionImpl extends ASTWrapperPsiElement implements BallerinaExpression {
+public interface BallerinaBinaryExpression extends BallerinaExpression {
 
-  public BallerinaExpressionImpl(ASTNode node) {
-    super(node);
-  }
+  @NotNull
+  List<BallerinaExpression> getExpressionList();
 
-  public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitExpression(this);
-  }
+  @NotNull
+  BallerinaExpression getLeft();
 
-  public void accept(@NotNull PsiElementVisitor visitor) {
-    if (visitor instanceof BallerinaVisitor) accept((BallerinaVisitor)visitor);
-    else super.accept(visitor);
-  }
+  @Nullable
+  BallerinaExpression getRight();
 
 }

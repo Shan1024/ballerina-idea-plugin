@@ -42,4 +42,10 @@ public class BallerinaJoinConditionsImpl extends ASTWrapperPsiElement implements
     else super.accept(visitor);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getIntegerLiteral() {
+    return findChildByType(INTEGERLITERAL);
+  }
+
 }
