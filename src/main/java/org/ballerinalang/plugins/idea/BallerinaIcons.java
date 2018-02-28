@@ -6,6 +6,6 @@ import javax.swing.Icon;
 
 public class BallerinaIcons {
 
-    public static final Icon FILE = IconLoader.getIcon("/icons/jar-gray.png");
+    public static final Icon FILE = IconLoader.getIcon("/icons/ballerina.png");
 
 }
