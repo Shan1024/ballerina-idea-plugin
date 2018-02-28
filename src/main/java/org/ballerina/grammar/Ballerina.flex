@@ -64,68 +64,69 @@ LINE_COMMENT = "//" [^\r\n]*
 <YYINITIAL> {
   {WHITE_SPACE}             { return WHITE_SPACE; }
 
-  "package"                 { return PACKAGE; }
-  "import"                  { return IMPORT; }
-  "as"                      { return AS; }
-  "public"                  { return PUBLIC; }
-  "private"                 { return PRIVATE; }
-  "native"                  { return NATIVE; }
-  "service"                 { return SERVICE; }
-  "resource"                { return RESOURCE; }
-  "function"                { return FUNCTION; }
-  "connector"               { return CONNECTOR; }
-  "action"                  { return ACTION; }
-  "struct"                  { return STRUCT; }
-  "annotation"              { return ANNOTATION; }
-  "enum"                    { return ENUM; }
-  "const"                   { return CONST; }
-  "transformer"             { return TRANSFORMER; }
-  "worker"                  { return WORKER; }
-  "endpoint"                { return ENDPOINT; }
-  "xmlns"                   { return XMLNS; }
-  "parameter"               { return TYPE_PARAMETER; }
-  "returns"                 { return RETURNS; }
-  "int"                     { return INT; }
-  "float"                   { return FLOAT; }
-  "boolean"                 { return BOOLEAN; }
-  "string"                  { return STRING; }
-  "blob"                    { return BLOB; }
-  "map"                     { return MAP; }
-  "json"                    { return JSON; }
-  "xml"                     { return XML; }
-  "table"                   { return TABLE; }
-  "any"                     { return ANY; }
-  "type"                    { return TYPE; }
-  "var"                     { return VAR; }
-  "create"                  { return CREATE; }
-  "attach"                  { return ATTACH; }
-  "if"                      { return IF; }
-  "else"                    { return ELSE; }
-  "foreach"                 { return FOREACH; }
-  "while"                   { return WHILE; }
-  "next"                    { return NEXT; }
-  "break"                   { return BREAK; }
-  "fork"                    { return FORK; }
-  "join"                    { return JOIN; }
-  "some"                    { return SOME; }
-  "all"                     { return ALL; }
-  "timeout"                 { return TIMEOUT; }
-  "try"                     { return TRY; }
-  "catch"                   { return CATCH; }
-  "finally"                 { return FINALLY; }
-  "throw"                   { return THROW; }
-  "return"                  { return RETURN; }
-  "transaction"             { return TRANSACTION; }
   "abort"                   { return ABORT; }
-  "failed"                  { return FAILED; }
-  "retries"                 { return RETRIES; }
-  "lengthof"                { return LENGTHOF; }
-  "typeof"                  { return TYPEOF; }
-  "with"                    { return WITH; }
+  "action"                  { return ACTION; }
+  "all"                     { return ALL; }
+  "annotation"              { return ANNOTATION; }
+  "any"                     { return ANY; }
+  "as"                      { return AS; }
+  "attach"                  { return ATTACH; }
   "bind"                    { return BIND; }
+  "blob"                    { return BLOB; }
+  "boolean"                 { return BOOLEAN; }
+  "break"                   { return BREAK; }
+  "catch"                   { return CATCH; }
+  "connector"               { return CONNECTOR; }
+  "const"                   { return CONST; }
+  "create"                  { return CREATE; }
+  "else"                    { return ELSE; }
+  "endpoint"                { return ENDPOINT; }
+  "enum"                    { return ENUM; }
+  "failed"                  { return FAILED; }
+  "finally"                 { return FINALLY; }
+  "float"                   { return FLOAT; }
+  "foreach"                 { return FOREACH; }
+  "fork"                    { return FORK; }
+  "function"                { return FUNCTION; }
+  "if"                      { return IF; }
+  "import"                  { return IMPORT; }
   "in"                      { return IN; }
+  "int"                     { return INT; }
+  "join"                    { return JOIN; }
+  "json"                    { return JSON; }
+  "lengthof"                { return LENGTHOF; }
   "lock"                    { return LOCK; }
+  "map"                     { return MAP; }
+  "native"                  { return NATIVE; }
+  "next"                    { return NEXT; }
+  "package"                 { return PACKAGE; }
+  "parameter"               { return TYPE_PARAMETER; }
+  "private"                 { return PRIVATE; }
+  "public"                  { return PUBLIC; }
+  "resource"                { return RESOURCE; }
+  "retries"                 { return RETRIES; }
+  "return"                  { return RETURN; }
+  "returns"                 { return RETURNS; }
+  "service"                 { return SERVICE; }
+  "some"                    { return SOME; }
+  "string"                  { return STRING; }
+  "struct"                  { return STRUCT; }
+  "table"                   { return TABLE; }
+  "timeout"                 { return TIMEOUT; }
+  "transaction"             { return TRANSACTION; }
+  "transformer"             { return TRANSFORMER; }
+  "try"                     { return TRY; }
+  "type"                    { return TYPE; }
+  "typeof"                  { return TYPEOF; }
+  "throw"                   { return THROW; }
+  "while"                   { return WHILE; }
+  "with"                    { return WITH; }
+  "worker"                  { return WORKER; }
+  "var"                     { return VAR; }
   "version"                 { return VERSION; }
+  "xml"                     { return XML; }
+  "xmlns"                   { return XMLNS; }
+
   ";"                       { return SEMICOLON; }
   ":"                       { return COLON; }
   "."                       { return DOT; }
