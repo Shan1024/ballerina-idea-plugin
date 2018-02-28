@@ -47,3 +47,85 @@ task copyPsiViewerPluginToSandBox(type: Copy) {
 copyPsiViewerPluginToSandBox.dependsOn downloadPsiViewerPlugin
 copyPsiViewerPluginToSandBox.mustRunAfter prepareSandbox
 runIde.dependsOn copyPsiViewerPluginToSandBox
+
+configurations {
+    bnf
+    jflex
+}
+
+dependencies {
+    bnf files("$buildDir/tools/tmp/GrammarKit/lib/grammar-kit.jar")
+    bnf files("$buildDir/tools/light-psi-all.jar")
+    jflex files("$buildDir/tools/JFlex.jar")
+}
+
+task downloadJFlexJar() {
+    download {
+        src 'https://jetbrains.bintray.com/intellij-third-party-dependencies/org/jetbrains/intellij/deps/jflex/jflex/1.7.0/jflex-1.7.0.jar'
+        dest new File("$buildDir/tools/", "JFlex.jar")
+        onlyIfNewer true
+    }
+}
+
+task downloadJFlexSkeleton() {
+    download {
+        src 'https://raw.github.com/JetBrains/intellij-community/master/tools/lexer/idea-flex.skeleton'
+        dest new File("$buildDir/tools/", "idea-flex.skeleton")
+        onlyIfNewer true
+    }
+}
+
+task generateLexer(type: JavaExec) {
+    description 'Generates lexer sources with JFlex.'
+    dependsOn downloadJFlexJar, downloadJFlexSkeleton
+
+    main = 'jflex.Main'
+    args = [
+            '-skel',
+            "$buildDir/tools/idea-flex.skeleton",
+            '-d',
+            'src/main/gen/org/ballerinalang/plugins/idea/lexer/',
+            'src/main/java/org/ballerinalang/plugins/idea/grammar/Ballerina.flex',
+    ]
+
+    classpath = configurations.jflex
+}
+
+task downloadGrammarKit() {
+    download {
+        src 'https://github.com/JetBrains/Grammar-Kit/releases/download/1.2.0.1/GrammarKit.zip'
+        dest new File("$buildDir/tools/", "GrammarKit.zip")
+        onlyIfNewer true
+    }
+}
+
+task downloadGrammarLightPsi() {
+    download {
+        src 'https://github.com/JetBrains/Grammar-Kit/releases/download/1.2.0.1/light-psi-all.jar'
+        dest new File("$buildDir/tools/", "light-psi-all.jar")
+        onlyIfNewer true
+    }
+}
+
+task unzipGrammarKit(type: Copy) {
+    from zipTree("$buildDir/tools/GrammarKit.zip")
+    into "${buildDir}/tools/tmp"
+}
+
+unzipGrammarKit.dependsOn downloadGrammarKit
+
+task generateParser(type: JavaExec) {
+    description 'Generates parser sources with GrammarKit.'
+    dependsOn unzipGrammarKit, downloadGrammarLightPsi
+
+    main = 'org.intellij.grammar.Main'
+    args = ['src/main/gen', file('src/main/java/org/ballerinalang/plugins/idea/grammar/Ballerina.bnf').absolutePath]
+
+    classpath = configurations.bnf + configurations.compile
+}
+
+task generateSources() {
+    dependsOn generateParser, generateLexer
+}
+
+compileJava.dependsOn generateSources
