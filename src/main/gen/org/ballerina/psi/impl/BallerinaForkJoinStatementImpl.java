@@ -27,14 +27,14 @@ import static org.ballerina.psi.BallerinaTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.ballerina.psi.*;
 
-public class BallerinaSimpleLiteralImpl extends ASTWrapperPsiElement implements BallerinaSimpleLiteral {
+public class BallerinaForkJoinStatementImpl extends ASTWrapperPsiElement implements BallerinaForkJoinStatement {
 
-  public BallerinaSimpleLiteralImpl(ASTNode node) {
+  public BallerinaForkJoinStatementImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitSimpleLiteral(this);
+    visitor.visitForkJoinStatement(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -44,14 +44,20 @@ public class BallerinaSimpleLiteralImpl extends ASTWrapperPsiElement implements 
 
   @Override
   @Nullable
-  public PsiElement getIntegerLiteral() {
-    return findChildByType(INTEGERLITERAL);
+  public BallerinaJoinClause getJoinClause() {
+    return findChildByClass(BallerinaJoinClause.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getQuotedStringLiteral() {
-    return findChildByType(QUOTEDSTRINGLITERAL);
+  public BallerinaTimeoutClause getTimeoutClause() {
+    return findChildByClass(BallerinaTimeoutClause.class);
+  }
+
+  @Override
+  @NotNull
+  public List<BallerinaWorkerDeclaration> getWorkerDeclarationList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaWorkerDeclaration.class);
   }
 
 }

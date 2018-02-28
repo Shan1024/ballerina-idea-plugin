@@ -21,12 +21,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaSimpleLiteral extends PsiElement {
+public interface BallerinaForkJoinStatement extends PsiElement {
 
   @Nullable
-  PsiElement getIntegerLiteral();
+  BallerinaJoinClause getJoinClause();
 
   @Nullable
-  PsiElement getQuotedStringLiteral();
+  BallerinaTimeoutClause getTimeoutClause();
+
+  @NotNull
+  List<BallerinaWorkerDeclaration> getWorkerDeclarationList();
 
 }

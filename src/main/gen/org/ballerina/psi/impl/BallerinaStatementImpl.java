@@ -80,6 +80,12 @@ public class BallerinaStatementImpl extends ASTWrapperPsiElement implements Ball
 
   @Override
   @Nullable
+  public BallerinaForkJoinStatement getForkJoinStatement() {
+    return findChildByClass(BallerinaForkJoinStatement.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaIfElseStatement getIfElseStatement() {
     return findChildByClass(BallerinaIfElseStatement.class);
   }

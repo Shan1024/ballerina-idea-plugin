@@ -16,70 +16,70 @@
 
     tokens=[
         // Todo -  remove keywords after uncommenting all parser rules
-        PACKAGE     = 'package'
-        IMPORT      = 'import'
-        AS          = 'as'
-        PUBLIC      = 'public'
-        PRIVATE      = 'private'
-        NATIVE      = 'native'
-        SERVICE     = 'service'
-        RESOURCE    = 'resource'
-        FUNCTION    = 'function'
-        CONNECTOR   = 'connector'
-        ACTION      = 'action'
-        STRUCT      = 'struct'
-        ANNOTATION  = 'annotation'
-        ENUM        = 'enum'
-//        PARAMETER   = 'parameter'
-        CONST       = 'const'
-        TRANSFORMER = 'transformer'
-        WORKER      = 'worker'
-        ENDPOINT    = 'endpoint'
-        XMLNS       = 'xmlns'
-        RETURNS     = 'returns'
-//        VERSION     = 'version'
+        PACKAGE         = 'package'
+        IMPORT          = 'import'
+        AS              = 'as'
+        PUBLIC          = 'public'
+        PRIVATE         = 'private'
+        NATIVE          = 'native'
+        SERVICE         = 'service'
+        RESOURCE        = 'resource'
+        FUNCTION        = 'function'
+        CONNECTOR       = 'connector'
+        ACTION          = 'action'
+        STRUCT          = 'struct'
+        ANNOTATION      = 'annotation'
+        ENUM            = 'enum'
+        TYPE_PARAMETER  = 'parameter'
+        CONST           = 'const'
+        TRANSFORMER     = 'transformer'
+        WORKER          = 'worker'
+        ENDPOINT        = 'endpoint'
+        XMLNS           = 'xmlns'
+        RETURNS         = 'returns'
+        VERSION         = 'version'
 
-        TYPE_INT        = 'int'
-        TYPE_FLOAT      = 'float'
-        TYPE_BOOL       = 'boolean'
-        TYPE_STRING     = 'string'
-        TYPE_BLOB       = 'blob'
-        TYPE_MAP        = 'map'
-        TYPE_JSON       = 'json'
-        TYPE_XML        = 'xml'
-        TYPE_TABLE      = 'table'
-        TYPE_ANY        = 'any'
-        TYPE_TYPE       = 'type'
+        INT             = 'int'
+        FLOAT           = 'float'
+        BOOLEAN         = 'boolean'
+        STRING          = 'string'
+        BLOB            = 'blob'
+        MAP             = 'map'
+        JSON            = 'json'
+        XML             = 'xml'
+        TABLE           = 'table'
+        ANY             = 'any'
+        TYPE            = 'type'
 
-        VAR         = 'var'
-        CREATE      = 'create'
-        ATTACH      = 'attach'
-        IF          = 'if'
-        ELSE        = 'else'
-        FOREACH     = 'foreach'
-        WHILE       = 'while'
-        NEXT        = 'next'
-        BREAK       = 'break'
-        FORK        = 'fork'
-        JOIN        = 'join'
-        SOME        = 'some'
-        ALL         = 'all'
-        TIMEOUT     = 'timeout'
-        TRY         = 'try'
-        CATCH       = 'catch'
-        FINALLY     = 'finally'
-        THROW       = 'throw'
-        RETURN      = 'return'
-        TRANSACTION = 'transaction'
-        ABORT       = 'abort'
-        FAILED      = 'failed'
-        RETRIES     = 'retries'
-        LENGTHOF    = 'lengthof'
-        TYPEOF      = 'typeof'
-        WITH        = 'with'
-        BIND        = 'bind'
-        IN          = 'in'
-        LOCK        = 'lock'
+        VAR             = 'var'
+        CREATE          = 'create'
+        ATTACH          = 'attach'
+        IF              = 'if'
+        ELSE            = 'else'
+        FOREACH         = 'foreach'
+        WHILE           = 'while'
+        NEXT            = 'next'
+        BREAK           = 'break'
+        FORK            = 'fork'
+        JOIN            = 'join'
+        SOME            = 'some'
+        ALL             = 'all'
+        TIMEOUT         = 'timeout'
+        TRY             = 'try'
+        CATCH           = 'catch'
+        FINALLY         = 'finally'
+        THROW           = 'throw'
+        RETURN          = 'return'
+        TRANSACTION     = 'transaction'
+        ABORT           = 'abort'
+        FAILED          = 'failed'
+        RETRIES         = 'retries'
+        LENGTHOF        = 'lengthof'
+        TYPEOF          = 'typeof'
+        WITH            = 'with'
+        BIND            = 'bind'
+        IN              = 'in'
+        LOCK            = 'lock'
 
         // Separators
 
@@ -106,7 +106,6 @@
         MOD     = '%'
 
         // Relational operators
-
         NOT         = '!'
         EQUAL       = '=='
         NOT_EQUAL   = '!='
@@ -118,7 +117,6 @@
         OR          = '||'
 
         // Additional symbols
-
         RARROW      = '->'
         LARROW      = '<-'
         AT          = '@'
@@ -128,8 +126,8 @@
         WHITE_SPACE = 'regexp:\s+'
         LINE_COMMENT = 'regexp://[^\r\n]*'
         identifier = 'regexp:[a-zA-Z_][a-zA-Z0-9_]*'
-//        quotedStringLiteral = "regexp:\"((~[\"\\]|\\[btnfr\"'\\])+)?\""
         quotedStringLiteral = "regexp:\"(.*)\""
+        integerLiteral = "regexp:\d+"
     ]
 }
 
@@ -154,15 +152,15 @@ private TopLevelDefinitionRecover ::= !(service | function | connector | struct 
 ServiceDefinition ::= service (LT identifier GT) identifier ServiceBody {pin=1}
 ServiceBody ::=   LEFT_BRACE EndpointDeclaration* VariableDefinitionStatement* ResourceDefinition* RIGHT_BRACE
 
-ResourceDefinition ::= AnnotationAttachment* RESOURCE identifier LEFT_PARENTHESIS ParameterList RIGHT_PARENTHESIS CallableUnitBody {pin=2}
+ResourceDefinition ::= AnnotationAttachment* resource identifier LEFT_PARENTHESIS ParameterList RIGHT_PARENTHESIS CallableUnitBody {pin=2}
 
 CallableUnitBody ::= LEFT_BRACE EndpointDeclaration* Statement* RIGHT_BRACE | LEFT_BRACE EndpointDeclaration* WorkerDeclaration+ RIGHT_BRACE
 
 FunctionDefinition ::= NativeFunctionDefinition | NonNativeFunctionDefinition
-NativeFunctionDefinition ::= (PUBLIC)? NATIVE FUNCTION (LT Parameter GT)? CallableUnitSignature SEMICOLON {pin=3}
-NonNativeFunctionDefinition ::= (PUBLIC)? FUNCTION (LT Parameter GT)? CallableUnitSignature CallableUnitBody {pin=2}
+NativeFunctionDefinition ::= (public)? native function (LT Parameter GT)? CallableUnitSignature SEMICOLON {pin=3}
+NonNativeFunctionDefinition ::= (public)? function (LT Parameter GT)? CallableUnitSignature CallableUnitBody {pin=2}
 
-LambdaFunction ::= FUNCTION LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ReturnParameters? CallableUnitBody
+LambdaFunction ::= function LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ReturnParameters? CallableUnitBody
 
 CallableUnitSignature ::= identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ReturnParameters? {pin=1}
 
@@ -190,36 +188,35 @@ GlobalVariableDefinition ::= (public)? TypeName identifier (ASSIGN Expression )?
 
 TransformerDefinition ::= (public)? transformer LT ParameterList GT (identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS)? CallableUnitBody {pin=2}
 
-// Todo - Enable parameter
-AttachmentPoint ::= service (LT identifier? GT)? | resource | connector | action | function | struct | enum | const /*| parameter*/ | annotation | transformer
+// Note - "parameter" is treated differently here because there is a parser rule named "parameter" as well.
+AttachmentPoint ::= service (LT identifier? GT)? | resource | connector | action | function | struct | enum | const | TYPE_PARAMETER | annotation | transformer
 
 AnnotationBody ::= LEFT_BRACE FieldDefinition* RIGHT_BRACE
 
-constantDefinition ::= (public)? const ValueTypeName identifier ASSIGN Expression SEMICOLON
+constantDefinition ::= (public)? const ValueTypeName identifier ASSIGN Expression SEMICOLON {pin=2}
 
 WorkerDeclaration ::= WorkerDefinition LEFT_BRACE Statement* RIGHT_BRACE
 
 WorkerDefinition ::= worker identifier
 
 // Todo - Remove left recursion
-TypeName ::= TYPE_ANY |TYPE_TYPE | ValueTypeName | ReferenceTypeName | /*TypeName*/ (LEFT_BRACKET RIGHT_BRACKET)+
+TypeName ::= any |type | ValueTypeName | ReferenceTypeName | /*TypeName*/ (LEFT_BRACKET RIGHT_BRACKET)+
 
-BuiltInTypeName ::= TYPE_ANY | TYPE_TYPE | ValueTypeName | BuiltInReferenceTypeName | TypeName (LEFT_BRACKET RIGHT_BRACKET)+
+BuiltInTypeName ::= any | type | ValueTypeName | BuiltInReferenceTypeName | TypeName (LEFT_BRACKET RIGHT_BRACKET)+
 
 ReferenceTypeName ::= BuiltInReferenceTypeName | UserDefineTypeName | AnonStructTypeName
 
 UserDefineTypeName ::= NameReference
 
-AnonStructTypeName ::= STRUCT StructBody
+AnonStructTypeName ::= struct StructBody
 
-ValueTypeName ::=   TYPE_BOOL | TYPE_INT | TYPE_FLOAT | TYPE_STRING |TYPE_BLOB
+ValueTypeName ::=   boolean | int | float | string | blob
 
-BuiltInReferenceTypeName
-    ::=   TYPE_MAP (LT TypeName GT)?
-    |   TYPE_XML (LT (LEFT_BRACE XmlNamespaceName RIGHT_BRACE)? XmlLocalName GT)?
-    |   TYPE_JSON (LT NameReference GT)?
-    |   TYPE_TABLE (LT NameReference GT)?
-    |   FunctionTypeName
+BuiltInReferenceTypeName ::= map (LT TypeName GT)?
+| xml (LT (LEFT_BRACE XmlNamespaceName RIGHT_BRACE)? XmlLocalName GT)?
+| json (LT NameReference GT)?
+| table (LT NameReference GT)?
+| FunctionTypeName
 
 FunctionTypeName ::= FUNCTION LEFT_PARENTHESIS (ParameterList | TypeList)? RIGHT_PARENTHESIS ReturnParameters?
 
@@ -250,7 +247,7 @@ Statement
     |   WhileStatement
     |   NextStatement
     |   BreakStatement
-//    |   ForkJoinStatement
+    |   ForkJoinStatement
     |   TryCatchStatement
     |   ThrowStatement
     |   ReturnStatement
@@ -275,7 +272,7 @@ ArrayLiteral ::= LEFT_BRACKET ExpressionList? RIGHT_BRACKET
 
 ConnectorInit ::= create UserDefineTypeName LEFT_PARENTHESIS ExpressionList? RIGHT_PARENTHESIS {pin=1}
 
-EndpointDeclaration ::= EndpointDefinition LEFT_BRACE ((VariableReference | ConnectorInit) SEMICOLON)? RIGHT_BRACE {pin=1}
+EndpointDeclaration ::= EndpointDefinition LEFT_BRACE ((VariableReference | ConnectorInit) SEMICOLON)? RIGHT_BRACE {pin(".*")=1}
 
 EndpointDefinition ::= endpoint (LT NameReference GT) identifier {pin=1}
 
@@ -303,25 +300,16 @@ NextStatement ::= next SEMICOLON {pin=1}
 
 BreakStatement ::= break SEMICOLON {pin=1}
 
-//// typeName is only message
-//forkJoinStatement
-//    : FORK LEFT_BRACE workerDeclaration* RIGHT_BRACE joinClause? timeoutClause?
-//    ;
-//
-//// below typeName is only 'message[]'
-//joinClause
-//    :   JOIN (LEFT_PARENTHESIS joinConditions RIGHT_PARENTHESIS)? LEFT_PARENTHESIS typeName identifier RIGHT_PARENTHESIS LEFT_BRACE statement* RIGHT_BRACE
-//    ;
-//
-//joinConditions
-//    : SOME IntegerLiteral (identifier (COMMA identifier)*)?     # anyJoinCondition
-//    | ALL (identifier (COMMA identifier)*)?                     # allJoinCondition
-//    ;
-//
-//// below typeName is only 'message[]'
-//timeoutClause
-//    :   TIMEOUT LEFT_PARENTHESIS expression RIGHT_PARENTHESIS LEFT_PARENTHESIS typeName identifier RIGHT_PARENTHESIS  LEFT_BRACE statement* RIGHT_BRACE
-//    ;
+// typeName is only message
+ForkJoinStatement ::= fork LEFT_BRACE WorkerDeclaration* RIGHT_BRACE JoinClause? TimeoutClause?
+
+// below typeName is only 'message[]'
+JoinClause ::= join (LEFT_PARENTHESIS JoinConditions RIGHT_PARENTHESIS)? LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Statement* RIGHT_BRACE
+
+JoinConditions ::= some IntegerLiteral (identifier (COMMA identifier)*)? | all (identifier (COMMA identifier)*)?
+
+// below typeName is only 'message[]'
+TimeoutClause ::= timeout LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Statement* RIGHT_BRACE
 
 TryCatchStatement ::= try LEFT_BRACE Statement* RIGHT_BRACE CatchClauses
 
@@ -425,13 +413,7 @@ Parameter ::= AnnotationAttachment* TypeName identifier
 
 FieldDefinition ::= TypeName identifier (ASSIGN SimpleLiteral)? SEMICOLON
 
-SimpleLiteral ::=
-//    (ADD|SUB)? IntegerLiteral
-//    | (ADD|SUB)? FloatingPointLiteral
-//    |
-    quotedStringLiteral
-//    |   BooleanLiteral
-//    |   NullLiteral
+SimpleLiteral ::= (ADD|SUB)? integerLiteral /*| (ADD|SUB)? floatingPointLiteral*/ | quotedStringLiteral /*| booleanLiteral | nullLiteral*/
 
 //// XML parsing
 //

@@ -21,12 +21,18 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaSimpleLiteral extends PsiElement {
+public interface BallerinaJoinClause extends PsiElement {
 
   @Nullable
-  PsiElement getIntegerLiteral();
+  BallerinaJoinConditions getJoinConditions();
 
-  @Nullable
-  PsiElement getQuotedStringLiteral();
+  @NotNull
+  List<BallerinaStatement> getStatementList();
+
+  @NotNull
+  BallerinaTypeName getTypeName();
+
+  @NotNull
+  PsiElement getIdentifier();
 
 }

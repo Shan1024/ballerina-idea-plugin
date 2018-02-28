@@ -27,14 +27,14 @@ import static org.ballerina.psi.BallerinaTypes.*;
 import com.intellij.extapi.psi.ASTWrapperPsiElement;
 import org.ballerina.psi.*;
 
-public class BallerinaSimpleLiteralImpl extends ASTWrapperPsiElement implements BallerinaSimpleLiteral {
+public class BallerinaJoinClauseImpl extends ASTWrapperPsiElement implements BallerinaJoinClause {
 
-  public BallerinaSimpleLiteralImpl(ASTNode node) {
+  public BallerinaJoinClauseImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitSimpleLiteral(this);
+    visitor.visitJoinClause(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -44,14 +44,26 @@ public class BallerinaSimpleLiteralImpl extends ASTWrapperPsiElement implements 
 
   @Override
   @Nullable
-  public PsiElement getIntegerLiteral() {
-    return findChildByType(INTEGERLITERAL);
+  public BallerinaJoinConditions getJoinConditions() {
+    return findChildByClass(BallerinaJoinConditions.class);
   }
 
   @Override
-  @Nullable
-  public PsiElement getQuotedStringLiteral() {
-    return findChildByType(QUOTEDSTRINGLITERAL);
+  @NotNull
+  public List<BallerinaStatement> getStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaStatement.class);
+  }
+
+  @Override
+  @NotNull
+  public BallerinaTypeName getTypeName() {
+    return findNotNullChildByClass(BallerinaTypeName.class);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getIdentifier() {
+    return findNotNullChildByType(IDENTIFIER);
   }
 
 }

@@ -23,13 +23,13 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaConstantDefinition extends PsiElement {
 
-  @NotNull
+  @Nullable
   BallerinaExpression getExpression();
 
-  @NotNull
+  @Nullable
   BallerinaValueTypeName getValueTypeName();
 
-  @NotNull
+  @Nullable
   PsiElement getIdentifier();
 
 }

@@ -43,21 +43,21 @@ public class BallerinaConstantDefinitionImpl extends ASTWrapperPsiElement implem
   }
 
   @Override
-  @NotNull
+  @Nullable
   public BallerinaExpression getExpression() {
-    return findNotNullChildByClass(BallerinaExpression.class);
+    return findChildByClass(BallerinaExpression.class);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public BallerinaValueTypeName getValueTypeName() {
-    return findNotNullChildByClass(BallerinaValueTypeName.class);
+    return findChildByClass(BallerinaValueTypeName.class);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getIdentifier() {
-    return findNotNullChildByType(IDENTIFIER);
+    return findChildByType(IDENTIFIER);
   }
 
 }

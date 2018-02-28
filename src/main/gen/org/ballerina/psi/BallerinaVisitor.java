@@ -171,6 +171,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitPsiElement(o);
   }
 
+  public void visitForkJoinStatement(@NotNull BallerinaForkJoinStatement o) {
+    visitPsiElement(o);
+  }
+
   public void visitFunctionDefinition(@NotNull BallerinaFunctionDefinition o) {
     visitPsiElement(o);
   }
@@ -208,6 +212,14 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitInvocation(@NotNull BallerinaInvocation o) {
+    visitPsiElement(o);
+  }
+
+  public void visitJoinClause(@NotNull BallerinaJoinClause o) {
+    visitPsiElement(o);
+  }
+
+  public void visitJoinConditions(@NotNull BallerinaJoinConditions o) {
     visitPsiElement(o);
   }
 
@@ -328,6 +340,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitThrowStatement(@NotNull BallerinaThrowStatement o) {
+    visitPsiElement(o);
+  }
+
+  public void visitTimeoutClause(@NotNull BallerinaTimeoutClause o) {
     visitPsiElement(o);
   }
 

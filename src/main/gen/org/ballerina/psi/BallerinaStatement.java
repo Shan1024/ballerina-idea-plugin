@@ -42,6 +42,9 @@ public interface BallerinaStatement extends PsiElement {
   BallerinaForeachStatement getForeachStatement();
 
   @Nullable
+  BallerinaForkJoinStatement getForkJoinStatement();
+
+  @Nullable
   BallerinaIfElseStatement getIfElseStatement();
 
   @Nullable

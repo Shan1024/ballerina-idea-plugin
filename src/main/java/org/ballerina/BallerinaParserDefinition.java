@@ -9,7 +9,6 @@ import com.intellij.psi.FileViewProvider;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.TokenType;
-import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import org.ballerina.lexer.BallerinaLexerAdapter;
@@ -19,18 +18,24 @@ import org.ballerina.psi.BallerinaTypes;
 import org.jetbrains.annotations.NotNull;
 
 import static org.ballerina.psi.BallerinaTypes.FUNCTION;
+import static org.ballerina.psi.BallerinaTypes.INTEGERLITERAL;
+import static org.ballerina.psi.BallerinaTypes.LINE_COMMENT;
 import static org.ballerina.psi.BallerinaTypes.QUOTEDSTRINGLITERAL;
 
 public class BallerinaParserDefinition implements ParserDefinition {
-
-    public static final IElementType LINE_COMMENT = BallerinaTypes.LINE_COMMENT;
 
     public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
     public static final TokenSet COMMENTS = TokenSet.create(LINE_COMMENT);
 
     public static final TokenSet STRING = TokenSet.create(QUOTEDSTRINGLITERAL);
 
+    public static final TokenSet NUMBERS = TokenSet.create(INTEGERLITERAL);
+
     public static final TokenSet KEYWORDS = TokenSet.create(FUNCTION);
+
+    public static final TokenSet OPERATORS = TokenSet.create();
+
+    public static final TokenSet BAD_CHARACTER = TokenSet.create(TokenType.BAD_CHARACTER);
 
     public static final IFileElementType FILE = new IFileElementType(BallerinaLanguage.INSTANCE);
 

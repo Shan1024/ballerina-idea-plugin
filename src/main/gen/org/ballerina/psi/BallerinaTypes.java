@@ -65,6 +65,7 @@ public interface BallerinaTypes {
   IElementType FIELD_DEFINITION = new BallerinaElementType("FIELD_DEFINITION");
   IElementType FINALLY_CLAUSE = new BallerinaElementType("FINALLY_CLAUSE");
   IElementType FOREACH_STATEMENT = new BallerinaElementType("FOREACH_STATEMENT");
+  IElementType FORK_JOIN_STATEMENT = new BallerinaElementType("FORK_JOIN_STATEMENT");
   IElementType FUNCTION_DEFINITION = new BallerinaElementType("FUNCTION_DEFINITION");
   IElementType FUNCTION_INVOCATION = new BallerinaElementType("FUNCTION_INVOCATION");
   IElementType FUNCTION_TYPE_NAME = new BallerinaElementType("FUNCTION_TYPE_NAME");
@@ -75,6 +76,8 @@ public interface BallerinaTypes {
   IElementType INDEX = new BallerinaElementType("INDEX");
   IElementType INT_RANGE_EXPRESSION = new BallerinaElementType("INT_RANGE_EXPRESSION");
   IElementType INVOCATION = new BallerinaElementType("INVOCATION");
+  IElementType JOIN_CLAUSE = new BallerinaElementType("JOIN_CLAUSE");
+  IElementType JOIN_CONDITIONS = new BallerinaElementType("JOIN_CONDITIONS");
   IElementType LAMBDA_FUNCTION = new BallerinaElementType("LAMBDA_FUNCTION");
   IElementType LOCK_STATEMENT = new BallerinaElementType("LOCK_STATEMENT");
   IElementType NAMESPACE_DECLARATION = new BallerinaElementType("NAMESPACE_DECLARATION");
@@ -106,6 +109,7 @@ public interface BallerinaTypes {
   IElementType STRUCT_BODY = new BallerinaElementType("STRUCT_BODY");
   IElementType STRUCT_DEFINITION = new BallerinaElementType("STRUCT_DEFINITION");
   IElementType THROW_STATEMENT = new BallerinaElementType("THROW_STATEMENT");
+  IElementType TIMEOUT_CLAUSE = new BallerinaElementType("TIMEOUT_CLAUSE");
   IElementType TRANSACTION_CLAUSE = new BallerinaElementType("TRANSACTION_CLAUSE");
   IElementType TRANSACTION_PROPERTY_INIT_STATEMENT = new BallerinaElementType("TRANSACTION_PROPERTY_INIT_STATEMENT");
   IElementType TRANSACTION_PROPERTY_INIT_STATEMENT_LIST = new BallerinaElementType("TRANSACTION_PROPERTY_INIT_STATEMENT_LIST");
@@ -134,6 +138,7 @@ public interface BallerinaTypes {
   IElementType ALL = new BallerinaTokenType("all");
   IElementType AND = new BallerinaTokenType("&&");
   IElementType ANNOTATION = new BallerinaTokenType("annotation");
+  IElementType ANY = new BallerinaTokenType("any");
   IElementType ANYIDENTIFIERNAME = new BallerinaTokenType("AnyIdentifierName");
   IElementType AS = new BallerinaTokenType("as");
   IElementType ASSIGN = new BallerinaTokenType("=");
@@ -141,6 +146,8 @@ public interface BallerinaTypes {
   IElementType ATTACH = new BallerinaTokenType("attach");
   IElementType BACKTICK = new BallerinaTokenType("`");
   IElementType BIND = new BallerinaTokenType("bind");
+  IElementType BLOB = new BallerinaTokenType("blob");
+  IElementType BOOLEAN = new BallerinaTokenType("boolean");
   IElementType BREAK = new BallerinaTokenType("break");
   IElementType CATCH = new BallerinaTokenType("catch");
   IElementType COLON = new BallerinaTokenType(":");
@@ -156,6 +163,7 @@ public interface BallerinaTypes {
   IElementType EQUAL = new BallerinaTokenType("==");
   IElementType FAILED = new BallerinaTokenType("failed");
   IElementType FINALLY = new BallerinaTokenType("finally");
+  IElementType FLOAT = new BallerinaTokenType("float");
   IElementType FOREACH = new BallerinaTokenType("foreach");
   IElementType FORK = new BallerinaTokenType("fork");
   IElementType FUNCTION = new BallerinaTokenType("function");
@@ -165,7 +173,10 @@ public interface BallerinaTypes {
   IElementType IF = new BallerinaTokenType("if");
   IElementType IMPORT = new BallerinaTokenType("import");
   IElementType IN = new BallerinaTokenType("in");
+  IElementType INT = new BallerinaTokenType("int");
+  IElementType INTEGERLITERAL = new BallerinaTokenType("IntegerLiteral");
   IElementType JOIN = new BallerinaTokenType("join");
+  IElementType JSON = new BallerinaTokenType("json");
   IElementType LARROW = new BallerinaTokenType("<-");
   IElementType LEFT_BRACE = new BallerinaTokenType("{");
   IElementType LEFT_BRACKET = new BallerinaTokenType("[");
@@ -175,6 +186,7 @@ public interface BallerinaTypes {
   IElementType LOCK = new BallerinaTokenType("lock");
   IElementType LT = new BallerinaTokenType("<");
   IElementType LT_EQUAL = new BallerinaTokenType("<=");
+  IElementType MAP = new BallerinaTokenType("map");
   IElementType MOD = new BallerinaTokenType("%");
   IElementType MUL = new BallerinaTokenType("*");
   IElementType NATIVE = new BallerinaTokenType("native");
@@ -200,30 +212,24 @@ public interface BallerinaTypes {
   IElementType SEMICOLON = new BallerinaTokenType(";");
   IElementType SERVICE = new BallerinaTokenType("service");
   IElementType SOME = new BallerinaTokenType("some");
+  IElementType STRING = new BallerinaTokenType("string");
   IElementType STRUCT = new BallerinaTokenType("struct");
   IElementType SUB = new BallerinaTokenType("-");
+  IElementType TABLE = new BallerinaTokenType("table");
   IElementType THROW = new BallerinaTokenType("throw");
   IElementType TIMEOUT = new BallerinaTokenType("timeout");
   IElementType TRANSACTION = new BallerinaTokenType("transaction");
   IElementType TRANSFORMER = new BallerinaTokenType("transformer");
   IElementType TRY = new BallerinaTokenType("try");
+  IElementType TYPE = new BallerinaTokenType("type");
   IElementType TYPEOF = new BallerinaTokenType("typeof");
-  IElementType TYPE_ANY = new BallerinaTokenType("any");
-  IElementType TYPE_BLOB = new BallerinaTokenType("blob");
-  IElementType TYPE_BOOL = new BallerinaTokenType("boolean");
-  IElementType TYPE_FLOAT = new BallerinaTokenType("float");
-  IElementType TYPE_INT = new BallerinaTokenType("int");
-  IElementType TYPE_JSON = new BallerinaTokenType("json");
-  IElementType TYPE_MAP = new BallerinaTokenType("map");
-  IElementType TYPE_STRING = new BallerinaTokenType("string");
-  IElementType TYPE_TABLE = new BallerinaTokenType("table");
-  IElementType TYPE_TYPE = new BallerinaTokenType("type");
-  IElementType TYPE_XML = new BallerinaTokenType("xml");
+  IElementType TYPE_PARAMETER = new BallerinaTokenType("parameter");
   IElementType VAR = new BallerinaTokenType("var");
   IElementType VERSION = new BallerinaTokenType("version");
   IElementType WHILE = new BallerinaTokenType("while");
   IElementType WITH = new BallerinaTokenType("with");
   IElementType WORKER = new BallerinaTokenType("worker");
+  IElementType XML = new BallerinaTokenType("xml");
   IElementType XMLNS = new BallerinaTokenType("xmlns");
 
   class Factory {
@@ -352,6 +358,9 @@ public interface BallerinaTypes {
       else if (type == FOREACH_STATEMENT) {
         return new BallerinaForeachStatementImpl(node);
       }
+      else if (type == FORK_JOIN_STATEMENT) {
+        return new BallerinaForkJoinStatementImpl(node);
+      }
       else if (type == FUNCTION_DEFINITION) {
         return new BallerinaFunctionDefinitionImpl(node);
       }
@@ -381,6 +390,12 @@ public interface BallerinaTypes {
       }
       else if (type == INVOCATION) {
         return new BallerinaInvocationImpl(node);
+      }
+      else if (type == JOIN_CLAUSE) {
+        return new BallerinaJoinClauseImpl(node);
+      }
+      else if (type == JOIN_CONDITIONS) {
+        return new BallerinaJoinConditionsImpl(node);
       }
       else if (type == LAMBDA_FUNCTION) {
         return new BallerinaLambdaFunctionImpl(node);
@@ -474,6 +489,9 @@ public interface BallerinaTypes {
       }
       else if (type == THROW_STATEMENT) {
         return new BallerinaThrowStatementImpl(node);
+      }
+      else if (type == TIMEOUT_CLAUSE) {
+        return new BallerinaTimeoutClauseImpl(node);
       }
       else if (type == TRANSACTION_CLAUSE) {
         return new BallerinaTransactionClauseImpl(node);
