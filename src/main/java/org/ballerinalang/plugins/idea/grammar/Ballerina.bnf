@@ -1,6 +1,7 @@
 {
 
     parserClass="org.ballerinalang.plugins.idea.parser.BallerinaParser"
+  parserUtilClass="org.ballerinalang.plugins.idea.parser.BallerinaParserUtil"
     classHeader='CopyrightHeader.txt'
 
     extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
@@ -132,12 +133,17 @@
 
 //     extends("(BinaryPow|And|Add|Conversion|Mul|Selector|Conditional)Expression")=BinaryExpression
       extends("(functionInvocation|simpleVariable|mapArrayVariable|fieldVariable|xmlAttribVariable|invocation)Reference")=VariableReference
-      extends("((ValueTypeType|BuiltInReferenceTypeType|VariableReference|LambdaFunction|ConnectorInit|TypeCasting|TypeConversion|TypeAccess|Unary|Braced|BinaryPow|BinaryDivMulMod|BinaryAddSub|BinaryCompare|BinaryEqual|BinaryAnd|BinaryOr|Ternary)Expression)")=Expression
+      extends("(ValueTypeType|BuiltInReferenceTypeType|VariableReference|LambdaFunction|ConnectorInit|TypeCasting|TypeConversion|TypeAccess|Braced)Expression")=Expression
+      extends("(Unary|BinaryPow|BinaryDivMulMod|BinaryAddSub|BinaryCompare|BinaryEqual|BinaryAnd|BinaryOr|Ternary)Expression")=Expression
       extends("((Simple|Array|Record)Literal)")=Expression
+//      extends("mapTypeName|xmlTypeName|jsonTypeName|tableTypeName|FunctionTypeName")=BuiltInReferenceTypeName
+//      extends("BuiltInReferenceTypeName|UserDefineTypeName|AnonStructTypeName")=ReferenceTypeName
+//      extends("any|type|ValueTypeName|BuiltInReferenceTypeName|arrayTypeName")=BuiltInTypeName
+      extends("anyTypeName|typeTypeName|ValueTypeName|ReferenceTypeName|arrayTypeName")=TypeName
 
 }
 
-CompilationUnit ::= PackageDeclaration? (ImportDeclaration | NamespaceDeclaration)* (AnnotationAttachment* Definition)*
+CompilationUnit ::= PackageDeclaration? (ImportDeclaration | NamespaceDeclaration)* (AnnotationAttachment* Definition)* <<eof>>
 
 PackageDeclaration ::= package PackageName PackageVersion? SEMICOLON {pin=1}
 
@@ -149,11 +155,15 @@ ImportDeclaration ::= import PackageName PackageVersion? Alias? SEMICOLON {pin=1
 
 Alias ::= as identifier {pin=1}
 
-Definition ::= ServiceDefinition | FunctionDefinition | connectorDefinition | structDefinition | enumDefinition |
-constantDefinition | AnnotationDefinition | GlobalVariableDefinition | TransformerDefinition
-{recoverWhile=TopLevelDefinitionRecover}
-
-private TopLevelDefinitionRecover ::= !(service | function | connector | struct | enum | const | annotation | transformer)
+//Definition ::=   nonFixedStartDefinitions | fixedStartDefinitions
+//private nonFixedStartDefinitions ::= GlobalVariableDefinition
+//private fixedStartDefinitions ::= ServiceDefinition | FunctionDefinition | connectorDefinition | structDefinition
+//                                | enumDefinition | AnnotationDefinition  | TransformerDefinition | constantDefinition
+//                                {recoverWhile=TopLevelDefinitionRecover}
+Definition ::= GlobalVariableDefinition | ServiceDefinition | FunctionDefinition | connectorDefinition | structDefinition
+               | enumDefinition | AnnotationDefinition  | TransformerDefinition | constantDefinition
+               {recoverWhile=TopLevelDefinitionRecover}
+private TopLevelDefinitionRecover ::= !(service | function | connector | struct | enum | annotation | transformer | const | boolean | int | float | string | blob | identifier| identifier identifier)
 
 ServiceDefinition ::= service (LT identifier GT) identifier ServiceBody {pin=1}
 ServiceBody ::=   LEFT_BRACE EndpointDeclaration* VariableDefinitionStatement* ResourceDefinition* RIGHT_BRACE
@@ -162,7 +172,7 @@ ResourceDefinition ::= AnnotationAttachment* resource identifier LEFT_PARENTHESI
 
 CallableUnitBody ::= LEFT_BRACE EndpointDeclaration* Statement* RIGHT_BRACE | LEFT_BRACE EndpointDeclaration* WorkerDeclaration+ RIGHT_BRACE
 
-FunctionDefinition ::= NativeFunctionDefinition | NonNativeFunctionDefinition
+FunctionDefinition ::= NativeFunctionDefinition | NonNativeFunctionDefinition {pin=1}
 NativeFunctionDefinition ::= (public)? native function (LT Parameter GT)? CallableUnitSignature SEMICOLON {pin=3}
 NonNativeFunctionDefinition ::= (public)? function (LT Parameter GT)? CallableUnitSignature CallableUnitBody {pin=2}
 
@@ -205,10 +215,11 @@ WorkerDeclaration ::= WorkerDefinition LEFT_BRACE Statement* RIGHT_BRACE
 
 WorkerDefinition ::= worker identifier
 
-// Todo - Remove left recursion
-TypeName ::= any |type | ValueTypeName | ReferenceTypeName | /*TypeName*/ (LEFT_BRACKET RIGHT_BRACKET)+
+TypeName ::= anyTypeName | typeTypeName | ValueTypeName | ReferenceTypeName | arrayTypeName
 
-BuiltInTypeName ::= any | type | ValueTypeName | BuiltInReferenceTypeName | TypeName (LEFT_BRACKET RIGHT_BRACKET)+
+BuiltInTypeName ::= any | type | ValueTypeName | BuiltInReferenceTypeName | arrayTypeName
+
+arrayTypeName ::= TypeName (LEFT_BRACKET RIGHT_BRACKET)+
 
 ReferenceTypeName ::= BuiltInReferenceTypeName | UserDefineTypeName | AnonStructTypeName
 
@@ -216,15 +227,27 @@ UserDefineTypeName ::= NameReference
 
 AnonStructTypeName ::= struct StructBody
 
+anyTypeName::= any
+
+typeTypeName::= type
+
 ValueTypeName ::=   boolean | int | float | string | blob
 
-BuiltInReferenceTypeName ::= map (LT TypeName GT)?
-| xml (LT (LEFT_BRACE XmlNamespaceName RIGHT_BRACE)? XmlLocalName GT)?
-| json (LT NameReference GT)?
-| table (LT NameReference GT)?
+BuiltInReferenceTypeName ::= mapTypeName
+| xmlTypeName
+| jsonTypeName
+| tableTypeName
 | FunctionTypeName
 
-FunctionTypeName ::= FUNCTION LEFT_PARENTHESIS (ParameterList | TypeList)? RIGHT_PARENTHESIS ReturnParameters?
+mapTypeName ::= map (LT TypeName GT)?
+
+xmlTypeName ::= xml (LT (LEFT_BRACE XmlNamespaceName RIGHT_BRACE)? XmlLocalName GT)?
+
+jsonTypeName ::= json (LT NameReference GT)?
+
+tableTypeName ::= table (LT NameReference GT)?
+
+FunctionTypeName ::= function LEFT_PARENTHESIS (ParameterList | TypeList)? RIGHT_PARENTHESIS ReturnParameters?
 
 XmlNamespaceName ::= quotedStringLiteral
 
@@ -239,7 +262,6 @@ AnnotationAttribute ::= identifier COLON AnnotationAttributeValue
 AnnotationAttributeValue ::= SimpleLiteral | NameReference | AnnotationAttachment | AnnotationAttributeArray
 
 AnnotationAttributeArray ::= LEFT_BRACKET (AnnotationAttributeValue (COMMA AnnotationAttributeValue)*)? RIGHT_BRACKET
-
 
 // //============================================================================================================
 //// STATEMENTS / BLOCKS
@@ -263,11 +285,11 @@ Statement
     |   TransactionStatement
     |   AbortStatement
     |   LockStatement
-    |   NamespaceDeclarationStatement
+    |   NamespaceDeclarationStatement /*{recoverWhile = StatementRecover}*/
 
+//private StatementRecover ::= !('!' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | interface | map | oct | return | select | string  | struct | switch | var | next |try )
 
-
-VariableDefinitionStatement ::= TypeName identifier (ASSIGN Expression)? SEMICOLON {pin(".*")=1}
+VariableDefinitionStatement ::= TypeName identifier (ASSIGN Expression)? SEMICOLON {pin=1}
 
 RecordLiteral ::= LEFT_BRACE (RecordKeyValue (COMMA RecordKeyValue)*)? RIGHT_BRACE
 
@@ -283,13 +305,13 @@ EndpointDeclaration ::= EndpointDefinition LEFT_BRACE ((VariableReference | Conn
 
 EndpointDefinition ::= endpoint (LT NameReference GT) identifier {pin=1}
 
-AssignmentStatement ::= (var)? VariableReferenceList ASSIGN Expression SEMICOLON {pin=2}
+AssignmentStatement ::= (var)? VariableReferenceList ASSIGN Expression SEMICOLON
 
 BindStatement ::= bind Expression WITH identifier SEMICOLON {pin=1}
 
 VariableReferenceList ::= VariableReference (COMMA VariableReference)*
 
-IfElseStatement ::= IfClause ElseIfClause* ElseClause?
+IfElseStatement ::= IfClause ElseIfClause* ElseClause? {pin=1}
 
 IfClause ::= if LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_BRACE Statement* RIGHT_BRACE {pin=1}
 
@@ -301,46 +323,47 @@ ForeachStatement ::= foreach LEFT_PARENTHESIS? VariableReferenceList in (Express
 
 IntRangeExpression ::= Expression RANGE Expression | (LEFT_BRACKET|LEFT_PARENTHESIS) Expression RANGE Expression (RIGHT_BRACKET|RIGHT_PARENTHESIS)
 
-WhileStatement ::= while LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_BRACE Statement* RIGHT_BRACE {pin=1}
+WhileStatement ::= while LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_BRACE Statement* RIGHT_BRACE {pin=2}
 
 NextStatement ::= next SEMICOLON {pin=1}
 
 BreakStatement ::= break SEMICOLON {pin=1}
 
 // typeName is only message
-ForkJoinStatement ::= fork LEFT_BRACE WorkerDeclaration* RIGHT_BRACE JoinClause? TimeoutClause?
+ForkJoinStatement ::= fork LEFT_BRACE WorkerDeclaration* RIGHT_BRACE JoinClause? TimeoutClause? {pin=1}
 
 // below typeName is only 'message[]'
-JoinClause ::= join (LEFT_PARENTHESIS JoinConditions RIGHT_PARENTHESIS)? LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Statement* RIGHT_BRACE
+JoinClause ::= join (LEFT_PARENTHESIS JoinConditions RIGHT_PARENTHESIS)? LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Statement* RIGHT_BRACE {pin=1}
 
-JoinConditions ::= some integerLiteral (identifier (COMMA identifier)*)? | all (identifier (COMMA identifier)*)?
+JoinConditions ::= some integerLiteral (identifier (COMMA identifier)*)? | all (identifier (COMMA identifier)*)? {pin=1}
 
 // below typeName is only 'message[]'
-TimeoutClause ::= timeout LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Statement* RIGHT_BRACE
+TimeoutClause ::= timeout LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Statement* RIGHT_BRACE {pin=1}
 
-TryCatchStatement ::= try LEFT_BRACE Statement* RIGHT_BRACE CatchClauses
+TryCatchStatement ::= try LEFT_BRACE Statement* RIGHT_BRACE CatchClauses {pin=1}
 
 CatchClauses ::= CatchClause+ FinallyClause? | FinallyClause
 
-CatchClause ::= catch LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Statement* RIGHT_BRACE
+CatchClause ::= catch LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Statement* RIGHT_BRACE {pin=1}
 
-FinallyClause ::= FINALLY LEFT_BRACE Statement* RIGHT_BRACE
+FinallyClause ::= finally LEFT_BRACE Statement* RIGHT_BRACE {pin=1}
 
-ThrowStatement ::= throw Expression SEMICOLON
+ThrowStatement ::= throw Expression SEMICOLON {pin=1}
 
-ReturnStatement ::= RETURN ExpressionList? SEMICOLON
+ReturnStatement ::= return ExpressionList? SEMICOLON {pin=1}
 
 WorkerInteractionStatement ::= TriggerWorker | WorkerReply
 
 // below left identifier is of type TYPE_MESSAGE and the right identifier is of type WORKER
-TriggerWorker ::= ExpressionList RARROW identifier SEMICOLON | ExpressionList RARROW fork SEMICOLON
+TriggerWorker ::= ExpressionList RARROW (identifier | fork) SEMICOLON {pin=2}
 
 // below left identifier is of type WORKER and the right identifier is of type message
-WorkerReply ::= ExpressionList LARROW identifier SEMICOLON
+WorkerReply ::= ExpressionList LARROW identifier SEMICOLON {pin=2}
 
 // Note - Order of 'simpleVariableReference' and 'functionInvocationReference' because otherwise all function
 // invocations will match simpleVariableReference first.
-VariableReference ::= functionInvocationReference | simpleVariableReference | mapArrayVariableReference | fieldVariableReference | xmlAttribVariableReference | invocationReference
+VariableReference ::= mapArrayVariableReference | fieldVariableReference | xmlAttribVariableReference
+                      | invocationReference | functionInvocationReference | simpleVariableReference
 
 functionInvocationReference ::= FunctionInvocation
 simpleVariableReference ::= NameReference
@@ -356,6 +379,9 @@ Index ::= LEFT_BRACKET Expression RIGHT_BRACKET
 XmlAttrib ::= AT (LEFT_BRACKET Expression RIGHT_BRACKET)?
 
 FunctionInvocation ::= NameReference LEFT_PARENTHESIS ExpressionList? RIGHT_PARENTHESIS {pin=2}
+//{recoverWhile=recover}
+//
+//private recover::=!(identifier);
 
 Invocation ::= DOT AnyIdentifierName LEFT_PARENTHESIS ExpressionList? RIGHT_PARENTHESIS
 
@@ -379,7 +405,7 @@ AbortStatement ::= abort SEMICOLON {pin=1}
 
 RetriesStatement ::= retries LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS {pin=1}
 
-NamespaceDeclarationStatement ::= NamespaceDeclaration
+NamespaceDeclarationStatement ::= NamespaceDeclaration {pin=1}
 
 NamespaceDeclaration ::= xmlns quotedStringLiteral (as identifier)? SEMICOLON {pin=1}
 
@@ -406,11 +432,13 @@ Expression
     |   BinaryEqualExpression
     |   BinaryAndExpression
     |   BinaryOrExpression
-    |   TernaryExpression
+    |   TernaryExpression {/*pin=1 */ /*recoverWhile=ExpressionRecover*/}
 
 //fake BinaryExpression ::= Expression+ {
 //  methods=[left="Expression[0]" right="Expression[1]" getOperator]
 //}
+
+//private ExpressionRecover ::=  !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var )
 
 ValueTypeTypeExpression ::= ValueTypeName DOT identifier
 BuiltInReferenceTypeTypeExpression ::= BuiltInReferenceTypeName DOT identifier
@@ -431,7 +459,7 @@ BinaryAndExpression ::= Expression AND Expression
 BinaryOrExpression ::= Expression OR Expression
 TernaryExpression ::= Expression QUESTION_MARK Expression COLON Expression
 
-////reusable productions
+//reusable productions
 
 NameReference ::= (identifier COLON)? identifier
 
@@ -445,7 +473,7 @@ Parameter ::= AnnotationAttachment* TypeName identifier
 
 FieldDefinition ::= TypeName identifier (ASSIGN SimpleLiteral)? SEMICOLON
 
-SimpleLiteral ::= (ADD|SUB)? integerLiteral /*| (ADD|SUB)? floatingPointLiteral*/ | quotedStringLiteral /*| booleanLiteral | nullLiteral*/
+SimpleLiteral ::= (ADD|SUB)? integerLiteral /*| (ADD|SUB)? floatingPointLiteral*/ | quotedStringLiteral /*| booleanLiteral | nullLiteral*/ {pin=1}
 
 //// XML parsing
 //
