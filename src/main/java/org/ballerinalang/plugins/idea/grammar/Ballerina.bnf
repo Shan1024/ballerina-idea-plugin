@@ -1,169 +1,170 @@
 {
 
-    parserClass="org.ballerinalang.plugins.idea.parser.BallerinaParser"
-  parserUtilClass="org.ballerinalang.plugins.idea.parser.BallerinaParserUtil"
-    classHeader='CopyrightHeader.txt'
+  classHeader='CopyrightHeader.txt'
 
-    extends="com.intellij.extapi.psi.ASTWrapperPsiElement"
+  implements='org.ballerinalang.plugins.idea.psi.BallerinaCompositeElement'
+  extends='org.ballerinalang.plugins.idea.psi.impl.BallerinaCompositeElementImpl'
 
-    psiClassPrefix="Ballerina"
-    psiImplClassSuffix="Impl"
-    psiPackage="org.ballerinalang.plugins.idea.psi"
-    psiImplPackage="org.ballerinalang.plugins.idea.psi.impl"
+  parserClass="org.ballerinalang.plugins.idea.parser.BallerinaParser"
 
-    elementTypeHolderClass="org.ballerinalang.plugins.idea.psi.BallerinaTypes"
-    elementTypeClass="org.ballerinalang.plugins.idea.psi.BallerinaElementType"
-    tokenTypeClass="org.ballerinalang.plugins.idea.psi.BallerinaTokenType"
+  psiClassPrefix="Ballerina"
+  psiImplClassSuffix="Impl"
+  psiPackage="org.ballerinalang.plugins.idea.psi"
+  psiImplPackage="org.ballerinalang.plugins.idea.psi.impl"
+  psiImplUtilClass="org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil"
 
-    tokens=[
-        // Todo -  remove keywords after uncommenting all parser rules
-        PACKAGE         = 'package'
-        IMPORT          = 'import'
-        AS              = 'as'
-        PUBLIC          = 'public'
-        PRIVATE         = 'private'
-        NATIVE          = 'native'
-        SERVICE         = 'service'
-        RESOURCE        = 'resource'
-        FUNCTION        = 'function'
-        CONNECTOR       = 'connector'
-        ACTION          = 'action'
-        STRUCT          = 'struct'
-        ANNOTATION      = 'annotation'
-        ENUM            = 'enum'
-        TYPE_PARAMETER  = 'parameter'
-        CONST           = 'const'
-        TRANSFORMER     = 'transformer'
-        WORKER          = 'worker'
-        ENDPOINT        = 'endpoint'
-        XMLNS           = 'xmlns'
-        RETURNS         = 'returns'
-        VERSION         = 'version'
+  elementTypeHolderClass="org.ballerinalang.plugins.idea.psi.BallerinaTypes"
+  elementTypeClass="org.ballerinalang.plugins.idea.psi.BallerinaCompositeElementType"
 
-        INT             = 'int'
-        FLOAT           = 'float'
-        BOOLEAN         = 'boolean'
-        STRING          = 'string'
-        BLOB            = 'blob'
-        MAP             = 'map'
-        JSON            = 'json'
-        XML             = 'xml'
-        TABLE           = 'table'
-        ANY             = 'any'
-        TYPE            = 'type'
+  tokenTypeClass="org.ballerinalang.plugins.idea.psi.BallerinaTokenType"
 
-        VAR             = 'var'
-        CREATE          = 'create'
-        ATTACH          = 'attach'
-        IF              = 'if'
-        ELSE            = 'else'
-        FOREACH         = 'foreach'
-        WHILE           = 'while'
-        NEXT            = 'next'
-        BREAK           = 'break'
-        FORK            = 'fork'
-        JOIN            = 'join'
-        SOME            = 'some'
-        ALL             = 'all'
-        TIMEOUT         = 'timeout'
-        TRY             = 'try'
-        CATCH           = 'catch'
-        FINALLY         = 'finally'
-        THROW           = 'throw'
-        RETURN          = 'return'
-        TRANSACTION     = 'transaction'
-        ABORT           = 'abort'
-        FAILED          = 'failed'
-        RETRIES         = 'retries'
-        LENGTHOF        = 'lengthof'
-        TYPEOF          = 'typeof'
-        WITH            = 'with'
-        BIND            = 'bind'
-        IN              = 'in'
-        LOCK            = 'lock'
+  tokens=[
+    // Todo -  remove keywords after uncommenting all parser rules
+    PACKAGE         = 'package'
+    IMPORT          = 'import'
+    AS              = 'as'
+    PUBLIC          = 'public'
+    PRIVATE         = 'private'
+    NATIVE          = 'native'
+    SERVICE         = 'service'
+    RESOURCE        = 'resource'
+    FUNCTION        = 'function'
+    CONNECTOR       = 'connector'
+    ACTION          = 'action'
+    STRUCT          = 'struct'
+    ANNOTATION      = 'annotation'
+    ENUM            = 'enum'
+    TYPE_PARAMETER  = 'parameter'
+    CONST           = 'const'
+    TRANSFORMER     = 'transformer'
+    WORKER          = 'worker'
+    ENDPOINT        = 'endpoint'
+    XMLNS           = 'xmlns'
+    RETURNS         = 'returns'
+    VERSION         = 'version'
 
-        // Separators
+    INT             = 'int'
+    FLOAT           = 'float'
+    BOOLEAN         = 'boolean'
+    STRING          = 'string'
+    BLOB            = 'blob'
+    MAP             = 'map'
+    JSON            = 'json'
+    XML             = 'xml'
+    TABLE           = 'table'
+    ANY             = 'any'
+    TYPE            = 'type'
 
-        SEMICOLON           = ';'
-        COLON               = ':'
-        DOT                 = '.'
-        COMMA               = ','
-        LEFT_BRACE          = '{'
-        RIGHT_BRACE         = '}'
-        LEFT_PARENTHESIS    = '('
-        RIGHT_PARENTHESIS   = ')'
-        LEFT_BRACKET        = '['
-        RIGHT_BRACKET       = ']'
-        QUESTION_MARK       = '?'
+    VAR             = 'var'
+    CREATE          = 'create'
+    ATTACH          = 'attach'
+    IF              = 'if'
+    ELSE            = 'else'
+    FOREACH         = 'foreach'
+    WHILE           = 'while'
+    NEXT            = 'next'
+    BREAK           = 'break'
+    FORK            = 'fork'
+    JOIN            = 'join'
+    SOME            = 'some'
+    ALL             = 'all'
+    TIMEOUT         = 'timeout'
+    TRY             = 'try'
+    CATCH           = 'catch'
+    FINALLY         = 'finally'
+    THROW           = 'throw'
+    RETURN          = 'return'
+    TRANSACTION     = 'transaction'
+    ABORT           = 'abort'
+    FAILED          = 'failed'
+    RETRIES         = 'retries'
+    LENGTHOF        = 'lengthof'
+    TYPEOF          = 'typeof'
+    WITH            = 'with'
+    BIND            = 'bind'
+    IN              = 'in'
+    LOCK            = 'lock'
 
-        // Arithmetic operators
+    // Separators
 
-        ASSIGN  = '='
-        ADD     = '+'
-        SUB     = '-'
-        MUL     = '*'
-        DIV     = '/'
-        POW     = '^'
-        MOD     = '%'
+    SEMICOLON           = ';'
+    COLON               = ':'
+    DOT                 = '.'
+    COMMA               = ','
+    LEFT_BRACE          = '{'
+    RIGHT_BRACE         = '}'
+    LEFT_PARENTHESIS    = '('
+    RIGHT_PARENTHESIS   = ')'
+    LEFT_BRACKET        = '['
+    RIGHT_BRACKET       = ']'
+    QUESTION_MARK       = '?'
 
-        // Relational operators
-        NOT         = '!'
-        EQUAL       = '=='
-        NOT_EQUAL   = '!='
-        GT          = '>'
-        LT          = '<'
-        GT_EQUAL    = '>='
-        LT_EQUAL    = '<='
-        AND         = '&&'
-        OR          = '||'
+    // Arithmetic operators
 
-        // Additional symbols
-        RARROW      = '->'
-        LARROW      = '<-'
-        AT          = '@'
-        BACKTICK    = '`'
-        RANGE       = '..'
+    ASSIGN  = '='
+    ADD     = '+'
+    SUB     = '-'
+    MUL     = '*'
+    DIV     = '/'
+    POW     = '^'
+    MOD     = '%'
 
-        WHITE_SPACE = 'regexp:\s+'
-        LINE_COMMENT = 'regexp://[^\r\n]*'
-        identifier = 'regexp:[a-zA-Z_][a-zA-Z0-9_]*'
-        quotedStringLiteral = "regexp:\"(.*)\""
-        integerLiteral = "regexp:\d+"
-    ]
+    // Relational operators
+    NOT         = '!'
+    EQUAL       = '=='
+    NOT_EQUAL   = '!='
+    GT          = '>'
+    LT          = '<'
+    GT_EQUAL    = '>='
+    LT_EQUAL    = '<='
+    AND         = '&&'
+    OR          = '||'
 
-//     extends("(BinaryPow|And|Add|Conversion|Mul|Selector|Conditional)Expression")=BinaryExpression
-      extends("(functionInvocation|simpleVariable|mapArrayVariable|fieldVariable|xmlAttribVariable|invocation)Reference")=VariableReference
-      extends("(ValueTypeType|BuiltInReferenceTypeType|VariableReference|LambdaFunction|ConnectorInit|TypeCasting|TypeConversion|TypeAccess|Braced)Expression")=Expression
-      extends("(Unary|BinaryPow|BinaryDivMulMod|BinaryAddSub|BinaryCompare|BinaryEqual|BinaryAnd|BinaryOr|Ternary)Expression")=Expression
-      extends("((Simple|Array|Record)Literal)")=Expression
-//      extends("mapTypeName|xmlTypeName|jsonTypeName|tableTypeName|FunctionTypeName")=BuiltInReferenceTypeName
-//      extends("BuiltInReferenceTypeName|UserDefineTypeName|AnonStructTypeName")=ReferenceTypeName
-//      extends("any|type|ValueTypeName|BuiltInReferenceTypeName|arrayTypeName")=BuiltInTypeName
-      extends("anyTypeName|typeTypeName|ValueTypeName|ReferenceTypeName|arrayTypeName")=TypeName
+    // Additional symbols
+    RARROW      = '->'
+    LARROW      = '<-'
+    AT          = '@'
+    BACKTICK    = '`'
+    RANGE       = '..'
 
+    WHITE_SPACE = 'regexp:\s+'
+    LINE_COMMENT = 'regexp://[^\r\n]*'
+    identifier = 'regexp:[a-zA-Z_][a-zA-Z0-9_]*'
+    quotedStringLiteral = "regexp:\"(.*)\""
+    integerLiteral = "regexp:\d+"
+  ]
+
+  extends("(functionInvocation|simpleVariable|mapArrayVariable|fieldVariable|xmlAttribVariable|invocation)Reference")=VariableReference
+
+  extends("(ValueTypeType|BuiltInReferenceTypeType|VariableReference|LambdaFunction|ConnectorInit|TypeCasting|TypeConversion|TypeAccess|Braced)Expression")=Expression
+  extends("(Unary|Binary|Ternary)Expression")=Expression
+  extends("((Simple|Array|Record)Literal)")=Expression
+  extends("Binary(Pow|DivMulMod|AddSub|Compare|Equal|And|Or)Expression")=BinaryExpression
+
+  extends("anyTypeName|typeTypeName|ValueTypeName|ReferenceTypeName|arrayTypeName|BinaryAndExpression")=TypeName
+
+//  extends("PackageDeclaration")="org.ballerinalang.plugins.idea.psi.impl.BallerinaStubbedElementImpl<?>"
+//  elementTypeFactory("PackageDeclaration")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
 }
 
 CompilationUnit ::= PackageDeclaration? (ImportDeclaration | NamespaceDeclaration)* (AnnotationAttachment* Definition)* <<eof>>
 
-PackageDeclaration ::= package PackageName PackageVersion? SEMICOLON {pin=1}
+PackageDeclaration ::= package PackageName PackageVersion? SEMICOLON {pin=1 methods=[getName] /*stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub"*/}
 
-PackageName ::= identifier (DOT identifier)* {pin=1}
+PackageName ::= identifier (DOT identifier)* {pin(".*")=1}
 
 PackageVersion ::= version identifier {pin=1};
 
-ImportDeclaration ::= import PackageName PackageVersion? Alias? SEMICOLON {pin=1}
+ImportDeclaration ::= import (orgName DIV)? PackageName PackageVersion? Alias? SEMICOLON {pin=1}
+
+orgName ::= identifier
 
 Alias ::= as identifier {pin=1}
 
-//Definition ::=   nonFixedStartDefinitions | fixedStartDefinitions
-//private nonFixedStartDefinitions ::= GlobalVariableDefinition
-//private fixedStartDefinitions ::= ServiceDefinition | FunctionDefinition | connectorDefinition | structDefinition
-//                                | enumDefinition | AnnotationDefinition  | TransformerDefinition | constantDefinition
-//                                {recoverWhile=TopLevelDefinitionRecover}
-Definition ::= GlobalVariableDefinition | ServiceDefinition | FunctionDefinition | connectorDefinition | structDefinition
-               | enumDefinition | AnnotationDefinition  | TransformerDefinition | constantDefinition
+Definition ::= GlobalVariableDefinition | ServiceDefinition | FunctionDefinition | connectorDefinition
+               | structDefinition | enumDefinition | AnnotationDefinition  | TransformerDefinition | constantDefinition
                {recoverWhile=TopLevelDefinitionRecover}
-private TopLevelDefinitionRecover ::= !(service | function | connector | struct | enum | annotation | transformer | const | boolean | int | float | string | blob | identifier| identifier identifier)
+private TopLevelDefinitionRecover ::= !(service | function | connector | struct | enum | annotation | transformer | const | boolean | int | float | string | blob | identifier)
 
 ServiceDefinition ::= service (LT identifier GT) identifier ServiceBody {pin=1}
 ServiceBody ::=   LEFT_BRACE EndpointDeclaration* VariableDefinitionStatement* ResourceDefinition* RIGHT_BRACE
@@ -173,8 +174,10 @@ ResourceDefinition ::= AnnotationAttachment* resource identifier LEFT_PARENTHESI
 CallableUnitBody ::= LEFT_BRACE EndpointDeclaration* Statement* RIGHT_BRACE | LEFT_BRACE EndpointDeclaration* WorkerDeclaration+ RIGHT_BRACE
 
 FunctionDefinition ::= NativeFunctionDefinition | NonNativeFunctionDefinition {pin=1}
-NativeFunctionDefinition ::= (public)? native function (LT Parameter GT)? CallableUnitSignature SEMICOLON {pin=3}
-NonNativeFunctionDefinition ::= (public)? function (LT Parameter GT)? CallableUnitSignature CallableUnitBody {pin=2}
+private NativeFunctionDefinition ::= (public)? native function receiver? CallableUnitSignature SEMICOLON {pin=3}
+private NonNativeFunctionDefinition ::= (public)? function receiver? CallableUnitSignature CallableUnitBody {pin=2}
+
+receiver ::= LT Parameter GT
 
 LambdaFunction ::= function LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ReturnParameters? CallableUnitBody
 
@@ -185,8 +188,8 @@ connectorDefinition ::= (public)? connector identifier LEFT_PARENTHESIS Paramete
 ConnectorBody ::= LEFT_BRACE EndpointDeclaration* VariableDefinitionStatement* ActionDefinition* RIGHT_BRACE
 
 ActionDefinition ::= NativeActionDefinition | NonNativeActionDefinition
-NativeActionDefinition ::= AnnotationAttachment* native action  CallableUnitSignature SEMICOLON {pin=3}
-NonNativeActionDefinition ::= AnnotationAttachment* action CallableUnitSignature CallableUnitBody {pin=2}
+private NativeActionDefinition ::= AnnotationAttachment* native action  CallableUnitSignature SEMICOLON {pin=3}
+private NonNativeActionDefinition ::= AnnotationAttachment* action CallableUnitSignature CallableUnitBody {pin=2}
 
 structDefinition ::= (public)? struct identifier StructBody {pin=2}
 
@@ -233,11 +236,7 @@ typeTypeName::= type
 
 ValueTypeName ::=   boolean | int | float | string | blob
 
-BuiltInReferenceTypeName ::= mapTypeName
-| xmlTypeName
-| jsonTypeName
-| tableTypeName
-| FunctionTypeName
+BuiltInReferenceTypeName ::= mapTypeName | xmlTypeName | jsonTypeName | tableTypeName | FunctionTypeName
 
 mapTypeName ::= map (LT TypeName GT)?
 
@@ -267,8 +266,7 @@ AnnotationAttributeArray ::= LEFT_BRACKET (AnnotationAttributeValue (COMMA Annot
 //// STATEMENTS / BLOCKS
 
 // Todo - Add recover rules
-Statement
-    ::= VariableDefinitionStatement
+Statement ::= VariableDefinitionStatement
     |   AssignmentStatement
     |   BindStatement
     |   IfElseStatement
@@ -287,7 +285,9 @@ Statement
     |   LockStatement
     |   NamespaceDeclarationStatement /*{recoverWhile = StatementRecover}*/
 
-//private StatementRecover ::= !('!' | '&' | '(' | '*' | '+' | '-' | ';' | '<-' | '^' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | interface | map | oct | return | select | string  | struct | switch | var | next |try )
+//private StatementRecover ::= !(int | string | '}')
+
+//private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
 
 VariableDefinitionStatement ::= TypeName identifier (ASSIGN Expression)? SEMICOLON {pin=1}
 
@@ -434,9 +434,9 @@ Expression
     |   BinaryOrExpression
     |   TernaryExpression {/*pin=1 */ /*recoverWhile=ExpressionRecover*/}
 
-//fake BinaryExpression ::= Expression+ {
-//  methods=[left="Expression[0]" right="Expression[1]" getOperator]
-//}
+fake BinaryExpression ::= Expression {
+  methods=[left="Expression[0]" right="Expression[1]" getOperator]
+}
 
 //private ExpressionRecover ::=  !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var )
 
