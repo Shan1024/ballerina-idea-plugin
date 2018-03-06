@@ -26,10 +26,15 @@
 
         <fileTypeFactory implementation="org.ballerinalang.plugins.idea.BallerinaFileTypeFactory"/>
 
-        <lang.parserDefinition language="Ballerina" implementationClass="org.ballerinalang.plugins.idea.BallerinaParserDefinition"/>
-
+        <lang.parserDefinition language="Ballerina"
+                               implementationClass="org.ballerinalang.plugins.idea.BallerinaParserDefinition"/>
         <lang.syntaxHighlighterFactory language="Ballerina"
                                        implementationClass="org.ballerinalang.plugins.idea.highlighting.BallerinaSyntaxHighlighterFactory"/>
+        <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaFunctionIndex"/>
+
+        <stubElementTypeHolder class="org.ballerinalang.plugins.idea.psi.BallerinaTypes"/>
+
+        <indexPatternBuilder implementation="org.ballerinalang.plugins.idea.BallerinaIndexPatternBuilder"/>
 
     </extensions>
 

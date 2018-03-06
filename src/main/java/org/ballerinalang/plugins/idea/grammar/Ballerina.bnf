@@ -143,8 +143,10 @@
 
   extends("anyTypeName|typeTypeName|ValueTypeName|ReferenceTypeName|arrayTypeName|BinaryAndExpression")=TypeName
 
-//  extends("PackageDeclaration")="org.ballerinalang.plugins.idea.psi.impl.BallerinaStubbedElementImpl<?>"
-//  elementTypeFactory("PackageDeclaration")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
+  elementTypeFactory("FunctionDefinition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
+
+  implements("FunctionDefinition")="org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+  extends("FunctionDefinition")="org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
 }
 
 CompilationUnit ::= PackageDeclaration? (ImportDeclaration | NamespaceDeclaration)* (AnnotationAttachment* Definition)* <<eof>>
@@ -173,7 +175,7 @@ ResourceDefinition ::= AnnotationAttachment* resource identifier LEFT_PARENTHESI
 
 CallableUnitBody ::= LEFT_BRACE EndpointDeclaration* Statement* RIGHT_BRACE | LEFT_BRACE EndpointDeclaration* WorkerDeclaration+ RIGHT_BRACE
 
-FunctionDefinition ::= NativeFunctionDefinition | NonNativeFunctionDefinition {pin=1}
+FunctionDefinition ::= NativeFunctionDefinition | NonNativeFunctionDefinition {pin=1 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFunctionDefinitionStub"}
 private NativeFunctionDefinition ::= (public)? native function receiver? CallableUnitSignature SEMICOLON {pin=3}
 private NonNativeFunctionDefinition ::= (public)? function receiver? CallableUnitSignature CallableUnitBody {pin=2}
 

@@ -102,8 +102,6 @@ public class BallerinaParserDefinition implements ParserDefinition {
 
     public static final TokenSet BAD_CHARACTER = TokenSet.create(TokenType.BAD_CHARACTER);
 
-    public static final IFileElementType FILE = new IFileElementType(BallerinaLanguage.INSTANCE);
-
     @NotNull
     @Override
     public Lexer createLexer(Project project) {
@@ -132,7 +130,7 @@ public class BallerinaParserDefinition implements ParserDefinition {
 
     @Override
     public IFileElementType getFileNodeType() {
-        return FILE;
+        return BallerinaFileElementType.INSTANCE;
     }
 
     public PsiFile createFile(FileViewProvider viewProvider) {
