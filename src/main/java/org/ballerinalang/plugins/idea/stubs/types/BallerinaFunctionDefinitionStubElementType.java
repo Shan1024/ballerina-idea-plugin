@@ -1,5 +1,7 @@
 package org.ballerinalang.plugins.idea.stubs.types;
 
+import com.intellij.openapi.util.text.StringUtil;
+import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubIndexKey;
 import com.intellij.psi.stubs.StubInputStream;
@@ -36,6 +38,14 @@ public class BallerinaFunctionDefinitionStubElementType extends
     public BallerinaFunctionDefinitionStub createStub(@NotNull BallerinaFunctionDefinition psi, StubElement
             parentStub) {
         return new BallerinaFunctionDefinitionStub(parentStub, this, psi.getName(), psi.isPublic());
+    }
+
+    @Override
+    public void indexStub(@NotNull BallerinaFunctionDefinitionStub stub, @NotNull IndexSink sink) {
+        String name = stub.getName();
+        if (shouldIndex() && StringUtil.isNotEmpty(name)) {
+            sink.occurrence(BallerinaFunctionIndex.KEY, name);
+        }
     }
 
     @Override

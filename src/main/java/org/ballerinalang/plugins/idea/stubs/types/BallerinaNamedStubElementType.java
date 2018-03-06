@@ -23,6 +23,7 @@ import com.intellij.psi.stubs.IndexSink;
 import com.intellij.psi.stubs.StubIndexKey;
 import org.ballerinalang.plugins.idea.psi.BallerinaNamedElement;
 import org.ballerinalang.plugins.idea.stubs.BallerinaNamedStub;
+import org.ballerinalang.plugins.idea.stubs.index.BallerinaFunctionIndex;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
@@ -65,6 +66,8 @@ public abstract class BallerinaNamedStubElementType<S extends BallerinaNamedStub
 //            for (StubIndexKey<String, ? extends GoNamedElement> key : getExtraIndexKeys()) {
 //                sink.occurrence(key, name);
 //            }
+
+
         }
     }
 
