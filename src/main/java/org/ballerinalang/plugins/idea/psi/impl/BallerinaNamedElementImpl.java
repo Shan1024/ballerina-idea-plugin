@@ -55,7 +55,7 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
     public boolean isPublic() {
 //        if (GoPsiImplUtil.builtin(this)) return true;
         T stub = getStub();
-        return stub != null ? stub.isPublic() : StringUtil.isCapitalized(getName());
+        return stub != null && stub.isPublic()/*StringUtil.isCapitalized(getName())*/;
     }
 
     @Nullable
