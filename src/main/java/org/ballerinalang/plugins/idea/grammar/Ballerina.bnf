@@ -141,6 +141,8 @@
   extends("((Simple|Array|Record)Literal)")=Expression
   extends("Binary(Pow|DivMulMod|AddSub|Compare|Equal|And|Or)Expression")=BinaryExpression
 
+
+
   extends("anyTypeName|typeTypeName|ValueTypeName|ReferenceTypeName|arrayTypeName|BinaryAndExpression")=TypeName
 
   elementTypeFactory("FunctionDefinition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
@@ -149,9 +151,9 @@
   extends("FunctionDefinition")="org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
 }
 
-CompilationUnit ::= PackageDeclaration? (ImportDeclaration | NamespaceDeclaration)* (AnnotationAttachment* Definition)* <<eof>>
+CompilationUnit ::= PackageDeclaration? (ImportDeclaration | NamespaceDeclaration)* Definition* <<eof>>
 
-PackageDeclaration ::= package PackageName PackageVersion? SEMICOLON {pin=1 methods=[getName] /*stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub"*/}
+PackageDeclaration ::= package PackageName PackageVersion? SEMICOLON {pin=1 /*methods=[getName]*/ /*stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub"*/}
 
 PackageName ::= identifier (DOT identifier)* {pin(".*")=1}
 
@@ -163,8 +165,9 @@ orgName ::= identifier
 
 Alias ::= as identifier {pin=1}
 
-Definition ::= GlobalVariableDefinition | ServiceDefinition | FunctionDefinition | connectorDefinition
-               | structDefinition | enumDefinition | AnnotationDefinition  | TransformerDefinition | constantDefinition
+// Note - Global variable definition should be the first definition since it can contain identifier as type.
+Definition ::= AnnotationAttachment* (GlobalVariableDefinition | ServiceDefinition | FunctionDefinition | connectorDefinition
+               | structDefinition | enumDefinition | AnnotationDefinition  | TransformerDefinition | ConstantDefinition)
                {recoverWhile=TopLevelDefinitionRecover}
 private TopLevelDefinitionRecover ::= !(service | function | connector | struct | enum | annotation | transformer | const | boolean | int | float | string | blob | identifier)
 
@@ -173,7 +176,15 @@ ServiceBody ::=   LEFT_BRACE EndpointDeclaration* VariableDefinitionStatement* R
 
 ResourceDefinition ::= AnnotationAttachment* resource identifier LEFT_PARENTHESIS ParameterList RIGHT_PARENTHESIS CallableUnitBody {pin=2}
 
-CallableUnitBody ::= LEFT_BRACE EndpointDeclaration* Statement* RIGHT_BRACE | LEFT_BRACE EndpointDeclaration* WorkerDeclaration+ RIGHT_BRACE
+CallableUnitBody ::= LEFT_BRACE BlockWithEndpoint RIGHT_BRACE | LEFT_BRACE EndpointDeclaration* WorkerDeclaration+ RIGHT_BRACE
+
+Block ::= Statement* {recoverWhile=StatementRecover}
+BlockWithEndpoint ::= EndpointDeclaration* Block
+
+private StatementRecover ::= !(int | string | '}' | '=')
+
+//private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
+
 
 FunctionDefinition ::= NativeFunctionDefinition | NonNativeFunctionDefinition {pin=1 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFunctionDefinitionStub"}
 private NativeFunctionDefinition ::= (public)? native function receiver? CallableUnitSignature SEMICOLON {pin=3}
@@ -181,7 +192,7 @@ private NonNativeFunctionDefinition ::= (public)? function receiver? CallableUni
 
 receiver ::= LT Parameter GT
 
-LambdaFunction ::= function LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ReturnParameters? CallableUnitBody
+LambdaFunction ::= function LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ReturnParameters? CallableUnitBody {pin=1}
 
 CallableUnitSignature ::= identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ReturnParameters? {pin=1}
 
@@ -214,11 +225,9 @@ AttachmentPoint ::= service (LT identifier? GT)? | resource | connector | action
 
 AnnotationBody ::= LEFT_BRACE FieldDefinition* RIGHT_BRACE
 
-constantDefinition ::= (public)? const ValueTypeName identifier ASSIGN Expression SEMICOLON {pin=2}
+ConstantDefinition ::= (public)? const ValueTypeName identifier ASSIGN Expression SEMICOLON {pin=2}
 
-WorkerDeclaration ::= WorkerDefinition LEFT_BRACE Statement* RIGHT_BRACE
-
-WorkerDefinition ::= worker identifier
+WorkerDeclaration ::= worker identifier LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
 TypeName ::= anyTypeName | typeTypeName | ValueTypeName | ReferenceTypeName | arrayTypeName
 
@@ -230,7 +239,7 @@ ReferenceTypeName ::= BuiltInReferenceTypeName | UserDefineTypeName | AnonStruct
 
 UserDefineTypeName ::= NameReference
 
-AnonStructTypeName ::= struct StructBody
+AnonStructTypeName ::= struct StructBody {pin=1}
 
 anyTypeName::= any
 
@@ -248,7 +257,7 @@ jsonTypeName ::= json (LT NameReference GT)?
 
 tableTypeName ::= table (LT NameReference GT)?
 
-FunctionTypeName ::= function LEFT_PARENTHESIS (ParameterList | TypeList)? RIGHT_PARENTHESIS ReturnParameters?
+FunctionTypeName ::= function LEFT_PARENTHESIS (ParameterList | TypeList)? RIGHT_PARENTHESIS ReturnParameters?{pin=3}
 
 XmlNamespaceName ::= quotedStringLiteral
 
@@ -268,8 +277,10 @@ AnnotationAttributeArray ::= LEFT_BRACKET (AnnotationAttributeValue (COMMA Annot
 //// STATEMENTS / BLOCKS
 
 // Todo - Add recover rules
-Statement ::= VariableDefinitionStatement
+Statement ::=
+        ExpressionStmt
     |   AssignmentStatement
+    |   VariableDefinitionStatement
     |   BindStatement
     |   IfElseStatement
     |   ForeachStatement
@@ -281,7 +292,6 @@ Statement ::= VariableDefinitionStatement
     |   ThrowStatement
     |   ReturnStatement
     |   WorkerInteractionStatement
-    |   ExpressionStmt
     |   TransactionStatement
     |   AbortStatement
     |   LockStatement
@@ -291,7 +301,7 @@ Statement ::= VariableDefinitionStatement
 
 //private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
 
-VariableDefinitionStatement ::= TypeName identifier (ASSIGN Expression)? SEMICOLON {pin=1}
+VariableDefinitionStatement ::= TypeName identifier (ASSIGN Expression)? SEMICOLON {pin(".*")=1}
 
 RecordLiteral ::= LEFT_BRACE (RecordKeyValue (COMMA RecordKeyValue)*)? RIGHT_BRACE
 
@@ -307,7 +317,7 @@ EndpointDeclaration ::= EndpointDefinition LEFT_BRACE ((VariableReference | Conn
 
 EndpointDefinition ::= endpoint (LT NameReference GT) identifier {pin=1}
 
-AssignmentStatement ::= (var)? VariableReferenceList ASSIGN Expression SEMICOLON
+AssignmentStatement ::= (var)? VariableReferenceList ASSIGN Expression SEMICOLON /*{pin=2}*/
 
 BindStatement ::= bind Expression WITH identifier SEMICOLON {pin=1}
 
@@ -315,17 +325,17 @@ VariableReferenceList ::= VariableReference (COMMA VariableReference)*
 
 IfElseStatement ::= IfClause ElseIfClause* ElseClause? {pin=1}
 
-IfClause ::= if LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_BRACE Statement* RIGHT_BRACE {pin=1}
+IfClause ::= if LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
-ElseIfClause ::= else if LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_BRACE Statement* RIGHT_BRACE {pin=2}
+ElseIfClause ::= else if LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_BRACE Block RIGHT_BRACE {pin=2}
 
-ElseClause ::= else LEFT_BRACE Statement*RIGHT_BRACE {pin=1}
+ElseClause ::= else LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
-ForeachStatement ::= foreach LEFT_PARENTHESIS? VariableReferenceList in (Expression | IntRangeExpression) RIGHT_PARENTHESIS? LEFT_BRACE Statement* RIGHT_BRACE {pin=1}
+ForeachStatement ::= foreach LEFT_PARENTHESIS? VariableReferenceList in (Expression | IntRangeExpression) RIGHT_PARENTHESIS? LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
 IntRangeExpression ::= Expression RANGE Expression | (LEFT_BRACKET|LEFT_PARENTHESIS) Expression RANGE Expression (RIGHT_BRACKET|RIGHT_PARENTHESIS)
 
-WhileStatement ::= while LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_BRACE Statement* RIGHT_BRACE {pin=2}
+WhileStatement ::= while LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_BRACE Block RIGHT_BRACE {pin=2}
 
 NextStatement ::= next SEMICOLON {pin=1}
 
@@ -335,20 +345,20 @@ BreakStatement ::= break SEMICOLON {pin=1}
 ForkJoinStatement ::= fork LEFT_BRACE WorkerDeclaration* RIGHT_BRACE JoinClause? TimeoutClause? {pin=1}
 
 // below typeName is only 'message[]'
-JoinClause ::= join (LEFT_PARENTHESIS JoinConditions RIGHT_PARENTHESIS)? LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Statement* RIGHT_BRACE {pin=1}
+JoinClause ::= join (LEFT_PARENTHESIS JoinConditions RIGHT_PARENTHESIS)? LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
 JoinConditions ::= some integerLiteral (identifier (COMMA identifier)*)? | all (identifier (COMMA identifier)*)? {pin=1}
 
 // below typeName is only 'message[]'
-TimeoutClause ::= timeout LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Statement* RIGHT_BRACE {pin=1}
+TimeoutClause ::= timeout LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
-TryCatchStatement ::= try LEFT_BRACE Statement* RIGHT_BRACE CatchClauses {pin=1}
+TryCatchStatement ::= try LEFT_BRACE Block RIGHT_BRACE CatchClauses {pin=1}
 
 CatchClauses ::= CatchClause+ FinallyClause? | FinallyClause
 
-CatchClause ::= catch LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Statement* RIGHT_BRACE {pin=1}
+CatchClause ::= catch LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
-FinallyClause ::= finally LEFT_BRACE Statement* RIGHT_BRACE {pin=1}
+FinallyClause ::= finally LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
 ThrowStatement ::= throw Expression SEMICOLON {pin=1}
 
@@ -393,15 +403,15 @@ ExpressionStmt ::= VariableReference SEMICOLON
 
 TransactionStatement ::= TransactionClause FailedClause?
 
-TransactionClause ::= transaction (WITH TransactionPropertyInitStatementList)? LEFT_BRACE Statement* RIGHT_BRACE {pin=1}
+TransactionClause ::= transaction (WITH TransactionPropertyInitStatementList)? LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
 TransactionPropertyInitStatement ::= RetriesStatement
 
 TransactionPropertyInitStatementList ::= TransactionPropertyInitStatement (COMMA TransactionPropertyInitStatement)*
 
-LockStatement ::= lock LEFT_BRACE Statement* RIGHT_BRACE {pin=1}
+LockStatement ::= lock LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
-FailedClause ::= failed LEFT_BRACE Statement* RIGHT_BRACE {pin=1}
+FailedClause ::= failed LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
 AbortStatement ::= abort SEMICOLON {pin=1}
 
@@ -467,9 +477,11 @@ NameReference ::= (identifier COLON)? identifier
 
 ReturnParameters ::= RETURNS? LEFT_PARENTHESIS (ParameterList | TypeList) RIGHT_PARENTHESIS {pin=3}
 
-private TypeList ::= TypeName (COMMA TypeName)* {pin=1}
+private TypeList ::= TypeName (COMMA TypeName)* {pin=1 /*recoverWhile=RecoverParameter*/}
 
-ParameterList ::= Parameter (COMMA Parameter)* {pin=1}
+ParameterList ::= Parameter (COMMA Parameter)* {pin=1 /*recoverWhile=RecoverParameter*/}
+
+private RecoverParameter ::= !(string | COMMA | RIGHT_PARENTHESIS | identifier)
 
 Parameter ::= AnnotationAttachment* TypeName identifier
 
