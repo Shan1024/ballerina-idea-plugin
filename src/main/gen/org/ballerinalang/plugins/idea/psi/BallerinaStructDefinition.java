@@ -20,13 +20,19 @@ package org.ballerinalang.plugins.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.StubBasedPsiElement;
+import org.ballerinalang.plugins.idea.stubs.BallerinaStructDefinitionStub;
 
-public interface BallerinaStructDefinition extends BallerinaCompositeElement {
+public interface BallerinaStructDefinition extends BallerinaNamedElement, StubBasedPsiElement<BallerinaStructDefinitionStub> {
 
   @Nullable
   BallerinaStructBody getStructBody();
 
   @Nullable
   PsiElement getIdentifier();
+
+  //WARNING: getName(...) is skipped
+  //matching getName(BallerinaStructDefinition, ...)
+  //methods are not found in BallerinaPsiImplUtil
 
 }

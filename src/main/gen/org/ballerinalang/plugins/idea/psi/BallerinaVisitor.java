@@ -390,6 +390,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitStructDefinition(@NotNull BallerinaStructDefinition o) {
+    visitNamedElement(o);
+  }
+
   public void visitTernaryExpression(@NotNull BallerinaTernaryExpression o) {
     visitExpression(o);
   }
@@ -560,10 +564,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
 
   public void visitSimpleVariableReference(@NotNull BallerinaSimpleVariableReference o) {
     visitVariableReference(o);
-  }
-
-  public void visitStructDefinition(@NotNull BallerinaStructDefinition o) {
-    visitCompositeElement(o);
   }
 
   public void visitTableTypeName(@NotNull BallerinaTableTypeName o) {

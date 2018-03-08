@@ -42,6 +42,9 @@ public interface BallerinaDefinition extends BallerinaCompositeElement {
   BallerinaServiceDefinition getServiceDefinition();
 
   @Nullable
+  BallerinaStructDefinition getStructDefinition();
+
+  @Nullable
   BallerinaTransformerDefinition getTransformerDefinition();
 
   @Nullable
@@ -49,8 +52,5 @@ public interface BallerinaDefinition extends BallerinaCompositeElement {
 
   @Nullable
   BallerinaEnumDefinition getEnumDefinition();
-
-  @Nullable
-  BallerinaStructDefinition getStructDefinition();
 
 }

@@ -20,6 +20,7 @@ package org.ballerinalang.plugins.idea.stubs;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.util.containers.HashMap;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaFunctionDefinitionStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaStructDefinitionStubElementType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -50,6 +51,9 @@ public class BallerinaElementTypeFactory {
         //    if ("ANONYMOUS_FIELD_DEFINITION".equals(name)) return new GoAnonymousFieldDefinitionStubElementType(name);
         if ("FUNCTION_DEFINITION".equals(name)) {
             return new BallerinaFunctionDefinitionStubElementType(name);
+        }
+        if ("STRUCT_DEFINITION".equals(name)) {
+            return new BallerinaStructDefinitionStubElementType(name);
         }
         //    if ("METHOD_DECLARATION".equals(name)) return new GoMethodDeclarationStubElementType(name);
         //    if ("IMPORT_SPEC".equals(name)) return new GoImportSpecStubElementType(name);

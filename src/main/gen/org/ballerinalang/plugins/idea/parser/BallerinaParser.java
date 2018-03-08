@@ -267,6 +267,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == STRUCT_BODY) {
       r = StructBody(b, 0);
     }
+    else if (t == STRUCT_DEFINITION) {
+      r = StructDefinition(b, 0);
+    }
     else if (t == THROW_STATEMENT) {
       r = ThrowStatement(b, 0);
     }
@@ -350,9 +353,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     }
     else if (t == RECEIVER) {
       r = receiver(b, 0);
-    }
-    else if (t == STRUCT_DEFINITION) {
-      r = structDefinition(b, 0);
     }
     else if (t == TABLE_TYPE_NAME) {
       r = tableTypeName(b, 0);
@@ -1140,8 +1140,8 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // AnnotationAttachment* (GlobalVariableDefinition | ServiceDefinition | FunctionDefinition | connectorDefinition
-  //                | structDefinition | enumDefinition | AnnotationDefinition  | TransformerDefinition | ConstantDefinition)
+  // AnnotationAttachment* (StructDefinition | GlobalVariableDefinition | ServiceDefinition | FunctionDefinition | connectorDefinition
+  //                | enumDefinition | AnnotationDefinition  | TransformerDefinition | ConstantDefinition)
   public static boolean Definition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Definition")) return false;
     boolean r;
@@ -1164,17 +1164,17 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // GlobalVariableDefinition | ServiceDefinition | FunctionDefinition | connectorDefinition
-  //                | structDefinition | enumDefinition | AnnotationDefinition  | TransformerDefinition | ConstantDefinition
+  // StructDefinition | GlobalVariableDefinition | ServiceDefinition | FunctionDefinition | connectorDefinition
+  //                | enumDefinition | AnnotationDefinition  | TransformerDefinition | ConstantDefinition
   private static boolean Definition_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Definition_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = GlobalVariableDefinition(b, l + 1);
+    r = StructDefinition(b, l + 1);
+    if (!r) r = GlobalVariableDefinition(b, l + 1);
     if (!r) r = ServiceDefinition(b, l + 1);
     if (!r) r = FunctionDefinition(b, l + 1);
     if (!r) r = connectorDefinition(b, l + 1);
-    if (!r) r = structDefinition(b, l + 1);
     if (!r) r = enumDefinition(b, l + 1);
     if (!r) r = AnnotationDefinition(b, l + 1);
     if (!r) r = TransformerDefinition(b, l + 1);
@@ -2733,6 +2733,28 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // (public)? struct identifier StructBody
+  public static boolean StructDefinition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "StructDefinition")) return false;
+    if (!nextTokenIs(b, "<struct definition>", PUBLIC, STRUCT)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, STRUCT_DEFINITION, "<struct definition>");
+    r = StructDefinition_0(b, l + 1);
+    r = r && consumeTokens(b, 1, STRUCT, IDENTIFIER);
+    p = r; // pin = 2
+    r = r && StructBody(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // (public)?
+  private static boolean StructDefinition_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "StructDefinition_0")) return false;
+    consumeToken(b, PUBLIC);
+    return true;
+  }
+
+  /* ********************************************************** */
   // throw Expression SEMICOLON
   public static boolean ThrowStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ThrowStatement")) return false;
@@ -3428,28 +3450,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     r = r && consumeToken(b, GT);
     exit_section_(b, m, RECEIVER, r);
     return r;
-  }
-
-  /* ********************************************************** */
-  // (public)? struct identifier StructBody
-  public static boolean structDefinition(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "structDefinition")) return false;
-    if (!nextTokenIs(b, "<struct definition>", PUBLIC, STRUCT)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, STRUCT_DEFINITION, "<struct definition>");
-    r = structDefinition_0(b, l + 1);
-    r = r && consumeTokens(b, 1, STRUCT, IDENTIFIER);
-    p = r; // pin = 2
-    r = r && StructBody(b, l + 1);
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // (public)?
-  private static boolean structDefinition_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "structDefinition_0")) return false;
-    consumeToken(b, PUBLIC);
-    return true;
   }
 
   /* ********************************************************** */

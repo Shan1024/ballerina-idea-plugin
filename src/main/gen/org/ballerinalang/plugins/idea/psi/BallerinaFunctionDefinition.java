@@ -34,4 +34,10 @@ public interface BallerinaFunctionDefinition extends BallerinaNamedElement, Stub
   @Nullable
   BallerinaReceiver getReceiver();
 
+  @Nullable
+  PsiElement getIdentifier();
+
+  @Nullable
+  String getName();
+
 }

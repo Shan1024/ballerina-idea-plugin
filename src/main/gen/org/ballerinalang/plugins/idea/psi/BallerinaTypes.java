@@ -130,7 +130,7 @@ public interface BallerinaTypes {
   IElementType SIMPLE_VARIABLE_REFERENCE = new BallerinaCompositeElementType("SIMPLE_VARIABLE_REFERENCE");
   IElementType STATEMENT = new BallerinaCompositeElementType("STATEMENT");
   IElementType STRUCT_BODY = new BallerinaCompositeElementType("STRUCT_BODY");
-  IElementType STRUCT_DEFINITION = new BallerinaCompositeElementType("STRUCT_DEFINITION");
+  IElementType STRUCT_DEFINITION = BallerinaElementTypeFactory.stubFactory("STRUCT_DEFINITION");
   IElementType TABLE_TYPE_NAME = new BallerinaCompositeElementType("TABLE_TYPE_NAME");
   IElementType TERNARY_EXPRESSION = new BallerinaCompositeElementType("TERNARY_EXPRESSION");
   IElementType THROW_STATEMENT = new BallerinaCompositeElementType("THROW_STATEMENT");

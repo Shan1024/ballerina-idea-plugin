@@ -24,15 +24,28 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaStructDefinition;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaFunctionIndex;
+import org.ballerinalang.plugins.idea.stubs.index.BallerinaStructIndex;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collection;
 
 public class BallerinaReferenceCompletionProvider extends CompletionContributor {
 
     @Override
     public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
         Project project = parameters.getOriginalFile().getProject();
-        StubIndex.getElements(BallerinaFunctionIndex.KEY, "test", project, GlobalSearchScope.allScope(project),
-                BallerinaFunctionDefinition.class);
+
+        Collection<BallerinaFunctionDefinition> ballerinaFunction = StubIndex.getElements(BallerinaFunctionIndex
+                .KEY, "test", project, GlobalSearchScope.allScope(project), BallerinaFunctionDefinition.class);
+
+        Collection<BallerinaStructDefinition> ballerinaStruct = StubIndex.getElements(BallerinaStructIndex.KEY, "test",
+                project, GlobalSearchScope.allScope(project), BallerinaStructDefinition.class);
+
+        Collection<String> allFunctions = StubIndex.getInstance().getAllKeys(BallerinaFunctionIndex.KEY, project);
+        Collection<String> allStructs = StubIndex.getInstance().getAllKeys(BallerinaStructIndex.KEY, project);
+
+        System.out.println("....");
     }
 }
