@@ -46,6 +46,15 @@ public class BallerinaReferenceCompletionProvider extends CompletionContributor 
         Collection<String> allFunctions = StubIndex.getInstance().getAllKeys(BallerinaFunctionIndex.KEY, project);
         Collection<String> allStructs = StubIndex.getInstance().getAllKeys(BallerinaStructIndex.KEY, project);
 
+        long start = System.currentTimeMillis();
+
+        Collection<BallerinaStructDefinition> ballerinaStructDefinitions = StubIndex.getElements(BallerinaStructIndex
+                .KEY, "user2", project, GlobalSearchScope.allScope(project), BallerinaStructDefinition.class);
+        /*.forEach(def -> System.out.println(def.getIdentifier().getText()));*/
+
+        long end = System.currentTimeMillis();
+
+        System.out.println("Found " + ballerinaStructDefinitions.size() + " in " + (end - start) + " ms");
         System.out.println("....");
     }
 }

@@ -28,7 +28,6 @@ import org.ballerinalang.plugins.idea.psi.BallerinaNamedElement;
 import org.ballerinalang.plugins.idea.psi.BallerinaStructDefinition;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaStructDefinitionImpl;
 import org.ballerinalang.plugins.idea.stubs.BallerinaStructDefinitionStub;
-import org.ballerinalang.plugins.idea.stubs.index.BallerinaFunctionIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaStructIndex;
 import org.jetbrains.annotations.NotNull;
 

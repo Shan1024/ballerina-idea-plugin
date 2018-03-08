@@ -34,6 +34,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaCompositeElement;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaNamedElement;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
+import org.ballerinalang.plugins.idea.psi.BallerinaTypes;
 import org.ballerinalang.plugins.idea.stubs.BallerinaNamedStub;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
@@ -54,9 +55,13 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
 
     @Override
     public boolean isPublic() {
-//        if (GoPsiImplUtil.builtin(this)) return true;
+        //        if (GoPsiImplUtil.builtin(this)) return true;
         T stub = getStub();
-        return stub != null && stub.isPublic()/*StringUtil.isCapitalized(getName())*/;
+        if (stub != null && stub.isPublic()) {
+            return true;
+        }
+        PsiElement firstChild = getFirstChild();
+        return firstChild.getNode().getElementType() == BallerinaTypes.PUBLIC;
     }
 
     @Nullable
@@ -81,8 +86,8 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
     public String getQualifiedName() {
         String name = getName();
         if (name == null) return null;
-//        String packageName = getContainingFile().getPackageName();
-//        return GoPsiImplUtil.getFqn(packageName, name);
+        //        String packageName = getContainingFile().getPackageName();
+        //        return GoPsiImplUtil.getFqn(packageName, name);
         return "";
     }
 
@@ -97,7 +102,7 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
     public PsiElement setName(@NonNls @NotNull String newName) throws IncorrectOperationException {
         PsiElement identifier = getIdentifier();
         if (identifier != null) {
-//            identifier.replace(GoElementFactory.createIdentifierFromText(getProject(), newName));
+            //            identifier.replace(GoElementFactory.createIdentifierFromText(getProject(), newName));
         }
         return this;
     }
@@ -105,25 +110,25 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
     @Nullable
     @Override
     public BallerinaTypeName getBallerinaType(@Nullable ResolveState context) {
-//        if (context != null) return getGoTypeInner(context);
-//        return CachedValuesManager.getCachedValue(this,
-//                () -> CachedValueProvider.Result
-//                        .create(getGoTypeInner(GoPsiImplUtil.createContextOnElement(this)),
-//                                PsiModificationTracker.MODIFICATION_COUNT));
+        //        if (context != null) return getGoTypeInner(context);
+        //        return CachedValuesManager.getCachedValue(this,
+        //                () -> CachedValueProvider.Result
+        //                        .create(getGoTypeInner(GoPsiImplUtil.createContextOnElement(this)),
+        //                                PsiModificationTracker.MODIFICATION_COUNT));
         return null;
     }
-//
-//    @Nullable
-//    protected GoType getGoTypeInner(@Nullable ResolveState context) {
-//        return findSiblingType();
-//    }
+    //
+    //    @Nullable
+    //    protected GoType getGoTypeInner(@Nullable ResolveState context) {
+    //        return findSiblingType();
+    //    }
 
     @Nullable
     @Override
     public BallerinaTypeName findSiblingType() {
         T stub = getStub();
         if (stub != null) {
-//            return GoPsiTreeUtil.getStubChildOfType(getParentByStub(), BallerinaTypeName.class);
+            //            return GoPsiTreeUtil.getStubChildOfType(getParentByStub(), BallerinaTypeName.class);
         }
         return PsiTreeUtil.getNextSiblingOfType(this, BallerinaTypeName.class);
     }
@@ -140,8 +145,9 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
     public ItemPresentation getPresentation() {
         String text = UsageViewUtil.createNodeText(this);
         if (text != null) {
-//            boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(ModuleUtilCore.findModuleForPsiElement
-//                    (getContainingFile()));
+            //            boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(ModuleUtilCore
+            // .findModuleForPsiElement
+            //                    (getContainingFile()));
             return new ItemPresentation() {
                 @Nullable
                 @Override
@@ -154,9 +160,10 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
                 public String getLocationString() {
                     BallerinaFile file = getContainingFile();
                     String fileName = file.getName();
-//                    String importPath = ObjectUtils.chooseNotNull(file.getImportPath(vendoringEnabled), file
-//                            .getPackageName());
-//                    return "in " + (importPath != null ? importPath + "/" + fileName : fileName);
+                    //                    String importPath = ObjectUtils.chooseNotNull(file.getImportPath
+                    // (vendoringEnabled), file
+                    //                            .getPackageName());
+                    //                    return "in " + (importPath != null ? importPath + "/" + fileName : fileName);
                     return "";
                 }
 
@@ -174,52 +181,53 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
     @Override
     public Icon getIcon(int flags) {
         Icon icon = null;
-//        if (this instanceof GoMethodDeclaration) icon = GoIcons.METHOD;
-//        else if (this instanceof GoFunctionDeclaration) icon = GoIcons.FUNCTION;
-//        else if (this instanceof GoTypeSpec) icon = GoIcons.TYPE;
-//        else if (this instanceof GoVarDefinition) icon = GoIcons.VARIABLE;
-//        else if (this instanceof GoConstDefinition) icon = GoIcons.CONSTANT;
-//        else if (this instanceof GoFieldDefinition) icon = GoIcons.FIELD;
-//        else if (this instanceof GoMethodSpec) icon = GoIcons.METHOD;
-//        else if (this instanceof GoAnonymousFieldDefinition) icon = GoIcons.FIELD;
-//        else if (this instanceof GoParamDefinition) icon = GoIcons.PARAMETER;
-//        else if (this instanceof GoLabelDefinition) icon = GoIcons.LABEL;
-//        if (icon != null) {
-//            if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {
-//                RowIcon rowIcon = ElementBase.createLayeredIcon(this, icon, flags);
-//                rowIcon.setIcon(isPublic() ? PlatformIcons.PUBLIC_ICON : PlatformIcons.PRIVATE_ICON, 1);
-//                return rowIcon;
-//            }
-//            return icon;
-//        }
+        //        if (this instanceof GoMethodDeclaration) icon = GoIcons.METHOD;
+        //        else if (this instanceof GoFunctionDeclaration) icon = GoIcons.FUNCTION;
+        //        else if (this instanceof GoTypeSpec) icon = GoIcons.TYPE;
+        //        else if (this instanceof GoVarDefinition) icon = GoIcons.VARIABLE;
+        //        else if (this instanceof GoConstDefinition) icon = GoIcons.CONSTANT;
+        //        else if (this instanceof GoFieldDefinition) icon = GoIcons.FIELD;
+        //        else if (this instanceof GoMethodSpec) icon = GoIcons.METHOD;
+        //        else if (this instanceof GoAnonymousFieldDefinition) icon = GoIcons.FIELD;
+        //        else if (this instanceof GoParamDefinition) icon = GoIcons.PARAMETER;
+        //        else if (this instanceof GoLabelDefinition) icon = GoIcons.LABEL;
+        //        if (icon != null) {
+        //            if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {
+        //                RowIcon rowIcon = ElementBase.createLayeredIcon(this, icon, flags);
+        //                rowIcon.setIcon(isPublic() ? PlatformIcons.PUBLIC_ICON : PlatformIcons.PRIVATE_ICON, 1);
+        //                return rowIcon;
+        //            }
+        //            return icon;
+        //        }
         return super.getIcon(flags);
     }
 
     @NotNull
     @Override
     public GlobalSearchScope getResolveScope() {
-//        return isPublic() ? GoUtil.goPathResolveScope(this) : GoPackageUtil.packageScope(getContainingFile());
-    return GlobalSearchScope.EMPTY_SCOPE;
+        //        return isPublic() ? GoUtil.goPathResolveScope(this) : GoPackageUtil.packageScope(getContainingFile());
+        return GlobalSearchScope.EMPTY_SCOPE;
     }
 
     @NotNull
     @Override
     public SearchScope getUseScope() {
-//        if (this instanceof GoVarDefinition || this instanceof GoConstDefinition || this instanceof GoLabelDefinition) {
-//            GoBlock block = PsiTreeUtil.getParentOfType(this, GoBlock.class);
-//            if (block != null) return new LocalSearchScope(block);
-//        }
-//        if (!isPublic()) {
-//            return GoPackageUtil.packageScope(getContainingFile());
-//        }
-//        GoSpecType parentType = PsiTreeUtil.getStubOrPsiParentOfType(this, GoSpecType.class);
-//        if (parentType != null) {
-//            GoTypeSpec typeSpec = GoPsiImplUtil.getTypeSpecSafe(parentType);
-//            if (typeSpec != null && !StringUtil.isCapitalized(typeSpec.getName())) {
-//                return GoPackageUtil.packageScope(getContainingFile());
-//            }
-//        }
-//        return GoUtil.goPathUseScope(this, !(this instanceof GoMethodDeclaration));
+        //        if (this instanceof GoVarDefinition || this instanceof GoConstDefinition || this instanceof
+        // GoLabelDefinition) {
+        //            GoBlock block = PsiTreeUtil.getParentOfType(this, GoBlock.class);
+        //            if (block != null) return new LocalSearchScope(block);
+        //        }
+        //        if (!isPublic()) {
+        //            return GoPackageUtil.packageScope(getContainingFile());
+        //        }
+        //        GoSpecType parentType = PsiTreeUtil.getStubOrPsiParentOfType(this, GoSpecType.class);
+        //        if (parentType != null) {
+        //            GoTypeSpec typeSpec = GoPsiImplUtil.getTypeSpecSafe(parentType);
+        //            if (typeSpec != null && !StringUtil.isCapitalized(typeSpec.getName())) {
+        //                return GoPackageUtil.packageScope(getContainingFile());
+        //            }
+        //        }
+        //        return GoUtil.goPathUseScope(this, !(this instanceof GoMethodDeclaration));
         return GlobalSearchScope.EMPTY_SCOPE;
     }
 

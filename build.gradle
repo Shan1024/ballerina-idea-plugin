@@ -78,13 +78,13 @@ runIde.dependsOn copyPsiViewerPluginToSandBox
 //    }
 //}
 
-task downloadJFlexSkeleton() {
-    download {
-        src 'https://raw.github.com/JetBrains/intellij-community/master/tools/lexer/idea-flex.skeleton'
-        dest new File("$buildDir/tools/", "idea-flex.skeleton")
-        onlyIfNewer true
-    }
-}
+//task downloadJFlexSkeleton() {
+//    download {
+//        src 'https://raw.github.com/JetBrains/intellij-community/master/tools/lexer/idea-flex.skeleton'
+//        dest new File("$buildDir/tools/", "idea-flex.skeleton")
+//        onlyIfNewer true
+//    }
+//}
 
 //task generateLexer(type: JavaExec) {
 //    description 'Generates lexer sources with JFlex.'

@@ -157,8 +157,6 @@
   extends("((Simple|Array|Record)Literal)")=Expression
   extends("Binary(Pow|DivMulMod|AddSub|Compare|Equal|And|Or)Expression")=BinaryExpression
 
-
-
   extends("anyTypeName|typeTypeName|ValueTypeName|ReferenceTypeName|arrayTypeName|BinaryAndExpression")=TypeName
 
   elementTypeFactory("FunctionDefinition|StructDefinition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
@@ -390,15 +388,15 @@ WorkerReply ::= ExpressionList LARROW identifier SEMICOLON {pin=2}
 
 // Note - Order of 'simpleVariableReference' and 'functionInvocationReference' because otherwise all function
 // invocations will match simpleVariableReference first.
-VariableReference ::= mapArrayVariableReference | fieldVariableReference | xmlAttribVariableReference
-                      | invocationReference | functionInvocationReference | simpleVariableReference
+VariableReference ::= invocationReference | mapArrayVariableReference | fieldVariableReference | xmlAttribVariableReference
+                      |  functionInvocationReference | simpleVariableReference
 
-functionInvocationReference ::= FunctionInvocation
-simpleVariableReference ::= NameReference
+invocationReference ::= VariableReference Invocation
 mapArrayVariableReference ::= VariableReference Index
 fieldVariableReference ::= VariableReference Field
 xmlAttribVariableReference ::= VariableReference XmlAttrib
-invocationReference ::= VariableReference Invocation
+functionInvocationReference ::= FunctionInvocation
+simpleVariableReference ::= NameReference
 
 Field ::= DOT identifier
 

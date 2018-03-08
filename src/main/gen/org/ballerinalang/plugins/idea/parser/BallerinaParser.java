@@ -4091,10 +4091,10 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // Expression root: VariableReference
   // Operator priority table:
-  // 0: POSTFIX(mapArrayVariableReference)
-  // 1: POSTFIX(fieldVariableReference)
-  // 2: POSTFIX(xmlAttribVariableReference)
-  // 3: POSTFIX(invocationReference)
+  // 0: POSTFIX(invocationReference)
+  // 1: POSTFIX(mapArrayVariableReference)
+  // 2: POSTFIX(fieldVariableReference)
+  // 3: POSTFIX(xmlAttribVariableReference)
   // 4: ATOM(functionInvocationReference)
   // 5: ATOM(simpleVariableReference)
   public static boolean VariableReference(PsiBuilder b, int l, int g) {
@@ -4116,21 +4116,21 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     boolean r = true;
     while (true) {
       Marker m = enter_section_(b, l, _LEFT_, null);
-      if (g < 0 && Index(b, l + 1)) {
+      if (g < 0 && Invocation(b, l + 1)) {
+        r = true;
+        exit_section_(b, l, m, INVOCATION_REFERENCE, r, true, null);
+      }
+      else if (g < 1 && Index(b, l + 1)) {
         r = true;
         exit_section_(b, l, m, MAP_ARRAY_VARIABLE_REFERENCE, r, true, null);
       }
-      else if (g < 1 && Field(b, l + 1)) {
+      else if (g < 2 && Field(b, l + 1)) {
         r = true;
         exit_section_(b, l, m, FIELD_VARIABLE_REFERENCE, r, true, null);
       }
-      else if (g < 2 && XmlAttrib(b, l + 1)) {
+      else if (g < 3 && XmlAttrib(b, l + 1)) {
         r = true;
         exit_section_(b, l, m, XML_ATTRIB_VARIABLE_REFERENCE, r, true, null);
-      }
-      else if (g < 3 && Invocation(b, l + 1)) {
-        r = true;
-        exit_section_(b, l, m, INVOCATION_REFERENCE, r, true, null);
       }
       else {
         exit_section_(b, l, m, null, false, false, null);

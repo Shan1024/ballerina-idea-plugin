@@ -32,8 +32,10 @@ public class BallerinaIndexPatternBuilder implements IndexPatternBuilder {
     @Nullable
     @Override
     public Lexer getIndexingLexer(@NotNull PsiFile file) {
-        return file instanceof BallerinaFile ? ((BallerinaFile) file).getParserDefinition().createLexer(file
-                .getProject()) : null;
+        if (file instanceof BallerinaFile) {
+            return ((BallerinaFile) file).getParserDefinition().createLexer(file.getProject());
+        }
+        return null;
     }
 
     @Nullable
