@@ -29,4 +29,10 @@ public interface BallerinaFunctionInvocation extends BallerinaCompositeElement {
   @NotNull
   BallerinaNameReference getNameReference();
 
+  @NotNull
+  PsiElement getLeftParenthesis();
+
+  @Nullable
+  PsiElement getRightParenthesis();
+
 }

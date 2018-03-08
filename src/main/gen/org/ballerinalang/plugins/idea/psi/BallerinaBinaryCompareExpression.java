@@ -26,4 +26,16 @@ public interface BallerinaBinaryCompareExpression extends BallerinaBinaryExpress
   @NotNull
   List<BallerinaExpression> getExpressionList();
 
+  @Nullable
+  PsiElement getGt();
+
+  @Nullable
+  PsiElement getGtEqual();
+
+  @Nullable
+  PsiElement getLt();
+
+  @Nullable
+  PsiElement getLtEqual();
+
 }

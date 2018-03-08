@@ -26,4 +26,10 @@ public interface BallerinaIndex extends BallerinaCompositeElement {
   @NotNull
   BallerinaExpression getExpression();
 
+  @NotNull
+  PsiElement getLeftBracket();
+
+  @NotNull
+  PsiElement getRightBracket();
+
 }

@@ -26,4 +26,13 @@ public interface BallerinaBinaryDivMulModExpression extends BallerinaBinaryExpre
   @NotNull
   List<BallerinaExpression> getExpressionList();
 
+  @Nullable
+  PsiElement getDiv();
+
+  @Nullable
+  PsiElement getMod();
+
+  @Nullable
+  PsiElement getMul();
+
 }

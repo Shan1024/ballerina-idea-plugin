@@ -47,4 +47,22 @@ public class BallerinaMapTypeNameImpl extends BallerinaCompositeElementImpl impl
     return PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getGt() {
+    return findChildByType(GT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLt() {
+    return findChildByType(LT);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getMap() {
+    return notNullChild(findChildByType(MAP));
+  }
+
 }

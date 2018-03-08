@@ -47,4 +47,16 @@ public class BallerinaRecordLiteralImpl extends BallerinaExpressionImpl implemen
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaRecordKeyValue.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getLeftBrace() {
+    return notNullChild(findChildByType(LEFT_BRACE));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRightBrace() {
+    return notNullChild(findChildByType(RIGHT_BRACE));
+  }
+
 }

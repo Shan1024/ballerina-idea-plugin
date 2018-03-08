@@ -47,4 +47,16 @@ public class BallerinaArrayLiteralImpl extends BallerinaExpressionImpl implement
     return PsiTreeUtil.getChildOfType(this, BallerinaExpressionList.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getLeftBracket() {
+    return notNullChild(findChildByType(LEFT_BRACKET));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRightBracket() {
+    return notNullChild(findChildByType(RIGHT_BRACKET));
+  }
+
 }

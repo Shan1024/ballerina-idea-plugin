@@ -295,7 +295,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitNameReference(@NotNull BallerinaNameReference o) {
-    visitCompositeElement(o);
+    visitReferenceExpressionBase(o);
   }
 
   public void visitNamespaceDeclaration(@NotNull BallerinaNamespaceDeclaration o) {
@@ -315,6 +315,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitPackageName(@NotNull BallerinaPackageName o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitPackageReference(@NotNull BallerinaPackageReference o) {
     visitCompositeElement(o);
   }
 
@@ -583,6 +587,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitNamedElement(@NotNull BallerinaNamedElement o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitReferenceExpressionBase(@NotNull BallerinaReferenceExpressionBase o) {
     visitCompositeElement(o);
   }
 

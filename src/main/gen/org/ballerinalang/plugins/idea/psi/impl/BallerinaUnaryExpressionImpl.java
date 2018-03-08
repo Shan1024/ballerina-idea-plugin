@@ -47,4 +47,34 @@ public class BallerinaUnaryExpressionImpl extends BallerinaExpressionImpl implem
     return PsiTreeUtil.getChildOfType(this, BallerinaExpression.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getAdd() {
+    return findChildByType(ADD);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getNot() {
+    return findChildByType(NOT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSub() {
+    return findChildByType(SUB);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLengthof() {
+    return findChildByType(LENGTHOF);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getTypeof() {
+    return findChildByType(TYPEOF);
+  }
+
 }

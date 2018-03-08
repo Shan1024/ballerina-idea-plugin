@@ -23,4 +23,7 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaAnyTypeName extends BallerinaTypeName {
 
+  @NotNull
+  PsiElement getAny();
+
 }

@@ -24,6 +24,9 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaField extends BallerinaCompositeElement {
 
   @NotNull
+  PsiElement getDot();
+
+  @NotNull
   PsiElement getIdentifier();
 
 }

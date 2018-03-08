@@ -41,4 +41,16 @@ public class BallerinaBreakStatementImpl extends BallerinaCompositeElementImpl i
     else super.accept(visitor);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getBreak() {
+    return notNullChild(findChildByType(BREAK));
+  }
+
 }

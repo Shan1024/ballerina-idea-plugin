@@ -26,4 +26,19 @@ public interface BallerinaUnaryExpression extends BallerinaExpression {
   @Nullable
   BallerinaExpression getExpression();
 
+  @Nullable
+  PsiElement getAdd();
+
+  @Nullable
+  PsiElement getNot();
+
+  @Nullable
+  PsiElement getSub();
+
+  @Nullable
+  PsiElement getLengthof();
+
+  @Nullable
+  PsiElement getTypeof();
+
 }

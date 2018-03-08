@@ -23,4 +23,10 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaReservedWord extends BallerinaCompositeElement {
 
+  @Nullable
+  PsiElement getForeach();
+
+  @Nullable
+  PsiElement getMap();
+
 }

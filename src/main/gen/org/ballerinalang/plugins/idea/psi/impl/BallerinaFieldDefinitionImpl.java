@@ -54,6 +54,18 @@ public class BallerinaFieldDefinitionImpl extends BallerinaCompositeElementImpl 
   }
 
   @Override
+  @Nullable
+  public PsiElement getAssign() {
+    return findChildByType(ASSIGN);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getSemicolon() {
+    return notNullChild(findChildByType(SEMICOLON));
+  }
+
+  @Override
   @NotNull
   public PsiElement getIdentifier() {
     return notNullChild(findChildByType(IDENTIFIER));

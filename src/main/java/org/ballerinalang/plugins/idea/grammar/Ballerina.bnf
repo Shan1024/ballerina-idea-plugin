@@ -163,6 +163,11 @@
 
   implements("FunctionDefinition|StructDefinition")="org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
   extends("FunctionDefinition|StructDefinition")="org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
+
+  implements("NameReference")="org.ballerinalang.plugins.idea.psi.BallerinaReferenceExpressionBase"
+
+  generateTokenAccessors=true
+
 }
 
 CompilationUnit ::= PackageDeclaration? (ImportDeclaration | NamespaceDeclaration)* Definition* <<eof>>
@@ -487,7 +492,9 @@ TernaryExpression ::= Expression QUESTION_MARK Expression COLON Expression
 
 //reusable productions
 
-NameReference ::= (identifier COLON)? identifier
+NameReference ::= PackageReference? identifier {methods=[getReference getQualifier resolve resolveType]}
+
+PackageReference ::= identifier COLON
 
 ReturnParameters ::= RETURNS? LEFT_PARENTHESIS (ParameterList | TypeList) RIGHT_PARENTHESIS {pin=3}
 

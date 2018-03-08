@@ -30,6 +30,24 @@ public interface BallerinaTransformerDefinition extends BallerinaCompositeElemen
   List<BallerinaParameterList> getParameterListList();
 
   @Nullable
+  PsiElement getGt();
+
+  @Nullable
+  PsiElement getLeftParenthesis();
+
+  @Nullable
+  PsiElement getLt();
+
+  @Nullable
+  PsiElement getRightParenthesis();
+
+  @Nullable
   PsiElement getIdentifier();
+
+  @Nullable
+  PsiElement getPublic();
+
+  @NotNull
+  PsiElement getTransformer();
 
 }

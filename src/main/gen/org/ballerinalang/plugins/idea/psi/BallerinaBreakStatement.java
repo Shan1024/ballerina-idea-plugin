@@ -23,4 +23,10 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaBreakStatement extends BallerinaCompositeElement {
 
+  @Nullable
+  PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getBreak();
+
 }

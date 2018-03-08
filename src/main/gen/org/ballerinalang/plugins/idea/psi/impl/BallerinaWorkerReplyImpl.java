@@ -48,6 +48,18 @@ public class BallerinaWorkerReplyImpl extends BallerinaCompositeElementImpl impl
   }
 
   @Override
+  @NotNull
+  public PsiElement getLarrow() {
+    return notNullChild(findChildByType(LARROW));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
   @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);

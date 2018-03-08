@@ -26,4 +26,10 @@ public interface BallerinaArrayLiteral extends BallerinaExpression {
   @Nullable
   BallerinaExpressionList getExpressionList();
 
+  @NotNull
+  PsiElement getLeftBracket();
+
+  @NotNull
+  PsiElement getRightBracket();
+
 }

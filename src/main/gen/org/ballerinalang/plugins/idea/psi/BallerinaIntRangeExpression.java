@@ -26,4 +26,19 @@ public interface BallerinaIntRangeExpression extends BallerinaCompositeElement {
   @NotNull
   List<BallerinaExpression> getExpressionList();
 
+  @Nullable
+  PsiElement getLeftBracket();
+
+  @Nullable
+  PsiElement getLeftParenthesis();
+
+  @NotNull
+  PsiElement getRange();
+
+  @Nullable
+  PsiElement getRightBracket();
+
+  @Nullable
+  PsiElement getRightParenthesis();
+
 }

@@ -59,4 +59,16 @@ public class BallerinaCallableUnitBodyImpl extends BallerinaCompositeElementImpl
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaWorkerDeclaration.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getLeftBrace() {
+    return notNullChild(findChildByType(LEFT_BRACE));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRightBrace() {
+    return notNullChild(findChildByType(RIGHT_BRACE));
+  }
+
 }

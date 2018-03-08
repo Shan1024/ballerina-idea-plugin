@@ -47,4 +47,16 @@ public class BallerinaBinaryAddSubExpressionImpl extends BallerinaBinaryExpressi
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaExpression.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getAdd() {
+    return findChildByType(ADD);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSub() {
+    return findChildByType(SUB);
+  }
+
 }

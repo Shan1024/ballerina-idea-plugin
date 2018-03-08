@@ -59,4 +59,22 @@ public class BallerinaActionDefinitionImpl extends BallerinaCompositeElementImpl
     return PsiTreeUtil.getChildOfType(this, BallerinaCallableUnitSignature.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getAction() {
+    return notNullChild(findChildByType(ACTION));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getNative() {
+    return findChildByType(NATIVE);
+  }
+
 }

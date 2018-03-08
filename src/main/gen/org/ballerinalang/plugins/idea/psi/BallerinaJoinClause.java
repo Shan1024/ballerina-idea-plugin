@@ -33,6 +33,15 @@ public interface BallerinaJoinClause extends BallerinaCompositeElement {
   BallerinaTypeName getTypeName();
 
   @Nullable
+  PsiElement getLeftBrace();
+
+  @Nullable
+  PsiElement getRightBrace();
+
+  @Nullable
   PsiElement getIdentifier();
+
+  @NotNull
+  PsiElement getJoin();
 
 }

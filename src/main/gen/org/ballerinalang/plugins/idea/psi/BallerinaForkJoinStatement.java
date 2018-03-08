@@ -32,4 +32,13 @@ public interface BallerinaForkJoinStatement extends BallerinaCompositeElement {
   @NotNull
   List<BallerinaWorkerDeclaration> getWorkerDeclarationList();
 
+  @Nullable
+  PsiElement getLeftBrace();
+
+  @Nullable
+  PsiElement getRightBrace();
+
+  @NotNull
+  PsiElement getFork();
+
 }

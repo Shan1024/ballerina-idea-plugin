@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaTriggerWorkerImpl extends BallerinaCompositeElementImpl implements BallerinaTriggerWorker {
+public class BallerinaPackageReferenceImpl extends BallerinaCompositeElementImpl implements BallerinaPackageReference {
 
-  public BallerinaTriggerWorkerImpl(ASTNode node) {
+  public BallerinaPackageReferenceImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitTriggerWorker(this);
+    visitor.visitPackageReference(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -43,32 +43,14 @@ public class BallerinaTriggerWorkerImpl extends BallerinaCompositeElementImpl im
 
   @Override
   @NotNull
-  public BallerinaExpressionList getExpressionList() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaExpressionList.class));
+  public PsiElement getColon() {
+    return notNullChild(findChildByType(COLON));
   }
 
   @Override
   @NotNull
-  public PsiElement getRarrow() {
-    return notNullChild(findChildByType(RARROW));
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getSemicolon() {
-    return findChildByType(SEMICOLON);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getFork() {
-    return findChildByType(FORK);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
+    return notNullChild(findChildByType(IDENTIFIER));
   }
 
 }

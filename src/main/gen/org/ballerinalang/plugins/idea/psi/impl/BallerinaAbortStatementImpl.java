@@ -41,4 +41,16 @@ public class BallerinaAbortStatementImpl extends BallerinaCompositeElementImpl i
     else super.accept(visitor);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getAbort() {
+    return notNullChild(findChildByType(ABORT));
+  }
+
 }

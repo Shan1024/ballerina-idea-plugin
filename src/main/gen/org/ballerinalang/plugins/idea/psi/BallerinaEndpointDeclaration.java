@@ -32,4 +32,13 @@ public interface BallerinaEndpointDeclaration extends BallerinaCompositeElement 
   @Nullable
   BallerinaVariableReference getVariableReference();
 
+  @Nullable
+  PsiElement getLeftBrace();
+
+  @Nullable
+  PsiElement getRightBrace();
+
+  @Nullable
+  PsiElement getSemicolon();
+
 }

@@ -61,8 +61,26 @@ public class BallerinaResourceDefinitionImpl extends BallerinaCompositeElementIm
 
   @Override
   @Nullable
+  public PsiElement getLeftParenthesis() {
+    return findChildByType(LEFT_PARENTHESIS);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightParenthesis() {
+    return findChildByType(RIGHT_PARENTHESIS);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getResource() {
+    return notNullChild(findChildByType(RESOURCE));
   }
 
 }

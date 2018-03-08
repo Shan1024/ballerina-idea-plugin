@@ -31,6 +31,12 @@ public interface BallerinaStructDefinition extends BallerinaNamedElement, StubBa
   @Nullable
   PsiElement getIdentifier();
 
+  @Nullable
+  PsiElement getPublic();
+
+  @NotNull
+  PsiElement getStruct();
+
   //WARNING: getName(...) is skipped
   //matching getName(BallerinaStructDefinition, ...)
   //methods are not found in BallerinaPsiImplUtil

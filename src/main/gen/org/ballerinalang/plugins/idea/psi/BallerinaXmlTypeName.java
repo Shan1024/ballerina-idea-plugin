@@ -29,4 +29,19 @@ public interface BallerinaXmlTypeName extends BallerinaCompositeElement {
   @Nullable
   BallerinaXmlNamespaceName getXmlNamespaceName();
 
+  @Nullable
+  PsiElement getGt();
+
+  @Nullable
+  PsiElement getLeftBrace();
+
+  @Nullable
+  PsiElement getLt();
+
+  @Nullable
+  PsiElement getRightBrace();
+
+  @NotNull
+  PsiElement getXml();
+
 }

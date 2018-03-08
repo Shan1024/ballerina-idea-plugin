@@ -26,4 +26,10 @@ public interface BallerinaRecordLiteral extends BallerinaExpression {
   @NotNull
   List<BallerinaRecordKeyValue> getRecordKeyValueList();
 
+  @NotNull
+  PsiElement getLeftBrace();
+
+  @NotNull
+  PsiElement getRightBrace();
+
 }

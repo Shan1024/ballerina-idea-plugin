@@ -53,4 +53,22 @@ public class BallerinaTryCatchStatementImpl extends BallerinaCompositeElementImp
     return PsiTreeUtil.getChildOfType(this, BallerinaCatchClauses.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getLeftBrace() {
+    return findChildByType(LEFT_BRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightBrace() {
+    return findChildByType(RIGHT_BRACE);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getTry() {
+    return notNullChild(findChildByType(TRY));
+  }
+
 }

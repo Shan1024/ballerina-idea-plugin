@@ -29,4 +29,10 @@ public interface BallerinaTypeCastingExpression extends BallerinaExpression {
   @NotNull
   BallerinaTypeName getTypeName();
 
+  @NotNull
+  PsiElement getLeftParenthesis();
+
+  @NotNull
+  PsiElement getRightParenthesis();
+
 }

@@ -41,4 +41,16 @@ public class BallerinaNextStatementImpl extends BallerinaCompositeElementImpl im
     else super.accept(visitor);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getNext() {
+    return notNullChild(findChildByType(NEXT));
+  }
+
 }

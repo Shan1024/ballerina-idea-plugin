@@ -29,4 +29,13 @@ public interface BallerinaTryCatchStatement extends BallerinaCompositeElement {
   @Nullable
   BallerinaCatchClauses getCatchClauses();
 
+  @Nullable
+  PsiElement getLeftBrace();
+
+  @Nullable
+  PsiElement getRightBrace();
+
+  @NotNull
+  PsiElement getTry();
+
 }

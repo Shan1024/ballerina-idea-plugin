@@ -47,4 +47,28 @@ public class BallerinaBinaryCompareExpressionImpl extends BallerinaBinaryExpress
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaExpression.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getGt() {
+    return findChildByType(GT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getGtEqual() {
+    return findChildByType(GT_EQUAL);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLt() {
+    return findChildByType(LT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLtEqual() {
+    return findChildByType(LT_EQUAL);
+  }
+
 }

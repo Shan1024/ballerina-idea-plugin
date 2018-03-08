@@ -49,6 +49,24 @@ public class BallerinaEndpointDefinitionImpl extends BallerinaCompositeElementIm
 
   @Override
   @Nullable
+  public PsiElement getGt() {
+    return findChildByType(GT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLt() {
+    return findChildByType(LT);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getEndpoint() {
+    return notNullChild(findChildByType(ENDPOINT));
+  }
+
+  @Override
+  @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
   }

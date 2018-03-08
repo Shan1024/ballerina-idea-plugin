@@ -43,8 +43,86 @@ public class BallerinaAttachmentPointImpl extends BallerinaCompositeElementImpl 
 
   @Override
   @Nullable
+  public PsiElement getGt() {
+    return findChildByType(GT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLt() {
+    return findChildByType(LT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getTypeParameter() {
+    return findChildByType(TYPE_PARAMETER);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getAction() {
+    return findChildByType(ACTION);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getAnnotation() {
+    return findChildByType(ANNOTATION);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getConnector() {
+    return findChildByType(CONNECTOR);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getConst() {
+    return findChildByType(CONST);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getEnum() {
+    return findChildByType(ENUM);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getFunction() {
+    return findChildByType(FUNCTION);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getResource() {
+    return findChildByType(RESOURCE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getService() {
+    return findChildByType(SERVICE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getStruct() {
+    return findChildByType(STRUCT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getTransformer() {
+    return findChildByType(TRANSFORMER);
   }
 
 }

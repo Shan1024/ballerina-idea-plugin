@@ -26,4 +26,13 @@ public interface BallerinaMapTypeName extends BallerinaCompositeElement {
   @Nullable
   BallerinaTypeName getTypeName();
 
+  @Nullable
+  PsiElement getGt();
+
+  @Nullable
+  PsiElement getLt();
+
+  @NotNull
+  PsiElement getMap();
+
 }

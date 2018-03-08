@@ -29,7 +29,16 @@ public interface BallerinaAnnotationDefinition extends BallerinaCompositeElement
   @NotNull
   List<BallerinaAttachmentPoint> getAttachmentPointList();
 
+  @NotNull
+  PsiElement getAnnotation();
+
+  @Nullable
+  PsiElement getAttach();
+
   @Nullable
   PsiElement getIdentifier();
+
+  @Nullable
+  PsiElement getPublic();
 
 }

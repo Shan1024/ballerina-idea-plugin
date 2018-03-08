@@ -29,4 +29,10 @@ public interface BallerinaStructBody extends BallerinaCompositeElement {
   @Nullable
   BallerinaPrivateStructBody getPrivateStructBody();
 
+  @NotNull
+  PsiElement getLeftBrace();
+
+  @NotNull
+  PsiElement getRightBrace();
+
 }

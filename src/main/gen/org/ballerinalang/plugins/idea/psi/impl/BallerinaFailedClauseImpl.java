@@ -47,4 +47,22 @@ public class BallerinaFailedClauseImpl extends BallerinaCompositeElementImpl imp
     return PsiTreeUtil.getChildOfType(this, BallerinaBlock.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getLeftBrace() {
+    return findChildByType(LEFT_BRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightBrace() {
+    return findChildByType(RIGHT_BRACE);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getFailed() {
+    return notNullChild(findChildByType(FAILED));
+  }
+
 }

@@ -35,4 +35,13 @@ public interface BallerinaImportDeclaration extends BallerinaCompositeElement {
   @Nullable
   BallerinaOrgName getOrgName();
 
+  @Nullable
+  PsiElement getDiv();
+
+  @Nullable
+  PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getImport();
+
 }

@@ -52,6 +52,8 @@ public class BallerinaReferenceCompletionProvider extends CompletionContributor 
                 .KEY, "user2", project, GlobalSearchScope.allScope(project), BallerinaStructDefinition.class);
         /*.forEach(def -> System.out.println(def.getIdentifier().getText()));*/
 
+        ballerinaStructDefinitions.forEach(def -> def.isPublic());
+
         long end = System.currentTimeMillis();
 
         System.out.println("Found " + ballerinaStructDefinitions.size() + " in " + (end - start) + " ms");

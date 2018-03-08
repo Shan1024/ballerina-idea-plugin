@@ -29,4 +29,10 @@ public interface BallerinaPackageDeclaration extends BallerinaCompositeElement {
   @Nullable
   BallerinaPackageVersion getPackageVersion();
 
+  @Nullable
+  PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getPackage();
+
 }

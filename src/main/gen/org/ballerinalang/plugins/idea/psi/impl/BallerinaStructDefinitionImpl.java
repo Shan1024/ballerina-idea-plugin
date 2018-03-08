@@ -59,4 +59,16 @@ public class BallerinaStructDefinitionImpl extends BallerinaNamedElementImpl<Bal
     return findChildByType(IDENTIFIER);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getPublic() {
+    return findChildByType(PUBLIC);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getStruct() {
+    return notNullChild(findChildByType(STRUCT));
+  }
+
 }

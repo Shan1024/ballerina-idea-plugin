@@ -47,4 +47,10 @@ public class BallerinaAnonStructTypeNameImpl extends BallerinaCompositeElementIm
     return PsiTreeUtil.getChildOfType(this, BallerinaStructBody.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getStruct() {
+    return notNullChild(findChildByType(STRUCT));
+  }
+
 }

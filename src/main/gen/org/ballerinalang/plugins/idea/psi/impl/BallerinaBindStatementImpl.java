@@ -49,6 +49,24 @@ public class BallerinaBindStatementImpl extends BallerinaCompositeElementImpl im
 
   @Override
   @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getWith() {
+    return findChildByType(WITH);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getBind() {
+    return notNullChild(findChildByType(BIND));
+  }
+
+  @Override
+  @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
   }

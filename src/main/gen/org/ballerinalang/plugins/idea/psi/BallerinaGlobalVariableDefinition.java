@@ -30,6 +30,15 @@ public interface BallerinaGlobalVariableDefinition extends BallerinaCompositeEle
   BallerinaTypeName getTypeName();
 
   @Nullable
+  PsiElement getAssign();
+
+  @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
   PsiElement getIdentifier();
+
+  @Nullable
+  PsiElement getPublic();
 
 }

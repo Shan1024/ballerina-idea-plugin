@@ -33,6 +33,15 @@ public interface BallerinaResourceDefinition extends BallerinaCompositeElement {
   BallerinaParameterList getParameterList();
 
   @Nullable
+  PsiElement getLeftParenthesis();
+
+  @Nullable
+  PsiElement getRightParenthesis();
+
+  @Nullable
   PsiElement getIdentifier();
+
+  @NotNull
+  PsiElement getResource();
 
 }

@@ -24,6 +24,12 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaSimpleLiteral extends BallerinaExpression {
 
   @Nullable
+  PsiElement getAdd();
+
+  @Nullable
+  PsiElement getSub();
+
+  @Nullable
   PsiElement getIntegerLiteral();
 
   @Nullable

@@ -47,4 +47,16 @@ public class BallerinaBracedExpressionImpl extends BallerinaExpressionImpl imple
     return PsiTreeUtil.getChildOfType(this, BallerinaExpression.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getLeftParenthesis() {
+    return notNullChild(findChildByType(LEFT_PARENTHESIS));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightParenthesis() {
+    return findChildByType(RIGHT_PARENTHESIS);
+  }
+
 }

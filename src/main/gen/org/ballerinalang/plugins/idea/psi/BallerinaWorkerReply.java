@@ -26,6 +26,12 @@ public interface BallerinaWorkerReply extends BallerinaCompositeElement {
   @NotNull
   BallerinaExpressionList getExpressionList();
 
+  @NotNull
+  PsiElement getLarrow();
+
+  @Nullable
+  PsiElement getSemicolon();
+
   @Nullable
   PsiElement getIdentifier();
 

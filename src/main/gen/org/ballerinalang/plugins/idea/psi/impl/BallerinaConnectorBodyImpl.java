@@ -59,4 +59,16 @@ public class BallerinaConnectorBodyImpl extends BallerinaCompositeElementImpl im
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaVariableDefinitionStatement.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getLeftBrace() {
+    return notNullChild(findChildByType(LEFT_BRACE));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRightBrace() {
+    return notNullChild(findChildByType(RIGHT_BRACE));
+  }
+
 }

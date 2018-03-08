@@ -30,6 +30,18 @@ public interface BallerinaConstantDefinition extends BallerinaCompositeElement {
   BallerinaValueTypeName getValueTypeName();
 
   @Nullable
+  PsiElement getAssign();
+
+  @Nullable
+  PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getConst();
+
+  @Nullable
   PsiElement getIdentifier();
+
+  @Nullable
+  PsiElement getPublic();
 
 }

@@ -27,6 +27,15 @@ public interface BallerinaEndpointDefinition extends BallerinaCompositeElement {
   BallerinaNameReference getNameReference();
 
   @Nullable
+  PsiElement getGt();
+
+  @Nullable
+  PsiElement getLt();
+
+  @NotNull
+  PsiElement getEndpoint();
+
+  @Nullable
   PsiElement getIdentifier();
 
 }

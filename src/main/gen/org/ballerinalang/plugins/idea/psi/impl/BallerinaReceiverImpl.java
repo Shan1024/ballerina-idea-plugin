@@ -47,4 +47,16 @@ public class BallerinaReceiverImpl extends BallerinaCompositeElementImpl impleme
     return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaParameter.class));
   }
 
+  @Override
+  @NotNull
+  public PsiElement getGt() {
+    return notNullChild(findChildByType(GT));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getLt() {
+    return notNullChild(findChildByType(LT));
+  }
+
 }

@@ -35,6 +35,18 @@ public interface BallerinaFunctionDefinition extends BallerinaNamedElement, Stub
   BallerinaReceiver getReceiver();
 
   @Nullable
+  PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getFunction();
+
+  @Nullable
+  PsiElement getNative();
+
+  @Nullable
+  PsiElement getPublic();
+
+  @Nullable
   PsiElement getIdentifier();
 
   @Nullable

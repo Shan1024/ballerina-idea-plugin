@@ -42,6 +42,12 @@ public class BallerinaAliasImpl extends BallerinaCompositeElementImpl implements
   }
 
   @Override
+  @NotNull
+  public PsiElement getAs() {
+    return notNullChild(findChildByType(AS));
+  }
+
+  @Override
   @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);

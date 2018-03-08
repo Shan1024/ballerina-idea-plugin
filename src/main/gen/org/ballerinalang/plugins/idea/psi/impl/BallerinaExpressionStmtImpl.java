@@ -47,4 +47,10 @@ public class BallerinaExpressionStmtImpl extends BallerinaCompositeElementImpl i
     return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaVariableReference.class));
   }
 
+  @Override
+  @NotNull
+  public PsiElement getSemicolon() {
+    return notNullChild(findChildByType(SEMICOLON));
+  }
+
 }

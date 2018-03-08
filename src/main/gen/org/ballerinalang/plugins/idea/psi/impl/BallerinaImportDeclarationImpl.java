@@ -65,4 +65,22 @@ public class BallerinaImportDeclarationImpl extends BallerinaCompositeElementImp
     return PsiTreeUtil.getChildOfType(this, BallerinaOrgName.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getDiv() {
+    return findChildByType(DIV);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getImport() {
+    return notNullChild(findChildByType(IMPORT));
+  }
+
 }

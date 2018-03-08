@@ -29,4 +29,10 @@ public interface BallerinaBuiltInTypeName extends BallerinaCompositeElement {
   @Nullable
   BallerinaTypeName getTypeName();
 
+  @Nullable
+  PsiElement getAny();
+
+  @Nullable
+  PsiElement getType();
+
 }

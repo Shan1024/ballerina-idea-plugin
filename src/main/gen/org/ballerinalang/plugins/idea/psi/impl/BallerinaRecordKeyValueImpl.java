@@ -53,4 +53,10 @@ public class BallerinaRecordKeyValueImpl extends BallerinaCompositeElementImpl i
     return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaRecordKey.class));
   }
 
+  @Override
+  @NotNull
+  public PsiElement getColon() {
+    return notNullChild(findChildByType(COLON));
+  }
+
 }

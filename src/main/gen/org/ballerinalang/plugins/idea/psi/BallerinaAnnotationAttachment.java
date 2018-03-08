@@ -29,4 +29,13 @@ public interface BallerinaAnnotationAttachment extends BallerinaCompositeElement
   @Nullable
   BallerinaAnnotationAttributeList getAnnotationAttributeList();
 
+  @NotNull
+  PsiElement getAt();
+
+  @Nullable
+  PsiElement getLeftBrace();
+
+  @Nullable
+  PsiElement getRightBrace();
+
 }

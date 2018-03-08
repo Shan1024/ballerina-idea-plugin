@@ -41,4 +41,34 @@ public class BallerinaValueTypeNameImpl extends BallerinaTypeNameImpl implements
     else super.accept(visitor);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getBlob() {
+    return findChildByType(BLOB);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getBoolean() {
+    return findChildByType(BOOLEAN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getFloat() {
+    return findChildByType(FLOAT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getInt() {
+    return findChildByType(INT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getString() {
+    return findChildByType(STRING);
+  }
+
 }

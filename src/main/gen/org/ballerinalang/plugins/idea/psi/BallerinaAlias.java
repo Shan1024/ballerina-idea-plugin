@@ -23,6 +23,9 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaAlias extends BallerinaCompositeElement {
 
+  @NotNull
+  PsiElement getAs();
+
   @Nullable
   PsiElement getIdentifier();
 

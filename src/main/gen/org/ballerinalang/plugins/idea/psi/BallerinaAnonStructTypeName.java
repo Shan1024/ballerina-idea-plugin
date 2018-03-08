@@ -26,4 +26,7 @@ public interface BallerinaAnonStructTypeName extends BallerinaCompositeElement {
   @Nullable
   BallerinaStructBody getStructBody();
 
+  @NotNull
+  PsiElement getStruct();
+
 }

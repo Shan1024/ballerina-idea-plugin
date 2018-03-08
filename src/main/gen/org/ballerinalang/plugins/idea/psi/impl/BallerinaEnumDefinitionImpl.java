@@ -49,8 +49,32 @@ public class BallerinaEnumDefinitionImpl extends BallerinaCompositeElementImpl i
 
   @Override
   @NotNull
+  public PsiElement getLeftBrace() {
+    return notNullChild(findChildByType(LEFT_BRACE));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRightBrace() {
+    return notNullChild(findChildByType(RIGHT_BRACE));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getEnum() {
+    return notNullChild(findChildByType(ENUM));
+  }
+
+  @Override
+  @NotNull
   public PsiElement getIdentifier() {
     return notNullChild(findChildByType(IDENTIFIER));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getPublic() {
+    return findChildByType(PUBLIC);
   }
 
 }

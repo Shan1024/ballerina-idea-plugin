@@ -47,4 +47,10 @@ public class BallerinaTypeAccessExpressionImpl extends BallerinaExpressionImpl i
     return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaBuiltInTypeName.class));
   }
 
+  @Override
+  @NotNull
+  public PsiElement getTypeof() {
+    return notNullChild(findChildByType(TYPEOF));
+  }
+
 }

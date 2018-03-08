@@ -47,4 +47,22 @@ public class BallerinaXmlAttribImpl extends BallerinaCompositeElementImpl implem
     return PsiTreeUtil.getChildOfType(this, BallerinaExpression.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getAt() {
+    return notNullChild(findChildByType(AT));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLeftBracket() {
+    return findChildByType(LEFT_BRACKET);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightBracket() {
+    return findChildByType(RIGHT_BRACKET);
+  }
+
 }

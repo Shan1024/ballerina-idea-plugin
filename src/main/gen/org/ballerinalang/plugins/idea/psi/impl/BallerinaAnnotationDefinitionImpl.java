@@ -54,9 +54,27 @@ public class BallerinaAnnotationDefinitionImpl extends BallerinaCompositeElement
   }
 
   @Override
+  @NotNull
+  public PsiElement getAnnotation() {
+    return notNullChild(findChildByType(ANNOTATION));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getAttach() {
+    return findChildByType(ATTACH);
+  }
+
+  @Override
   @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getPublic() {
+    return findChildByType(PUBLIC);
   }
 
 }

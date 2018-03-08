@@ -26,4 +26,10 @@ public interface BallerinaAnnotationAttributeArray extends BallerinaCompositeEle
   @NotNull
   List<BallerinaAnnotationAttributeValue> getAnnotationAttributeValueList();
 
+  @NotNull
+  PsiElement getLeftBracket();
+
+  @NotNull
+  PsiElement getRightBracket();
+
 }

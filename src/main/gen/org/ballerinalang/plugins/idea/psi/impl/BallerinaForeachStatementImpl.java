@@ -65,4 +65,40 @@ public class BallerinaForeachStatementImpl extends BallerinaCompositeElementImpl
     return PsiTreeUtil.getChildOfType(this, BallerinaVariableReferenceList.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getLeftBrace() {
+    return findChildByType(LEFT_BRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLeftParenthesis() {
+    return findChildByType(LEFT_PARENTHESIS);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightBrace() {
+    return findChildByType(RIGHT_BRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightParenthesis() {
+    return findChildByType(RIGHT_PARENTHESIS);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getForeach() {
+    return notNullChild(findChildByType(FOREACH));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIn() {
+    return findChildByType(IN);
+  }
+
 }

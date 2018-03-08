@@ -27,6 +27,9 @@ public interface BallerinaValueTypeTypeExpression extends BallerinaExpression {
   BallerinaValueTypeName getValueTypeName();
 
   @NotNull
+  PsiElement getDot();
+
+  @NotNull
   PsiElement getIdentifier();
 
 }

@@ -26,4 +26,13 @@ public interface BallerinaFailedClause extends BallerinaCompositeElement {
   @Nullable
   BallerinaBlock getBlock();
 
+  @Nullable
+  PsiElement getLeftBrace();
+
+  @Nullable
+  PsiElement getRightBrace();
+
+  @NotNull
+  PsiElement getFailed();
+
 }

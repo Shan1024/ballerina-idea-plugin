@@ -29,6 +29,12 @@ public interface BallerinaCallableUnitSignature extends BallerinaCompositeElemen
   @Nullable
   BallerinaReturnParameters getReturnParameters();
 
+  @Nullable
+  PsiElement getLeftParenthesis();
+
+  @Nullable
+  PsiElement getRightParenthesis();
+
   @NotNull
   PsiElement getIdentifier();
 

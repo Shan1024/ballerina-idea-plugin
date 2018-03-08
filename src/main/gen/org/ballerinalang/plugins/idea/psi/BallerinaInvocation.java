@@ -29,4 +29,13 @@ public interface BallerinaInvocation extends BallerinaCompositeElement {
   @Nullable
   BallerinaExpressionList getExpressionList();
 
+  @NotNull
+  PsiElement getDot();
+
+  @NotNull
+  PsiElement getLeftParenthesis();
+
+  @NotNull
+  PsiElement getRightParenthesis();
+
 }

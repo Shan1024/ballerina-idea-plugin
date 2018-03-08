@@ -47,4 +47,16 @@ public class BallerinaAnnotationBodyImpl extends BallerinaCompositeElementImpl i
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaFieldDefinition.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getLeftBrace() {
+    return notNullChild(findChildByType(LEFT_BRACE));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRightBrace() {
+    return notNullChild(findChildByType(RIGHT_BRACE));
+  }
+
 }

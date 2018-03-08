@@ -30,6 +30,21 @@ public interface BallerinaCatchClause extends BallerinaCompositeElement {
   BallerinaTypeName getTypeName();
 
   @Nullable
+  PsiElement getLeftBrace();
+
+  @Nullable
+  PsiElement getLeftParenthesis();
+
+  @Nullable
+  PsiElement getRightBrace();
+
+  @Nullable
+  PsiElement getRightParenthesis();
+
+  @NotNull
+  PsiElement getCatch();
+
+  @Nullable
   PsiElement getIdentifier();
 
 }

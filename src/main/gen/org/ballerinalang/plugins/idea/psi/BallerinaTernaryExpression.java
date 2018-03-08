@@ -26,4 +26,10 @@ public interface BallerinaTernaryExpression extends BallerinaExpression {
   @NotNull
   List<BallerinaExpression> getExpressionList();
 
+  @Nullable
+  PsiElement getColon();
+
+  @NotNull
+  PsiElement getQuestionMark();
+
 }

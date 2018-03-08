@@ -47,4 +47,16 @@ public class BallerinaIndexImpl extends BallerinaCompositeElementImpl implements
     return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaExpression.class));
   }
 
+  @Override
+  @NotNull
+  public PsiElement getLeftBracket() {
+    return notNullChild(findChildByType(LEFT_BRACKET));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRightBracket() {
+    return notNullChild(findChildByType(RIGHT_BRACKET));
+  }
+
 }

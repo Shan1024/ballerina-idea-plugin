@@ -26,4 +26,10 @@ public interface BallerinaAnnotationBody extends BallerinaCompositeElement {
   @NotNull
   List<BallerinaFieldDefinition> getFieldDefinitionList();
 
+  @NotNull
+  PsiElement getLeftBrace();
+
+  @NotNull
+  PsiElement getRightBrace();
+
 }

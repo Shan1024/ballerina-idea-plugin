@@ -27,6 +27,15 @@ public interface BallerinaWorkerDeclaration extends BallerinaCompositeElement {
   BallerinaBlock getBlock();
 
   @Nullable
+  PsiElement getLeftBrace();
+
+  @Nullable
+  PsiElement getRightBrace();
+
+  @Nullable
   PsiElement getIdentifier();
+
+  @NotNull
+  PsiElement getWorker();
 
 }

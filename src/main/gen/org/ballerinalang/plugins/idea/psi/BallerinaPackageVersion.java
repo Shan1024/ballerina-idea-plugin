@@ -26,4 +26,7 @@ public interface BallerinaPackageVersion extends BallerinaCompositeElement {
   @Nullable
   PsiElement getIdentifier();
 
+  @NotNull
+  PsiElement getVersion();
+
 }

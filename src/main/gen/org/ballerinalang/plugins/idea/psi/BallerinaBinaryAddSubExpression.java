@@ -26,4 +26,10 @@ public interface BallerinaBinaryAddSubExpression extends BallerinaBinaryExpressi
   @NotNull
   List<BallerinaExpression> getExpressionList();
 
+  @Nullable
+  PsiElement getAdd();
+
+  @Nullable
+  PsiElement getSub();
+
 }

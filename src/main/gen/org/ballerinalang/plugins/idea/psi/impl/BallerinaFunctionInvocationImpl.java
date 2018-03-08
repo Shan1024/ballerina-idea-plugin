@@ -53,4 +53,16 @@ public class BallerinaFunctionInvocationImpl extends BallerinaCompositeElementIm
     return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaNameReference.class));
   }
 
+  @Override
+  @NotNull
+  public PsiElement getLeftParenthesis() {
+    return notNullChild(findChildByType(LEFT_PARENTHESIS));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightParenthesis() {
+    return findChildByType(RIGHT_PARENTHESIS);
+  }
+
 }

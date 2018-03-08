@@ -59,4 +59,22 @@ public class BallerinaForkJoinStatementImpl extends BallerinaCompositeElementImp
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaWorkerDeclaration.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getLeftBrace() {
+    return findChildByType(LEFT_BRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightBrace() {
+    return findChildByType(RIGHT_BRACE);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getFork() {
+    return notNullChild(findChildByType(FORK));
+  }
+
 }

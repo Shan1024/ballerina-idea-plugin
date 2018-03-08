@@ -47,4 +47,22 @@ public class BallerinaLockStatementImpl extends BallerinaCompositeElementImpl im
     return PsiTreeUtil.getChildOfType(this, BallerinaBlock.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getLeftBrace() {
+    return findChildByType(LEFT_BRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightBrace() {
+    return findChildByType(RIGHT_BRACE);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getLock() {
+    return notNullChild(findChildByType(LOCK));
+  }
+
 }

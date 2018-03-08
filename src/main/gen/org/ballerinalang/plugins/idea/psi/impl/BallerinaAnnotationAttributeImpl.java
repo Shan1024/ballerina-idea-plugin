@@ -49,6 +49,12 @@ public class BallerinaAnnotationAttributeImpl extends BallerinaCompositeElementI
 
   @Override
   @NotNull
+  public PsiElement getColon() {
+    return notNullChild(findChildByType(COLON));
+  }
+
+  @Override
+  @NotNull
   public PsiElement getIdentifier() {
     return notNullChild(findChildByType(IDENTIFIER));
   }

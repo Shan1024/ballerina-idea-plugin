@@ -23,4 +23,10 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaAbortStatement extends BallerinaCompositeElement {
 
+  @Nullable
+  PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getAbort();
+
 }

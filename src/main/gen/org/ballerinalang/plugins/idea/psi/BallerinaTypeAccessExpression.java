@@ -26,4 +26,7 @@ public interface BallerinaTypeAccessExpression extends BallerinaExpression {
   @NotNull
   BallerinaBuiltInTypeName getBuiltInTypeName();
 
+  @NotNull
+  PsiElement getTypeof();
+
 }

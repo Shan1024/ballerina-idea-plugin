@@ -30,6 +30,12 @@ public interface BallerinaVariableDefinitionStatement extends BallerinaComposite
   BallerinaTypeName getTypeName();
 
   @Nullable
+  PsiElement getAssign();
+
+  @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
   PsiElement getIdentifier();
 
 }

@@ -26,4 +26,13 @@ public interface BallerinaRetriesStatement extends BallerinaCompositeElement {
   @Nullable
   BallerinaExpression getExpression();
 
+  @Nullable
+  PsiElement getLeftParenthesis();
+
+  @Nullable
+  PsiElement getRightParenthesis();
+
+  @NotNull
+  PsiElement getRetries();
+
 }

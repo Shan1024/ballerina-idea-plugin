@@ -53,4 +53,16 @@ public class BallerinaPackageDeclarationImpl extends BallerinaCompositeElementIm
     return PsiTreeUtil.getChildOfType(this, BallerinaPackageVersion.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getPackage() {
+    return notNullChild(findChildByType(PACKAGE));
+  }
+
 }

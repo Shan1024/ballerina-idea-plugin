@@ -29,4 +29,7 @@ public interface BallerinaRecordKeyValue extends BallerinaCompositeElement {
   @NotNull
   BallerinaRecordKey getRecordKey();
 
+  @NotNull
+  PsiElement getColon();
+
 }

@@ -47,4 +47,22 @@ public class BallerinaBinaryDivMulModExpressionImpl extends BallerinaBinaryExpre
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaExpression.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getDiv() {
+    return findChildByType(DIV);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getMod() {
+    return findChildByType(MOD);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getMul() {
+    return findChildByType(MUL);
+  }
+
 }

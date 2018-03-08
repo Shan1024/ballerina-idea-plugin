@@ -47,4 +47,16 @@ public class BallerinaThrowStatementImpl extends BallerinaCompositeElementImpl i
     return PsiTreeUtil.getChildOfType(this, BallerinaExpression.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getThrow() {
+    return notNullChild(findChildByType(THROW));
+  }
+
 }

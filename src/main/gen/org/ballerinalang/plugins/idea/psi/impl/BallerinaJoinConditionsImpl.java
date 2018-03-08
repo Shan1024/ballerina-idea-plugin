@@ -43,8 +43,20 @@ public class BallerinaJoinConditionsImpl extends BallerinaCompositeElementImpl i
 
   @Override
   @Nullable
+  public PsiElement getAll() {
+    return findChildByType(ALL);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getIntegerLiteral() {
     return findChildByType(INTEGERLITERAL);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSome() {
+    return findChildByType(SOME);
   }
 
 }

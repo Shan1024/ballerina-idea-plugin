@@ -32,4 +32,13 @@ public interface BallerinaTypeConversionExpression extends BallerinaExpression {
   @NotNull
   BallerinaTypeName getTypeName();
 
+  @Nullable
+  PsiElement getComma();
+
+  @NotNull
+  PsiElement getGt();
+
+  @NotNull
+  PsiElement getLt();
+
 }

@@ -26,4 +26,13 @@ public interface BallerinaXmlAttrib extends BallerinaCompositeElement {
   @Nullable
   BallerinaExpression getExpression();
 
+  @NotNull
+  PsiElement getAt();
+
+  @Nullable
+  PsiElement getLeftBracket();
+
+  @Nullable
+  PsiElement getRightBracket();
+
 }

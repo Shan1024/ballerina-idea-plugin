@@ -222,6 +222,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == PACKAGE_NAME) {
       r = PackageName(b, 0);
     }
+    else if (t == PACKAGE_REFERENCE) {
+      r = PackageReference(b, 0);
+    }
     else if (t == PACKAGE_VERSION) {
       r = PackageVersion(b, 0);
     }
@@ -2026,7 +2029,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (identifier COLON)? identifier
+  // PackageReference? identifier
   public static boolean NameReference(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NameReference")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -2038,21 +2041,11 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (identifier COLON)?
+  // PackageReference?
   private static boolean NameReference_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NameReference_0")) return false;
-    NameReference_0_0(b, l + 1);
+    PackageReference(b, l + 1);
     return true;
-  }
-
-  // identifier COLON
-  private static boolean NameReference_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "NameReference_0_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, IDENTIFIER, COLON);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */
@@ -2288,6 +2281,18 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     p = r; // pin = 1
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  /* ********************************************************** */
+  // identifier COLON
+  public static boolean PackageReference(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PackageReference")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokens(b, 0, IDENTIFIER, COLON);
+    exit_section_(b, m, PACKAGE_REFERENCE, r);
+    return r;
   }
 
   /* ********************************************************** */

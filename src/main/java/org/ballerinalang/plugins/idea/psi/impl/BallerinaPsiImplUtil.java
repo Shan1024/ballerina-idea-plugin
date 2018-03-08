@@ -18,8 +18,13 @@
 package org.ballerinalang.plugins.idea.psi.impl;
 
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BallerinaPsiImplUtil {
@@ -42,5 +47,33 @@ public class BallerinaPsiImplUtil {
     public static String getName(BallerinaFunctionDefinition ballerinaFunctionDefinition) {
         BallerinaCallableUnitSignature callableUnitSignature = ballerinaFunctionDefinition.getCallableUnitSignature();
         return callableUnitSignature != null ? callableUnitSignature.getIdentifier().getText() : "";
+    }
+
+    @NotNull
+    public static PsiReference getReference(@NotNull BallerinaNameReference ballerinaNameReference) {
+        // Todo
+        return null;
+    }
+
+
+    @Nullable
+    public static BallerinaNameReference getQualifier(@NotNull BallerinaNameReference ballerinaNameReference) {
+        // Todo
+        //        return PsiTreeUtil.getChildOfType(ballerinaNameReference, BallerinaNameReference.class);
+        return null;
+    }
+
+    // todo: ?
+    public static PsiElement resolve(@NotNull BallerinaNameReference ballerinaNameReference) {
+        return ballerinaNameReference.getReference().resolve();
+    }
+
+    @Nullable
+    public static BallerinaTypeName resolveType(@NotNull BallerinaNameReference ballerinaNameReference) {
+//        PsiElement resolve = ballerinaNameReference.resolve();
+//        if (resolve instanceof GoTypeSpec) return ((GoTypeSpec) resolve).getSpecType();
+//        // hacky C resolve
+//        return resolve == ballerinaNameReference ? new GoCType(ballerinaNameReference) : null;
+        return null;
     }
 }

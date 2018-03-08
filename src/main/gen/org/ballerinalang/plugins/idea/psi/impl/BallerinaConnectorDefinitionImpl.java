@@ -55,8 +55,32 @@ public class BallerinaConnectorDefinitionImpl extends BallerinaCompositeElementI
 
   @Override
   @Nullable
+  public PsiElement getLeftParenthesis() {
+    return findChildByType(LEFT_PARENTHESIS);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightParenthesis() {
+    return findChildByType(RIGHT_PARENTHESIS);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getConnector() {
+    return notNullChild(findChildByType(CONNECTOR));
+  }
+
+  @Override
+  @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getPublic() {
+    return findChildByType(PUBLIC);
   }
 
 }

@@ -55,8 +55,26 @@ public class BallerinaGlobalVariableDefinitionImpl extends BallerinaCompositeEle
 
   @Override
   @Nullable
+  public PsiElement getAssign() {
+    return findChildByType(ASSIGN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getPublic() {
+    return findChildByType(PUBLIC);
   }
 
 }

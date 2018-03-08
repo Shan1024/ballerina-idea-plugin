@@ -32,4 +32,10 @@ public interface BallerinaServiceBody extends BallerinaCompositeElement {
   @NotNull
   List<BallerinaVariableDefinitionStatement> getVariableDefinitionStatementList();
 
+  @NotNull
+  PsiElement getLeftBrace();
+
+  @NotNull
+  PsiElement getRightBrace();
+
 }

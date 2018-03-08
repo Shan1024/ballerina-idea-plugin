@@ -26,4 +26,10 @@ public interface BallerinaBracedExpression extends BallerinaExpression {
   @Nullable
   BallerinaExpression getExpression();
 
+  @NotNull
+  PsiElement getLeftParenthesis();
+
+  @Nullable
+  PsiElement getRightParenthesis();
+
 }

@@ -32,4 +32,10 @@ public interface BallerinaCallableUnitBody extends BallerinaCompositeElement {
   @NotNull
   List<BallerinaWorkerDeclaration> getWorkerDeclarationList();
 
+  @NotNull
+  PsiElement getLeftBrace();
+
+  @NotNull
+  PsiElement getRightBrace();
+
 }

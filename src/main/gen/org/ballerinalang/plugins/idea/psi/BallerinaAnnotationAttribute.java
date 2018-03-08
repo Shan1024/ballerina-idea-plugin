@@ -27,6 +27,9 @@ public interface BallerinaAnnotationAttribute extends BallerinaCompositeElement 
   BallerinaAnnotationAttributeValue getAnnotationAttributeValue();
 
   @NotNull
+  PsiElement getColon();
+
+  @NotNull
   PsiElement getIdentifier();
 
 }

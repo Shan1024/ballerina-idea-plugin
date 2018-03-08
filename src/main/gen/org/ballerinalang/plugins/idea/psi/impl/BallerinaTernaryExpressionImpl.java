@@ -47,4 +47,16 @@ public class BallerinaTernaryExpressionImpl extends BallerinaExpressionImpl impl
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaExpression.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getColon() {
+    return findChildByType(COLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getQuestionMark() {
+    return notNullChild(findChildByType(QUESTION_MARK));
+  }
+
 }

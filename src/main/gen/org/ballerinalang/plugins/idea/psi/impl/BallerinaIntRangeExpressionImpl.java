@@ -47,4 +47,34 @@ public class BallerinaIntRangeExpressionImpl extends BallerinaCompositeElementIm
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaExpression.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getLeftBracket() {
+    return findChildByType(LEFT_BRACKET);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLeftParenthesis() {
+    return findChildByType(LEFT_PARENTHESIS);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRange() {
+    return notNullChild(findChildByType(RANGE));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightBracket() {
+    return findChildByType(RIGHT_BRACKET);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightParenthesis() {
+    return findChildByType(RIGHT_PARENTHESIS);
+  }
+
 }

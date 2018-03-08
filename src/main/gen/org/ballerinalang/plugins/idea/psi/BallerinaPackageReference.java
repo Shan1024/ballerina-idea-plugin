@@ -21,48 +21,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaAttachmentPoint extends BallerinaCompositeElement {
+public interface BallerinaPackageReference extends BallerinaCompositeElement {
 
-  @Nullable
-  PsiElement getGt();
+  @NotNull
+  PsiElement getColon();
 
-  @Nullable
-  PsiElement getLt();
-
-  @Nullable
-  PsiElement getTypeParameter();
-
-  @Nullable
-  PsiElement getAction();
-
-  @Nullable
-  PsiElement getAnnotation();
-
-  @Nullable
-  PsiElement getConnector();
-
-  @Nullable
-  PsiElement getConst();
-
-  @Nullable
-  PsiElement getEnum();
-
-  @Nullable
-  PsiElement getFunction();
-
-  @Nullable
+  @NotNull
   PsiElement getIdentifier();
-
-  @Nullable
-  PsiElement getResource();
-
-  @Nullable
-  PsiElement getService();
-
-  @Nullable
-  PsiElement getStruct();
-
-  @Nullable
-  PsiElement getTransformer();
 
 }

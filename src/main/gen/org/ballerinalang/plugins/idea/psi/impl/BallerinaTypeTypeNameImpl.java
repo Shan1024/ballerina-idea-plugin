@@ -41,4 +41,10 @@ public class BallerinaTypeTypeNameImpl extends BallerinaTypeNameImpl implements 
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getType() {
+    return notNullChild(findChildByType(TYPE));
+  }
+
 }

@@ -24,9 +24,18 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaNamespaceDeclaration extends BallerinaCompositeElement {
 
   @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
+  PsiElement getAs();
+
+  @Nullable
   PsiElement getIdentifier();
 
   @Nullable
   PsiElement getQuotedStringLiteral();
+
+  @NotNull
+  PsiElement getXmlns();
 
 }

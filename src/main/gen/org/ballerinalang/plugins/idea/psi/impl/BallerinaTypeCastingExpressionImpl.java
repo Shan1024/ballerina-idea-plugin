@@ -53,4 +53,16 @@ public class BallerinaTypeCastingExpressionImpl extends BallerinaExpressionImpl 
     return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class));
   }
 
+  @Override
+  @NotNull
+  public PsiElement getLeftParenthesis() {
+    return notNullChild(findChildByType(LEFT_PARENTHESIS));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRightParenthesis() {
+    return notNullChild(findChildByType(RIGHT_PARENTHESIS));
+  }
+
 }

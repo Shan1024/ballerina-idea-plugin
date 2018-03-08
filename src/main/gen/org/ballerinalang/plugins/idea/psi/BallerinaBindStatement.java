@@ -27,6 +27,15 @@ public interface BallerinaBindStatement extends BallerinaCompositeElement {
   BallerinaExpression getExpression();
 
   @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
+  PsiElement getWith();
+
+  @NotNull
+  PsiElement getBind();
+
+  @Nullable
   PsiElement getIdentifier();
 
 }

@@ -30,6 +30,18 @@ public interface BallerinaConnectorDefinition extends BallerinaCompositeElement 
   BallerinaParameterList getParameterList();
 
   @Nullable
+  PsiElement getLeftParenthesis();
+
+  @Nullable
+  PsiElement getRightParenthesis();
+
+  @NotNull
+  PsiElement getConnector();
+
+  @Nullable
   PsiElement getIdentifier();
+
+  @Nullable
+  PsiElement getPublic();
 
 }

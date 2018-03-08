@@ -26,4 +26,7 @@ public interface BallerinaBinaryAndExpression extends BallerinaBinaryExpression 
   @NotNull
   List<BallerinaExpression> getExpressionList();
 
+  @NotNull
+  PsiElement getAnd();
+
 }

@@ -43,6 +43,18 @@ public class BallerinaSimpleLiteralImpl extends BallerinaExpressionImpl implemen
 
   @Override
   @Nullable
+  public PsiElement getAdd() {
+    return findChildByType(ADD);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSub() {
+    return findChildByType(SUB);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getIntegerLiteral() {
     return findChildByType(INTEGERLITERAL);
   }

@@ -26,4 +26,10 @@ public interface BallerinaReceiver extends BallerinaCompositeElement {
   @NotNull
   BallerinaParameter getParameter();
 
+  @NotNull
+  PsiElement getGt();
+
+  @NotNull
+  PsiElement getLt();
+
 }

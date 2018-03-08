@@ -23,4 +23,19 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaValueTypeName extends BallerinaTypeName {
 
+  @Nullable
+  PsiElement getBlob();
+
+  @Nullable
+  PsiElement getBoolean();
+
+  @Nullable
+  PsiElement getFloat();
+
+  @Nullable
+  PsiElement getInt();
+
+  @Nullable
+  PsiElement getString();
+
 }

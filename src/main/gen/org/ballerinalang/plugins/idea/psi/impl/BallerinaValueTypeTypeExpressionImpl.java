@@ -49,6 +49,12 @@ public class BallerinaValueTypeTypeExpressionImpl extends BallerinaExpressionImp
 
   @Override
   @NotNull
+  public PsiElement getDot() {
+    return notNullChild(findChildByType(DOT));
+  }
+
+  @Override
+  @NotNull
   public PsiElement getIdentifier() {
     return notNullChild(findChildByType(IDENTIFIER));
   }

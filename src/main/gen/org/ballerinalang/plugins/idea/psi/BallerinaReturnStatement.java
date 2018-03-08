@@ -26,4 +26,10 @@ public interface BallerinaReturnStatement extends BallerinaCompositeElement {
   @Nullable
   BallerinaExpressionList getExpressionList();
 
+  @Nullable
+  PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getReturn();
+
 }

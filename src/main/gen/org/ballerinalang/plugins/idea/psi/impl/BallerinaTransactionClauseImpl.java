@@ -53,4 +53,28 @@ public class BallerinaTransactionClauseImpl extends BallerinaCompositeElementImp
     return PsiTreeUtil.getChildOfType(this, BallerinaTransactionPropertyInitStatementList.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getLeftBrace() {
+    return findChildByType(LEFT_BRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightBrace() {
+    return findChildByType(RIGHT_BRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getWith() {
+    return findChildByType(WITH);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getTransaction() {
+    return notNullChild(findChildByType(TRANSACTION));
+  }
+
 }

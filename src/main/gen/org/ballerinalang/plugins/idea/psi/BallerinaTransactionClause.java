@@ -29,4 +29,16 @@ public interface BallerinaTransactionClause extends BallerinaCompositeElement {
   @Nullable
   BallerinaTransactionPropertyInitStatementList getTransactionPropertyInitStatementList();
 
+  @Nullable
+  PsiElement getLeftBrace();
+
+  @Nullable
+  PsiElement getRightBrace();
+
+  @Nullable
+  PsiElement getWith();
+
+  @NotNull
+  PsiElement getTransaction();
+
 }

@@ -26,6 +26,15 @@ public interface BallerinaTriggerWorker extends BallerinaCompositeElement {
   @NotNull
   BallerinaExpressionList getExpressionList();
 
+  @NotNull
+  PsiElement getRarrow();
+
+  @Nullable
+  PsiElement getSemicolon();
+
+  @Nullable
+  PsiElement getFork();
+
   @Nullable
   PsiElement getIdentifier();
 

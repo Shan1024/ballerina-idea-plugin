@@ -26,4 +26,13 @@ public interface BallerinaJsonTypeName extends BallerinaCompositeElement {
   @Nullable
   BallerinaNameReference getNameReference();
 
+  @Nullable
+  PsiElement getGt();
+
+  @Nullable
+  PsiElement getLt();
+
+  @NotNull
+  PsiElement getJson();
+
 }

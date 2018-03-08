@@ -59,4 +59,22 @@ public class BallerinaLambdaFunctionImpl extends BallerinaCompositeElementImpl i
     return PsiTreeUtil.getChildOfType(this, BallerinaReturnParameters.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getLeftParenthesis() {
+    return findChildByType(LEFT_PARENTHESIS);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightParenthesis() {
+    return findChildByType(RIGHT_PARENTHESIS);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getFunction() {
+    return notNullChild(findChildByType(FUNCTION));
+  }
+
 }

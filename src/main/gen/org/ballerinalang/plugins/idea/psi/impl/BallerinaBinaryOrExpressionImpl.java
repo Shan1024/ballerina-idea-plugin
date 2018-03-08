@@ -47,4 +47,10 @@ public class BallerinaBinaryOrExpressionImpl extends BallerinaBinaryExpressionIm
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaExpression.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getOr() {
+    return notNullChild(findChildByType(OR));
+  }
+
 }

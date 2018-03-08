@@ -27,6 +27,9 @@ public interface BallerinaBuiltInReferenceTypeTypeExpression extends BallerinaEx
   BallerinaBuiltInReferenceTypeName getBuiltInReferenceTypeName();
 
   @NotNull
+  PsiElement getDot();
+
+  @NotNull
   PsiElement getIdentifier();
 
 }

@@ -35,4 +35,22 @@ public interface BallerinaForeachStatement extends BallerinaCompositeElement {
   @Nullable
   BallerinaVariableReferenceList getVariableReferenceList();
 
+  @Nullable
+  PsiElement getLeftBrace();
+
+  @Nullable
+  PsiElement getLeftParenthesis();
+
+  @Nullable
+  PsiElement getRightBrace();
+
+  @Nullable
+  PsiElement getRightParenthesis();
+
+  @NotNull
+  PsiElement getForeach();
+
+  @Nullable
+  PsiElement getIn();
+
 }

@@ -26,4 +26,13 @@ public interface BallerinaElseClause extends BallerinaCompositeElement {
   @Nullable
   BallerinaBlock getBlock();
 
+  @Nullable
+  PsiElement getLeftBrace();
+
+  @Nullable
+  PsiElement getRightBrace();
+
+  @NotNull
+  PsiElement getElse();
+
 }

@@ -59,4 +59,22 @@ public class BallerinaEndpointDeclarationImpl extends BallerinaCompositeElementI
     return PsiTreeUtil.getChildOfType(this, BallerinaVariableReference.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getLeftBrace() {
+    return findChildByType(LEFT_BRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightBrace() {
+    return findChildByType(RIGHT_BRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
 }

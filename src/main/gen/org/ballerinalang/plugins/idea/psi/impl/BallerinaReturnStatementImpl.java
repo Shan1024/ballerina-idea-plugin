@@ -47,4 +47,16 @@ public class BallerinaReturnStatementImpl extends BallerinaCompositeElementImpl 
     return PsiTreeUtil.getChildOfType(this, BallerinaExpressionList.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getReturn() {
+    return notNullChild(findChildByType(RETURN));
+  }
+
 }

@@ -59,4 +59,22 @@ public class BallerinaTypeConversionExpressionImpl extends BallerinaExpressionIm
     return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class));
   }
 
+  @Override
+  @Nullable
+  public PsiElement getComma() {
+    return findChildByType(COMMA);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getGt() {
+    return notNullChild(findChildByType(GT));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getLt() {
+    return notNullChild(findChildByType(LT));
+  }
+
 }

@@ -29,4 +29,19 @@ public interface BallerinaWhileStatement extends BallerinaCompositeElement {
   @Nullable
   BallerinaExpression getExpression();
 
+  @Nullable
+  PsiElement getLeftBrace();
+
+  @NotNull
+  PsiElement getLeftParenthesis();
+
+  @Nullable
+  PsiElement getRightBrace();
+
+  @Nullable
+  PsiElement getRightParenthesis();
+
+  @NotNull
+  PsiElement getWhile();
+
 }

@@ -26,4 +26,10 @@ public interface BallerinaPrivateStructBody extends BallerinaCompositeElement {
   @NotNull
   List<BallerinaFieldDefinition> getFieldDefinitionList();
 
+  @NotNull
+  PsiElement getColon();
+
+  @NotNull
+  PsiElement getPrivate();
+
 }

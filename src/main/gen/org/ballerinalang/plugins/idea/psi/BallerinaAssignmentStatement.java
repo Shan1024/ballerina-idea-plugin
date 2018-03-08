@@ -29,4 +29,13 @@ public interface BallerinaAssignmentStatement extends BallerinaCompositeElement 
   @NotNull
   BallerinaVariableReferenceList getVariableReferenceList();
 
+  @NotNull
+  PsiElement getAssign();
+
+  @NotNull
+  PsiElement getSemicolon();
+
+  @Nullable
+  PsiElement getVar();
+
 }

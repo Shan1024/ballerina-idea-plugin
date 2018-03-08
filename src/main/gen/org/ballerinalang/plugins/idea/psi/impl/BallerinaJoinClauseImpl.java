@@ -61,8 +61,26 @@ public class BallerinaJoinClauseImpl extends BallerinaCompositeElementImpl imple
 
   @Override
   @Nullable
+  public PsiElement getLeftBrace() {
+    return findChildByType(LEFT_BRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightBrace() {
+    return findChildByType(RIGHT_BRACE);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getJoin() {
+    return notNullChild(findChildByType(JOIN));
   }
 
 }

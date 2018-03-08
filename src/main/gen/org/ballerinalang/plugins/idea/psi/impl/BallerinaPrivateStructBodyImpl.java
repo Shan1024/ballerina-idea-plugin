@@ -47,4 +47,16 @@ public class BallerinaPrivateStructBodyImpl extends BallerinaCompositeElementImp
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaFieldDefinition.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getColon() {
+    return notNullChild(findChildByType(COLON));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getPrivate() {
+    return notNullChild(findChildByType(PRIVATE));
+  }
+
 }

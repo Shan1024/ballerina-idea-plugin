@@ -26,4 +26,10 @@ public interface BallerinaThrowStatement extends BallerinaCompositeElement {
   @Nullable
   BallerinaExpression getExpression();
 
+  @Nullable
+  PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getThrow();
+
 }

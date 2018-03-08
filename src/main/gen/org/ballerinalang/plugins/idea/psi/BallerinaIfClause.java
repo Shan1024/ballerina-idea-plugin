@@ -29,4 +29,19 @@ public interface BallerinaIfClause extends BallerinaCompositeElement {
   @Nullable
   BallerinaExpression getExpression();
 
+  @Nullable
+  PsiElement getLeftBrace();
+
+  @Nullable
+  PsiElement getLeftParenthesis();
+
+  @Nullable
+  PsiElement getRightBrace();
+
+  @Nullable
+  PsiElement getRightParenthesis();
+
+  @NotNull
+  PsiElement getIf();
+
 }

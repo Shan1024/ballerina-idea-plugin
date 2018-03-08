@@ -47,4 +47,10 @@ public class BallerinaPackageVersionImpl extends BallerinaCompositeElementImpl i
     return findChildByType(IDENTIFIER);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getVersion() {
+    return notNullChild(findChildByType(VERSION));
+  }
+
 }

@@ -32,4 +32,13 @@ public interface BallerinaActionDefinition extends BallerinaCompositeElement {
   @Nullable
   BallerinaCallableUnitSignature getCallableUnitSignature();
 
+  @Nullable
+  PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getAction();
+
+  @Nullable
+  PsiElement getNative();
+
 }

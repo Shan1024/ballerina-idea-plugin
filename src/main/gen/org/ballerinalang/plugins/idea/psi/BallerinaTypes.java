@@ -110,6 +110,7 @@ public interface BallerinaTypes {
   IElementType ORG_NAME = new BallerinaCompositeElementType("ORG_NAME");
   IElementType PACKAGE_DECLARATION = new BallerinaCompositeElementType("PACKAGE_DECLARATION");
   IElementType PACKAGE_NAME = new BallerinaCompositeElementType("PACKAGE_NAME");
+  IElementType PACKAGE_REFERENCE = new BallerinaCompositeElementType("PACKAGE_REFERENCE");
   IElementType PACKAGE_VERSION = new BallerinaCompositeElementType("PACKAGE_VERSION");
   IElementType PARAMETER = new BallerinaCompositeElementType("PARAMETER");
   IElementType PARAMETER_LIST = new BallerinaCompositeElementType("PARAMETER_LIST");
@@ -518,6 +519,9 @@ public interface BallerinaTypes {
       }
       else if (type == PACKAGE_NAME) {
         return new BallerinaPackageNameImpl(node);
+      }
+      else if (type == PACKAGE_REFERENCE) {
+        return new BallerinaPackageReferenceImpl(node);
       }
       else if (type == PACKAGE_VERSION) {
         return new BallerinaPackageVersionImpl(node);

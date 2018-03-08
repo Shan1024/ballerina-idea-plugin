@@ -65,6 +65,30 @@ public class BallerinaFunctionDefinitionImpl extends BallerinaNamedElementImpl<B
     return PsiTreeUtil.getChildOfType(this, BallerinaReceiver.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getFunction() {
+    return notNullChild(findChildByType(FUNCTION));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getNative() {
+    return findChildByType(NATIVE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getPublic() {
+    return findChildByType(PUBLIC);
+  }
+
   @Nullable
   public PsiElement getIdentifier() {
     return BallerinaPsiImplUtil.getIdentifier(this);

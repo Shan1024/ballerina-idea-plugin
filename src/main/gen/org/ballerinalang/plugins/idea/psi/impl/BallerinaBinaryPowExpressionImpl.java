@@ -47,4 +47,10 @@ public class BallerinaBinaryPowExpressionImpl extends BallerinaBinaryExpressionI
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaExpression.class);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getPow() {
+    return notNullChild(findChildByType(POW));
+  }
+
 }

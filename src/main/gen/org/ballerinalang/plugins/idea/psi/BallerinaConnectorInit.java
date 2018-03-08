@@ -29,4 +29,13 @@ public interface BallerinaConnectorInit extends BallerinaCompositeElement {
   @Nullable
   BallerinaUserDefineTypeName getUserDefineTypeName();
 
+  @Nullable
+  PsiElement getLeftParenthesis();
+
+  @Nullable
+  PsiElement getRightParenthesis();
+
+  @NotNull
+  PsiElement getCreate();
+
 }
