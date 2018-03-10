@@ -49,8 +49,8 @@ public class BallerinaGlobalEndpointDefinitionImpl extends BallerinaNamedElement
 
   @Override
   @NotNull
-  public BallerinaEndpointDeclaration getEndpointDeclaration() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaEndpointDeclaration.class));
+  public BallerinaEndpointDefinition getEndpointDefinition() {
+    return notNullChild(PsiTreeUtil.getStubChildOfType(this, BallerinaEndpointDefinition.class));
   }
 
   @Override

@@ -159,10 +159,10 @@
 
   extends("(AnyType|TypeType|ValueType|ReferenceType|arrayType)Name|BinaryAndExpression")=TypeName
 
-  implements("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|GlobalEndpoint)Definition")="org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
-  extends("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|GlobalEndpoint)Definition")="org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
+  implements("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|.*Endpoint)Definition")="org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+  extends("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|.*Endpoint)Definition")="org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
 
-  elementTypeFactory("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|GlobalEndpoint)Definition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
+  elementTypeFactory("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|.*Endpoint)Definition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
 
 //  implements("NameReference")="com.intellij.psi.PsiNameIdentifierOwner"
 
@@ -200,14 +200,14 @@ Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachme
 private TopLevelDefinitionRecover ::= !(service | function | connector | struct | enum | annotation | transformer | endpoint | const | boolean | int | float | string | blob | identifier)
 
 ServiceDefinition ::= service (LT NameReference GT) identifier ServiceBody {pin=1}
-ServiceBody ::=   LEFT_BRACE EndpointDeclaration* VariableDefinitionStatement* ResourceDefinition* RIGHT_BRACE
+ServiceBody ::=   LEFT_BRACE EndpointDefinition* VariableDefinitionStatement* ResourceDefinition* RIGHT_BRACE
 
 ResourceDefinition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? resource identifier LEFT_PARENTHESIS ParameterList RIGHT_PARENTHESIS CallableUnitBody {pin=4}
 
-CallableUnitBody ::= LEFT_BRACE BlockWithEndpoint RIGHT_BRACE | LEFT_BRACE EndpointDeclaration* WorkerDeclaration+ RIGHT_BRACE
+CallableUnitBody ::= LEFT_BRACE BlockWithEndpoint RIGHT_BRACE | LEFT_BRACE EndpointDefinition* WorkerDeclaration+ RIGHT_BRACE
 
 Block ::= Statement* /*{recoverWhile=StatementRecover}*/
-BlockWithEndpoint ::= EndpointDeclaration* Block
+BlockWithEndpoint ::= EndpointDefinition* Block
 
 //private StatementRecover ::= !(int | string | '}' | '=')
 
@@ -224,7 +224,7 @@ CallableUnitSignature ::= identifier LEFT_PARENTHESIS ParameterList? RIGHT_PAREN
 
 ConnectorDefinition ::= (public)? connector identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ConnectorBody {pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaConnectorDefinitionStub"}
 
-ConnectorBody ::= LEFT_BRACE EndpointDeclaration* VariableDefinitionStatement* ActionDefinition* RIGHT_BRACE
+ConnectorBody ::= LEFT_BRACE EndpointDefinition* VariableDefinitionStatement* ActionDefinition* RIGHT_BRACE
 
 ActionDefinition ::= NativeActionDefinition | NonNativeActionDefinition
 private NativeActionDefinition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? native action  CallableUnitSignature SEMICOLON {pin=5}
@@ -255,9 +255,9 @@ ConstantDefinition ::= (public)? const ValueTypeName identifier ASSIGN Expressio
 
 WorkerDeclaration ::= worker identifier LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
-GlobalEndpointDefinition ::= public? EndpointDeclaration {pin=2 methods=[getIdentifier] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaGlobalEndpointDefinitionStub"}
+GlobalEndpointDefinition ::= public? EndpointDefinition {pin=2 methods=[getIdentifier] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaGlobalEndpointDefinitionStub"}
 
-EndpointDeclaration ::= AnnotationAttachment* endpoint (LT NameReference GT) identifier RecordLiteral? {pin=2}
+EndpointDefinition ::= AnnotationAttachment* endpoint (LT NameReference GT) identifier RecordLiteral? {pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaEndpointDefinitionStub"}
 
 TypeName ::= AnyTypeName | TypeTypeName | ValueTypeName | ReferenceTypeName | arrayTypeName
 

@@ -27,7 +27,7 @@ public interface BallerinaCallableUnitBody extends BallerinaCompositeElement {
   BallerinaBlockWithEndpoint getBlockWithEndpoint();
 
   @NotNull
-  List<BallerinaEndpointDeclaration> getEndpointDeclarationList();
+  List<BallerinaEndpointDefinition> getEndpointDefinitionList();
 
   @NotNull
   List<BallerinaWorkerDeclaration> getWorkerDeclarationList();

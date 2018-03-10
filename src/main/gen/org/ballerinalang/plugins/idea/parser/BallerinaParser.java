@@ -135,8 +135,8 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == EMPTY_TAG) {
       r = EmptyTag(b, 0);
     }
-    else if (t == ENDPOINT_DECLARATION) {
-      r = EndpointDeclaration(b, 0);
+    else if (t == ENDPOINT_DEFINITION) {
+      r = EndpointDefinition(b, 0);
     }
     else if (t == ENUM_DEFINITION) {
       r = EnumDefinition(b, 0);
@@ -758,7 +758,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // EndpointDeclaration* Block
+  // EndpointDefinition* Block
   public static boolean BlockWithEndpoint(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "BlockWithEndpoint")) return false;
     boolean r;
@@ -769,12 +769,12 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // EndpointDeclaration*
+  // EndpointDefinition*
   private static boolean BlockWithEndpoint_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "BlockWithEndpoint_0")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!EndpointDeclaration(b, l + 1)) break;
+      if (!EndpointDefinition(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "BlockWithEndpoint_0", c)) break;
       c = current_position_(b);
     }
@@ -825,7 +825,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LEFT_BRACE BlockWithEndpoint RIGHT_BRACE | LEFT_BRACE EndpointDeclaration* WorkerDeclaration+ RIGHT_BRACE
+  // LEFT_BRACE BlockWithEndpoint RIGHT_BRACE | LEFT_BRACE EndpointDefinition* WorkerDeclaration+ RIGHT_BRACE
   public static boolean CallableUnitBody(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CallableUnitBody")) return false;
     if (!nextTokenIs(b, LEFT_BRACE)) return false;
@@ -849,7 +849,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // LEFT_BRACE EndpointDeclaration* WorkerDeclaration+ RIGHT_BRACE
+  // LEFT_BRACE EndpointDefinition* WorkerDeclaration+ RIGHT_BRACE
   private static boolean CallableUnitBody_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CallableUnitBody_1")) return false;
     boolean r;
@@ -862,12 +862,12 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // EndpointDeclaration*
+  // EndpointDefinition*
   private static boolean CallableUnitBody_1_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CallableUnitBody_1_1")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!EndpointDeclaration(b, l + 1)) break;
+      if (!EndpointDefinition(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "CallableUnitBody_1_1", c)) break;
       c = current_position_(b);
     }
@@ -1139,7 +1139,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LEFT_BRACE EndpointDeclaration* VariableDefinitionStatement* ActionDefinition* RIGHT_BRACE
+  // LEFT_BRACE EndpointDefinition* VariableDefinitionStatement* ActionDefinition* RIGHT_BRACE
   public static boolean ConnectorBody(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConnectorBody")) return false;
     if (!nextTokenIs(b, LEFT_BRACE)) return false;
@@ -1154,12 +1154,12 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // EndpointDeclaration*
+  // EndpointDefinition*
   private static boolean ConnectorBody_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConnectorBody_1")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!EndpointDeclaration(b, l + 1)) break;
+      if (!EndpointDefinition(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "ConnectorBody_1", c)) break;
       c = current_position_(b);
     }
@@ -1458,36 +1458,36 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // AnnotationAttachment* endpoint (LT NameReference GT) identifier RecordLiteral?
-  public static boolean EndpointDeclaration(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "EndpointDeclaration")) return false;
-    if (!nextTokenIs(b, "<endpoint declaration>", AT, ENDPOINT)) return false;
+  public static boolean EndpointDefinition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EndpointDefinition")) return false;
+    if (!nextTokenIs(b, "<endpoint definition>", AT, ENDPOINT)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, ENDPOINT_DECLARATION, "<endpoint declaration>");
-    r = EndpointDeclaration_0(b, l + 1);
+    Marker m = enter_section_(b, l, _NONE_, ENDPOINT_DEFINITION, "<endpoint definition>");
+    r = EndpointDefinition_0(b, l + 1);
     r = r && consumeToken(b, ENDPOINT);
     p = r; // pin = 2
-    r = r && report_error_(b, EndpointDeclaration_2(b, l + 1));
+    r = r && report_error_(b, EndpointDefinition_2(b, l + 1));
     r = p && report_error_(b, consumeToken(b, IDENTIFIER)) && r;
-    r = p && EndpointDeclaration_4(b, l + 1) && r;
+    r = p && EndpointDefinition_4(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
   // AnnotationAttachment*
-  private static boolean EndpointDeclaration_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "EndpointDeclaration_0")) return false;
+  private static boolean EndpointDefinition_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EndpointDefinition_0")) return false;
     int c = current_position_(b);
     while (true) {
       if (!AnnotationAttachment(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "EndpointDeclaration_0", c)) break;
+      if (!empty_element_parsed_guard_(b, "EndpointDefinition_0", c)) break;
       c = current_position_(b);
     }
     return true;
   }
 
   // LT NameReference GT
-  private static boolean EndpointDeclaration_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "EndpointDeclaration_2")) return false;
+  private static boolean EndpointDefinition_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EndpointDefinition_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, LT);
@@ -1498,8 +1498,8 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   // RecordLiteral?
-  private static boolean EndpointDeclaration_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "EndpointDeclaration_4")) return false;
+  private static boolean EndpointDefinition_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EndpointDefinition_4")) return false;
     RecordLiteral(b, l + 1);
     return true;
   }
@@ -1863,13 +1863,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // public? EndpointDeclaration
+  // public? EndpointDefinition
   public static boolean GlobalEndpointDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "GlobalEndpointDefinition")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, GLOBAL_ENDPOINT_DEFINITION, "<global endpoint definition>");
     r = GlobalEndpointDefinition_0(b, l + 1);
-    r = r && EndpointDeclaration(b, l + 1);
+    r = r && EndpointDefinition(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -2908,7 +2908,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LEFT_BRACE EndpointDeclaration* VariableDefinitionStatement* ResourceDefinition* RIGHT_BRACE
+  // LEFT_BRACE EndpointDefinition* VariableDefinitionStatement* ResourceDefinition* RIGHT_BRACE
   public static boolean ServiceBody(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ServiceBody")) return false;
     if (!nextTokenIs(b, LEFT_BRACE)) return false;
@@ -2923,12 +2923,12 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // EndpointDeclaration*
+  // EndpointDefinition*
   private static boolean ServiceBody_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ServiceBody_1")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!EndpointDeclaration(b, l + 1)) break;
+      if (!EndpointDefinition(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "ServiceBody_1", c)) break;
       c = current_position_(b);
     }

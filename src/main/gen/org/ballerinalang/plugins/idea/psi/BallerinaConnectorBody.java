@@ -27,7 +27,7 @@ public interface BallerinaConnectorBody extends BallerinaCompositeElement {
   List<BallerinaActionDefinition> getActionDefinitionList();
 
   @NotNull
-  List<BallerinaEndpointDeclaration> getEndpointDeclarationList();
+  List<BallerinaEndpointDefinition> getEndpointDefinitionList();
 
   @NotNull
   List<BallerinaVariableDefinitionStatement> getVariableDefinitionStatementList();

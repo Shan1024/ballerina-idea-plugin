@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaServiceBody extends BallerinaCompositeElement {
 
   @NotNull
-  List<BallerinaEndpointDeclaration> getEndpointDeclarationList();
+  List<BallerinaEndpointDefinition> getEndpointDefinitionList();
 
   @NotNull
   List<BallerinaResourceDefinition> getResourceDefinitionList();

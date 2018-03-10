@@ -79,7 +79,7 @@ public interface BallerinaTypes {
   IElementType ELSE_CLAUSE = new BallerinaCompositeElementType("ELSE_CLAUSE");
   IElementType ELSE_IF_CLAUSE = new BallerinaCompositeElementType("ELSE_IF_CLAUSE");
   IElementType EMPTY_TAG = new BallerinaCompositeElementType("EMPTY_TAG");
-  IElementType ENDPOINT_DECLARATION = new BallerinaCompositeElementType("ENDPOINT_DECLARATION");
+  IElementType ENDPOINT_DEFINITION = BallerinaElementTypeFactory.stubFactory("ENDPOINT_DEFINITION");
   IElementType ENUMERATOR = new BallerinaCompositeElementType("ENUMERATOR");
   IElementType ENUM_DEFINITION = BallerinaElementTypeFactory.stubFactory("ENUM_DEFINITION");
   IElementType EXPRESSION = new BallerinaCompositeElementType("EXPRESSION");
@@ -511,8 +511,8 @@ public interface BallerinaTypes {
       else if (type == EMPTY_TAG) {
         return new BallerinaEmptyTagImpl(node);
       }
-      else if (type == ENDPOINT_DECLARATION) {
-        return new BallerinaEndpointDeclarationImpl(node);
+      else if (type == ENDPOINT_DEFINITION) {
+        return new BallerinaEndpointDefinitionImpl(node);
       }
       else if (type == ENUMERATOR) {
         return new BallerinaEnumeratorImpl(node);

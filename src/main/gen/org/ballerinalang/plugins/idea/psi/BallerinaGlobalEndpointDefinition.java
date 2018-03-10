@@ -26,7 +26,7 @@ import org.ballerinalang.plugins.idea.stubs.BallerinaGlobalEndpointDefinitionStu
 public interface BallerinaGlobalEndpointDefinition extends BallerinaNamedElement, StubBasedPsiElement<BallerinaGlobalEndpointDefinitionStub> {
 
   @NotNull
-  BallerinaEndpointDeclaration getEndpointDeclaration();
+  BallerinaEndpointDefinition getEndpointDefinition();
 
   @Nullable
   PsiElement getPublic();

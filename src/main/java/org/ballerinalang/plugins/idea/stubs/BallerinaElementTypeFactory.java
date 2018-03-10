@@ -22,6 +22,7 @@ import com.intellij.util.containers.HashMap;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaAnnotationDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaConnectorDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaConstantDefinitionStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaEndpointDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaEnumDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaFunctionDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalEndpointDefinitionStubElementType;
@@ -80,6 +81,9 @@ public class BallerinaElementTypeFactory {
         }
         if ("GLOBAL_ENDPOINT_DEFINITION".equals(name)) {
             return new BallerinaGlobalEndpointDefinitionStubElementType(name);
+        }
+        if ("ENDPOINT_DEFINITION".equals(name)) {
+            return new BallerinaEndpointDefinitionStubElementType(name);
         }
         //    if ("METHOD_DECLARATION".equals(name)) return new GoMethodDeclarationStubElementType(name);
         //    if ("IMPORT_SPEC".equals(name)) return new GoImportSpecStubElementType(name);

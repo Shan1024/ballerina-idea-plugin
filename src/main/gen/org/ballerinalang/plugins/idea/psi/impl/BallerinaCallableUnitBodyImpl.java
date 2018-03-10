@@ -49,8 +49,8 @@ public class BallerinaCallableUnitBodyImpl extends BallerinaCompositeElementImpl
 
   @Override
   @NotNull
-  public List<BallerinaEndpointDeclaration> getEndpointDeclarationList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaEndpointDeclaration.class);
+  public List<BallerinaEndpointDefinition> getEndpointDefinitionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaEndpointDefinition.class);
   }
 
   @Override

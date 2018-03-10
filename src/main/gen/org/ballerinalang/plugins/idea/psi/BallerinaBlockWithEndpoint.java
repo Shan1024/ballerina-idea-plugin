@@ -27,6 +27,6 @@ public interface BallerinaBlockWithEndpoint extends BallerinaCompositeElement {
   BallerinaBlock getBlock();
 
   @NotNull
-  List<BallerinaEndpointDeclaration> getEndpointDeclarationList();
+  List<BallerinaEndpointDefinition> getEndpointDefinitionList();
 
 }
