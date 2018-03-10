@@ -20,8 +20,10 @@ package org.ballerinalang.plugins.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.StubBasedPsiElement;
+import org.ballerinalang.plugins.idea.stubs.BallerinaConnectorDefinitionStub;
 
-public interface BallerinaConnectorDefinition extends BallerinaCompositeElement {
+public interface BallerinaConnectorDefinition extends BallerinaNamedElement, StubBasedPsiElement<BallerinaConnectorDefinitionStub> {
 
   @Nullable
   BallerinaConnectorBody getConnectorBody();

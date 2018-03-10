@@ -23,9 +23,11 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
+import org.ballerinalang.plugins.idea.psi.BallerinaConnectorDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaStructDefinition;
+import org.ballerinalang.plugins.idea.stubs.index.BallerinaConnectorIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaFunctionIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaGlobalVariableIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaStructIndex;
@@ -49,10 +51,14 @@ public class BallerinaReferenceCompletionProvider extends CompletionContributor 
                 StubIndex.getElements(BallerinaGlobalVariableIndex.KEY, "test", project, GlobalSearchScope.allScope
                         (project), BallerinaGlobalVariableDefinition.class);
 
+        Collection<BallerinaConnectorDefinition> ballerinaConnector = StubIndex.getElements(BallerinaConnectorIndex.KEY,
+                "test", project, GlobalSearchScope.allScope(project), BallerinaConnectorDefinition.class);
+
         Collection<String> allFunctions = StubIndex.getInstance().getAllKeys(BallerinaFunctionIndex.KEY, project);
         Collection<String> allStructs = StubIndex.getInstance().getAllKeys(BallerinaStructIndex.KEY, project);
         Collection<String> allGlobalVariables = StubIndex.getInstance().getAllKeys(BallerinaGlobalVariableIndex.KEY,
                 project);
+        Collection<String> allConnectors = StubIndex.getInstance().getAllKeys(BallerinaConnectorIndex.KEY, project);
 
         long start = System.currentTimeMillis();
 

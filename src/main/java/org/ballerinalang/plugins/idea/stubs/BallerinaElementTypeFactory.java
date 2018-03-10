@@ -19,6 +19,7 @@ package org.ballerinalang.plugins.idea.stubs;
 
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.util.containers.HashMap;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaConnectorDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaFunctionDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalVariableDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaStructDefinitionStubElementType;
@@ -58,6 +59,9 @@ public class BallerinaElementTypeFactory {
         }
         if ("GLOBAL_VARIABLE_DEFINITION".equals(name)) {
             return new BallerinaGlobalVariableDefinitionStubElementType(name);
+        }
+        if ("CONNECTOR_DEFINITION".equals(name)) {
+            return new BallerinaConnectorDefinitionStubElementType(name);
         }
         //    if ("METHOD_DECLARATION".equals(name)) return new GoMethodDeclarationStubElementType(name);
         //    if ("IMPORT_SPEC".equals(name)) return new GoImportSpecStubElementType(name);

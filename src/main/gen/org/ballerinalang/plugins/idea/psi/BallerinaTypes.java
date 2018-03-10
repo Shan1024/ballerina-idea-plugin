@@ -61,7 +61,7 @@ public interface BallerinaTypes {
   IElementType COMMENT = new BallerinaCompositeElementType("COMMENT");
   IElementType COMPLETE_PACKAGE_NAME = new BallerinaCompositeElementType("COMPLETE_PACKAGE_NAME");
   IElementType CONNECTOR_BODY = new BallerinaCompositeElementType("CONNECTOR_BODY");
-  IElementType CONNECTOR_DEFINITION = new BallerinaCompositeElementType("CONNECTOR_DEFINITION");
+  IElementType CONNECTOR_DEFINITION = BallerinaElementTypeFactory.stubFactory("CONNECTOR_DEFINITION");
   IElementType CONSTANT_DEFINITION = new BallerinaCompositeElementType("CONSTANT_DEFINITION");
   IElementType CONTENT = new BallerinaCompositeElementType("CONTENT");
   IElementType DEFINITION = new BallerinaCompositeElementType("DEFINITION");

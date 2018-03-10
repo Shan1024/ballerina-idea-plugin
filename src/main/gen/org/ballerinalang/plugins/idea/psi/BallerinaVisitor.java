@@ -166,6 +166,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitConnectorDefinition(@NotNull BallerinaConnectorDefinition o) {
+    visitNamedElement(o);
+  }
+
   public void visitConstantDefinition(@NotNull BallerinaConstantDefinition o) {
     visitCompositeElement(o);
   }
@@ -616,10 +620,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
 
   public void visitArrayTypeName(@NotNull BallerinaArrayTypeName o) {
     visitTypeName(o);
-  }
-
-  public void visitConnectorDefinition(@NotNull BallerinaConnectorDefinition o) {
-    visitCompositeElement(o);
   }
 
   public void visitDeprecatedAttachment(@NotNull BallerinaDeprecatedAttachment o) {

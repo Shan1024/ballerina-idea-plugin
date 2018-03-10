@@ -159,10 +159,10 @@
 
   extends("(AnyType|TypeType|ValueType|ReferenceType|arrayType)Name|BinaryAndExpression")=TypeName
 
-  implements("(Function|Struct|GlobalVariable)Definition")="org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
-  extends("(Function|Struct|GlobalVariable)Definition")="org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
+  implements("(Function|Struct|GlobalVariable|Connector)Definition")="org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+  extends("(Function|Struct|GlobalVariable|Connector)Definition")="org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
 
-  elementTypeFactory("(Function|Struct|GlobalVariable)Definition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
+  elementTypeFactory("(Function|Struct|GlobalVariable|Connector)Definition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
 
 //  implements("NameReference")="com.intellij.psi.PsiNameIdentifierOwner"
 
@@ -194,7 +194,7 @@ Alias ::= as identifier {pin=1}
 // Note - Global variable definition should be the first definition since it can contain identifier as type.
 Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment?
                (StructDefinition | GlobalVariableDefinition | ServiceDefinition | FunctionDefinition
-                | connectorDefinition | enumDefinition | AnnotationDefinition | TransformerDefinition
+                | ConnectorDefinition | enumDefinition | AnnotationDefinition | TransformerDefinition
                 | ConstantDefinition | GlobalEndpointDefinition) {recoverWhile=TopLevelDefinitionRecover}
 
 private TopLevelDefinitionRecover ::= !(service | function | connector | struct | enum | annotation | transformer | const | boolean | int | float | string | blob | identifier)
@@ -222,7 +222,7 @@ LambdaFunction ::= function LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS Re
 // Todo - cache. Signature owner
 CallableUnitSignature ::= identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ReturnParameters? {pin=1}
 
-connectorDefinition ::= (public)? connector identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ConnectorBody {pin=2}
+ConnectorDefinition ::= (public)? connector identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ConnectorBody {pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaConnectorDefinitionStub"}
 
 ConnectorBody ::= LEFT_BRACE EndpointDeclaration* VariableDefinitionStatement* ActionDefinition* RIGHT_BRACE
 

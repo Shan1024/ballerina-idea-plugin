@@ -111,6 +111,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == CONNECTOR_BODY) {
       r = ConnectorBody(b, 0);
     }
+    else if (t == CONNECTOR_DEFINITION) {
+      r = ConnectorDefinition(b, 0);
+    }
     else if (t == CONSTANT_DEFINITION) {
       r = ConstantDefinition(b, 0);
     }
@@ -380,9 +383,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     }
     else if (t == XML_TYPE_NAME) {
       r = XmlTypeName(b, 0);
-    }
-    else if (t == CONNECTOR_DEFINITION) {
-      r = connectorDefinition(b, 0);
     }
     else if (t == DEPRECATED_ATTACHMENT) {
       r = deprecatedAttachment(b, 0);
@@ -1191,6 +1191,37 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // (public)? connector identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ConnectorBody
+  public static boolean ConnectorDefinition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ConnectorDefinition")) return false;
+    if (!nextTokenIs(b, "<connector definition>", CONNECTOR, PUBLIC)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, CONNECTOR_DEFINITION, "<connector definition>");
+    r = ConnectorDefinition_0(b, l + 1);
+    r = r && consumeTokens(b, 1, CONNECTOR, IDENTIFIER, LEFT_PARENTHESIS);
+    p = r; // pin = 2
+    r = r && report_error_(b, ConnectorDefinition_4(b, l + 1));
+    r = p && report_error_(b, consumeToken(b, RIGHT_PARENTHESIS)) && r;
+    r = p && ConnectorBody(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // (public)?
+  private static boolean ConnectorDefinition_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ConnectorDefinition_0")) return false;
+    consumeToken(b, PUBLIC);
+    return true;
+  }
+
+  // ParameterList?
+  private static boolean ConnectorDefinition_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ConnectorDefinition_4")) return false;
+    ParameterList(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
   // (public)? const ValueTypeName identifier ASSIGN Expression SEMICOLON
   public static boolean ConstantDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ConstantDefinition")) return false;
@@ -1280,7 +1311,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // AnnotationAttachment* documentationAttachment? deprecatedAttachment?
   //                (StructDefinition | GlobalVariableDefinition | ServiceDefinition | FunctionDefinition
-  //                 | connectorDefinition | enumDefinition | AnnotationDefinition | TransformerDefinition
+  //                 | ConnectorDefinition | enumDefinition | AnnotationDefinition | TransformerDefinition
   //                 | ConstantDefinition | GlobalEndpointDefinition)
   public static boolean Definition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Definition")) return false;
@@ -1321,7 +1352,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   // StructDefinition | GlobalVariableDefinition | ServiceDefinition | FunctionDefinition
-  //                 | connectorDefinition | enumDefinition | AnnotationDefinition | TransformerDefinition
+  //                 | ConnectorDefinition | enumDefinition | AnnotationDefinition | TransformerDefinition
   //                 | ConstantDefinition | GlobalEndpointDefinition
   private static boolean Definition_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Definition_3")) return false;
@@ -1331,7 +1362,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = GlobalVariableDefinition(b, l + 1);
     if (!r) r = ServiceDefinition(b, l + 1);
     if (!r) r = FunctionDefinition(b, l + 1);
-    if (!r) r = connectorDefinition(b, l + 1);
+    if (!r) r = ConnectorDefinition(b, l + 1);
     if (!r) r = enumDefinition(b, l + 1);
     if (!r) r = AnnotationDefinition(b, l + 1);
     if (!r) r = TransformerDefinition(b, l + 1);
@@ -3906,37 +3937,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     r = r && consumeToken(b, RIGHT_BRACE);
     exit_section_(b, m, null, r);
     return r;
-  }
-
-  /* ********************************************************** */
-  // (public)? connector identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ConnectorBody
-  public static boolean connectorDefinition(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "connectorDefinition")) return false;
-    if (!nextTokenIs(b, "<connector definition>", CONNECTOR, PUBLIC)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, CONNECTOR_DEFINITION, "<connector definition>");
-    r = connectorDefinition_0(b, l + 1);
-    r = r && consumeTokens(b, 1, CONNECTOR, IDENTIFIER, LEFT_PARENTHESIS);
-    p = r; // pin = 2
-    r = r && report_error_(b, connectorDefinition_4(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, RIGHT_PARENTHESIS)) && r;
-    r = p && ConnectorBody(b, l + 1) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // (public)?
-  private static boolean connectorDefinition_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "connectorDefinition_0")) return false;
-    consumeToken(b, PUBLIC);
-    return true;
-  }
-
-  // ParameterList?
-  private static boolean connectorDefinition_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "connectorDefinition_4")) return false;
-    ParameterList(b, l + 1);
-    return true;
   }
 
   /* ********************************************************** */
