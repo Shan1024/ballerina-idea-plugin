@@ -24,9 +24,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
+import org.ballerinalang.plugins.idea.stubs.BallerinaEnumDefinitionStub;
 import org.ballerinalang.plugins.idea.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class BallerinaEnumDefinitionImpl extends BallerinaCompositeElementImpl implements BallerinaEnumDefinition {
+public class BallerinaEnumDefinitionImpl extends BallerinaNamedElementImpl<BallerinaEnumDefinitionStub> implements BallerinaEnumDefinition {
+
+  public BallerinaEnumDefinitionImpl(BallerinaEnumDefinitionStub stub, IStubElementType type) {
+    super(stub, type);
+  }
 
   public BallerinaEnumDefinitionImpl(ASTNode node) {
     super(node);

@@ -81,7 +81,7 @@ public interface BallerinaTypes {
   IElementType EMPTY_TAG = new BallerinaCompositeElementType("EMPTY_TAG");
   IElementType ENDPOINT_DECLARATION = new BallerinaCompositeElementType("ENDPOINT_DECLARATION");
   IElementType ENUMERATOR = new BallerinaCompositeElementType("ENUMERATOR");
-  IElementType ENUM_DEFINITION = new BallerinaCompositeElementType("ENUM_DEFINITION");
+  IElementType ENUM_DEFINITION = BallerinaElementTypeFactory.stubFactory("ENUM_DEFINITION");
   IElementType EXPRESSION = new BallerinaCompositeElementType("EXPRESSION");
   IElementType EXPRESSION_LIST = new BallerinaCompositeElementType("EXPRESSION_LIST");
   IElementType EXPRESSION_STMT = new BallerinaCompositeElementType("EXPRESSION_STMT");

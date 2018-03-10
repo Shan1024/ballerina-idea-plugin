@@ -159,10 +159,10 @@
 
   extends("(AnyType|TypeType|ValueType|ReferenceType|arrayType)Name|BinaryAndExpression")=TypeName
 
-  implements("(Function|Struct|GlobalVariable|Connector)Definition")="org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
-  extends("(Function|Struct|GlobalVariable|Connector)Definition")="org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
+  implements("(Function|Struct|GlobalVariable|Connector|Enum)Definition")="org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+  extends("(Function|Struct|GlobalVariable|Connector|Enum)Definition")="org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
 
-  elementTypeFactory("(Function|Struct|GlobalVariable|Connector)Definition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
+  elementTypeFactory("(Function|Struct|GlobalVariable|Connector|Enum)Definition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
 
 //  implements("NameReference")="com.intellij.psi.PsiNameIdentifierOwner"
 
@@ -194,7 +194,7 @@ Alias ::= as identifier {pin=1}
 // Note - Global variable definition should be the first definition since it can contain identifier as type.
 Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment?
                (StructDefinition | GlobalVariableDefinition | ServiceDefinition | FunctionDefinition
-                | ConnectorDefinition | enumDefinition | AnnotationDefinition | TransformerDefinition
+                | ConnectorDefinition | EnumDefinition | AnnotationDefinition | TransformerDefinition
                 | ConstantDefinition | GlobalEndpointDefinition) {recoverWhile=TopLevelDefinitionRecover}
 
 private TopLevelDefinitionRecover ::= !(service | function | connector | struct | enum | annotation | transformer | const | boolean | int | float | string | blob | identifier)
@@ -239,7 +239,7 @@ PrivateStructBody ::= private COLON FieldDefinition* {pin=1}
 
 AnnotationDefinition ::= (public)? annotation (LT AttachmentPoint (COMMA AttachmentPoint)* GT)?  identifier UserDefineTypeName? SEMICOLON {pin=2}
 
-enumDefinition ::= (public)? enum identifier LEFT_BRACE Enumerator (COMMA Enumerator)* RIGHT_BRACE {pin=2}
+EnumDefinition ::= (public)? enum identifier LEFT_BRACE Enumerator (COMMA Enumerator)* RIGHT_BRACE {pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaEnumDefinitionStub"}
 
 Enumerator ::= identifier
 

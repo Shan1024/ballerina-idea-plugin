@@ -138,6 +138,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == ENDPOINT_DECLARATION) {
       r = EndpointDeclaration(b, 0);
     }
+    else if (t == ENUM_DEFINITION) {
+      r = EnumDefinition(b, 0);
+    }
     else if (t == ENUMERATOR) {
       r = Enumerator(b, 0);
     }
@@ -413,9 +416,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     }
     else if (t == DOUBLE_BACK_TICK_DOC_INLINE_CODE) {
       r = doubleBackTickDocInlineCode(b, 0);
-    }
-    else if (t == ENUM_DEFINITION) {
-      r = enumDefinition(b, 0);
     }
     else if (t == ORG_NAME) {
       r = orgName(b, 0);
@@ -1311,7 +1311,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // AnnotationAttachment* documentationAttachment? deprecatedAttachment?
   //                (StructDefinition | GlobalVariableDefinition | ServiceDefinition | FunctionDefinition
-  //                 | ConnectorDefinition | enumDefinition | AnnotationDefinition | TransformerDefinition
+  //                 | ConnectorDefinition | EnumDefinition | AnnotationDefinition | TransformerDefinition
   //                 | ConstantDefinition | GlobalEndpointDefinition)
   public static boolean Definition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Definition")) return false;
@@ -1352,7 +1352,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   // StructDefinition | GlobalVariableDefinition | ServiceDefinition | FunctionDefinition
-  //                 | ConnectorDefinition | enumDefinition | AnnotationDefinition | TransformerDefinition
+  //                 | ConnectorDefinition | EnumDefinition | AnnotationDefinition | TransformerDefinition
   //                 | ConstantDefinition | GlobalEndpointDefinition
   private static boolean Definition_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Definition_3")) return false;
@@ -1363,7 +1363,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = ServiceDefinition(b, l + 1);
     if (!r) r = FunctionDefinition(b, l + 1);
     if (!r) r = ConnectorDefinition(b, l + 1);
-    if (!r) r = enumDefinition(b, l + 1);
+    if (!r) r = EnumDefinition(b, l + 1);
     if (!r) r = AnnotationDefinition(b, l + 1);
     if (!r) r = TransformerDefinition(b, l + 1);
     if (!r) r = ConstantDefinition(b, l + 1);
@@ -1502,6 +1502,53 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "EndpointDeclaration_4")) return false;
     RecordLiteral(b, l + 1);
     return true;
+  }
+
+  /* ********************************************************** */
+  // (public)? enum identifier LEFT_BRACE Enumerator (COMMA Enumerator)* RIGHT_BRACE
+  public static boolean EnumDefinition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EnumDefinition")) return false;
+    if (!nextTokenIs(b, "<enum definition>", ENUM, PUBLIC)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, ENUM_DEFINITION, "<enum definition>");
+    r = EnumDefinition_0(b, l + 1);
+    r = r && consumeTokens(b, 1, ENUM, IDENTIFIER, LEFT_BRACE);
+    p = r; // pin = 2
+    r = r && report_error_(b, Enumerator(b, l + 1));
+    r = p && report_error_(b, EnumDefinition_5(b, l + 1)) && r;
+    r = p && consumeToken(b, RIGHT_BRACE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // (public)?
+  private static boolean EnumDefinition_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EnumDefinition_0")) return false;
+    consumeToken(b, PUBLIC);
+    return true;
+  }
+
+  // (COMMA Enumerator)*
+  private static boolean EnumDefinition_5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EnumDefinition_5")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!EnumDefinition_5_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "EnumDefinition_5", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // COMMA Enumerator
+  private static boolean EnumDefinition_5_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EnumDefinition_5_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && Enumerator(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   /* ********************************************************** */
@@ -4275,53 +4322,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "doubleBackTickDocInlineCode_1")) return false;
     consumeToken(b, DOUBLEBACKTICKINLINECODE);
     return true;
-  }
-
-  /* ********************************************************** */
-  // (public)? enum identifier LEFT_BRACE Enumerator (COMMA Enumerator)* RIGHT_BRACE
-  public static boolean enumDefinition(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "enumDefinition")) return false;
-    if (!nextTokenIs(b, "<enum definition>", ENUM, PUBLIC)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, ENUM_DEFINITION, "<enum definition>");
-    r = enumDefinition_0(b, l + 1);
-    r = r && consumeTokens(b, 1, ENUM, IDENTIFIER, LEFT_BRACE);
-    p = r; // pin = 2
-    r = r && report_error_(b, Enumerator(b, l + 1));
-    r = p && report_error_(b, enumDefinition_5(b, l + 1)) && r;
-    r = p && consumeToken(b, RIGHT_BRACE) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // (public)?
-  private static boolean enumDefinition_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "enumDefinition_0")) return false;
-    consumeToken(b, PUBLIC);
-    return true;
-  }
-
-  // (COMMA Enumerator)*
-  private static boolean enumDefinition_5(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "enumDefinition_5")) return false;
-    int c = current_position_(b);
-    while (true) {
-      if (!enumDefinition_5_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "enumDefinition_5", c)) break;
-      c = current_position_(b);
-    }
-    return true;
-  }
-
-  // COMMA Enumerator
-  private static boolean enumDefinition_5_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "enumDefinition_5_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && Enumerator(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */

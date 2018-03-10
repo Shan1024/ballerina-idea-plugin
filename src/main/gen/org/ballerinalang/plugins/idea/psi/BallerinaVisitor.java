@@ -202,6 +202,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitEnumDefinition(@NotNull BallerinaEnumDefinition o) {
+    visitNamedElement(o);
+  }
+
   public void visitEnumerator(@NotNull BallerinaEnumerator o) {
     visitCompositeElement(o);
   }
@@ -659,10 +663,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitDoubleBackTickDocInlineCode(@NotNull BallerinaDoubleBackTickDocInlineCode o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitEnumDefinition(@NotNull BallerinaEnumDefinition o) {
     visitCompositeElement(o);
   }
 
