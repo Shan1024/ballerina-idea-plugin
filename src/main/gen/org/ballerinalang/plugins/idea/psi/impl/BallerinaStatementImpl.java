@@ -55,12 +55,6 @@ public class BallerinaStatementImpl extends BallerinaCompositeElementImpl implem
 
   @Override
   @Nullable
-  public BallerinaBindStatement getBindStatement() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaBindStatement.class);
-  }
-
-  @Override
-  @Nullable
   public BallerinaBreakStatement getBreakStatement() {
     return PsiTreeUtil.getChildOfType(this, BallerinaBreakStatement.class);
   }

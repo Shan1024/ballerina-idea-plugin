@@ -43,6 +43,12 @@ public class BallerinaVariableDefinitionStatementImpl extends BallerinaComposite
 
   @Override
   @Nullable
+  public BallerinaActionInvocation getActionInvocation() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaActionInvocation.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaExpression getExpression() {
     return PsiTreeUtil.getChildOfType(this, BallerinaExpression.class);
   }

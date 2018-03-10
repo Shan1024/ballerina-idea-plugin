@@ -24,6 +24,9 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaServiceDefinition extends BallerinaCompositeElement {
 
   @Nullable
+  BallerinaNameReference getNameReference();
+
+  @Nullable
   BallerinaServiceBody getServiceBody();
 
   @Nullable
@@ -31,6 +34,9 @@ public interface BallerinaServiceDefinition extends BallerinaCompositeElement {
 
   @Nullable
   PsiElement getLt();
+
+  @Nullable
+  PsiElement getIdentifier();
 
   @NotNull
   PsiElement getService();

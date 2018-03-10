@@ -42,9 +42,9 @@ public class BallerinaInvocationImpl extends BallerinaCompositeElementImpl imple
   }
 
   @Override
-  @NotNull
+  @Nullable
   public BallerinaAnyIdentifierName getAnyIdentifierName() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaAnyIdentifierName.class));
+    return PsiTreeUtil.getChildOfType(this, BallerinaAnyIdentifierName.class);
   }
 
   @Override
@@ -60,15 +60,15 @@ public class BallerinaInvocationImpl extends BallerinaCompositeElementImpl imple
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getLeftParenthesis() {
-    return notNullChild(findChildByType(LEFT_PARENTHESIS));
+    return findChildByType(LEFT_PARENTHESIS);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getRightParenthesis() {
-    return notNullChild(findChildByType(RIGHT_PARENTHESIS));
+    return findChildByType(RIGHT_PARENTHESIS);
   }
 
 }

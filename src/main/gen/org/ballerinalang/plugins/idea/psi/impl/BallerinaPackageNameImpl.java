@@ -41,4 +41,10 @@ public class BallerinaPackageNameImpl extends BallerinaCompositeElementImpl impl
     else super.accept(visitor);
   }
 
+  @Override
+  @NotNull
+  public PsiElement getIdentifier() {
+    return notNullChild(findChildByType(IDENTIFIER));
+  }
+
 }

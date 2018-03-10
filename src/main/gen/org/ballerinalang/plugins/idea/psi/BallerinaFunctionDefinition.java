@@ -32,7 +32,13 @@ public interface BallerinaFunctionDefinition extends BallerinaNamedElement, Stub
   BallerinaCallableUnitSignature getCallableUnitSignature();
 
   @Nullable
-  BallerinaReceiver getReceiver();
+  BallerinaParameter getParameter();
+
+  @Nullable
+  PsiElement getGt();
+
+  @Nullable
+  PsiElement getLt();
 
   @Nullable
   PsiElement getSemicolon();

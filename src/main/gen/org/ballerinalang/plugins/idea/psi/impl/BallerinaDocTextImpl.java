@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaAnnotationAttributeListImpl extends BallerinaCompositeElementImpl implements BallerinaAnnotationAttributeList {
+public class BallerinaDocTextImpl extends BallerinaCompositeElementImpl implements BallerinaDocText {
 
-  public BallerinaAnnotationAttributeListImpl(ASTNode node) {
+  public BallerinaDocTextImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitAnnotationAttributeList(this);
+    visitor.visitDocText(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -43,8 +43,8 @@ public class BallerinaAnnotationAttributeListImpl extends BallerinaCompositeElem
 
   @Override
   @NotNull
-  public List<BallerinaAnnotationAttribute> getAnnotationAttributeList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaAnnotationAttribute.class);
+  public List<BallerinaDocumentationTemplateInlineCode> getDocumentationTemplateInlineCodeList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaDocumentationTemplateInlineCode.class);
   }
 
 }

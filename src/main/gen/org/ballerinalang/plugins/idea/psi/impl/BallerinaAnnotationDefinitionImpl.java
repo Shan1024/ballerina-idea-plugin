@@ -42,27 +42,39 @@ public class BallerinaAnnotationDefinitionImpl extends BallerinaCompositeElement
   }
 
   @Override
-  @Nullable
-  public BallerinaAnnotationBody getAnnotationBody() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaAnnotationBody.class);
-  }
-
-  @Override
   @NotNull
   public List<BallerinaAttachmentPoint> getAttachmentPointList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaAttachmentPoint.class);
   }
 
   @Override
-  @NotNull
-  public PsiElement getAnnotation() {
-    return notNullChild(findChildByType(ANNOTATION));
+  @Nullable
+  public BallerinaUserDefineTypeName getUserDefineTypeName() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaUserDefineTypeName.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getAttach() {
-    return findChildByType(ATTACH);
+  public PsiElement getGt() {
+    return findChildByType(GT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLt() {
+    return findChildByType(LT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getAnnotation() {
+    return notNullChild(findChildByType(ANNOTATION));
   }
 
   @Override

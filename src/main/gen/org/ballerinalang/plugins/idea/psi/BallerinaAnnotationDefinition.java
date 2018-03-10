@@ -23,17 +23,23 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaAnnotationDefinition extends BallerinaCompositeElement {
 
-  @Nullable
-  BallerinaAnnotationBody getAnnotationBody();
-
   @NotNull
   List<BallerinaAttachmentPoint> getAttachmentPointList();
 
-  @NotNull
-  PsiElement getAnnotation();
+  @Nullable
+  BallerinaUserDefineTypeName getUserDefineTypeName();
 
   @Nullable
-  PsiElement getAttach();
+  PsiElement getGt();
+
+  @Nullable
+  PsiElement getLt();
+
+  @Nullable
+  PsiElement getSemicolon();
+
+  @NotNull
+  PsiElement getAnnotation();
 
   @Nullable
   PsiElement getIdentifier();

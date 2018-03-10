@@ -61,6 +61,18 @@ public class BallerinaActionDefinitionImpl extends BallerinaCompositeElementImpl
 
   @Override
   @Nullable
+  public BallerinaDeprecatedAttachment getDeprecatedAttachment() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaDeprecatedAttachment.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaDocumentationAttachment getDocumentationAttachment() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaDocumentationAttachment.class);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
   }

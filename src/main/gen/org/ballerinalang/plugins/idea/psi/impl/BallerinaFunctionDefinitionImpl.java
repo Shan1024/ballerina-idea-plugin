@@ -61,8 +61,20 @@ public class BallerinaFunctionDefinitionImpl extends BallerinaNamedElementImpl<B
 
   @Override
   @Nullable
-  public BallerinaReceiver getReceiver() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaReceiver.class);
+  public BallerinaParameter getParameter() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaParameter.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getGt() {
+    return findChildByType(GT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLt() {
+    return findChildByType(LT);
   }
 
   @Override

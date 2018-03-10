@@ -42,39 +42,45 @@ public class BallerinaEndpointDeclarationImpl extends BallerinaCompositeElementI
   }
 
   @Override
+  @NotNull
+  public List<BallerinaAnnotationAttachment> getAnnotationAttachmentList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaAnnotationAttachment.class);
+  }
+
+  @Override
   @Nullable
-  public BallerinaConnectorInit getConnectorInit() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaConnectorInit.class);
+  public BallerinaNameReference getNameReference() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaNameReference.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaRecordLiteral getRecordLiteral() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaRecordLiteral.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getGt() {
+    return findChildByType(GT);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLt() {
+    return findChildByType(LT);
   }
 
   @Override
   @NotNull
-  public BallerinaEndpointDefinition getEndpointDefinition() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaEndpointDefinition.class));
+  public PsiElement getEndpoint() {
+    return notNullChild(findChildByType(ENDPOINT));
   }
 
   @Override
   @Nullable
-  public BallerinaVariableReference getVariableReference() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaVariableReference.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLeftBrace() {
-    return findChildByType(LEFT_BRACE);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRightBrace() {
-    return findChildByType(RIGHT_BRACE);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getSemicolon() {
-    return findChildByType(SEMICOLON);
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
   }
 
 }

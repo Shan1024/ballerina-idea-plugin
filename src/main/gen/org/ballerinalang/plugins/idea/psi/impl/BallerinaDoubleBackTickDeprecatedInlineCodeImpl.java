@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaReceiverImpl extends BallerinaCompositeElementImpl implements BallerinaReceiver {
+public class BallerinaDoubleBackTickDeprecatedInlineCodeImpl extends BallerinaCompositeElementImpl implements BallerinaDoubleBackTickDeprecatedInlineCode {
 
-  public BallerinaReceiverImpl(ASTNode node) {
+  public BallerinaDoubleBackTickDeprecatedInlineCodeImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitReceiver(this);
+    visitor.visitDoubleBackTickDeprecatedInlineCode(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -43,20 +43,20 @@ public class BallerinaReceiverImpl extends BallerinaCompositeElementImpl impleme
 
   @Override
   @NotNull
-  public BallerinaParameter getParameter() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaParameter.class));
+  public PsiElement getDBDeprecatedInlineCodeStart() {
+    return notNullChild(findChildByType(DBDEPRECATEDINLINECODESTART));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getDoubleBackTickInlineCode() {
+    return findChildByType(DOUBLEBACKTICKINLINECODE);
   }
 
   @Override
   @NotNull
-  public PsiElement getGt() {
-    return notNullChild(findChildByType(GT));
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getLt() {
-    return notNullChild(findChildByType(LT));
+  public PsiElement getDoubleBackTickInlineCodeEnd() {
+    return notNullChild(findChildByType(DOUBLEBACKTICKINLINECODEEND));
   }
 
 }

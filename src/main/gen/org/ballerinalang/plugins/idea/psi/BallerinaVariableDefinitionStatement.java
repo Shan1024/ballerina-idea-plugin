@@ -24,6 +24,9 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaVariableDefinitionStatement extends BallerinaCompositeElement {
 
   @Nullable
+  BallerinaActionInvocation getActionInvocation();
+
+  @Nullable
   BallerinaExpression getExpression();
 
   @NotNull

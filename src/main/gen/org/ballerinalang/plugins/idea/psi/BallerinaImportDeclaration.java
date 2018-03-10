@@ -27,10 +27,7 @@ public interface BallerinaImportDeclaration extends BallerinaCompositeElement {
   BallerinaAlias getAlias();
 
   @Nullable
-  BallerinaPackageName getPackageName();
-
-  @Nullable
-  BallerinaPackageVersion getPackageVersion();
+  BallerinaCompletePackageName getCompletePackageName();
 
   @Nullable
   BallerinaOrgName getOrgName();

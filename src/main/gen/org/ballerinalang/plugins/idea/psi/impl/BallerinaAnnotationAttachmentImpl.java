@@ -42,33 +42,21 @@ public class BallerinaAnnotationAttachmentImpl extends BallerinaCompositeElement
   }
 
   @Override
-  @Nullable
+  @NotNull
   public BallerinaNameReference getNameReference() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaNameReference.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaNameReference.class));
   }
 
   @Override
   @Nullable
-  public BallerinaAnnotationAttributeList getAnnotationAttributeList() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaAnnotationAttributeList.class);
+  public BallerinaRecordLiteral getRecordLiteral() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaRecordLiteral.class);
   }
 
   @Override
   @NotNull
   public PsiElement getAt() {
     return notNullChild(findChildByType(AT));
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLeftBrace() {
-    return findChildByType(LEFT_BRACE);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRightBrace() {
-    return findChildByType(RIGHT_BRACE);
   }
 
 }

@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaAnnotationAttributeArrayImpl extends BallerinaCompositeElementImpl implements BallerinaAnnotationAttributeArray {
+public class BallerinaDocumentationTemplateAttributeDescriptionImpl extends BallerinaCompositeElementImpl implements BallerinaDocumentationTemplateAttributeDescription {
 
-  public BallerinaAnnotationAttributeArrayImpl(ASTNode node) {
+  public BallerinaDocumentationTemplateAttributeDescriptionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitAnnotationAttributeArray(this);
+    visitor.visitDocumentationTemplateAttributeDescription(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -42,21 +42,27 @@ public class BallerinaAnnotationAttributeArrayImpl extends BallerinaCompositeEle
   }
 
   @Override
-  @NotNull
-  public List<BallerinaAnnotationAttributeValue> getAnnotationAttributeValueList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaAnnotationAttributeValue.class);
+  @Nullable
+  public BallerinaDocText getDocText() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaDocText.class);
   }
 
   @Override
   @NotNull
-  public PsiElement getLeftBracket() {
-    return notNullChild(findChildByType(LEFT_BRACKET));
+  public PsiElement getDocumentationTemplateAttributeEnd() {
+    return notNullChild(findChildByType(DOCUMENTATIONTEMPLATEATTRIBUTEEND));
   }
 
   @Override
   @NotNull
-  public PsiElement getRightBracket() {
-    return notNullChild(findChildByType(RIGHT_BRACKET));
+  public PsiElement getDocumentationTemplateAttributeStart() {
+    return notNullChild(findChildByType(DOCUMENTATIONTEMPLATEATTRIBUTESTART));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getIdentifier() {
+    return notNullChild(findChildByType(IDENTIFIER));
   }
 
 }

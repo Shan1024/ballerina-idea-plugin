@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaEndpointDefinitionImpl extends BallerinaCompositeElementImpl implements BallerinaEndpointDefinition {
+public class BallerinaDoubleBackTickDocInlineCodeImpl extends BallerinaCompositeElementImpl implements BallerinaDoubleBackTickDocInlineCode {
 
-  public BallerinaEndpointDefinitionImpl(ASTNode node) {
+  public BallerinaDoubleBackTickDocInlineCodeImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitEndpointDefinition(this);
+    visitor.visitDoubleBackTickDocInlineCode(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -42,33 +42,21 @@ public class BallerinaEndpointDefinitionImpl extends BallerinaCompositeElementIm
   }
 
   @Override
-  @Nullable
-  public BallerinaNameReference getNameReference() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaNameReference.class);
+  @NotNull
+  public PsiElement getDBDocInlineCodeStart() {
+    return notNullChild(findChildByType(DBDOCINLINECODESTART));
   }
 
   @Override
   @Nullable
-  public PsiElement getGt() {
-    return findChildByType(GT);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLt() {
-    return findChildByType(LT);
+  public PsiElement getDoubleBackTickInlineCode() {
+    return findChildByType(DOUBLEBACKTICKINLINECODE);
   }
 
   @Override
   @NotNull
-  public PsiElement getEndpoint() {
-    return notNullChild(findChildByType(ENDPOINT));
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
+  public PsiElement getDoubleBackTickInlineCodeEnd() {
+    return notNullChild(findChildByType(DOUBLEBACKTICKINLINECODEEND));
   }
 
 }

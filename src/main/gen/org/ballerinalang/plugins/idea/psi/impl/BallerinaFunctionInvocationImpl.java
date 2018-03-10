@@ -60,9 +60,9 @@ public class BallerinaFunctionInvocationImpl extends BallerinaCompositeElementIm
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getRightParenthesis() {
-    return findChildByType(RIGHT_PARENTHESIS);
+    return notNullChild(findChildByType(RIGHT_PARENTHESIS));
   }
 
 }

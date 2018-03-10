@@ -55,12 +55,6 @@ public class BallerinaFunctionTypeNameImpl extends BallerinaCompositeElementImpl
 
   @Override
   @NotNull
-  public List<BallerinaTypeName> getTypeNameList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaTypeName.class);
-  }
-
-  @Override
-  @NotNull
   public PsiElement getLeftParenthesis() {
     return notNullChild(findChildByType(LEFT_PARENTHESIS));
   }
@@ -69,6 +63,12 @@ public class BallerinaFunctionTypeNameImpl extends BallerinaCompositeElementImpl
   @Nullable
   public PsiElement getRightParenthesis() {
     return findChildByType(RIGHT_PARENTHESIS);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getTypeList() {
+    return findChildByType(TYPELIST);
   }
 
   @Override

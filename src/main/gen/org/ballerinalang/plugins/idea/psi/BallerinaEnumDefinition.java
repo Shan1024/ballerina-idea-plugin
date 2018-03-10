@@ -26,16 +26,16 @@ public interface BallerinaEnumDefinition extends BallerinaCompositeElement {
   @NotNull
   List<BallerinaEnumerator> getEnumeratorList();
 
-  @NotNull
+  @Nullable
   PsiElement getLeftBrace();
 
-  @NotNull
+  @Nullable
   PsiElement getRightBrace();
 
   @NotNull
   PsiElement getEnum();
 
-  @NotNull
+  @Nullable
   PsiElement getIdentifier();
 
   @Nullable

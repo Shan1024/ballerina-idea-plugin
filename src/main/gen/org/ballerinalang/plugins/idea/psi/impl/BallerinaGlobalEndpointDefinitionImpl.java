@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaAnnotationAttributeValueImpl extends BallerinaCompositeElementImpl implements BallerinaAnnotationAttributeValue {
+public class BallerinaGlobalEndpointDefinitionImpl extends BallerinaCompositeElementImpl implements BallerinaGlobalEndpointDefinition {
 
-  public BallerinaAnnotationAttributeValueImpl(ASTNode node) {
+  public BallerinaGlobalEndpointDefinitionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitAnnotationAttributeValue(this);
+    visitor.visitGlobalEndpointDefinition(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -42,27 +42,15 @@ public class BallerinaAnnotationAttributeValueImpl extends BallerinaCompositeEle
   }
 
   @Override
-  @Nullable
-  public BallerinaAnnotationAttachment getAnnotationAttachment() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaAnnotationAttachment.class);
+  @NotNull
+  public BallerinaEndpointDeclaration getEndpointDeclaration() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaEndpointDeclaration.class));
   }
 
   @Override
   @Nullable
-  public BallerinaAnnotationAttributeArray getAnnotationAttributeArray() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaAnnotationAttributeArray.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaNameReference getNameReference() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaNameReference.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaSimpleLiteral getSimpleLiteral() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaSimpleLiteral.class);
+  public PsiElement getPublic() {
+    return findChildByType(PUBLIC);
   }
 
 }

@@ -48,9 +48,9 @@ public class BallerinaPrivateStructBodyImpl extends BallerinaCompositeElementImp
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getColon() {
-    return notNullChild(findChildByType(COLON));
+    return findChildByType(COLON);
   }
 
   @Override

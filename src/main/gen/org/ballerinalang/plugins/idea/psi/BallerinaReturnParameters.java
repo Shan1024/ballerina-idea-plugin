@@ -26,8 +26,8 @@ public interface BallerinaReturnParameters extends BallerinaCompositeElement {
   @Nullable
   BallerinaParameterList getParameterList();
 
-  @NotNull
-  List<BallerinaTypeName> getTypeNameList();
+  @Nullable
+  BallerinaParameterTypeNameList getParameterTypeNameList();
 
   @NotNull
   PsiElement getLeftParenthesis();

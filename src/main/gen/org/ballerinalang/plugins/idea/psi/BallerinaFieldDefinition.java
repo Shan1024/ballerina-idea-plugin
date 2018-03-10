@@ -32,10 +32,10 @@ public interface BallerinaFieldDefinition extends BallerinaCompositeElement {
   @Nullable
   PsiElement getAssign();
 
-  @NotNull
+  @Nullable
   PsiElement getSemicolon();
 
-  @NotNull
+  @Nullable
   PsiElement getIdentifier();
 
 }

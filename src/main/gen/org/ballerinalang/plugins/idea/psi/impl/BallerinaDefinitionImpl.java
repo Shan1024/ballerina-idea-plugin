@@ -67,6 +67,12 @@ public class BallerinaDefinitionImpl extends BallerinaCompositeElementImpl imple
 
   @Override
   @Nullable
+  public BallerinaGlobalEndpointDefinition getGlobalEndpointDefinition() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaGlobalEndpointDefinition.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaGlobalVariableDefinition getGlobalVariableDefinition() {
     return PsiTreeUtil.getChildOfType(this, BallerinaGlobalVariableDefinition.class);
   }
@@ -93,6 +99,18 @@ public class BallerinaDefinitionImpl extends BallerinaCompositeElementImpl imple
   @Nullable
   public BallerinaConnectorDefinition getConnectorDefinition() {
     return PsiTreeUtil.getChildOfType(this, BallerinaConnectorDefinition.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaDeprecatedAttachment getDeprecatedAttachment() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaDeprecatedAttachment.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaDocumentationAttachment getDocumentationAttachment() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaDocumentationAttachment.class);
   }
 
   @Override

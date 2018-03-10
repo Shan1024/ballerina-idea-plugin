@@ -23,22 +23,25 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaEndpointDeclaration extends BallerinaCompositeElement {
 
+  @NotNull
+  List<BallerinaAnnotationAttachment> getAnnotationAttachmentList();
+
   @Nullable
-  BallerinaConnectorInit getConnectorInit();
+  BallerinaNameReference getNameReference();
+
+  @Nullable
+  BallerinaRecordLiteral getRecordLiteral();
+
+  @Nullable
+  PsiElement getGt();
+
+  @Nullable
+  PsiElement getLt();
 
   @NotNull
-  BallerinaEndpointDefinition getEndpointDefinition();
+  PsiElement getEndpoint();
 
   @Nullable
-  BallerinaVariableReference getVariableReference();
-
-  @Nullable
-  PsiElement getLeftBrace();
-
-  @Nullable
-  PsiElement getRightBrace();
-
-  @Nullable
-  PsiElement getSemicolon();
+  PsiElement getIdentifier();
 
 }

@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaConnectorInitImpl extends BallerinaCompositeElementImpl implements BallerinaConnectorInit {
+public class BallerinaParameterTypeNameListImpl extends BallerinaCompositeElementImpl implements BallerinaParameterTypeNameList {
 
-  public BallerinaConnectorInitImpl(ASTNode node) {
+  public BallerinaParameterTypeNameListImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitConnectorInit(this);
+    visitor.visitParameterTypeNameList(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -42,33 +42,9 @@ public class BallerinaConnectorInitImpl extends BallerinaCompositeElementImpl im
   }
 
   @Override
-  @Nullable
-  public BallerinaExpressionList getExpressionList() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaExpressionList.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaUserDefineTypeName getUserDefineTypeName() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaUserDefineTypeName.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLeftParenthesis() {
-    return findChildByType(LEFT_PARENTHESIS);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRightParenthesis() {
-    return findChildByType(RIGHT_PARENTHESIS);
-  }
-
-  @Override
   @NotNull
-  public PsiElement getCreate() {
-    return notNullChild(findChildByType(CREATE));
+  public List<BallerinaParameterTypeName> getParameterTypeNameList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaParameterTypeName.class);
   }
 
 }

@@ -24,10 +24,7 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaPackageDeclaration extends BallerinaCompositeElement {
 
   @Nullable
-  BallerinaPackageName getPackageName();
-
-  @Nullable
-  BallerinaPackageVersion getPackageVersion();
+  BallerinaCompletePackageName getCompletePackageName();
 
   @Nullable
   PsiElement getSemicolon();

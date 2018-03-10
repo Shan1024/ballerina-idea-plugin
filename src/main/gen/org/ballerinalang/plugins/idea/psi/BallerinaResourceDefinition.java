@@ -33,6 +33,12 @@ public interface BallerinaResourceDefinition extends BallerinaCompositeElement {
   BallerinaParameterList getParameterList();
 
   @Nullable
+  BallerinaDeprecatedAttachment getDeprecatedAttachment();
+
+  @Nullable
+  BallerinaDocumentationAttachment getDocumentationAttachment();
+
+  @Nullable
   PsiElement getLeftParenthesis();
 
   @Nullable

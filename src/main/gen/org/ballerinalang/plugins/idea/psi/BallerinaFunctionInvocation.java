@@ -32,7 +32,7 @@ public interface BallerinaFunctionInvocation extends BallerinaCompositeElement {
   @NotNull
   PsiElement getLeftParenthesis();
 
-  @Nullable
+  @NotNull
   PsiElement getRightParenthesis();
 
 }

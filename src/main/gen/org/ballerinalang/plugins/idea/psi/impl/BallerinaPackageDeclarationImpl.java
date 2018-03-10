@@ -43,14 +43,8 @@ public class BallerinaPackageDeclarationImpl extends BallerinaCompositeElementIm
 
   @Override
   @Nullable
-  public BallerinaPackageName getPackageName() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaPackageName.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaPackageVersion getPackageVersion() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaPackageVersion.class);
+  public BallerinaCompletePackageName getCompletePackageName() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaCompletePackageName.class);
   }
 
   @Override

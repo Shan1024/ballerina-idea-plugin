@@ -61,6 +61,18 @@ public class BallerinaResourceDefinitionImpl extends BallerinaCompositeElementIm
 
   @Override
   @Nullable
+  public BallerinaDeprecatedAttachment getDeprecatedAttachment() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaDeprecatedAttachment.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaDocumentationAttachment getDocumentationAttachment() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaDocumentationAttachment.class);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getLeftParenthesis() {
     return findChildByType(LEFT_PARENTHESIS);
   }

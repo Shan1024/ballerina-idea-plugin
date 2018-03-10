@@ -23,7 +23,10 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaExpressionStmt extends BallerinaCompositeElement {
 
-  @NotNull
+  @Nullable
+  BallerinaActionInvocation getActionInvocation();
+
+  @Nullable
   BallerinaVariableReference getVariableReference();
 
   @NotNull

@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaAnnotationBodyImpl extends BallerinaCompositeElementImpl implements BallerinaAnnotationBody {
+public class BallerinaTripleBackTickDeprecatedInlineCodeImpl extends BallerinaCompositeElementImpl implements BallerinaTripleBackTickDeprecatedInlineCode {
 
-  public BallerinaAnnotationBodyImpl(ASTNode node) {
+  public BallerinaTripleBackTickDeprecatedInlineCodeImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitAnnotationBody(this);
+    visitor.visitTripleBackTickDeprecatedInlineCode(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -43,20 +43,20 @@ public class BallerinaAnnotationBodyImpl extends BallerinaCompositeElementImpl i
 
   @Override
   @NotNull
-  public List<BallerinaFieldDefinition> getFieldDefinitionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaFieldDefinition.class);
+  public PsiElement getTBDeprecatedInlineCodeStart() {
+    return notNullChild(findChildByType(TBDEPRECATEDINLINECODESTART));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getTripleBackTickInlineCode() {
+    return findChildByType(TRIPLEBACKTICKINLINECODE);
   }
 
   @Override
   @NotNull
-  public PsiElement getLeftBrace() {
-    return notNullChild(findChildByType(LEFT_BRACE));
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getRightBrace() {
-    return notNullChild(findChildByType(RIGHT_BRACE));
+  public PsiElement getTripleBackTickInlineCodeEnd() {
+    return notNullChild(findChildByType(TRIPLEBACKTICKINLINECODEEND));
   }
 
 }

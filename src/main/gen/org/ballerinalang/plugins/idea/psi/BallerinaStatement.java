@@ -30,9 +30,6 @@ public interface BallerinaStatement extends BallerinaCompositeElement {
   BallerinaAssignmentStatement getAssignmentStatement();
 
   @Nullable
-  BallerinaBindStatement getBindStatement();
-
-  @Nullable
   BallerinaBreakStatement getBreakStatement();
 
   @Nullable

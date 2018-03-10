@@ -48,9 +48,9 @@ public class BallerinaFieldImpl extends BallerinaCompositeElementImpl implements
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getIdentifier() {
-    return notNullChild(findChildByType(IDENTIFIER));
+    return findChildByType(IDENTIFIER);
   }
 
 }

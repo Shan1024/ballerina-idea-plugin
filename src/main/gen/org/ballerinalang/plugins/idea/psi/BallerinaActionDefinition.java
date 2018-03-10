@@ -33,6 +33,12 @@ public interface BallerinaActionDefinition extends BallerinaCompositeElement {
   BallerinaCallableUnitSignature getCallableUnitSignature();
 
   @Nullable
+  BallerinaDeprecatedAttachment getDeprecatedAttachment();
+
+  @Nullable
+  BallerinaDocumentationAttachment getDocumentationAttachment();
+
+  @Nullable
   PsiElement getSemicolon();
 
   @NotNull

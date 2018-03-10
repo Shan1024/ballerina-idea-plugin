@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaConnectorInitExpressionImpl extends BallerinaExpressionImpl implements BallerinaConnectorInitExpression {
+public class BallerinaSingleBackTickDocInlineCodeImpl extends BallerinaCompositeElementImpl implements BallerinaSingleBackTickDocInlineCode {
 
-  public BallerinaConnectorInitExpressionImpl(ASTNode node) {
+  public BallerinaSingleBackTickDocInlineCodeImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitConnectorInitExpression(this);
+    visitor.visitSingleBackTickDocInlineCode(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -43,8 +43,20 @@ public class BallerinaConnectorInitExpressionImpl extends BallerinaExpressionImp
 
   @Override
   @NotNull
-  public BallerinaConnectorInit getConnectorInit() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaConnectorInit.class));
+  public PsiElement getSBDocInlineCodeStart() {
+    return notNullChild(findChildByType(SBDOCINLINECODESTART));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSingleBackTickInlineCode() {
+    return findChildByType(SINGLEBACKTICKINLINECODE);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getSingleBackTickInlineCodeEnd() {
+    return notNullChild(findChildByType(SINGLEBACKTICKINLINECODEEND));
   }
 
 }
