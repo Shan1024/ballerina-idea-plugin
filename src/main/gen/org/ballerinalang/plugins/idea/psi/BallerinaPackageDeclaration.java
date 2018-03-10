@@ -20,8 +20,10 @@ package org.ballerinalang.plugins.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.StubBasedPsiElement;
+import org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub;
 
-public interface BallerinaPackageDeclaration extends BallerinaCompositeElement {
+public interface BallerinaPackageDeclaration extends BallerinaCompositeElement, StubBasedPsiElement<BallerinaPackageDeclarationStub> {
 
   @Nullable
   BallerinaCompletePackageName getCompletePackageName();
@@ -31,5 +33,8 @@ public interface BallerinaPackageDeclaration extends BallerinaCompositeElement {
 
   @NotNull
   PsiElement getPackage();
+
+  @Nullable
+  String getName();
 
 }

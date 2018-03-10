@@ -118,7 +118,7 @@ public interface BallerinaTypes {
   IElementType NAME_REFERENCE = new BallerinaCompositeElementType("NAME_REFERENCE");
   IElementType NEXT_STATEMENT = new BallerinaCompositeElementType("NEXT_STATEMENT");
   IElementType ORG_NAME = new BallerinaCompositeElementType("ORG_NAME");
-  IElementType PACKAGE_DECLARATION = new BallerinaCompositeElementType("PACKAGE_DECLARATION");
+  IElementType PACKAGE_DECLARATION = BallerinaElementTypeFactory.stubFactory("PACKAGE_DECLARATION");
   IElementType PACKAGE_NAME = new BallerinaCompositeElementType("PACKAGE_NAME");
   IElementType PACKAGE_REFERENCE = new BallerinaCompositeElementType("PACKAGE_REFERENCE");
   IElementType PACKAGE_VERSION = new BallerinaCompositeElementType("PACKAGE_VERSION");

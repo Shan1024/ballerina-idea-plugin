@@ -28,6 +28,7 @@ import org.ballerinalang.plugins.idea.stubs.types.BallerinaEnumDefinitionStubEle
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaFunctionDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalEndpointDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalVariableDefinitionStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageDeclarationStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaStructDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaTransformerDefinitionStubElementType;
 import org.jetbrains.annotations.NotNull;
@@ -56,6 +57,9 @@ public class BallerinaElementTypeFactory {
 
     public static IStubElementType stubFactory(@NotNull String name) {
         // Note - If the element type is wrong, an error will occur while loading the lexer in syntax highlighting.
+        if ("PACKAGE_DECLARATION".equals(name)) {
+            return BallerinaPackageDeclarationStubElementType.INSTANCE;
+        }
         if ("FUNCTION_DEFINITION".equals(name)) {
             return new BallerinaFunctionDefinitionStubElementType(name);
         }

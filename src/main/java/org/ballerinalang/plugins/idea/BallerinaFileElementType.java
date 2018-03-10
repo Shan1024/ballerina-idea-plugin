@@ -17,6 +17,7 @@
 
 package org.ballerinalang.plugins.idea;
 
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.StubBuilder;
 import com.intellij.psi.stubs.DefaultStubBuilder;
@@ -27,6 +28,7 @@ import com.intellij.psi.stubs.StubOutputStream;
 import com.intellij.psi.tree.IStubFileElementType;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.stubs.BallerinaFileStub;
+import org.ballerinalang.plugins.idea.stubs.index.BallerinaPackageIndex;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
@@ -34,7 +36,7 @@ import java.io.IOException;
 public class BallerinaFileElementType extends IStubFileElementType<BallerinaFileStub> {
 
     public static final IStubFileElementType INSTANCE = new BallerinaFileElementType();
-    public static final int VERSION = 3;
+    public static final int VERSION = 1;
 
     private BallerinaFileElementType() {
         super("BALLERINA_FILE", BallerinaLanguage.INSTANCE);
@@ -63,15 +65,15 @@ public class BallerinaFileElementType extends IStubFileElementType<BallerinaFile
     @Override
     public void indexStub(@NotNull BallerinaFileStub stub, @NotNull IndexSink sink) {
         super.indexStub(stub, sink);
-        //        String packageName = stub.getPackageName();
-        //        if (StringUtil.isNotEmpty(packageName)) {
-        //            sink.occurrence(BallerinaPackagesIndex.KEY, packageName);
-        //        }
+        String packageName = stub.getPackageName();
+        if (StringUtil.isNotEmpty(packageName)) {
+            sink.occurrence(BallerinaPackageIndex.KEY, packageName);
+        }
     }
 
     @Override
     public void serialize(@NotNull BallerinaFileStub stub, @NotNull StubOutputStream dataStream) throws IOException {
-        //        dataStream.writeUTF(StringUtil.notNullize(stub.getBuildFlags()));
+
     }
 
     @NotNull

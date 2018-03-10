@@ -24,6 +24,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import org.ballerinalang.plugins.idea.psi.BallerinaConnectorDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaStructDefinition;
@@ -36,6 +37,7 @@ import org.ballerinalang.plugins.idea.stubs.index.BallerinaEnumIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaFunctionIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaGlobalEndpointIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaGlobalVariableIndex;
+import org.ballerinalang.plugins.idea.stubs.index.BallerinaPackageIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaStructIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaTransformerIndex;
 import org.jetbrains.annotations.NotNull;
@@ -47,6 +49,9 @@ public class BallerinaReferenceCompletionProvider extends CompletionContributor 
     @Override
     public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
         Project project = parameters.getOriginalFile().getProject();
+
+        Collection<BallerinaFile> ballerinaPackage = StubIndex.getElements(BallerinaPackageIndex.KEY,
+                "samples.parser", project, GlobalSearchScope.allScope(project), BallerinaFile.class);
 
         Collection<BallerinaFunctionDefinition> ballerinaFunction = StubIndex.getElements(BallerinaFunctionIndex
                 .KEY, "test", project, GlobalSearchScope.allScope(project), BallerinaFunctionDefinition.class);
@@ -61,6 +66,7 @@ public class BallerinaReferenceCompletionProvider extends CompletionContributor 
         Collection<BallerinaConnectorDefinition> ballerinaConnector = StubIndex.getElements(BallerinaConnectorIndex.KEY,
                 "test", project, GlobalSearchScope.allScope(project), BallerinaConnectorDefinition.class);
 
+        Collection<String> allPackages = StubIndex.getInstance().getAllKeys(BallerinaPackageIndex.KEY, project);
         Collection<String> allFunctions = StubIndex.getInstance().getAllKeys(BallerinaFunctionIndex.KEY, project);
         Collection<String> allStructs = StubIndex.getInstance().getAllKeys(BallerinaStructIndex.KEY, project);
         Collection<String> allGlobalVariables = StubIndex.getInstance().getAllKeys(BallerinaGlobalVariableIndex.KEY,

@@ -162,16 +162,17 @@
   implements("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|.*Endpoint|Action)Definition")="org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
   extends("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|.*Endpoint|Action)Definition")="org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
 
-  elementTypeFactory("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|.*Endpoint|Action)Definition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
+  elementTypeFactory("PackageDeclaration|(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|.*Endpoint|Action)Definition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
 
 //  implements("NameReference")="com.intellij.psi.PsiNameIdentifierOwner"
+  extends("PackageDeclaration")="org.ballerinalang.plugins.idea.psi.impl.BallerinaStubbedElementImpl<?>"
 
   generateTokenAccessors=true
 }
 
 CompilationUnit ::= PackageDeclaration? (ImportDeclaration | NamespaceDeclaration)* Definition* <<eof>>
 
-PackageDeclaration ::= package CompletePackageName SEMICOLON {pin=1 /*methods=[getName]*/ /*stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub"*/}
+PackageDeclaration ::= package CompletePackageName SEMICOLON {pin=1 methods=[getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub"}
 
 // Todo - Cache
 CompletePackageName ::= PackageName (DOT PackageName)* PackageVersion? {pin(".*")=1}

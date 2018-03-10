@@ -25,19 +25,21 @@ import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaPackageDeclaration;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
+import org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BallerinaPsiImplUtil {
 
-    //    @Nullable
-    //    public static String getName(@NotNull BallerinaPackageDeclaration packageClause) {
-    //        BallerinaPackageDeclarationStub stub = packageClause.getStub();
-    //        if (stub != null) return stub.getName();
-    //        PsiElement packageIdentifier = packageClause.getPackageName();
-    //        return packageIdentifier != null ? packageIdentifier.getText().trim() : null;
-    //    }
+    @Nullable
+    public static String getName(@NotNull BallerinaPackageDeclaration packageClause) {
+        BallerinaPackageDeclarationStub stub = packageClause.getStub();
+        if (stub != null) return stub.getName();
+        PsiElement packageIdentifier = packageClause.getCompletePackageName();
+        return packageIdentifier != null ? packageIdentifier.getText().trim() : null;
+    }
 
     @Nullable
     public static PsiElement getIdentifier(BallerinaFunctionDefinition ballerinaFunctionDefinition) {
