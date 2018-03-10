@@ -78,6 +78,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitAttribute(@NotNull BallerinaAttribute o) {
+    visitCompositeElement(o);
+  }
+
   public void visitBinaryAddSubExpression(@NotNull BallerinaBinaryAddSubExpression o) {
     visitBinaryExpression(o);
   }
@@ -158,6 +162,14 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitCloseTag(@NotNull BallerinaCloseTag o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitComment(@NotNull BallerinaComment o) {
+    visitCompositeElement(o);
+  }
+
   public void visitConnectorBody(@NotNull BallerinaConnectorBody o) {
     visitCompositeElement(o);
   }
@@ -174,7 +186,15 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitContent(@NotNull BallerinaContent o) {
+    visitCompositeElement(o);
+  }
+
   public void visitDefinition(@NotNull BallerinaDefinition o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitElement(@NotNull BallerinaElement o) {
     visitCompositeElement(o);
   }
 
@@ -183,6 +203,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitElseIfClause(@NotNull BallerinaElseIfClause o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitEmptyTag(@NotNull BallerinaEmptyTag o) {
     visitCompositeElement(o);
   }
 
@@ -295,7 +319,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitNameReference(@NotNull BallerinaNameReference o) {
-    visitReferenceExpressionBase(o);
+    visitCompositeElement(o);
   }
 
   public void visitNamespaceDeclaration(@NotNull BallerinaNamespaceDeclaration o) {
@@ -335,6 +359,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitPrivateStructBody(@NotNull BallerinaPrivateStructBody o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitProcIns(@NotNull BallerinaProcIns o) {
     visitCompositeElement(o);
   }
 
@@ -386,8 +414,20 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitStartTag(@NotNull BallerinaStartTag o) {
+    visitCompositeElement(o);
+  }
+
   public void visitStatement(@NotNull BallerinaStatement o) {
     visitCompositeElement(o);
+  }
+
+  public void visitStringTemplateContent(@NotNull BallerinaStringTemplateContent o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitStringTemplateLiteral(@NotNull BallerinaStringTemplateLiteral o) {
+    visitExpression(o);
   }
 
   public void visitStructBody(@NotNull BallerinaStructBody o) {
@@ -506,11 +546,39 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitXmlDoubleQuotedString(@NotNull BallerinaXmlDoubleQuotedString o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitXmlItem(@NotNull BallerinaXmlItem o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitXmlLiteral(@NotNull BallerinaXmlLiteral o) {
+    visitExpression(o);
+  }
+
   public void visitXmlLocalName(@NotNull BallerinaXmlLocalName o) {
     visitCompositeElement(o);
   }
 
   public void visitXmlNamespaceName(@NotNull BallerinaXmlNamespaceName o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitXmlQualifiedName(@NotNull BallerinaXmlQualifiedName o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitXmlQuotedString(@NotNull BallerinaXmlQuotedString o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitXmlSingleQuotedString(@NotNull BallerinaXmlSingleQuotedString o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitXmlText(@NotNull BallerinaXmlText o) {
     visitCompositeElement(o);
   }
 
@@ -587,10 +655,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitNamedElement(@NotNull BallerinaNamedElement o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitReferenceExpressionBase(@NotNull BallerinaReferenceExpressionBase o) {
     visitCompositeElement(o);
   }
 

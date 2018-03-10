@@ -20,25 +20,13 @@ package org.ballerinalang.plugins.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 
-public interface BallerinaNameReference extends BallerinaCompositeElement {
-
-  @Nullable
-  BallerinaPackageReference getPackageReference();
+public interface BallerinaStringTemplateContent extends BallerinaCompositeElement {
 
   @NotNull
-  PsiElement getIdentifier();
-
-  @NotNull
-  PsiReference getReference();
+  List<BallerinaExpression> getExpressionList();
 
   @Nullable
-  BallerinaNameReference getQualifier();
-
-  PsiElement resolve();
-
-  @Nullable
-  BallerinaTypeName resolveType();
+  PsiElement getStringTemplateText();
 
 }

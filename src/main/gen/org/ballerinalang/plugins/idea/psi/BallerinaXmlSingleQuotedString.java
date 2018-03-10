@@ -20,25 +20,19 @@ package org.ballerinalang.plugins.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 
-public interface BallerinaNameReference extends BallerinaCompositeElement {
-
-  @Nullable
-  BallerinaPackageReference getPackageReference();
+public interface BallerinaXmlSingleQuotedString extends BallerinaCompositeElement {
 
   @NotNull
-  PsiElement getIdentifier();
+  List<BallerinaExpression> getExpressionList();
 
   @NotNull
-  PsiReference getReference();
+  PsiElement getSingleQuote();
+
+  @NotNull
+  PsiElement getSingleQuoteEnd();
 
   @Nullable
-  BallerinaNameReference getQualifier();
-
-  PsiElement resolve();
-
-  @Nullable
-  BallerinaTypeName resolveType();
+  PsiElement getXMLSingleQuotedString();
 
 }

@@ -152,19 +152,19 @@
 
   extends("(functionInvocation|simpleVariable|mapArrayVariable|fieldVariable|xmlAttribVariable|invocation)Reference")=VariableReference
 
-  extends("(ValueTypeType|BuiltInReferenceTypeType|VariableReference|LambdaFunction|ConnectorInit|TypeCasting|TypeConversion|TypeAccess|Braced)Expression")=Expression
+  extends("((ValueType|BuiltInReferenceType)Type|VariableReference|LambdaFunction|ConnectorInit|Type(Casting|Conversion|Access)|Braced)Expression")=Expression
   extends("(Unary|Binary|Ternary)Expression")=Expression
-  extends("((Simple|Array|Record)Literal)")=Expression
+  extends("((Simple|Array|Record|Xml|StringTemplate)Literal)")=Expression
   extends("Binary(Pow|DivMulMod|AddSub|Compare|Equal|And|Or)Expression")=BinaryExpression
 
-  extends("anyTypeName|typeTypeName|ValueTypeName|ReferenceTypeName|arrayTypeName|BinaryAndExpression")=TypeName
+  extends("(anyType|typeType|ValueType|ReferenceType|arrayType)Name|BinaryAndExpression")=TypeName
 
-  elementTypeFactory("FunctionDefinition|StructDefinition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
+  elementTypeFactory("(Function|Struct)Definition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
 
-  implements("FunctionDefinition|StructDefinition")="org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
-  extends("FunctionDefinition|StructDefinition")="org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
+  implements("(Function|Struct)Definition")="org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+  extends("(Function|Struct)Definition")="org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
 
-  implements("NameReference")="org.ballerinalang.plugins.idea.psi.BallerinaReferenceExpressionBase"
+//  implements("NameReference")="com.intellij.psi.PsiNameIdentifierOwner"
 
   generateTokenAccessors=true
 
@@ -444,8 +444,8 @@ Expression
     ::=  SimpleLiteral
     |   ArrayLiteral
     |   RecordLiteral
-//    |   XmlLiteral
-//    |   StringTemplateLiteral
+    |   XmlLiteral
+    |   StringTemplateLiteral
     |   ValueTypeTypeExpression
     |   BuiltInReferenceTypeTypeExpression
     |   VariableReferenceExpression
@@ -510,83 +510,41 @@ FieldDefinition ::= TypeName identifier (ASSIGN SimpleLiteral)? SEMICOLON
 
 SimpleLiteral ::= (ADD|SUB)? integerLiteral /*| (ADD|SUB)? floatingPointLiteral*/ | quotedStringLiteral /*| booleanLiteral | nullLiteral*/ {pin=1}
 
-//// XML parsing
-//
-//xmlLiteral
-//    :   XMLLiteralStart xmlItem XMLLiteralEnd
-//    ;
-//
-//xmlItem
-//    :   element
-//    |   procIns
-//    |   comment
-//    |   text
-//    |   CDATA
-//    ;
-//
-//content
-//    :   text? ((element | CDATA | procIns | comment) text?)*
-//    ;
-//
-//comment
-//    :   XML_COMMENT_START (XMLCommentTemplateText expression ExpressionEnd)* XMLCommentText
-//    ;
-//
-//element
-//    :   startTag content closeTag
-//    |   emptyTag
-//    ;
-//
-//startTag
-//    :   XML_TAG_OPEN xmlQualifiedName attribute* XML_TAG_CLOSE
-//    ;
-//
-//closeTag
-//    :   XML_TAG_OPEN_SLASH xmlQualifiedName XML_TAG_CLOSE
-//    ;
-//
-//emptyTag
-//    :   XML_TAG_OPEN xmlQualifiedName attribute* XML_TAG_SLASH_CLOSE
-//    ;
-//
-//procIns
-//    :   XML_TAG_SPECIAL_OPEN (XMLPITemplateText expression ExpressionEnd)* XMLPIText
-//    ;
-//
-//attribute
-//    :   xmlQualifiedName EQUALS xmlQuotedString;
-//
-//text
-//    :   (XMLTemplateText expression ExpressionEnd)+ XMLText?
-//    |   XMLText
-//    ;
-//
-//xmlQuotedString
-//    :   xmlSingleQuotedString
-//    |   xmlDoubleQuotedString
-//    ;
-//
-//xmlSingleQuotedString
-//    :   SINGLE_QUOTE (XMLSingleQuotedTemplateString expression ExpressionEnd)* XMLSingleQuotedString? SINGLE_QUOTE_END
-//    ;
-//
-//xmlDoubleQuotedString
-//    :   DOUBLE_QUOTE (XMLDoubleQuotedTemplateString expression ExpressionEnd)* XMLDoubleQuotedString? DOUBLE_QUOTE_END
-//    ;
-//
-//xmlQualifiedName
-//    :   (XMLQName QNAME_SEPARATOR)? XMLQName
-//    |   XMLTagExpressionStart expression ExpressionEnd
-//    ;
-//
-//stringTemplateLiteral
-//    :   StringTemplateLiteralStart stringTemplateContent? StringTemplateLiteralEnd
-//    ;
-//
-//stringTemplateContent
-//    :   (StringTemplateExpressionStart expression ExpressionEnd)+ StringTemplateText?
-//    |   StringTemplateText
-//    ;
+// XML parsing
+
+XmlLiteral ::= XMLLiteralStart XmlItem XMLLiteralEnd
+
+XmlItem ::= Element | ProcIns | Comment | XmlText | CDATA
+
+Content ::= XmlText? ((Element | CDATA | ProcIns | Comment) XmlText?)*
+
+Comment ::= XML_COMMENT_START (XMLCommentTemplateText Expression ExpressionEnd)* XMLCommentText
+
+Element ::= StartTag Content CloseTag | EmptyTag
+
+StartTag ::= XML_TAG_OPEN XmlQualifiedName Attribute* XML_TAG_CLOSE
+
+CloseTag ::= XML_TAG_OPEN_SLASH XmlQualifiedName XML_TAG_CLOSE
+
+EmptyTag ::= XML_TAG_OPEN XmlQualifiedName Attribute* XML_TAG_SLASH_CLOSE
+
+ProcIns ::= XML_TAG_SPECIAL_OPEN (XMLPITemplateText Expression ExpressionEnd)* XMLPIText
+
+Attribute ::= XmlQualifiedName EQUALS XmlQuotedString;
+
+XmlText ::= (XMLTemplateText Expression ExpressionEnd)+ XMLText? | XMLText
+
+XmlQuotedString ::= XmlSingleQuotedString | XmlDoubleQuotedString
+
+XmlSingleQuotedString ::= SINGLE_QUOTE (XMLSingleQuotedTemplateString Expression ExpressionEnd)* XMLSingleQuotedString? SINGLE_QUOTE_END
+
+XmlDoubleQuotedString ::= DOUBLE_QUOTE (XMLDoubleQuotedTemplateString Expression ExpressionEnd)* XMLDoubleQuotedString? DOUBLE_QUOTE_END
+
+XmlQualifiedName ::= (XMLQName QNAME_SEPARATOR)? XMLQName | XMLTagExpressionStart Expression ExpressionEnd
+
+StringTemplateLiteral ::= StringTemplateLiteralStart StringTemplateContent? StringTemplateLiteralEnd
+
+StringTemplateContent ::= (StringTemplateExpressionStart Expression ExpressionEnd)+ StringTemplateText? | StringTemplateText
 
 AnyIdentifierName ::= identifier | ReservedWord
 
