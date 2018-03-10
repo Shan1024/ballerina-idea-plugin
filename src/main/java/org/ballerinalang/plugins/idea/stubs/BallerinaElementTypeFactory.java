@@ -21,6 +21,7 @@ import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.util.containers.HashMap;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaAnnotationDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaConnectorDefinitionStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaConstantDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaEnumDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaFunctionDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalVariableDefinitionStubElementType;
@@ -51,9 +52,7 @@ public class BallerinaElementTypeFactory {
     }
 
     public static IStubElementType stubFactory(@NotNull String name) {
-        //    if ("CONST_DEFINITION".equals(name)) return new GoConstDefinitionStubElementType(name);
-        //    if ("FIELD_DEFINITION".equals(name)) return new GoFieldDefinitionStubElementType(name);
-        //    if ("ANONYMOUS_FIELD_DEFINITION".equals(name)) return new GoAnonymousFieldDefinitionStubElementType(name);
+        // Note - If the element type is wrong, an error will occur while loading the lexer in syntax highlighting.
         if ("FUNCTION_DEFINITION".equals(name)) {
             return new BallerinaFunctionDefinitionStubElementType(name);
         }
@@ -74,6 +73,9 @@ public class BallerinaElementTypeFactory {
         }
         if ("TRANSFORMER_DEFINITION".equals(name)) {
             return new BallerinaTransformerDefinitionStubElementType(name);
+        }
+        if ("CONSTANT_DEFINITION".equals(name)) {
+            return new BallerinaConstantDefinitionStubElementType(name);
         }
         //    if ("METHOD_DECLARATION".equals(name)) return new GoMethodDeclarationStubElementType(name);
         //    if ("IMPORT_SPEC".equals(name)) return new GoImportSpecStubElementType(name);

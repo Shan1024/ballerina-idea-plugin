@@ -29,6 +29,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaStructDefinition;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaAnnotationIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaConnectorIndex;
+import org.ballerinalang.plugins.idea.stubs.index.BallerinaConstantIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaEnumIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaFunctionIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaGlobalVariableIndex;
@@ -65,6 +66,7 @@ public class BallerinaReferenceCompletionProvider extends CompletionContributor 
         Collection<String> allEnums = StubIndex.getInstance().getAllKeys(BallerinaEnumIndex.KEY, project);
         Collection<String> allAnnotations = StubIndex.getInstance().getAllKeys(BallerinaAnnotationIndex.KEY, project);
         Collection<String> allTransformers = StubIndex.getInstance().getAllKeys(BallerinaTransformerIndex.KEY, project);
+        Collection<String> allConstants = StubIndex.getInstance().getAllKeys(BallerinaConstantIndex.KEY, project);
 
         long start = System.currentTimeMillis();
 

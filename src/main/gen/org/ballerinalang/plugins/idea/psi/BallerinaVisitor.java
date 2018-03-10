@@ -171,7 +171,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitConstantDefinition(@NotNull BallerinaConstantDefinition o) {
-    visitCompositeElement(o);
+    visitNamedElement(o);
   }
 
   public void visitContent(@NotNull BallerinaContent o) {

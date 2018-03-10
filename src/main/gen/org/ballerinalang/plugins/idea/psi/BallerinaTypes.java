@@ -62,7 +62,7 @@ public interface BallerinaTypes {
   IElementType COMPLETE_PACKAGE_NAME = new BallerinaCompositeElementType("COMPLETE_PACKAGE_NAME");
   IElementType CONNECTOR_BODY = new BallerinaCompositeElementType("CONNECTOR_BODY");
   IElementType CONNECTOR_DEFINITION = BallerinaElementTypeFactory.stubFactory("CONNECTOR_DEFINITION");
-  IElementType CONSTANT_DEFINITION = new BallerinaCompositeElementType("CONSTANT_DEFINITION");
+  IElementType CONSTANT_DEFINITION = BallerinaElementTypeFactory.stubFactory("CONSTANT_DEFINITION");
   IElementType CONTENT = new BallerinaCompositeElementType("CONTENT");
   IElementType DEFINITION = new BallerinaCompositeElementType("DEFINITION");
   IElementType DEPRECATED_ATTACHMENT = new BallerinaCompositeElementType("DEPRECATED_ATTACHMENT");

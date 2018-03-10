@@ -159,10 +159,10 @@
 
   extends("(AnyType|TypeType|ValueType|ReferenceType|arrayType)Name|BinaryAndExpression")=TypeName
 
-  implements("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer)Definition")="org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
-  extends("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer)Definition")="org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
+  implements("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant)Definition")="org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+  extends("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant)Definition")="org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
 
-  elementTypeFactory("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer)Definition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
+  elementTypeFactory("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant)Definition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
 
 //  implements("NameReference")="com.intellij.psi.PsiNameIdentifierOwner"
 
@@ -251,7 +251,7 @@ TransformerDefinition ::= (public)? transformer LT ParameterList GT (identifier 
 // Note - "parameter" is treated differently here because there is a parser rule named "parameter" as well.
 AttachmentPoint ::= service (LT identifier? GT)? | resource | connector | action | function | struct | enum | const | TYPE_PARAMETER | annotation | transformer
 
-ConstantDefinition ::= (public)? const ValueTypeName identifier ASSIGN Expression SEMICOLON {pin=2}
+ConstantDefinition ::= (public)? const ValueTypeName identifier ASSIGN Expression SEMICOLON {pin=2  stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaConstantDefinitionStub"}
 
 WorkerDeclaration ::= worker identifier LEFT_BRACE Block RIGHT_BRACE {pin=1}
 

@@ -37,6 +37,7 @@
         <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaEnumIndex"/>
         <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaAnnotationIndex"/>
         <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaTransformerIndex"/>
+        <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaConstantIndex"/>
 
         <stubElementTypeHolder class="org.ballerinalang.plugins.idea.psi.BallerinaTypes"/>
 
