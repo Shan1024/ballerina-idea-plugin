@@ -43,7 +43,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitAnnotationDefinition(@NotNull BallerinaAnnotationDefinition o) {
-    visitCompositeElement(o);
+    visitNamedElement(o);
   }
 
   public void visitAnonStructTypeName(@NotNull BallerinaAnonStructTypeName o) {

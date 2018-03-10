@@ -19,6 +19,7 @@ package org.ballerinalang.plugins.idea.stubs;
 
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.util.containers.HashMap;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaAnnotationDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaConnectorDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaEnumDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaFunctionDefinitionStubElementType;
@@ -66,6 +67,9 @@ public class BallerinaElementTypeFactory {
         }
         if ("ENUM_DEFINITION".equals(name)) {
             return new BallerinaEnumDefinitionStubElementType(name);
+        }
+        if ("ANNOTATION_DEFINITION".equals(name)) {
+            return new BallerinaAnnotationDefinitionStubElementType(name);
         }
         //    if ("METHOD_DECLARATION".equals(name)) return new GoMethodDeclarationStubElementType(name);
         //    if ("IMPORT_SPEC".equals(name)) return new GoImportSpecStubElementType(name);
