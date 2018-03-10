@@ -27,7 +27,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitActionDefinition(@NotNull BallerinaActionDefinition o) {
-    visitCompositeElement(o);
+    visitNamedElement(o);
   }
 
   public void visitActionInvocation(@NotNull BallerinaActionInvocation o) {

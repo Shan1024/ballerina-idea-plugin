@@ -34,7 +34,7 @@ import java.io.IOException;
 public class BallerinaFileElementType extends IStubFileElementType<BallerinaFileStub> {
 
     public static final IStubFileElementType INSTANCE = new BallerinaFileElementType();
-    public static final int VERSION = 1;
+    public static final int VERSION = 3;
 
     private BallerinaFileElementType() {
         super("BALLERINA_FILE", BallerinaLanguage.INSTANCE);

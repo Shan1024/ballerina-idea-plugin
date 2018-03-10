@@ -159,10 +159,10 @@
 
   extends("(AnyType|TypeType|ValueType|ReferenceType|arrayType)Name|BinaryAndExpression")=TypeName
 
-  implements("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|.*Endpoint)Definition")="org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
-  extends("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|.*Endpoint)Definition")="org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
+  implements("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|.*Endpoint|Action)Definition")="org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+  extends("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|.*Endpoint|Action)Definition")="org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
 
-  elementTypeFactory("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|.*Endpoint)Definition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
+  elementTypeFactory("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|.*Endpoint|Action)Definition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
 
 //  implements("NameReference")="com.intellij.psi.PsiNameIdentifierOwner"
 
@@ -226,7 +226,7 @@ ConnectorDefinition ::= (public)? connector identifier LEFT_PARENTHESIS Paramete
 
 ConnectorBody ::= LEFT_BRACE EndpointDefinition* VariableDefinitionStatement* ActionDefinition* RIGHT_BRACE
 
-ActionDefinition ::= NativeActionDefinition | NonNativeActionDefinition
+ActionDefinition ::= NativeActionDefinition | NonNativeActionDefinition {methods=[getIdentifier] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaActionDefinitionStub"}
 private NativeActionDefinition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? native action  CallableUnitSignature SEMICOLON {pin=5}
 private NonNativeActionDefinition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? action CallableUnitSignature CallableUnitBody {pin=4}
 

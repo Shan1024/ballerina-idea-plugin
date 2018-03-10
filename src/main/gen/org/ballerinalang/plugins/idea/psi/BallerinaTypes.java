@@ -26,7 +26,7 @@ import org.ballerinalang.plugins.idea.psi.impl.*;
 public interface BallerinaTypes {
 
   IElementType ABORT_STATEMENT = new BallerinaCompositeElementType("ABORT_STATEMENT");
-  IElementType ACTION_DEFINITION = new BallerinaCompositeElementType("ACTION_DEFINITION");
+  IElementType ACTION_DEFINITION = BallerinaElementTypeFactory.stubFactory("ACTION_DEFINITION");
   IElementType ACTION_INVOCATION = new BallerinaCompositeElementType("ACTION_INVOCATION");
   IElementType ALIAS = new BallerinaCompositeElementType("ALIAS");
   IElementType ANNOTATION_ATTACHMENT = new BallerinaCompositeElementType("ANNOTATION_ATTACHMENT");

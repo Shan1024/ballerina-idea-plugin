@@ -19,6 +19,7 @@ package org.ballerinalang.plugins.idea.psi.impl;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaActionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
@@ -48,6 +49,12 @@ public class BallerinaPsiImplUtil {
     public static PsiElement getIdentifier(BallerinaGlobalEndpointDefinition ballerinaGlobalEndpointDefinition) {
         BallerinaEndpointDefinition endpointDeclaration = ballerinaGlobalEndpointDefinition.getEndpointDefinition();
         return endpointDeclaration.getIdentifier();
+    }
+
+    @Nullable
+    public static PsiElement getIdentifier(BallerinaActionDefinition ballerinaActionDefinition) {
+        BallerinaCallableUnitSignature callableUnitSignature = ballerinaActionDefinition.getCallableUnitSignature();
+        return callableUnitSignature != null ? callableUnitSignature.getIdentifier() : null;
     }
 
     @Nullable

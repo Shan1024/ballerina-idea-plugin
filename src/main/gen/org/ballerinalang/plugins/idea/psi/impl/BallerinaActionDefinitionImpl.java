@@ -24,9 +24,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
+import org.ballerinalang.plugins.idea.stubs.BallerinaActionDefinitionStub;
 import org.ballerinalang.plugins.idea.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class BallerinaActionDefinitionImpl extends BallerinaCompositeElementImpl implements BallerinaActionDefinition {
+public class BallerinaActionDefinitionImpl extends BallerinaNamedElementImpl<BallerinaActionDefinitionStub> implements BallerinaActionDefinition {
+
+  public BallerinaActionDefinitionImpl(BallerinaActionDefinitionStub stub, IStubElementType type) {
+    super(stub, type);
+  }
 
   public BallerinaActionDefinitionImpl(ASTNode node) {
     super(node);
@@ -87,6 +93,11 @@ public class BallerinaActionDefinitionImpl extends BallerinaCompositeElementImpl
   @Nullable
   public PsiElement getNative() {
     return findChildByType(NATIVE);
+  }
+
+  @Nullable
+  public PsiElement getIdentifier() {
+    return BallerinaPsiImplUtil.getIdentifier(this);
   }
 
 }
