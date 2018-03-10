@@ -25,16 +25,16 @@ import com.intellij.psi.stubs.StubIndexKey;
 import com.intellij.util.Processor;
 import com.intellij.util.indexing.IdFilter;
 import org.ballerinalang.plugins.idea.BallerinaFileElementType;
-import org.ballerinalang.plugins.idea.psi.BallerinaStructDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
-public class BallerinaStructIndex extends StringStubIndexExtension<BallerinaStructDefinition> {
+public class BallerinaGlobalVariableIndex extends StringStubIndexExtension<BallerinaGlobalVariableDefinition> {
 
-    public static final StubIndexKey<String, BallerinaStructDefinition> KEY =
-            StubIndexKey.createIndexKey("ballerina.struct");
+    public static final StubIndexKey<String, BallerinaGlobalVariableDefinition> KEY =
+            StubIndexKey.createIndexKey("ballerina.global.variable");
 
     @Override
     public int getVersion() {
@@ -43,21 +43,21 @@ public class BallerinaStructIndex extends StringStubIndexExtension<BallerinaStru
 
     @NotNull
     @Override
-    public StubIndexKey<String, BallerinaStructDefinition> getKey() {
+    public StubIndexKey<String, BallerinaGlobalVariableDefinition> getKey() {
         return KEY;
     }
 
     @NotNull
-    public static Collection<BallerinaStructDefinition> find(@NotNull String name, @NotNull Project project,
-                                                             @Nullable GlobalSearchScope scope,
-                                                             @Nullable IdFilter idFilter) {
-        return StubIndex.getElements(KEY, name, project, scope, idFilter, BallerinaStructDefinition.class);
+    public static Collection<BallerinaGlobalVariableDefinition> find(@NotNull String name, @NotNull Project project,
+                                                                     @Nullable GlobalSearchScope scope,
+                                                                     @Nullable IdFilter idFilter) {
+        return StubIndex.getElements(KEY, name, project, scope, idFilter, BallerinaGlobalVariableDefinition.class);
     }
 
     public static boolean process(@NotNull String name, @NotNull Project project, @Nullable GlobalSearchScope scope,
                                   @Nullable IdFilter idFilter,
-                                  @NotNull Processor<BallerinaStructDefinition> processor) {
+                                  @NotNull Processor<BallerinaGlobalVariableDefinition> processor) {
         return StubIndex.getInstance().processElements(KEY, name, project, scope, idFilter,
-                BallerinaStructDefinition.class, processor);
+                BallerinaGlobalVariableDefinition.class, processor);
     }
 }

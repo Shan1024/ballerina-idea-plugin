@@ -24,8 +24,10 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaStructDefinition;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaFunctionIndex;
+import org.ballerinalang.plugins.idea.stubs.index.BallerinaGlobalVariableIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaStructIndex;
 import org.jetbrains.annotations.NotNull;
 
@@ -43,8 +45,14 @@ public class BallerinaReferenceCompletionProvider extends CompletionContributor 
         Collection<BallerinaStructDefinition> ballerinaStruct = StubIndex.getElements(BallerinaStructIndex.KEY, "test",
                 project, GlobalSearchScope.allScope(project), BallerinaStructDefinition.class);
 
+        Collection<BallerinaGlobalVariableDefinition> ballerinaGlobalVariable =
+                StubIndex.getElements(BallerinaGlobalVariableIndex.KEY, "test", project, GlobalSearchScope.allScope
+                        (project), BallerinaGlobalVariableDefinition.class);
+
         Collection<String> allFunctions = StubIndex.getInstance().getAllKeys(BallerinaFunctionIndex.KEY, project);
         Collection<String> allStructs = StubIndex.getInstance().getAllKeys(BallerinaStructIndex.KEY, project);
+        Collection<String> allGlobalVariables = StubIndex.getInstance().getAllKeys(BallerinaGlobalVariableIndex.KEY,
+                project);
 
         long start = System.currentTimeMillis();
 
@@ -52,7 +60,7 @@ public class BallerinaReferenceCompletionProvider extends CompletionContributor 
                 .KEY, "user2", project, GlobalSearchScope.allScope(project), BallerinaStructDefinition.class);
         /*.forEach(def -> System.out.println(def.getIdentifier().getText()));*/
 
-        ballerinaStructDefinitions.forEach(def -> def.isPublic());
+        //        ballerinaStructDefinitions.forEach(def -> def.isPublic());
 
         long end = System.currentTimeMillis();
 

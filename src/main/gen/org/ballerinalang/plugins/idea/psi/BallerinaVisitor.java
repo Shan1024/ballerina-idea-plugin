@@ -263,7 +263,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitGlobalVariableDefinition(@NotNull BallerinaGlobalVariableDefinition o) {
-    visitCompositeElement(o);
+    visitNamedElement(o);
   }
 
   public void visitIfClause(@NotNull BallerinaIfClause o) {

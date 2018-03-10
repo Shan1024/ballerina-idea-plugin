@@ -32,6 +32,7 @@
                                        implementationClass="org.ballerinalang.plugins.idea.highlighting.BallerinaSyntaxHighlighterFactory"/>
         <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaFunctionIndex"/>
         <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaStructIndex"/>
+        <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaGlobalVariableIndex"/>
 
         <stubElementTypeHolder class="org.ballerinalang.plugins.idea.psi.BallerinaTypes"/>
 

@@ -38,7 +38,7 @@ public class BallerinaFunctionIndex extends StringStubIndexExtension<BallerinaFu
 
     @Override
     public int getVersion() {
-        return BallerinaFileElementType.VERSION + 3;
+        return BallerinaFileElementType.VERSION;
     }
 
     @NotNull

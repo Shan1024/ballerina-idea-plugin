@@ -159,15 +159,14 @@
 
   extends("(AnyType|TypeType|ValueType|ReferenceType|arrayType)Name|BinaryAndExpression")=TypeName
 
-  elementTypeFactory("(Function|Struct)Definition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
+  implements("(Function|Struct|GlobalVariable)Definition")="org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+  extends("(Function|Struct|GlobalVariable)Definition")="org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
 
-  implements("(Function|Struct)Definition")="org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
-  extends("(Function|Struct)Definition")="org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
+  elementTypeFactory("(Function|Struct|GlobalVariable)Definition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
 
 //  implements("NameReference")="com.intellij.psi.PsiNameIdentifierOwner"
 
   generateTokenAccessors=true
-
 }
 
 CompilationUnit ::= PackageDeclaration? (ImportDeclaration | NamespaceDeclaration)* Definition* <<eof>>
@@ -193,10 +192,10 @@ orgName ::= identifier
 Alias ::= as identifier {pin=1}
 
 // Note - Global variable definition should be the first definition since it can contain identifier as type.
-Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? (
-                    StructDefinition | GlobalVariableDefinition | ServiceDefinition | FunctionDefinition
-                    | connectorDefinition | enumDefinition | AnnotationDefinition | TransformerDefinition
-                    | ConstantDefinition | GlobalEndpointDefinition) {recoverWhile=TopLevelDefinitionRecover}
+Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment?
+               (StructDefinition | GlobalVariableDefinition | ServiceDefinition | FunctionDefinition
+                | connectorDefinition | enumDefinition | AnnotationDefinition | TransformerDefinition
+                | ConstantDefinition | GlobalEndpointDefinition) {recoverWhile=TopLevelDefinitionRecover}
 
 private TopLevelDefinitionRecover ::= !(service | function | connector | struct | enum | annotation | transformer | const | boolean | int | float | string | blob | identifier)
 
@@ -244,7 +243,7 @@ enumDefinition ::= (public)? enum identifier LEFT_BRACE Enumerator (COMMA Enumer
 
 Enumerator ::= identifier
 
-GlobalVariableDefinition ::= (public)? TypeName identifier (ASSIGN Expression )? SEMICOLON {pin=2}
+GlobalVariableDefinition ::= (public)? TypeName identifier (ASSIGN Expression )? SEMICOLON {pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaGlobalVariableDefinitionStub"}
 
 TransformerDefinition ::= (public)? transformer LT ParameterList GT (identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS)? CallableUnitBody {pin=2}
 
@@ -492,7 +491,7 @@ TernaryExpression ::= Expression QUESTION_MARK Expression COLON Expression
 
 //reusable productions
 
-NameReference ::= PackageReference? identifier {methods=[getReference getQualifier resolve resolveType]}
+NameReference ::= PackageReference? identifier /*{methods=[getReference getQualifier resolve resolveType]}*/
 
 PackageReference ::= identifier COLON
 

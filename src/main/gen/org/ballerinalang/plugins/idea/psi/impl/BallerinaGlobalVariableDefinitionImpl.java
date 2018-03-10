@@ -24,9 +24,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
+import org.ballerinalang.plugins.idea.stubs.BallerinaGlobalVariableDefinitionStub;
 import org.ballerinalang.plugins.idea.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class BallerinaGlobalVariableDefinitionImpl extends BallerinaCompositeElementImpl implements BallerinaGlobalVariableDefinition {
+public class BallerinaGlobalVariableDefinitionImpl extends BallerinaNamedElementImpl<BallerinaGlobalVariableDefinitionStub> implements BallerinaGlobalVariableDefinition {
+
+  public BallerinaGlobalVariableDefinitionImpl(BallerinaGlobalVariableDefinitionStub stub, IStubElementType type) {
+    super(stub, type);
+  }
 
   public BallerinaGlobalVariableDefinitionImpl(ASTNode node) {
     super(node);
