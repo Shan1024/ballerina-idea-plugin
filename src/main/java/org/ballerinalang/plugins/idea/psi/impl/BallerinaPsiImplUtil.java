@@ -19,9 +19,10 @@ package org.ballerinalang.plugins.idea.psi.impl;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
-import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
+import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDeclaration;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
 import org.jetbrains.annotations.NotNull;
@@ -41,6 +42,12 @@ public class BallerinaPsiImplUtil {
     public static PsiElement getIdentifier(BallerinaFunctionDefinition ballerinaFunctionDefinition) {
         BallerinaCallableUnitSignature callableUnitSignature = ballerinaFunctionDefinition.getCallableUnitSignature();
         return callableUnitSignature != null ? callableUnitSignature.getIdentifier() : null;
+    }
+
+    @Nullable
+    public static PsiElement getIdentifier(BallerinaGlobalEndpointDefinition ballerinaGlobalEndpointDefinition) {
+        BallerinaEndpointDeclaration endpointDeclaration = ballerinaGlobalEndpointDefinition.getEndpointDeclaration();
+        return endpointDeclaration.getIdentifier();
     }
 
     @Nullable
@@ -70,10 +77,10 @@ public class BallerinaPsiImplUtil {
 
     @Nullable
     public static BallerinaTypeName resolveType(@NotNull BallerinaNameReference ballerinaNameReference) {
-//        PsiElement resolve = ballerinaNameReference.resolve();
-//        if (resolve instanceof GoTypeSpec) return ((GoTypeSpec) resolve).getSpecType();
-//        // hacky C resolve
-//        return resolve == ballerinaNameReference ? new GoCType(ballerinaNameReference) : null;
+        //        PsiElement resolve = ballerinaNameReference.resolve();
+        //        if (resolve instanceof GoTypeSpec) return ((GoTypeSpec) resolve).getSpecType();
+        //        // hacky C resolve
+        //        return resolve == ballerinaNameReference ? new GoCType(ballerinaNameReference) : null;
         return null;
     }
 }

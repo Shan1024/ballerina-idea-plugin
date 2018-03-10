@@ -24,6 +24,7 @@ import org.ballerinalang.plugins.idea.stubs.types.BallerinaConnectorDefinitionSt
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaConstantDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaEnumDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaFunctionDefinitionStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalEndpointDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalVariableDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaStructDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaTransformerDefinitionStubElementType;
@@ -76,6 +77,9 @@ public class BallerinaElementTypeFactory {
         }
         if ("CONSTANT_DEFINITION".equals(name)) {
             return new BallerinaConstantDefinitionStubElementType(name);
+        }
+        if ("GLOBAL_ENDPOINT_DEFINITION".equals(name)) {
+            return new BallerinaGlobalEndpointDefinitionStubElementType(name);
         }
         //    if ("METHOD_DECLARATION".equals(name)) return new GoMethodDeclarationStubElementType(name);
         //    if ("IMPORT_SPEC".equals(name)) return new GoImportSpecStubElementType(name);

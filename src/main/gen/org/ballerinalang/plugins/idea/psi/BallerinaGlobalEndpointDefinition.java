@@ -20,13 +20,18 @@ package org.ballerinalang.plugins.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.StubBasedPsiElement;
+import org.ballerinalang.plugins.idea.stubs.BallerinaGlobalEndpointDefinitionStub;
 
-public interface BallerinaGlobalEndpointDefinition extends BallerinaCompositeElement {
+public interface BallerinaGlobalEndpointDefinition extends BallerinaNamedElement, StubBasedPsiElement<BallerinaGlobalEndpointDefinitionStub> {
 
   @NotNull
   BallerinaEndpointDeclaration getEndpointDeclaration();
 
   @Nullable
   PsiElement getPublic();
+
+  @Nullable
+  PsiElement getIdentifier();
 
 }

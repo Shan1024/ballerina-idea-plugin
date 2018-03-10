@@ -1311,8 +1311,8 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // AnnotationAttachment* documentationAttachment? deprecatedAttachment?
   //                (StructDefinition | GlobalVariableDefinition | ServiceDefinition | FunctionDefinition
-  //                 | ConnectorDefinition | EnumDefinition | AnnotationDefinition | TransformerDefinition
-  //                 | ConstantDefinition | GlobalEndpointDefinition)
+  //                | ConnectorDefinition | EnumDefinition | AnnotationDefinition | TransformerDefinition
+  //                | ConstantDefinition | GlobalEndpointDefinition)
   public static boolean Definition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Definition")) return false;
     boolean r;
@@ -1352,8 +1352,8 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   // StructDefinition | GlobalVariableDefinition | ServiceDefinition | FunctionDefinition
-  //                 | ConnectorDefinition | EnumDefinition | AnnotationDefinition | TransformerDefinition
-  //                 | ConstantDefinition | GlobalEndpointDefinition
+  //                | ConnectorDefinition | EnumDefinition | AnnotationDefinition | TransformerDefinition
+  //                | ConstantDefinition | GlobalEndpointDefinition
   private static boolean Definition_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Definition_3")) return false;
     boolean r;
@@ -3240,7 +3240,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !(service | function | connector | struct | enum | annotation | transformer | const | boolean | int | float | string | blob | identifier)
+  // !(service | function | connector | struct | enum | annotation | transformer | endpoint | const | boolean | int | float | string | blob | identifier)
   static boolean TopLevelDefinitionRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopLevelDefinitionRecover")) return false;
     boolean r;
@@ -3250,7 +3250,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // service | function | connector | struct | enum | annotation | transformer | const | boolean | int | float | string | blob | identifier
+  // service | function | connector | struct | enum | annotation | transformer | endpoint | const | boolean | int | float | string | blob | identifier
   private static boolean TopLevelDefinitionRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopLevelDefinitionRecover_0")) return false;
     boolean r;
@@ -3262,6 +3262,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, ENUM);
     if (!r) r = consumeToken(b, ANNOTATION);
     if (!r) r = consumeToken(b, TRANSFORMER);
+    if (!r) r = consumeToken(b, ENDPOINT);
     if (!r) r = consumeToken(b, CONST);
     if (!r) r = consumeToken(b, BOOLEAN);
     if (!r) r = consumeToken(b, INT);

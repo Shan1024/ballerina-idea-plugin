@@ -24,9 +24,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
+import org.ballerinalang.plugins.idea.stubs.BallerinaGlobalEndpointDefinitionStub;
 import org.ballerinalang.plugins.idea.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class BallerinaGlobalEndpointDefinitionImpl extends BallerinaCompositeElementImpl implements BallerinaGlobalEndpointDefinition {
+public class BallerinaGlobalEndpointDefinitionImpl extends BallerinaNamedElementImpl<BallerinaGlobalEndpointDefinitionStub> implements BallerinaGlobalEndpointDefinition {
+
+  public BallerinaGlobalEndpointDefinitionImpl(BallerinaGlobalEndpointDefinitionStub stub, IStubElementType type) {
+    super(stub, type);
+  }
 
   public BallerinaGlobalEndpointDefinitionImpl(ASTNode node) {
     super(node);
@@ -51,6 +57,11 @@ public class BallerinaGlobalEndpointDefinitionImpl extends BallerinaCompositeEle
   @Nullable
   public PsiElement getPublic() {
     return findChildByType(PUBLIC);
+  }
+
+  @Nullable
+  public PsiElement getIdentifier() {
+    return BallerinaPsiImplUtil.getIdentifier(this);
   }
 
 }
