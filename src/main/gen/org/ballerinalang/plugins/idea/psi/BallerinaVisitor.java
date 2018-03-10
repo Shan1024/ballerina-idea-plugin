@@ -491,7 +491,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitTransformerDefinition(@NotNull BallerinaTransformerDefinition o) {
-    visitCompositeElement(o);
+    visitNamedElement(o);
   }
 
   public void visitTriggerWorker(@NotNull BallerinaTriggerWorker o) {

@@ -753,7 +753,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
       if (!empty_element_parsed_guard_(b, "Block", c)) break;
       c = current_position_(b);
     }
-    exit_section_(b, l, m, true, false, StatementRecover_parser_);
+    exit_section_(b, l, m, true, false, null);
     return true;
   }
 
@@ -2095,16 +2095,15 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean Invocation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Invocation")) return false;
     if (!nextTokenIs(b, DOT)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, INVOCATION, null);
+    boolean r;
+    Marker m = enter_section_(b);
     r = consumeToken(b, DOT);
-    p = r; // pin = 1
-    r = r && report_error_(b, AnyIdentifierName(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, LEFT_PARENTHESIS)) && r;
-    r = p && report_error_(b, Invocation_3(b, l + 1)) && r;
-    r = p && consumeToken(b, RIGHT_PARENTHESIS) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
+    r = r && AnyIdentifierName(b, l + 1);
+    r = r && consumeToken(b, LEFT_PARENTHESIS);
+    r = r && Invocation_3(b, l + 1);
+    r = r && consumeToken(b, RIGHT_PARENTHESIS);
+    exit_section_(b, m, INVOCATION, r);
+    return r;
   }
 
   // ExpressionList?
@@ -3055,30 +3054,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = LockStatement(b, l + 1);
     if (!r) r = NamespaceDeclarationStatement(b, l + 1);
     exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // !(int | string | '}' | '=')
-  static boolean StatementRecover(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "StatementRecover")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NOT_);
-    r = !StatementRecover_0(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // int | string | '}' | '='
-  private static boolean StatementRecover_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "StatementRecover_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, INT);
-    if (!r) r = consumeToken(b, STRING);
-    if (!r) r = consumeToken(b, RIGHT_BRACE);
-    if (!r) r = consumeToken(b, ASSIGN);
-    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -5155,11 +5130,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  final static Parser StatementRecover_parser_ = new Parser() {
-    public boolean parse(PsiBuilder b, int l) {
-      return StatementRecover(b, l + 1);
-    }
-  };
   final static Parser TopLevelDefinitionRecover_parser_ = new Parser() {
     public boolean parse(PsiBuilder b, int l) {
       return TopLevelDefinitionRecover(b, l + 1);

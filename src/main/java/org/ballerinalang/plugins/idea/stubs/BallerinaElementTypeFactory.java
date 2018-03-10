@@ -25,6 +25,7 @@ import org.ballerinalang.plugins.idea.stubs.types.BallerinaEnumDefinitionStubEle
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaFunctionDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalVariableDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaStructDefinitionStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaTransformerDefinitionStubElementType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -70,6 +71,9 @@ public class BallerinaElementTypeFactory {
         }
         if ("ANNOTATION_DEFINITION".equals(name)) {
             return new BallerinaAnnotationDefinitionStubElementType(name);
+        }
+        if ("TRANSFORMER_DEFINITION".equals(name)) {
+            return new BallerinaTransformerDefinitionStubElementType(name);
         }
         //    if ("METHOD_DECLARATION".equals(name)) return new GoMethodDeclarationStubElementType(name);
         //    if ("IMPORT_SPEC".equals(name)) return new GoImportSpecStubElementType(name);
