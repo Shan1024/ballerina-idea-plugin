@@ -28,6 +28,7 @@ import org.ballerinalang.plugins.idea.stubs.types.BallerinaEndpointDefinitionStu
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaEnumDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaEnumeratorStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaFieldDefinitionStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaFieldStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaFunctionDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalEndpointDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalVariableDefinitionStubElementType;
@@ -115,6 +116,8 @@ public class BallerinaElementTypeFactory {
                 return new BallerinaNameReferenceStubElementType(name);
             case "PACKAGE_REFERENCE":
                 return new BallerinaPackageReferenceStubElementType(name);
+            case "FIELD":
+                return new BallerinaFieldStubElementType(name);
         }
 
         //    if ("CONST_SPEC".equals(name)) return new GoConstSpecStubElementType(name);

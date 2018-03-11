@@ -86,7 +86,7 @@ public interface BallerinaTypes {
   IElementType EXPRESSION_LIST = new BallerinaCompositeElementType("EXPRESSION_LIST");
   IElementType EXPRESSION_STMT = new BallerinaCompositeElementType("EXPRESSION_STMT");
   IElementType FAILED_CLAUSE = new BallerinaCompositeElementType("FAILED_CLAUSE");
-  IElementType FIELD = new BallerinaCompositeElementType("FIELD");
+  IElementType FIELD = BallerinaElementTypeFactory.stubFactory("FIELD");
   IElementType FIELD_DEFINITION = BallerinaElementTypeFactory.stubFactory("FIELD_DEFINITION");
   IElementType FIELD_VARIABLE_REFERENCE = new BallerinaCompositeElementType("FIELD_VARIABLE_REFERENCE");
   IElementType FINALLY_CLAUSE = new BallerinaCompositeElementType("FINALLY_CLAUSE");

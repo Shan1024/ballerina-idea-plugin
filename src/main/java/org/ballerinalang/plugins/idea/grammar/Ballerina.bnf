@@ -173,11 +173,11 @@
     // implements("|NamespaceDeclaration|ParameterList|ParameterTypeNameList|CallableUnitSignature|ParameterTypeNameList|ReturnParameters") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
     // Todo - Add CatchClause, TriggerWorker, WorkerReply?
     // Each named element (which can be renamed) should implement this interface.
-    implements("Package(Name|Version)|OrgName|Alias|(Name|Package)Reference|Parameter|Enumerator|VariableDefinitionStatement|FieldDefinition") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+    implements("Package(Name|Version)|OrgName|Alias|(Name|Package)Reference|Parameter|Enumerator|VariableDefinitionStatement|Field(Definition)?") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
     // Each named element should extend this class.
-    extends("Package(Name|Version)|OrgName|Alias|(Name|Package)Reference|Parameter|Enumerator|VariableDefinitionStatement|FieldDefinition") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
+    extends("Package(Name|Version)|OrgName|Alias|(Name|Package)Reference|Parameter|Enumerator|VariableDefinitionStatement|Field(Definition)?") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
     // Each stubbed element should have this element type factory.
-    elementTypeFactory("Package(Name|Version)|OrgName|Alias|(Name|Package)Reference|Parameter|Enumerator|VariableDefinitionStatement|FieldDefinition") = "org.ballerinalang.plugins.idea.stubs.factory.BallerinaElementTypeFactory.stubFactory"
+    elementTypeFactory("Package(Name|Version)|OrgName|Alias|(Name|Package)Reference|Parameter|Enumerator|VariableDefinitionStatement|Field(Definition)?") = "org.ballerinalang.plugins.idea.stubs.factory.BallerinaElementTypeFactory.stubFactory"
 
     generateTokenAccessors = true
 }
@@ -450,7 +450,9 @@ XmlAttribVariableReference ::= VariableReference XmlAttrib
 FunctionInvocationReference ::= FunctionInvocation
 SimpleVariableReference ::= NameReference
 
-Field ::= DOT identifier {pin=1}
+Field ::= DOT identifier {
+    pin=1 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFieldStub"
+}
 
 Index ::= LEFT_BRACKET Expression RIGHT_BRACKET {pin=1}
 
@@ -540,10 +542,8 @@ TernaryExpression ::= Expression QUESTION_MARK Expression COLON Expression
 //reusable productions
 
 NameReference ::= PackageReference? identifier {
-    stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaNameReferenceStub"
+    stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaNameReferenceStub" /*{methods=[getReference getQualifier resolve resolveType]}*/
 }
-
-/*{methods=[getReference getQualifier resolve resolveType]}*/
 
 PackageReference ::= identifier COLON {
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageReferenceStub"
