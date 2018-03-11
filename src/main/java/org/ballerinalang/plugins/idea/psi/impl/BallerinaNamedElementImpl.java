@@ -102,7 +102,7 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
     public PsiElement setName(@NonNls @NotNull String newName) throws IncorrectOperationException {
         PsiElement identifier = getIdentifier();
         if (identifier != null) {
-            //            identifier.replace(GoElementFactory.createIdentifierFromText(getProject(), newName));
+            identifier.replace(BallerinaElementFactory.createIdentifierFromText(getProject(), newName));
         }
         return this;
     }
@@ -228,7 +228,7 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
         //            }
         //        }
         //        return GoUtil.goPathUseScope(this, !(this instanceof GoMethodDeclaration));
-        return GlobalSearchScope.EMPTY_SCOPE;
+        return GlobalSearchScope.allScope(getProject());
     }
 
     @Override

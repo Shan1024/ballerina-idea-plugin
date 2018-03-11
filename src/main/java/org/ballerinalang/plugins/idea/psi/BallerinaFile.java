@@ -20,9 +20,14 @@ package org.ballerinalang.plugins.idea.psi;
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.psi.FileViewProvider;
+import com.intellij.psi.stubs.StubElement;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
 import org.ballerinalang.plugins.idea.BallerinaFileType;
 import org.ballerinalang.plugins.idea.BallerinaLanguage;
+import org.ballerinalang.plugins.idea.stubs.BallerinaFileStub;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import javax.swing.Icon;
 
@@ -46,5 +51,25 @@ public class BallerinaFile extends PsiFileBase {
     @Override
     public Icon getIcon(int flags) {
         return super.getIcon(flags);
+    }
+
+    @Nullable
+    public BallerinaPackageDeclaration getPackage() {
+        return CachedValuesManager.getCachedValue(this, () -> {
+            BallerinaFileStub stub = getStub();
+            if (stub != null) {
+                StubElement<BallerinaPackageDeclaration> packageClauseStub = stub.getPackageClauseStub();
+                return CachedValueProvider.Result.create(packageClauseStub != null ? packageClauseStub.getPsi() :
+                        null, this);
+            }
+            return CachedValueProvider.Result.create(findChildByClass(BallerinaPackageDeclaration.class), this);
+        });
+    }
+
+    @Nullable
+    @Override
+    public BallerinaFileStub getStub() {
+        //noinspection unchecked
+        return (BallerinaFileStub) super.getStub();
     }
 }
