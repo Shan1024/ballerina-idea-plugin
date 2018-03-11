@@ -28,7 +28,4 @@ public interface BallerinaPackageName extends BallerinaNamedElement, StubBasedPs
   @NotNull
   PsiElement getIdentifier();
 
-  @Nullable
-  String getName();
-
 }

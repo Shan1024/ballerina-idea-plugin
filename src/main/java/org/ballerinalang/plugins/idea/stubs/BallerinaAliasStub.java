@@ -20,17 +20,17 @@ package org.ballerinalang.plugins.idea.stubs;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
-import org.ballerinalang.plugins.idea.psi.BallerinaPackageVersion;
+import org.ballerinalang.plugins.idea.psi.BallerinaAlias;
 
-public class BallerinaPackageVersionStub extends BallerinaNamedStub<BallerinaPackageVersion> {
+public class BallerinaAliasStub extends BallerinaNamedStub<BallerinaAlias> {
 
-    public BallerinaPackageVersionStub(StubElement parent, IStubElementType elementType, StringRef name,
-                                       boolean isPublic) {
+    public BallerinaAliasStub(StubElement parent, IStubElementType elementType, StringRef name,
+                              boolean isPublic) {
         super(parent, elementType, name, isPublic);
     }
 
-    public BallerinaPackageVersionStub(StubElement parent, IStubElementType elementType, String name,
-                                       boolean isPublic) {
+    public BallerinaAliasStub(StubElement parent, IStubElementType elementType, String name,
+                              boolean isPublic) {
         super(parent, elementType, name, isPublic);
     }
 }

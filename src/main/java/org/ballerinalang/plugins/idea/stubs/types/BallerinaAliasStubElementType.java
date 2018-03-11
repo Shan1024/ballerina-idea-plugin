@@ -20,33 +20,33 @@ package org.ballerinalang.plugins.idea.stubs.types;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
-import org.ballerinalang.plugins.idea.psi.BallerinaPackageVersion;
-import org.ballerinalang.plugins.idea.psi.impl.BallerinaPackageVersionImpl;
-import org.ballerinalang.plugins.idea.stubs.BallerinaPackageVersionStub;
+import org.ballerinalang.plugins.idea.psi.BallerinaAlias;
+import org.ballerinalang.plugins.idea.psi.impl.BallerinaAliasImpl;
+import org.ballerinalang.plugins.idea.stubs.BallerinaAliasStub;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
-public class BallerinaPackageVersionStubElementType extends
-        BallerinaNamedStubElementType<BallerinaPackageVersionStub, BallerinaPackageVersion> {
+public class BallerinaAliasStubElementType extends
+        BallerinaNamedStubElementType<BallerinaAliasStub, BallerinaAlias> {
 
-    public BallerinaPackageVersionStubElementType(@NotNull String debugName) {
+    public BallerinaAliasStubElementType(@NotNull String debugName) {
         super(debugName);
     }
 
     @Override
-    public BallerinaPackageVersion createPsi(@NotNull BallerinaPackageVersionStub stub) {
-        return new BallerinaPackageVersionImpl(stub, this);
+    public BallerinaAlias createPsi(@NotNull BallerinaAliasStub stub) {
+        return new BallerinaAliasImpl(stub, this);
     }
 
     @NotNull
     @Override
-    public BallerinaPackageVersionStub createStub(@NotNull BallerinaPackageVersion psi, StubElement parentStub) {
-        return new BallerinaPackageVersionStub(parentStub, this, psi.getName(), psi.isPublic());
+    public BallerinaAliasStub createStub(@NotNull BallerinaAlias psi, StubElement parentStub) {
+        return new BallerinaAliasStub(parentStub, this, psi.getName(), psi.isPublic());
     }
 
     @Override
-    public void serialize(@NotNull BallerinaPackageVersionStub stub, @NotNull StubOutputStream dataStream)
+    public void serialize(@NotNull BallerinaAliasStub stub, @NotNull StubOutputStream dataStream)
             throws IOException {
         dataStream.writeName(stub.getName());
         dataStream.writeBoolean(stub.isPublic());
@@ -54,8 +54,8 @@ public class BallerinaPackageVersionStubElementType extends
 
     @NotNull
     @Override
-    public BallerinaPackageVersionStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub)
+    public BallerinaAliasStub deserialize(@NotNull StubInputStream dataStream, StubElement parentStub)
             throws IOException {
-        return new BallerinaPackageVersionStub(parentStub, this, dataStream.readName(), dataStream.readBoolean());
+        return new BallerinaAliasStub(parentStub, this, dataStream.readName(), dataStream.readBoolean());
     }
 }

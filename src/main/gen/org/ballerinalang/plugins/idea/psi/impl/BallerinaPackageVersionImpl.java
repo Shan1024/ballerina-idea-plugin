@@ -28,7 +28,7 @@ import org.ballerinalang.plugins.idea.stubs.BallerinaPackageVersionStub;
 import org.ballerinalang.plugins.idea.psi.*;
 import com.intellij.psi.stubs.IStubElementType;
 
-public class BallerinaPackageVersionImpl extends BallerinaStubbedElementImpl<BallerinaPackageVersionStub> implements BallerinaPackageVersion {
+public class BallerinaPackageVersionImpl extends BallerinaNamedElementImpl<BallerinaPackageVersionStub> implements BallerinaPackageVersion {
 
   public BallerinaPackageVersionImpl(BallerinaPackageVersionStub stub, IStubElementType type) {
     super(stub, type);
@@ -57,11 +57,6 @@ public class BallerinaPackageVersionImpl extends BallerinaStubbedElementImpl<Bal
   @NotNull
   public PsiElement getVersion() {
     return notNullChild(findChildByType(VERSION));
-  }
-
-  @Nullable
-  public String getName() {
-    return BallerinaPsiImplUtil.getName(this);
   }
 
 }

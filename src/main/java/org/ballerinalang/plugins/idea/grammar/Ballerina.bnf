@@ -168,16 +168,16 @@
     elementTypeFactory("PackageDeclaration|(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action)Definition") = "org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory"
 
     // Each stub which is not a named definition should extend this class.
-    extends("PackageDeclaration|PackageVersion") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaStubbedElementImpl<?>"
+    extends("PackageDeclaration") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaStubbedElementImpl<?>"
 
-    // Each named element should implement this interface.
-    // Todo - TriggerWorker,WorkerReply?
     //    implements("(Package|Org)Name|Alias|Enumerator|VariableDefinitionStatement|CatchClause|NamespaceDeclaration|Parameter|FieldDefinition") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
-    implements("(Package|Org)Name") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+    // Todo - Add TriggerWorker,WorkerReply?
+    // Each named element should implement this interface.
+    implements("(Package|Org)Name|PackageVersion|Alias") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
     // Each named element should extend this class.
-    extends("(Package|Org)Name") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
+    extends("(Package|Org)Name|PackageVersion|Alias") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
     // Each stubbed element should have this element type factory.
-    elementTypeFactory("(Package|Org)Name") = "org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory"
+    elementTypeFactory("(Package|Org)Name|PackageVersion|Alias") = "org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory"
 
     generateTokenAccessors = true
 }
@@ -191,22 +191,23 @@ PackageDeclaration ::= package CompletePackageName SEMICOLON {
 CompletePackageName ::= PackageName (DOT PackageName)* PackageVersion? {pin(".*")=1}
 
 PackageName ::= identifier {
-    methods=[getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageNameStub"
+    /*methods=[getName]*/ stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageNameStub"
 }
 
 PackageVersion ::= version identifier {
-    pin=1 methods=[getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageVersionStub"
+    pin=1 /*methods=[getName]*/ stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageVersionStub"
 }
 
 // Todo - Cache
 ImportDeclaration ::= import (OrgName DIV)? CompletePackageName Alias? SEMICOLON {pin=1}
 
 OrgName ::= identifier {
-    methods=[getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaOrgNameStub"
+    /*methods=[getName]*/ stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaOrgNameStub"
 }
 
-// Todo - Cache
-Alias ::= as identifier {pin=1}
+Alias ::= as identifier {
+    pin=1 /*methods=[getName]*/ stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaAliasStub"
+}
 
 // Note - Global variable definition should be the first definition since it can contain identifier as type.
 Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? (StructDefinition

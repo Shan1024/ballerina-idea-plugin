@@ -53,9 +53,4 @@ public class BallerinaPackageNameImpl extends BallerinaNamedElementImpl<Ballerin
     return notNullChild(findChildByType(IDENTIFIER));
   }
 
-  @Nullable
-  public String getName() {
-    return BallerinaPsiImplUtil.getName(this);
-  }
-
 }

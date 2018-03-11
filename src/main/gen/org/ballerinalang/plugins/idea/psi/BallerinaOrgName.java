@@ -28,7 +28,4 @@ public interface BallerinaOrgName extends BallerinaNamedElement, StubBasedPsiEle
   @NotNull
   PsiElement getIdentifier();
 
-  @Nullable
-  String getName();
-
 }

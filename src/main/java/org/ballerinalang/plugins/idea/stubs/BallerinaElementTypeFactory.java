@@ -20,6 +20,7 @@ package org.ballerinalang.plugins.idea.stubs;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.util.containers.HashMap;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaActionDefinitionStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaAliasStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaAnnotationDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaConnectorDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaConstantDefinitionStubElementType;
@@ -91,6 +92,8 @@ public class BallerinaElementTypeFactory {
                 return new BallerinaOrgNameStubElementType(name);
             case "PACKAGE_VERSION":
                 return new BallerinaPackageVersionStubElementType(name);
+            case "ALIAS":
+                return new BallerinaAliasStubElementType(name);
         }
 
         //    if ("CONST_SPEC".equals(name)) return new GoConstSpecStubElementType(name);

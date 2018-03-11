@@ -35,7 +35,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitAlias(@NotNull BallerinaAlias o) {
-    visitCompositeElement(o);
+    visitNamedElement(o);
   }
 
   public void visitAnnotationAttachment(@NotNull BallerinaAnnotationAttachment o) {
@@ -367,7 +367,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitPackageVersion(@NotNull BallerinaPackageVersion o) {
-    visitCompositeElement(o);
+    visitNamedElement(o);
   }
 
   public void visitParameter(@NotNull BallerinaParameter o) {

@@ -20,6 +20,7 @@ package org.ballerinalang.plugins.idea.psi.impl;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaActionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaAlias;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
@@ -57,6 +58,12 @@ public class BallerinaPsiImplUtil {
     public static String getName(@NotNull BallerinaOrgName ballerinaOrgName) {
         PsiElement identifier = ballerinaOrgName.getIdentifier();
         return identifier.getText();
+    }
+
+    @Nullable
+    public static String getName(@NotNull BallerinaAlias ballerinaAlias) {
+        PsiElement identifier = ballerinaAlias.getIdentifier();
+        return identifier != null ? identifier.getText() : null;
     }
 
     @Nullable

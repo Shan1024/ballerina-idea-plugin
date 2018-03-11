@@ -23,15 +23,12 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.ballerinalang.plugins.idea.stubs.BallerinaPackageVersionStub;
 
-public interface BallerinaPackageVersion extends BallerinaCompositeElement, StubBasedPsiElement<BallerinaPackageVersionStub> {
+public interface BallerinaPackageVersion extends BallerinaNamedElement, StubBasedPsiElement<BallerinaPackageVersionStub> {
 
   @Nullable
   PsiElement getIdentifier();
 
   @NotNull
   PsiElement getVersion();
-
-  @Nullable
-  String getName();
 
 }
