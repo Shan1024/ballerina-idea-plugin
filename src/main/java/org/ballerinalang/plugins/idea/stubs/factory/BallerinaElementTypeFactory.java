@@ -36,6 +36,7 @@ import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageNameStubElemen
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageVersionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaStructDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaTransformerDefinitionStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaVariableDefinitionStatementStubElementType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -97,6 +98,8 @@ public class BallerinaElementTypeFactory {
                 return new BallerinaAliasStubElementType(name);
             case "ENUMERATOR":
                 return new BallerinaEnumeratorStubElementType(name);
+            case "VARIABLE_DEFINITION_STATEMENT":
+                return new BallerinaVariableDefinitionStatementStubElementType(name);
         }
 
         //    if ("CONST_SPEC".equals(name)) return new GoConstSpecStubElementType(name);

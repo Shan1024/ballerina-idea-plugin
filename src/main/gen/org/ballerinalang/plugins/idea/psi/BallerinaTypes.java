@@ -172,7 +172,7 @@ public interface BallerinaTypes {
   IElementType USER_DEFINE_TYPE_NAME = new BallerinaCompositeElementType("USER_DEFINE_TYPE_NAME");
   IElementType VALUE_TYPE_NAME = new BallerinaCompositeElementType("VALUE_TYPE_NAME");
   IElementType VALUE_TYPE_TYPE_EXPRESSION = new BallerinaCompositeElementType("VALUE_TYPE_TYPE_EXPRESSION");
-  IElementType VARIABLE_DEFINITION_STATEMENT = new BallerinaCompositeElementType("VARIABLE_DEFINITION_STATEMENT");
+  IElementType VARIABLE_DEFINITION_STATEMENT = BallerinaElementTypeFactory.stubFactory("VARIABLE_DEFINITION_STATEMENT");
   IElementType VARIABLE_REFERENCE = new BallerinaCompositeElementType("VARIABLE_REFERENCE");
   IElementType VARIABLE_REFERENCE_EXPRESSION = new BallerinaCompositeElementType("VARIABLE_REFERENCE_EXPRESSION");
   IElementType VARIABLE_REFERENCE_LIST = new BallerinaCompositeElementType("VARIABLE_REFERENCE_LIST");
