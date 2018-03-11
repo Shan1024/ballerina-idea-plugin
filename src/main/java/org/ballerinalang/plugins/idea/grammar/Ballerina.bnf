@@ -173,11 +173,11 @@
     // implements("|NamespaceDeclaration|ParameterList|ParameterTypeNameList|CallableUnitSignature|ParameterTypeNameList|ReturnParameters") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
     // Todo - Add CatchClause, TriggerWorker, WorkerReply?
     // Each named element (which can be renamed) should implement this interface.
-    implements("Package(Name|Version)|OrgName|Alias|(Name|Package)Reference|Parameter|Enumerator|VariableDefinitionStatement|Field(Definition)?") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+    implements("Package(Name|Version)|OrgName|Alias|(Name|Package)Reference|Parameter|Enumerator|VariableDefinitionStatement|Field(Definition)?|NamespaceDeclaration") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
     // Each named element should extend this class.
-    extends("Package(Name|Version)|OrgName|Alias|(Name|Package)Reference|Parameter|Enumerator|VariableDefinitionStatement|Field(Definition)?") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
+    extends("Package(Name|Version)|OrgName|Alias|(Name|Package)Reference|Parameter|Enumerator|VariableDefinitionStatement|Field(Definition)?|NamespaceDeclaration") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
     // Each stubbed element should have this element type factory.
-    elementTypeFactory("Package(Name|Version)|OrgName|Alias|(Name|Package)Reference|Parameter|Enumerator|VariableDefinitionStatement|Field(Definition)?") = "org.ballerinalang.plugins.idea.stubs.factory.BallerinaElementTypeFactory.stubFactory"
+    elementTypeFactory("Package(Name|Version)|OrgName|Alias|(Name|Package)Reference|Parameter|Enumerator|VariableDefinitionStatement|Field(Definition)?|NamespaceDeclaration") = "org.ballerinalang.plugins.idea.stubs.factory.BallerinaElementTypeFactory.stubFactory"
 
     generateTokenAccessors = true
 }
@@ -488,7 +488,9 @@ RetriesStatement ::= retries LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS {pin=
 
 NamespaceDeclarationStatement ::= NamespaceDeclaration /*{pin=1}*/
 
-NamespaceDeclaration ::= xmlns quotedStringLiteral (as identifier)? SEMICOLON {pin=1}
+NamespaceDeclaration ::= xmlns quotedStringLiteral (as identifier)? SEMICOLON {
+    pin=1 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaNamespaceDeclarationStub"
+}
 
 Expression
     ::=  SimpleLiteral

@@ -43,6 +43,7 @@
         <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaEndpointIndex"/>
         <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaActionIndex"/>
         <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaWorkerIndex"/>
+        <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaNamespaceIndex"/>
 
         <stubElementTypeHolder class="org.ballerinalang.plugins.idea.psi.BallerinaTypes"/>
 

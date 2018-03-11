@@ -20,8 +20,10 @@ package org.ballerinalang.plugins.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.StubBasedPsiElement;
+import org.ballerinalang.plugins.idea.stubs.BallerinaNamespaceDeclarationStub;
 
-public interface BallerinaNamespaceDeclaration extends BallerinaCompositeElement {
+public interface BallerinaNamespaceDeclaration extends BallerinaNamedElement, StubBasedPsiElement<BallerinaNamespaceDeclarationStub> {
 
   @Nullable
   PsiElement getSemicolon();

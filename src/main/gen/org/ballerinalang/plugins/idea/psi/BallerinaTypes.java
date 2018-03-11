@@ -113,7 +113,7 @@ public interface BallerinaTypes {
   IElementType LOCK_STATEMENT = new BallerinaCompositeElementType("LOCK_STATEMENT");
   IElementType MAP_ARRAY_VARIABLE_REFERENCE = new BallerinaCompositeElementType("MAP_ARRAY_VARIABLE_REFERENCE");
   IElementType MAP_TYPE_NAME = new BallerinaCompositeElementType("MAP_TYPE_NAME");
-  IElementType NAMESPACE_DECLARATION = new BallerinaCompositeElementType("NAMESPACE_DECLARATION");
+  IElementType NAMESPACE_DECLARATION = BallerinaElementTypeFactory.stubFactory("NAMESPACE_DECLARATION");
   IElementType NAMESPACE_DECLARATION_STATEMENT = new BallerinaCompositeElementType("NAMESPACE_DECLARATION_STATEMENT");
   IElementType NAME_REFERENCE = BallerinaElementTypeFactory.stubFactory("NAME_REFERENCE");
   IElementType NEXT_STATEMENT = new BallerinaCompositeElementType("NEXT_STATEMENT");

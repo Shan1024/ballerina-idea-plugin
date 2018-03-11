@@ -33,6 +33,7 @@ import org.ballerinalang.plugins.idea.stubs.types.BallerinaFunctionDefinitionStu
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalEndpointDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalVariableDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaNameReferenceStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaNamespaceDeclarationStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaOrgNameStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageDeclarationStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageNameStubElementType;
@@ -118,6 +119,8 @@ public class BallerinaElementTypeFactory {
                 return new BallerinaPackageReferenceStubElementType(name);
             case "FIELD":
                 return new BallerinaFieldStubElementType(name);
+            case "NAMESPACE_DECLARATION":
+                return new BallerinaNamespaceDeclarationStubElementType(name);
         }
 
         //    if ("CONST_SPEC".equals(name)) return new GoConstSpecStubElementType(name);
