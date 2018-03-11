@@ -56,7 +56,7 @@ public class BallerinaEndpointDefinitionImpl extends BallerinaNamedElementImpl<B
   @Override
   @Nullable
   public BallerinaNameReference getNameReference() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaNameReference.class);
+    return PsiTreeUtil.getStubChildOfType(this, BallerinaNameReference.class);
   }
 
   @Override

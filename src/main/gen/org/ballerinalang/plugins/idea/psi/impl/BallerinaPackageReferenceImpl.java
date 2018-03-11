@@ -24,9 +24,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
+import org.ballerinalang.plugins.idea.stubs.BallerinaPackageReferenceStub;
 import org.ballerinalang.plugins.idea.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class BallerinaPackageReferenceImpl extends BallerinaCompositeElementImpl implements BallerinaPackageReference {
+public class BallerinaPackageReferenceImpl extends BallerinaNamedElementImpl<BallerinaPackageReferenceStub> implements BallerinaPackageReference {
+
+  public BallerinaPackageReferenceImpl(BallerinaPackageReferenceStub stub, IStubElementType type) {
+    super(stub, type);
+  }
 
   public BallerinaPackageReferenceImpl(ASTNode node) {
     super(node);

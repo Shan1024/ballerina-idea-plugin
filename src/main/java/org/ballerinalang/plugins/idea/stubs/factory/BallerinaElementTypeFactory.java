@@ -31,9 +31,11 @@ import org.ballerinalang.plugins.idea.stubs.types.BallerinaFieldDefinitionStubEl
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaFunctionDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalEndpointDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalVariableDefinitionStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaNameReferenceStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaOrgNameStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageDeclarationStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageNameStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageReferenceStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageVersionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaParameterStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaStructDefinitionStubElementType;
@@ -109,6 +111,10 @@ public class BallerinaElementTypeFactory {
                 return new BallerinaParameterStubElementType(name);
             case "FIELD_DEFINITION":
                 return new BallerinaFieldDefinitionStubElementType(name);
+            case "NAME_REFERENCE":
+                return new BallerinaNameReferenceStubElementType(name);
+            case "PACKAGE_REFERENCE":
+                return new BallerinaPackageReferenceStubElementType(name);
         }
 
         //    if ("CONST_SPEC".equals(name)) return new GoConstSpecStubElementType(name);

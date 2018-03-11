@@ -20,8 +20,10 @@ package org.ballerinalang.plugins.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.StubBasedPsiElement;
+import org.ballerinalang.plugins.idea.stubs.BallerinaPackageReferenceStub;
 
-public interface BallerinaPackageReference extends BallerinaCompositeElement {
+public interface BallerinaPackageReference extends BallerinaNamedElement, StubBasedPsiElement<BallerinaPackageReferenceStub> {
 
   @NotNull
   PsiElement getColon();

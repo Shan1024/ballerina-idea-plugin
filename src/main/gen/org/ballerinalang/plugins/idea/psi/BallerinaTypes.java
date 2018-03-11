@@ -115,12 +115,12 @@ public interface BallerinaTypes {
   IElementType MAP_TYPE_NAME = new BallerinaCompositeElementType("MAP_TYPE_NAME");
   IElementType NAMESPACE_DECLARATION = new BallerinaCompositeElementType("NAMESPACE_DECLARATION");
   IElementType NAMESPACE_DECLARATION_STATEMENT = new BallerinaCompositeElementType("NAMESPACE_DECLARATION_STATEMENT");
-  IElementType NAME_REFERENCE = new BallerinaCompositeElementType("NAME_REFERENCE");
+  IElementType NAME_REFERENCE = BallerinaElementTypeFactory.stubFactory("NAME_REFERENCE");
   IElementType NEXT_STATEMENT = new BallerinaCompositeElementType("NEXT_STATEMENT");
   IElementType ORG_NAME = BallerinaElementTypeFactory.stubFactory("ORG_NAME");
   IElementType PACKAGE_DECLARATION = BallerinaElementTypeFactory.stubFactory("PACKAGE_DECLARATION");
   IElementType PACKAGE_NAME = BallerinaElementTypeFactory.stubFactory("PACKAGE_NAME");
-  IElementType PACKAGE_REFERENCE = new BallerinaCompositeElementType("PACKAGE_REFERENCE");
+  IElementType PACKAGE_REFERENCE = BallerinaElementTypeFactory.stubFactory("PACKAGE_REFERENCE");
   IElementType PACKAGE_VERSION = BallerinaElementTypeFactory.stubFactory("PACKAGE_VERSION");
   IElementType PARAMETER = BallerinaElementTypeFactory.stubFactory("PARAMETER");
   IElementType PARAMETER_LIST = new BallerinaCompositeElementType("PARAMETER_LIST");
