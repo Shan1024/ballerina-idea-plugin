@@ -27,6 +27,7 @@ import org.ballerinalang.plugins.idea.stubs.types.BallerinaConstantDefinitionStu
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaEndpointDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaEnumDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaEnumeratorStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaFieldDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaFunctionDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalEndpointDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalVariableDefinitionStubElementType;
@@ -106,6 +107,8 @@ public class BallerinaElementTypeFactory {
                 return new BallerinaVariableDefinitionStatementStubElementType(name);
             case "PARAMETER":
                 return new BallerinaParameterStubElementType(name);
+            case "FIELD_DEFINITION":
+                return new BallerinaFieldDefinitionStubElementType(name);
         }
 
         //    if ("CONST_SPEC".equals(name)) return new GoConstSpecStubElementType(name);

@@ -24,9 +24,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
+import org.ballerinalang.plugins.idea.stubs.BallerinaFieldDefinitionStub;
 import org.ballerinalang.plugins.idea.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class BallerinaFieldDefinitionImpl extends BallerinaCompositeElementImpl implements BallerinaFieldDefinition {
+public class BallerinaFieldDefinitionImpl extends BallerinaNamedElementImpl<BallerinaFieldDefinitionStub> implements BallerinaFieldDefinition {
+
+  public BallerinaFieldDefinitionImpl(BallerinaFieldDefinitionStub stub, IStubElementType type) {
+    super(stub, type);
+  }
 
   public BallerinaFieldDefinitionImpl(ASTNode node) {
     super(node);

@@ -170,14 +170,14 @@
     // Each stub which is not a named definition should extend this class.
     extends("PackageDeclaration") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaStubbedElementImpl<?>"
 
-    // implements("|NamespaceDeclaration|FieldDefinition|ParameterList|ParameterTypeNameList|NameReference") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+    // implements("|NamespaceDeclaration|ParameterList|ParameterTypeNameList|NameReference") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
     // Todo - Add CatchClause, TriggerWorker,WorkerReply?
     // Each named element (which can be renamed) should implement this interface.
-    implements("Package(Name|Version)|OrgName|Alias|Parameter|Enumerator|VariableDefinitionStatement") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+    implements("Package(Name|Version)|OrgName|Alias|Parameter|Enumerator|VariableDefinitionStatement|FieldDefinition") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
     // Each named element should extend this class.
-    extends("Package(Name|Version)|OrgName|Alias|Parameter|Enumerator|VariableDefinitionStatement") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
+    extends("Package(Name|Version)|OrgName|Alias|Parameter|Enumerator|VariableDefinitionStatement|FieldDefinition") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
     // Each stubbed element should have this element type factory.
-    elementTypeFactory("Package(Name|Version)|OrgName|Alias|Parameter|Enumerator|VariableDefinitionStatement") = "org.ballerinalang.plugins.idea.stubs.factory.BallerinaElementTypeFactory.stubFactory"
+    elementTypeFactory("Package(Name|Version)|OrgName|Alias|Parameter|Enumerator|VariableDefinitionStatement|FieldDefinition") = "org.ballerinalang.plugins.idea.stubs.factory.BallerinaElementTypeFactory.stubFactory"
 
     generateTokenAccessors = true
 }
@@ -558,7 +558,9 @@ Parameter ::= AnnotationAttachment* TypeName identifier {
 }
 
 // Todo - cache
-FieldDefinition ::= TypeName identifier (ASSIGN SimpleLiteral)? SEMICOLON {pin=1}
+FieldDefinition ::= TypeName identifier (ASSIGN SimpleLiteral)? SEMICOLON {
+    pin=1 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFieldDefinitionStub"
+}
 
 SimpleLiteral ::= (ADD|SUB)? integerLiteral /*| (ADD|SUB)? floatingPointLiteral*/ | quotedStringLiteral /*| booleanLiteral | nullLiteral*/ {pin=1}
 
