@@ -30,7 +30,7 @@ public interface BallerinaCallableUnitBody extends BallerinaCompositeElement {
   List<BallerinaEndpointDefinition> getEndpointDefinitionList();
 
   @NotNull
-  List<BallerinaWorkerDeclaration> getWorkerDeclarationList();
+  List<BallerinaWorkerDefinition> getWorkerDefinitionList();
 
   @NotNull
   PsiElement getLeftBrace();

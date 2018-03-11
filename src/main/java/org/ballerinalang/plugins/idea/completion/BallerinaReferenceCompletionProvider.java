@@ -40,6 +40,7 @@ import org.ballerinalang.plugins.idea.stubs.index.BallerinaGlobalVariableIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaPackageIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaStructIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaTransformerIndex;
+import org.ballerinalang.plugins.idea.stubs.index.BallerinaWorkerIndex;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
@@ -80,6 +81,7 @@ public class BallerinaReferenceCompletionProvider extends CompletionContributor 
                 project);
         Collection<String> allEndpoints = StubIndex.getInstance().getAllKeys(BallerinaEndpointIndex.KEY, project);
         Collection<String> allActions = StubIndex.getInstance().getAllKeys(BallerinaActionIndex.KEY, project);
+        Collection<String> allWorkers = StubIndex.getInstance().getAllKeys(BallerinaWorkerIndex.KEY, project);
 
         long start = System.currentTimeMillis();
 

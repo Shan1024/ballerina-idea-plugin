@@ -24,16 +24,22 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
+import org.ballerinalang.plugins.idea.stubs.BallerinaWorkerDefinitionStub;
 import org.ballerinalang.plugins.idea.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class BallerinaWorkerDeclarationImpl extends BallerinaCompositeElementImpl implements BallerinaWorkerDeclaration {
+public class BallerinaWorkerDefinitionImpl extends BallerinaNamedElementImpl<BallerinaWorkerDefinitionStub> implements BallerinaWorkerDefinition {
 
-  public BallerinaWorkerDeclarationImpl(ASTNode node) {
+  public BallerinaWorkerDefinitionImpl(BallerinaWorkerDefinitionStub stub, IStubElementType type) {
+    super(stub, type);
+  }
+
+  public BallerinaWorkerDefinitionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitWorkerDeclaration(this);
+    visitor.visitWorkerDefinition(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {

@@ -354,8 +354,8 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == WHILE_STATEMENT) {
       r = WhileStatement(b, 0);
     }
-    else if (t == WORKER_DECLARATION) {
-      r = WorkerDeclaration(b, 0);
+    else if (t == WORKER_DEFINITION) {
+      r = WorkerDefinition(b, 0);
     }
     else if (t == WORKER_INTERACTION_STATEMENT) {
       r = WorkerInteractionStatement(b, 0);
@@ -825,7 +825,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LEFT_BRACE BlockWithEndpoint RIGHT_BRACE | LEFT_BRACE EndpointDefinition* WorkerDeclaration+ RIGHT_BRACE
+  // LEFT_BRACE BlockWithEndpoint RIGHT_BRACE | LEFT_BRACE EndpointDefinition* WorkerDefinition+ RIGHT_BRACE
   public static boolean CallableUnitBody(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CallableUnitBody")) return false;
     if (!nextTokenIs(b, LEFT_BRACE)) return false;
@@ -849,7 +849,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // LEFT_BRACE EndpointDefinition* WorkerDeclaration+ RIGHT_BRACE
+  // LEFT_BRACE EndpointDefinition* WorkerDefinition+ RIGHT_BRACE
   private static boolean CallableUnitBody_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CallableUnitBody_1")) return false;
     boolean r;
@@ -874,15 +874,15 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // WorkerDeclaration+
+  // WorkerDefinition+
   private static boolean CallableUnitBody_1_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CallableUnitBody_1_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = WorkerDeclaration(b, l + 1);
+    r = WorkerDefinition(b, l + 1);
     int c = current_position_(b);
     while (r) {
-      if (!WorkerDeclaration(b, l + 1)) break;
+      if (!WorkerDefinition(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "CallableUnitBody_1_2", c)) break;
       c = current_position_(b);
     }
@@ -1744,7 +1744,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // fork LEFT_BRACE WorkerDeclaration* RIGHT_BRACE JoinClause? TimeoutClause?
+  // fork LEFT_BRACE WorkerDefinition* RIGHT_BRACE JoinClause? TimeoutClause?
   public static boolean ForkJoinStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForkJoinStatement")) return false;
     if (!nextTokenIs(b, FORK)) return false;
@@ -1760,12 +1760,12 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // WorkerDeclaration*
+  // WorkerDefinition*
   private static boolean ForkJoinStatement_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ForkJoinStatement_2")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!WorkerDeclaration(b, l + 1)) break;
+      if (!WorkerDefinition(b, l + 1)) break;
       if (!empty_element_parsed_guard_(b, "ForkJoinStatement_2", c)) break;
       c = current_position_(b);
     }
@@ -3629,11 +3629,11 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // worker identifier LEFT_BRACE Block RIGHT_BRACE
-  public static boolean WorkerDeclaration(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "WorkerDeclaration")) return false;
+  public static boolean WorkerDefinition(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "WorkerDefinition")) return false;
     if (!nextTokenIs(b, WORKER)) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, WORKER_DECLARATION, null);
+    Marker m = enter_section_(b, l, _NONE_, WORKER_DEFINITION, null);
     r = consumeTokens(b, 1, WORKER, IDENTIFIER, LEFT_BRACE);
     p = r; // pin = 1
     r = r && report_error_(b, Block(b, l + 1));

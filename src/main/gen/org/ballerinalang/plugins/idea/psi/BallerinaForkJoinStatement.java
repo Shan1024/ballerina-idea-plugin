@@ -30,7 +30,7 @@ public interface BallerinaForkJoinStatement extends BallerinaCompositeElement {
   BallerinaTimeoutClause getTimeoutClause();
 
   @NotNull
-  List<BallerinaWorkerDeclaration> getWorkerDeclarationList();
+  List<BallerinaWorkerDefinition> getWorkerDefinitionList();
 
   @Nullable
   PsiElement getLeftBrace();

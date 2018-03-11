@@ -38,6 +38,7 @@ import org.ballerinalang.plugins.idea.stubs.types.BallerinaParameterStubElementT
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaStructDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaTransformerDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaVariableDefinitionStatementStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaWorkerDefinitionStubElementType;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
@@ -89,6 +90,8 @@ public class BallerinaElementTypeFactory {
                 return new BallerinaEndpointDefinitionStubElementType(name);
             case "ACTION_DEFINITION":
                 return new BallerinaActionDefinitionStubElementType(name);
+            case "WORKER_DEFINITION":
+                return new BallerinaWorkerDefinitionStubElementType(name);
             case "PACKAGE_NAME":
                 return new BallerinaPackageNameStubElementType(name);
             case "ORG_NAME":

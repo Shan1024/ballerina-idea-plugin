@@ -160,12 +160,12 @@
     extends("(AnyType|TypeType|ValueType|ReferenceType|arrayType)Name|BinaryAndExpression") = TypeName
 
     // Each named definition (which can be renamed) should implement this interface.
-    implements("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action)Definition") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+    implements("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
     // Each named definition should extend this class.
-    extends("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action)Definition") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
+    extends("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
 
     // Each stubbed element should have this element type factory.
-    elementTypeFactory("PackageDeclaration|(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action)Definition") = "org.ballerinalang.plugins.idea.stubs.factory.BallerinaElementTypeFactory.stubFactory"
+    elementTypeFactory("PackageDeclaration|(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.stubs.factory.BallerinaElementTypeFactory.stubFactory"
 
     // Each stub which is not a named definition should extend this class.
     extends("PackageDeclaration") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaStubbedElementImpl<?>"
@@ -223,7 +223,7 @@ ServiceBody ::= LEFT_BRACE EndpointDefinition* VariableDefinitionStatement* Reso
 
 ResourceDefinition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? resource identifier LEFT_PARENTHESIS ParameterList RIGHT_PARENTHESIS CallableUnitBody {pin=4}
 
-CallableUnitBody ::= LEFT_BRACE BlockWithEndpoint RIGHT_BRACE | LEFT_BRACE EndpointDefinition* WorkerDeclaration+ RIGHT_BRACE
+CallableUnitBody ::= LEFT_BRACE BlockWithEndpoint RIGHT_BRACE | LEFT_BRACE EndpointDefinition* WorkerDefinition+ RIGHT_BRACE
 
 Block ::= Statement* /*{recoverWhile=StatementRecover}*/
 BlockWithEndpoint ::= EndpointDefinition* Block
@@ -292,7 +292,9 @@ ConstantDefinition ::= (public)? const ValueTypeName identifier ASSIGN Expressio
     pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaConstantDefinitionStub"
 }
 
-WorkerDeclaration ::= worker identifier LEFT_BRACE Block RIGHT_BRACE {pin=1}
+WorkerDefinition ::= worker identifier LEFT_BRACE Block RIGHT_BRACE {
+    pin=1 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaWorkerDefinitionStub"
+}
 
 GlobalEndpointDefinition ::= public? EndpointDefinition {
     pin=2 methods=[getIdentifier] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaGlobalEndpointDefinitionStub"
@@ -405,7 +407,7 @@ NextStatement ::= next SEMICOLON {pin=1}
 BreakStatement ::= break SEMICOLON {pin=1}
 
 // typeName is only message
-ForkJoinStatement ::= fork LEFT_BRACE WorkerDeclaration* RIGHT_BRACE JoinClause? TimeoutClause? {pin=1}
+ForkJoinStatement ::= fork LEFT_BRACE WorkerDefinition* RIGHT_BRACE JoinClause? TimeoutClause? {pin=1}
 
 // below typeName is only 'message[]'
 JoinClause ::= join (LEFT_PARENTHESIS JoinConditions RIGHT_PARENTHESIS)? LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Block RIGHT_BRACE {pin=1}

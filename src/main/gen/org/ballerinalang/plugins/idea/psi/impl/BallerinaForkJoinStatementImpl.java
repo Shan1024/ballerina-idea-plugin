@@ -55,8 +55,8 @@ public class BallerinaForkJoinStatementImpl extends BallerinaCompositeElementImp
 
   @Override
   @NotNull
-  public List<BallerinaWorkerDeclaration> getWorkerDeclarationList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaWorkerDeclaration.class);
+  public List<BallerinaWorkerDefinition> getWorkerDefinitionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaWorkerDefinition.class);
   }
 
   @Override
