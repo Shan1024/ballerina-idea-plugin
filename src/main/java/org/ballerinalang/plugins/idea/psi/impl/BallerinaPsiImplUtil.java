@@ -25,9 +25,13 @@ import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaOrgName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageDeclaration;
+import org.ballerinalang.plugins.idea.psi.BallerinaPackageName;
+import org.ballerinalang.plugins.idea.psi.BallerinaPackageVersion;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
 import org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub;
+import org.ballerinalang.plugins.idea.stubs.BallerinaPackageVersionStub;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -36,9 +40,33 @@ public class BallerinaPsiImplUtil {
     @Nullable
     public static String getName(@NotNull BallerinaPackageDeclaration packageClause) {
         BallerinaPackageDeclarationStub stub = packageClause.getStub();
-        if (stub != null) return stub.getName();
-        PsiElement packageIdentifier = packageClause.getCompletePackageName();
-        return packageIdentifier != null ? packageIdentifier.getText().trim() : null;
+        if (stub != null) {
+            return stub.getName();
+        }
+        PsiElement identifier = packageClause.getCompletePackageName();
+        return identifier != null ? identifier.getText() : null;
+    }
+
+    @Nullable
+    public static String getName(@NotNull BallerinaPackageName ballerinaPackageName) {
+        PsiElement identifier = ballerinaPackageName.getIdentifier();
+        return identifier.getText();
+    }
+
+    @Nullable
+    public static String getName(@NotNull BallerinaOrgName ballerinaOrgName) {
+        PsiElement identifier = ballerinaOrgName.getIdentifier();
+        return identifier.getText();
+    }
+
+    @Nullable
+    public static String getName(@NotNull BallerinaPackageVersion ballerinaPackageVersion) {
+        BallerinaPackageVersionStub stub = ballerinaPackageVersion.getStub();
+        if (stub != null) {
+            return stub.getName();
+        }
+        PsiElement identifier = ballerinaPackageVersion.getIdentifier();
+        return identifier != null ? identifier.getText() : null;
     }
 
     @Nullable

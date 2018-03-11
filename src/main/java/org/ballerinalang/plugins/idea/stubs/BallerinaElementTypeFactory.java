@@ -28,7 +28,10 @@ import org.ballerinalang.plugins.idea.stubs.types.BallerinaEnumDefinitionStubEle
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaFunctionDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalEndpointDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalVariableDefinitionStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaOrgNameStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageDeclarationStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageNameStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageVersionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaStructDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaTransformerDefinitionStubElementType;
 import org.jetbrains.annotations.NotNull;
@@ -57,48 +60,39 @@ public class BallerinaElementTypeFactory {
 
     public static IStubElementType stubFactory(@NotNull String name) {
         // Note - If the element type is wrong, an error will occur while loading the lexer in syntax highlighting.
-        if ("PACKAGE_DECLARATION".equals(name)) {
-            return BallerinaPackageDeclarationStubElementType.INSTANCE;
+        switch (name) {
+            case "PACKAGE_DECLARATION":
+                return BallerinaPackageDeclarationStubElementType.INSTANCE;
+            case "FUNCTION_DEFINITION":
+                return new BallerinaFunctionDefinitionStubElementType(name);
+            case "STRUCT_DEFINITION":
+                return new BallerinaStructDefinitionStubElementType(name);
+            case "GLOBAL_VARIABLE_DEFINITION":
+                return new BallerinaGlobalVariableDefinitionStubElementType(name);
+            case "CONNECTOR_DEFINITION":
+                return new BallerinaConnectorDefinitionStubElementType(name);
+            case "ENUM_DEFINITION":
+                return new BallerinaEnumDefinitionStubElementType(name);
+            case "ANNOTATION_DEFINITION":
+                return new BallerinaAnnotationDefinitionStubElementType(name);
+            case "TRANSFORMER_DEFINITION":
+                return new BallerinaTransformerDefinitionStubElementType(name);
+            case "CONSTANT_DEFINITION":
+                return new BallerinaConstantDefinitionStubElementType(name);
+            case "GLOBAL_ENDPOINT_DEFINITION":
+                return new BallerinaGlobalEndpointDefinitionStubElementType(name);
+            case "ENDPOINT_DEFINITION":
+                return new BallerinaEndpointDefinitionStubElementType(name);
+            case "ACTION_DEFINITION":
+                return new BallerinaActionDefinitionStubElementType(name);
+            case "PACKAGE_NAME":
+                return new BallerinaPackageNameStubElementType(name);
+            case "ORG_NAME":
+                return new BallerinaOrgNameStubElementType(name);
+            case "PACKAGE_VERSION":
+                return new BallerinaPackageVersionStubElementType(name);
         }
-        if ("FUNCTION_DEFINITION".equals(name)) {
-            return new BallerinaFunctionDefinitionStubElementType(name);
-        }
-        if ("STRUCT_DEFINITION".equals(name)) {
-            return new BallerinaStructDefinitionStubElementType(name);
-        }
-        if ("GLOBAL_VARIABLE_DEFINITION".equals(name)) {
-            return new BallerinaGlobalVariableDefinitionStubElementType(name);
-        }
-        if ("CONNECTOR_DEFINITION".equals(name)) {
-            return new BallerinaConnectorDefinitionStubElementType(name);
-        }
-        if ("ENUM_DEFINITION".equals(name)) {
-            return new BallerinaEnumDefinitionStubElementType(name);
-        }
-        if ("ANNOTATION_DEFINITION".equals(name)) {
-            return new BallerinaAnnotationDefinitionStubElementType(name);
-        }
-        if ("TRANSFORMER_DEFINITION".equals(name)) {
-            return new BallerinaTransformerDefinitionStubElementType(name);
-        }
-        if ("CONSTANT_DEFINITION".equals(name)) {
-            return new BallerinaConstantDefinitionStubElementType(name);
-        }
-        if ("GLOBAL_ENDPOINT_DEFINITION".equals(name)) {
-            return new BallerinaGlobalEndpointDefinitionStubElementType(name);
-        }
-        if ("ENDPOINT_DEFINITION".equals(name)) {
-            return new BallerinaEndpointDefinitionStubElementType(name);
-        }
-        if ("ACTION_DEFINITION".equals(name)) {
-            return new BallerinaActionDefinitionStubElementType(name);
-        }
-        //    if ("METHOD_DECLARATION".equals(name)) return new GoMethodDeclarationStubElementType(name);
-        //    if ("IMPORT_SPEC".equals(name)) return new GoImportSpecStubElementType(name);
-        //    if ("PARAM_DEFINITION".equals(name)) return new GoParamDefinitionStubElementType(name);
-        //    if ("RECEIVER".equals(name)) return new GoReceiverStubElementType(name);
-        //    if ("TYPE_SPEC".equals(name)) return new GoTypeSpecStubElementType(name);
-        //    if ("METHOD_SPEC".equals(name)) return new GoMethodSpecStubElementType(name);
+
         //    if ("CONST_SPEC".equals(name)) return new GoConstSpecStubElementType(name);
         //        if ("PACKAGE_CLAUSE".equals(name)) {
         //            return BallerinaPackageDeclarationStubElementType.INSTANCE;

@@ -16,25 +16,25 @@
  */
 
 {
-  classHeader='CopyrightHeader.txt'
+    classHeader = "CopyrightHeader.txt"
 
-  implements='org.ballerinalang.plugins.idea.psi.BallerinaCompositeElement'
-  extends='org.ballerinalang.plugins.idea.psi.impl.BallerinaCompositeElementImpl'
+    implements = "org.ballerinalang.plugins.idea.psi.BallerinaCompositeElement"
+    extends = "org.ballerinalang.plugins.idea.psi.impl.BallerinaCompositeElementImpl"
 
-  parserClass="org.ballerinalang.plugins.idea.parser.BallerinaParser"
+    parserClass = "org.ballerinalang.plugins.idea.parser.BallerinaParser"
 
-  psiClassPrefix="Ballerina"
-  psiImplClassSuffix="Impl"
-  psiPackage="org.ballerinalang.plugins.idea.psi"
-  psiImplPackage="org.ballerinalang.plugins.idea.psi.impl"
-  psiImplUtilClass="org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil"
+    psiClassPrefix = "Ballerina"
+    psiImplClassSuffix = "Impl"
+    psiPackage = "org.ballerinalang.plugins.idea.psi"
+    psiImplPackage = "org.ballerinalang.plugins.idea.psi.impl"
+    psiImplUtilClass = "org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil"
 
-  elementTypeHolderClass="org.ballerinalang.plugins.idea.psi.BallerinaTypes"
-  elementTypeClass="org.ballerinalang.plugins.idea.psi.BallerinaCompositeElementType"
+    elementTypeHolderClass = "org.ballerinalang.plugins.idea.psi.BallerinaTypes"
+    elementTypeClass = "org.ballerinalang.plugins.idea.psi.BallerinaCompositeElementType"
 
-  tokenTypeClass="org.ballerinalang.plugins.idea.psi.BallerinaTokenType"
+    tokenTypeClass = "org.ballerinalang.plugins.idea.psi.BallerinaTokenType"
 
-  tokens=[
+    tokens=[
     // Todo -  remove keywords after uncommenting all parser rules
     PACKAGE         = 'package'
     IMPORT          = 'import'
@@ -150,58 +150,75 @@
     integerLiteral = "regexp:\d+"
   ]
 
-  extends("(FunctionInvocation|SimpleVariable|MapArrayVariable|FieldVariable|XmlAttribVariable|Invocation)Reference")=VariableReference
+    extends("(FunctionInvocation|SimpleVariable|MapArrayVariable|FieldVariable|XmlAttribVariable|Invocation)Reference") = VariableReference
 
-  extends("((ValueType|BuiltInReferenceType)Type|VariableReference|LambdaFunction|TypeInit|Type(Casting|Conversion|Access)|Braced)Expression")=Expression
-  extends("(Unary|Binary|Ternary)Expression")=Expression
-  extends("((Simple|Array|Record|Xml|StringTemplate)Literal)")=Expression
-  extends("Binary(Pow|DivMulMod|AddSub|Compare|Equal|And|Or)Expression")=BinaryExpression
+    extends("((ValueType|BuiltInReferenceType)Type|VariableReference|LambdaFunction|TypeInit|Type(Casting|Conversion|Access)|Braced)Expression") = Expression
+    extends("(Unary|Binary|Ternary)Expression") = Expression
+    extends("((Simple|Array|Record|Xml|StringTemplate)Literal)") = Expression
+    extends("Binary(Pow|DivMulMod|AddSub|Compare|Equal|And|Or)Expression") = BinaryExpression
 
-  extends("(AnyType|TypeType|ValueType|ReferenceType|arrayType)Name|BinaryAndExpression")=TypeName
+    extends("(AnyType|TypeType|ValueType|ReferenceType|arrayType)Name|BinaryAndExpression") = TypeName
 
-  implements("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|.*Endpoint|Action)Definition")="org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
-  extends("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|.*Endpoint|Action)Definition")="org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
+    // Each named definition should implement this interface.
+    implements("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action)Definition") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+    // Each named definition should extend this class.
+    extends("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action)Definition") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
 
-  elementTypeFactory("PackageDeclaration|(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|.*Endpoint|Action)Definition")='org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory'
+    // Each stubbed element should have this element type factory.
+    elementTypeFactory("PackageDeclaration|(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action)Definition") = "org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory"
 
-//  implements("NameReference")="com.intellij.psi.PsiNameIdentifierOwner"
-  extends("PackageDeclaration")="org.ballerinalang.plugins.idea.psi.impl.BallerinaStubbedElementImpl<?>"
+    // Each stub which is not a named definition should extend this class.
+    extends("PackageDeclaration|PackageVersion") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaStubbedElementImpl<?>"
 
-  generateTokenAccessors=true
+    // Each named element should implement this interface.
+    // Todo - TriggerWorker,WorkerReply?
+    //    implements("(Package|Org)Name|Alias|Enumerator|VariableDefinitionStatement|CatchClause|NamespaceDeclaration|Parameter|FieldDefinition") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+    implements("(Package|Org)Name") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+    // Each named element should extend this class.
+    extends("(Package|Org)Name") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
+    // Each stubbed element should have this element type factory.
+    elementTypeFactory("(Package|Org)Name") = "org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory"
+
+    generateTokenAccessors = true
 }
 
 CompilationUnit ::= PackageDeclaration? (ImportDeclaration | NamespaceDeclaration)* Definition* <<eof>>
 
-PackageDeclaration ::= package CompletePackageName SEMICOLON {pin=1 methods=[getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub"}
+PackageDeclaration ::= package CompletePackageName SEMICOLON {
+    pin=1 methods=[getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub"
+}
 
-// Todo - Cache
 CompletePackageName ::= PackageName (DOT PackageName)* PackageVersion? {pin(".*")=1}
 
-// Todo - Cache
-PackageName ::= identifier
+PackageName ::= identifier {
+    methods=[getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageNameStub"
+}
+
+PackageVersion ::= version identifier {
+    pin=1 methods=[getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageVersionStub"
+}
 
 // Todo - Cache
-PackageVersion ::= version identifier {pin=1};
+ImportDeclaration ::= import (OrgName DIV)? CompletePackageName Alias? SEMICOLON {pin=1}
 
-// Todo - Cache
-ImportDeclaration ::= import (orgName DIV)? CompletePackageName Alias? SEMICOLON {pin=1}
-
-// Todo - Cache
-orgName ::= identifier
+OrgName ::= identifier {
+    methods=[getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaOrgNameStub"
+}
 
 // Todo - Cache
 Alias ::= as identifier {pin=1}
 
 // Note - Global variable definition should be the first definition since it can contain identifier as type.
-Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment?
-               (StructDefinition | GlobalVariableDefinition | ServiceDefinition | FunctionDefinition
-               | ConnectorDefinition | EnumDefinition | AnnotationDefinition | TransformerDefinition
-               | ConstantDefinition | GlobalEndpointDefinition) {recoverWhile=TopLevelDefinitionRecover}
+Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? (StructDefinition
+    | GlobalVariableDefinition | ServiceDefinition | FunctionDefinition | ConnectorDefinition | EnumDefinition
+    | AnnotationDefinition | TransformerDefinition | ConstantDefinition | GlobalEndpointDefinition) {
+    recoverWhile=TopLevelDefinitionRecover
+}
 
 private TopLevelDefinitionRecover ::= !(service | function | connector | struct | enum | annotation | transformer | endpoint | const | boolean | int | float | string | blob | identifier)
 
 ServiceDefinition ::= service (LT NameReference GT) identifier ServiceBody {pin=1}
-ServiceBody ::=   LEFT_BRACE EndpointDefinition* VariableDefinitionStatement* ResourceDefinition* RIGHT_BRACE
+ServiceBody ::= LEFT_BRACE EndpointDefinition* VariableDefinitionStatement* ResourceDefinition* RIGHT_BRACE
 
 ResourceDefinition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? resource identifier LEFT_PARENTHESIS ParameterList RIGHT_PARENTHESIS CallableUnitBody {pin=4}
 
@@ -214,7 +231,9 @@ BlockWithEndpoint ::= EndpointDefinition* Block
 
 //private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
 
-FunctionDefinition ::= NativeFunctionDefinition | NonNativeFunctionDefinition {pin=1 methods=[getIdentifier getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFunctionDefinitionStub"}
+FunctionDefinition ::= NativeFunctionDefinition | NonNativeFunctionDefinition {
+    pin=1 methods=[getIdentifier getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFunctionDefinitionStub"
+}
 private NativeFunctionDefinition ::= (public)? native function (LT Parameter GT)? CallableUnitSignature SEMICOLON {pin=3}
 private NonNativeFunctionDefinition ::= (public)? function (LT Parameter GT)? CallableUnitSignature CallableUnitBody {pin=2}
 
@@ -223,42 +242,62 @@ LambdaFunction ::= function LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS Re
 // Todo - cache. Signature owner
 CallableUnitSignature ::= identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ReturnParameters? {pin=1}
 
-ConnectorDefinition ::= (public)? connector identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ConnectorBody {pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaConnectorDefinitionStub"}
+ConnectorDefinition ::= (public)? connector identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ConnectorBody {
+    pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaConnectorDefinitionStub"
+}
 
 ConnectorBody ::= LEFT_BRACE EndpointDefinition* VariableDefinitionStatement* ActionDefinition* RIGHT_BRACE
 
-ActionDefinition ::= NativeActionDefinition | NonNativeActionDefinition {methods=[getIdentifier] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaActionDefinitionStub"}
+ActionDefinition ::= NativeActionDefinition | NonNativeActionDefinition {
+    methods=[getIdentifier] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaActionDefinitionStub"
+}
 private NativeActionDefinition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? native action  CallableUnitSignature SEMICOLON {pin=5}
 private NonNativeActionDefinition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? action CallableUnitSignature CallableUnitBody {pin=4}
 
-StructDefinition ::= (public)? struct identifier StructBody {pin=2 methods=[getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaStructDefinitionStub"}
+StructDefinition ::= (public)? struct identifier StructBody {
+    pin=2 methods=[getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaStructDefinitionStub"
+}
 
 StructBody ::= LEFT_BRACE FieldDefinition* PrivateStructBody? RIGHT_BRACE
 
 // Todo - Cache
 PrivateStructBody ::= private COLON FieldDefinition* {pin=1}
 
-AnnotationDefinition ::= (public)? annotation (LT AttachmentPoint (COMMA AttachmentPoint)* GT)?  identifier UserDefineTypeName? SEMICOLON {pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaAnnotationDefinitionStub"}
+AnnotationDefinition ::= (public)? annotation (LT AttachmentPoint (COMMA AttachmentPoint)* GT)? identifier UserDefineTypeName? SEMICOLON {
+    pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaAnnotationDefinitionStub"
+}
 
-EnumDefinition ::= (public)? enum identifier LEFT_BRACE Enumerator (COMMA Enumerator)* RIGHT_BRACE {pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaEnumDefinitionStub"}
+EnumDefinition ::= (public)? enum identifier LEFT_BRACE Enumerator (COMMA Enumerator)* RIGHT_BRACE {
+    pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaEnumDefinitionStub"
+}
 
 Enumerator ::= identifier
 
-GlobalVariableDefinition ::= (public)? TypeName identifier (ASSIGN Expression )? SEMICOLON {pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaGlobalVariableDefinitionStub"}
+GlobalVariableDefinition ::= (public)? TypeName identifier (ASSIGN Expression )? SEMICOLON {
+    pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaGlobalVariableDefinitionStub"
+}
 
-TransformerDefinition ::= (public)? transformer LT ParameterList GT (identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS)? CallableUnitBody {pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaTransformerDefinitionStub"}
+TransformerDefinition ::= (public)? transformer LT ParameterList GT (identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS)? CallableUnitBody {
+    pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaTransformerDefinitionStub"
+}
 
 // Todo - Need to update the service?
 // Note - "parameter" is treated differently here because there is a parser rule named "parameter" as well.
 AttachmentPoint ::= service (LT identifier? GT)? | resource | connector | action | function | struct | enum | const | TYPE_PARAMETER | annotation | transformer
 
-ConstantDefinition ::= (public)? const ValueTypeName identifier ASSIGN Expression SEMICOLON {pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaConstantDefinitionStub"}
+ConstantDefinition ::= (public)? const ValueTypeName identifier ASSIGN Expression SEMICOLON {
+    pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaConstantDefinitionStub"
+}
 
 WorkerDeclaration ::= worker identifier LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
-GlobalEndpointDefinition ::= public? EndpointDefinition {pin=2 methods=[getIdentifier] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaGlobalEndpointDefinitionStub"}
+GlobalEndpointDefinition ::= public? EndpointDefinition {
+    pin=2 methods=[getIdentifier] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaGlobalEndpointDefinitionStub"
+}
 
-EndpointDefinition ::= AnnotationAttachment* endpoint (LT NameReference GT) identifier RecordLiteral? {pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaEndpointDefinitionStub"}
+EndpointDefinition ::= AnnotationAttachment* endpoint (LT NameReference GT) identifier RecordLiteral? {
+    pin=2 stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaEndpointDefinitionStub"
+}
 
 TypeName ::= AnyTypeName | TypeTypeName | ValueTypeName | ReferenceTypeName | arrayTypeName
 
@@ -289,7 +328,7 @@ JsonTypeName ::= json (LT NameReference GT)? {pin=1}
 TableTypeName ::= table (LT NameReference GT)? {pin=1}
 
 // Todo - Pin 1?
-FunctionTypeName ::= function LEFT_PARENTHESIS (ParameterList | TypeList)? RIGHT_PARENTHESIS ReturnParameters? {pin=3}
+FunctionTypeName ::= function LEFT_PARENTHESIS (ParameterList | ParameterTypeNameList)? RIGHT_PARENTHESIS ReturnParameters? {pin=3}
 
 XmlNamespaceName ::= quotedStringLiteral
 
@@ -413,7 +452,7 @@ XmlAttrib ::= AT (LEFT_BRACKET Expression RIGHT_BRACKET)? {pin=1}
 // Todo - Need to pin?
 FunctionInvocation ::= NameReference LEFT_PARENTHESIS ExpressionList? RIGHT_PARENTHESIS /*{pin=2}*/
 
-// Todo - Adding pin will mess with function invocation.
+// Todo - Adding pin will mess function invocation.
 Invocation ::= DOT AnyIdentifierName LEFT_PARENTHESIS ExpressionList? RIGHT_PARENTHESIS /*{pin=1}*/
 
 ActionInvocation ::= VariableReference RARROW FunctionInvocation {pin=2}
@@ -497,9 +536,9 @@ NameReference ::= PackageReference? identifier /*{methods=[getReference getQuali
 
 PackageReference ::= identifier COLON
 
-ReturnParameters ::= RETURNS? LEFT_PARENTHESIS (ParameterList | parameterTypeNameList) RIGHT_PARENTHESIS {pin=3}
+ReturnParameters ::= RETURNS? LEFT_PARENTHESIS (ParameterList | ParameterTypeNameList) RIGHT_PARENTHESIS {pin=3}
 
-parameterTypeNameList ::= parameterTypeName (COMMA parameterTypeName)* {pin=1 /*recoverWhile=RecoverParameter*/}
+ParameterTypeNameList ::= parameterTypeName (COMMA parameterTypeName)* {pin=1 /*recoverWhile=RecoverParameter*/}
 
 parameterTypeName ::= AnnotationAttachment* TypeName
 

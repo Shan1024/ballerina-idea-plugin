@@ -117,9 +117,9 @@ public interface BallerinaTypes {
   IElementType NAMESPACE_DECLARATION_STATEMENT = new BallerinaCompositeElementType("NAMESPACE_DECLARATION_STATEMENT");
   IElementType NAME_REFERENCE = new BallerinaCompositeElementType("NAME_REFERENCE");
   IElementType NEXT_STATEMENT = new BallerinaCompositeElementType("NEXT_STATEMENT");
-  IElementType ORG_NAME = new BallerinaCompositeElementType("ORG_NAME");
+  IElementType ORG_NAME = BallerinaElementTypeFactory.stubFactory("ORG_NAME");
   IElementType PACKAGE_DECLARATION = BallerinaElementTypeFactory.stubFactory("PACKAGE_DECLARATION");
-  IElementType PACKAGE_NAME = new BallerinaCompositeElementType("PACKAGE_NAME");
+  IElementType PACKAGE_NAME = BallerinaElementTypeFactory.stubFactory("PACKAGE_NAME");
   IElementType PACKAGE_REFERENCE = new BallerinaCompositeElementType("PACKAGE_REFERENCE");
   IElementType PACKAGE_VERSION = new BallerinaCompositeElementType("PACKAGE_VERSION");
   IElementType PARAMETER = new BallerinaCompositeElementType("PARAMETER");
@@ -315,7 +315,6 @@ public interface BallerinaTypes {
   IElementType TRIPLEBACKTICKINLINECODEEND = new BallerinaTokenType("TripleBackTickInlineCodeEnd");
   IElementType TRY = new BallerinaTokenType("try");
   IElementType TYPE = new BallerinaTokenType("type");
-  IElementType TYPELIST = new BallerinaTokenType("TypeList");
   IElementType TYPEOF = new BallerinaTokenType("typeof");
   IElementType TYPE_PARAMETER = new BallerinaTokenType("parameter");
   IElementType VAR = new BallerinaTokenType("var");
