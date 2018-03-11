@@ -34,6 +34,7 @@ import org.ballerinalang.plugins.idea.stubs.types.BallerinaOrgNameStubElementTyp
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageDeclarationStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageNameStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageVersionStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaParameterStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaStructDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaTransformerDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaVariableDefinitionStatementStubElementType;
@@ -100,6 +101,8 @@ public class BallerinaElementTypeFactory {
                 return new BallerinaEnumeratorStubElementType(name);
             case "VARIABLE_DEFINITION_STATEMENT":
                 return new BallerinaVariableDefinitionStatementStubElementType(name);
+            case "PARAMETER":
+                return new BallerinaParameterStubElementType(name);
         }
 
         //    if ("CONST_SPEC".equals(name)) return new GoConstSpecStubElementType(name);
