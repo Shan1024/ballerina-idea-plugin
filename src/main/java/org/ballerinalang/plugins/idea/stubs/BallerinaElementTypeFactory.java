@@ -94,6 +94,8 @@ public class BallerinaElementTypeFactory {
                 return new BallerinaPackageVersionStubElementType(name);
             case "ALIAS":
                 return new BallerinaAliasStubElementType(name);
+            case "Enumerator":
+                return new BallerinaEnumDefinitionStubElementType(name);
         }
 
         //    if ("CONST_SPEC".equals(name)) return new GoConstSpecStubElementType(name);

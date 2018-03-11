@@ -50,7 +50,7 @@ public class BallerinaEnumDefinitionImpl extends BallerinaNamedElementImpl<Balle
   @Override
   @NotNull
   public List<BallerinaEnumerator> getEnumeratorList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaEnumerator.class);
+    return PsiTreeUtil.getStubChildrenOfTypeAsList(this, BallerinaEnumerator.class);
   }
 
   @Override

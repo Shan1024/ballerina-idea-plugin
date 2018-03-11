@@ -207,7 +207,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitEnumerator(@NotNull BallerinaEnumerator o) {
-    visitCompositeElement(o);
+    visitNamedElement(o);
   }
 
   public void visitExpression(@NotNull BallerinaExpression o) {
