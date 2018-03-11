@@ -15,7 +15,7 @@
  *
  */
 
-package org.ballerinalang.plugins.idea.stubs;
+package org.ballerinalang.plugins.idea.stubs.factory;
 
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.util.containers.HashMap;
@@ -26,6 +26,7 @@ import org.ballerinalang.plugins.idea.stubs.types.BallerinaConnectorDefinitionSt
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaConstantDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaEndpointDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaEnumDefinitionStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaEnumeratorStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaFunctionDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalEndpointDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalVariableDefinitionStubElementType;
@@ -60,7 +61,7 @@ public class BallerinaElementTypeFactory {
     }
 
     public static IStubElementType stubFactory(@NotNull String name) {
-        // Note - If the element type is wrong, an error will occur while loading the lexer in syntax highlighting.
+        // NOTE - If the element type is wrong, an error will occur while loading the lexer in syntax highlighting.
         switch (name) {
             case "PACKAGE_DECLARATION":
                 return BallerinaPackageDeclarationStubElementType.INSTANCE;
@@ -94,8 +95,8 @@ public class BallerinaElementTypeFactory {
                 return new BallerinaPackageVersionStubElementType(name);
             case "ALIAS":
                 return new BallerinaAliasStubElementType(name);
-            case "Enumerator":
-                return new BallerinaEnumDefinitionStubElementType(name);
+            case "ENUMERATOR":
+                return new BallerinaEnumeratorStubElementType(name);
         }
 
         //    if ("CONST_SPEC".equals(name)) return new GoConstSpecStubElementType(name);

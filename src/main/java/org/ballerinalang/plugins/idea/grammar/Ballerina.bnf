@@ -165,7 +165,7 @@
     extends("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action)Definition") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
 
     // Each stubbed element should have this element type factory.
-    elementTypeFactory("PackageDeclaration|(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action)Definition") = "org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory"
+    elementTypeFactory("PackageDeclaration|(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action)Definition") = "org.ballerinalang.plugins.idea.stubs.factory.BallerinaElementTypeFactory.stubFactory"
 
     // Each stub which is not a named definition should extend this class.
     extends("PackageDeclaration") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaStubbedElementImpl<?>"
@@ -177,7 +177,7 @@
     // Each named element should extend this class.
     extends("(Package|Org)Name|PackageVersion|Alias|Enumerator") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
     // Each stubbed element should have this element type factory.
-    elementTypeFactory("(Package|Org)Name|PackageVersion|Alias|Enumerator") = "org.ballerinalang.plugins.idea.stubs.BallerinaElementTypeFactory.stubFactory"
+    elementTypeFactory("(Package|Org)Name|PackageVersion|Alias|Enumerator") = "org.ballerinalang.plugins.idea.stubs.factory.BallerinaElementTypeFactory.stubFactory"
 
     generateTokenAccessors = true
 }
