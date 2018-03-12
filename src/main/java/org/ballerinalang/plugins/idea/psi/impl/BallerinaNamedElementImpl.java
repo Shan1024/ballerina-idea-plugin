@@ -134,10 +134,8 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
     }
 
     @Override
-    public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
-                                       @NotNull ResolveState state,
-                                       PsiElement lastParent,
-                                       @NotNull PsiElement place) {
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state,
+                                       PsiElement lastParent, @NotNull PsiElement place) {
         return BallerinaCompositeElementImpl.processDeclarationsDefault(this, processor, state, lastParent, place);
     }
 

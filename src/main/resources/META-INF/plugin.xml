@@ -26,6 +26,9 @@
 
         <fileTypeFactory implementation="org.ballerinalang.plugins.idea.BallerinaFileTypeFactory"/>
 
+        <lang.ast.factory language="Ballerina"
+                          implementationClass="org.ballerinalang.plugins.idea.BallerinaASTFactory"/>
+
         <lang.parserDefinition language="Ballerina"
                                implementationClass="org.ballerinalang.plugins.idea.BallerinaParserDefinition"/>
         <lang.syntaxHighlighterFactory language="Ballerina"
@@ -44,6 +47,7 @@
         <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaActionIndex"/>
         <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaWorkerIndex"/>
         <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaNamespaceIndex"/>
+        <!--Add organization index-->
 
         <stubElementTypeHolder class="org.ballerinalang.plugins.idea.psi.BallerinaTypes"/>
 
@@ -51,6 +55,9 @@
 
         <completion.contributor language="Ballerina"
                                 implementationClass="org.ballerinalang.plugins.idea.completion.BallerinaReferenceCompletionProvider"/>
+
+        <lang.findUsagesProvider language="Ballerina"
+                                 implementationClass="org.ballerinalang.plugins.idea.usage.BallerinaFindUsageProvider"/>
 
     </extensions>
 

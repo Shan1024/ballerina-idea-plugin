@@ -17,11 +17,16 @@
 
 package org.ballerinalang.plugins.idea.psi.impl;
 
+import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.SmartPointerManager;
+import com.intellij.psi.SmartPsiElementPointer;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import org.ballerinalang.plugins.idea.psi.BallerinaActionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaAlias;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
+import org.ballerinalang.plugins.idea.psi.BallerinaCompositeElement;
 import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
@@ -29,6 +34,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaOrgName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageDeclaration;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageName;
+import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageVersion;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
 import org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub;
@@ -37,6 +43,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public class BallerinaPsiImplUtil {
+
+    private static final Key<SmartPsiElementPointer<PsiElement>> CONTEXT = Key.create("CONTEXT");
 
     @Nullable
     public static String getName(@NotNull BallerinaPackageDeclaration packageClause) {
@@ -100,12 +108,14 @@ public class BallerinaPsiImplUtil {
         return callableUnitSignature != null ? callableUnitSignature.getIdentifier().getText() : "";
     }
 
-    @NotNull
-    public static PsiReference getReference(@NotNull BallerinaNameReference ballerinaNameReference) {
-        // Todo
-        return null;
-    }
-
+    //    @NotNull
+    //    public static PsiReference getReference(@NotNull BallerinaNameReference ballerinaNameReference) {
+    //        // Todo
+    //        if (ballerinaNameReference.getParent() instanceof BallerinaFunctionInvocation) {
+    //            return new BallerinaFunctionReference(ballerinaNameReference.getIdentifier());
+    //        }
+    //        return new BallerinaReference(ballerinaNameReference);
+    //    }
 
     @Nullable
     public static BallerinaNameReference getQualifier(@NotNull BallerinaNameReference ballerinaNameReference) {
@@ -127,4 +137,53 @@ public class BallerinaPsiImplUtil {
         //        return resolve == ballerinaNameReference ? new GoCType(ballerinaNameReference) : null;
         return null;
     }
+
+    public static boolean isLocalPackageReference(@NotNull BallerinaNameReference ballerinaNameReference) {
+        //        PsiElement resolve = ballerinaNameReference.resolve();
+        //        if (resolve instanceof GoTypeSpec) return ((GoTypeSpec) resolve).getSpecType();
+        //        // hacky C resolve
+        //        return resolve == ballerinaNameReference ? new GoCType(ballerinaNameReference) : null;
+        return ballerinaNameReference.getPackageReference() == null;
+    }
+
+    @Nullable
+    public static PsiElement getContextElement(@Nullable ResolveState state) {
+        SmartPsiElementPointer<PsiElement> context = state != null ? state.get(CONTEXT) : null;
+        return context != null ? context.getElement() : null;
+    }
+
+    @NotNull
+    public static ResolveState createContextOnElement(@NotNull PsiElement element) {
+        return ResolveState.initial().put(CONTEXT, SmartPointerManager.getInstance(element.getProject())
+                .createSmartPsiElementPointer(element));
+    }
+
+    //
+    public static boolean processDeclarations(@NotNull BallerinaCompositeElement o,
+                                              @NotNull PsiScopeProcessor processor,
+                                              @NotNull ResolveState state,
+                                              PsiElement lastParent,
+                                              @NotNull PsiElement place) {
+        //        boolean isAncestor = PsiTreeUtil.isAncestor(o, place, false);
+        //        if (o instanceof GoVarSpec) {
+        //            return isAncestor || GoCompositeElementImpl.processDeclarationsDefault(o, processor, state,
+        // lastParent,
+        //                    place);
+        //        }
+        //
+        //        if (isAncestor) {
+        //            return GoCompositeElementImpl.processDeclarationsDefault(o, processor, state, lastParent, place);
+        //        }
+        //        if (o instanceof GoBlock ||
+        //                o instanceof GoIfStatement ||
+        //                o instanceof GoForStatement ||
+        //                o instanceof GoCommClause ||
+        //                o instanceof GoFunctionLit ||
+        //                o instanceof GoTypeCaseClause ||
+        //                o instanceof GoExprCaseClause) {
+        //            return processor.execute(o, state);
+        //        }
+        return BallerinaCompositeElementImpl.processDeclarationsDefault(o, processor, state, lastParent, place);
+    }
+
 }

@@ -75,9 +75,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == BLOCK) {
       r = Block(b, 0);
     }
-    else if (t == BLOCK_WITH_ENDPOINT) {
-      r = BlockWithEndpoint(b, 0);
-    }
     else if (t == BREAK_STATEMENT) {
       r = BreakStatement(b, 0);
     }
@@ -762,7 +759,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean BlockWithEndpoint(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "BlockWithEndpoint")) return false;
     boolean r;
-    Marker m = enter_section_(b, l, _NONE_, BLOCK_WITH_ENDPOINT, "<block with endpoint>");
+    Marker m = enter_section_(b, l, _COLLAPSE_, BLOCK, "<block with endpoint>");
     r = BlockWithEndpoint_0(b, l + 1);
     r = r && Block(b, l + 1);
     exit_section_(b, l, m, r, false, null);
@@ -3287,7 +3284,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !(service | function | connector | struct | enum | annotation | transformer | endpoint | const | boolean | int | float | string | blob | identifier)
+  // !(service | function | connector | struct | enum | annotation | transformer | endpoint | const | boolean | int | float | string | blob | public | identifier)
   static boolean TopLevelDefinitionRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopLevelDefinitionRecover")) return false;
     boolean r;
@@ -3297,7 +3294,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // service | function | connector | struct | enum | annotation | transformer | endpoint | const | boolean | int | float | string | blob | identifier
+  // service | function | connector | struct | enum | annotation | transformer | endpoint | const | boolean | int | float | string | blob | public | identifier
   private static boolean TopLevelDefinitionRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopLevelDefinitionRecover_0")) return false;
     boolean r;
@@ -3316,6 +3313,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, FLOAT);
     if (!r) r = consumeToken(b, STRING);
     if (!r) r = consumeToken(b, BLOB);
+    if (!r) r = consumeToken(b, PUBLIC);
     if (!r) r = consumeToken(b, IDENTIFIER);
     exit_section_(b, m, null, r);
     return r;

@@ -110,10 +110,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitBlockWithEndpoint(@NotNull BallerinaBlockWithEndpoint o) {
-    visitCompositeElement(o);
-  }
-
   public void visitBracedExpression(@NotNull BallerinaBracedExpression o) {
     visitExpression(o);
   }
@@ -336,6 +332,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
 
   public void visitNameReference(@NotNull BallerinaNameReference o) {
     visitNamedElement(o);
+    // visitReferenceExpressionBase(o);
   }
 
   public void visitNamespaceDeclaration(@NotNull BallerinaNamespaceDeclaration o) {

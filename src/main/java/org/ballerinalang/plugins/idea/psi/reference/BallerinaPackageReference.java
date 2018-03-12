@@ -15,17 +15,23 @@
  *
  */
 
-package org.ballerinalang.plugins.idea.psi;
+package org.ballerinalang.plugins.idea.psi.reference;
 
-import com.intellij.psi.PsiElement;
+import com.intellij.openapi.util.TextRange;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
+import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public interface BallerinaReferenceExpressionBase extends BallerinaCompositeElement {
+public class BallerinaPackageReference extends FileReference {
 
-  @NotNull
-  PsiElement getIdentifier();
+    public BallerinaPackageReference(@NotNull FileReferenceSet fileReferenceSet, TextRange range, int index,
+                                     String text) {
+        super(fileReferenceSet, range, index, text);
+    }
 
-  @Nullable
-  BallerinaReferenceExpressionBase getQualifier();
+    public BallerinaPackageReference(FileReference original) {
+        super(original);
+    }
+
+
 }

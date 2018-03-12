@@ -21,7 +21,7 @@ import com.intellij.psi.scope.BaseScopeProcessor;
 
 abstract public class BallerinaScopeProcessor extends BaseScopeProcessor {
 
-    public boolean isCompletion() {
-        return false;
-    }
+  public boolean isCompletion() {
+    return false;
+  }
 }

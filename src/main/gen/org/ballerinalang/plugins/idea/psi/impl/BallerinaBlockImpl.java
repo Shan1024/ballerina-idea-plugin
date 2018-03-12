@@ -25,6 +25,8 @@ import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 
 public class BallerinaBlockImpl extends BallerinaCompositeElementImpl implements BallerinaBlock {
 
@@ -45,6 +47,10 @@ public class BallerinaBlockImpl extends BallerinaCompositeElementImpl implements
   @NotNull
   public List<BallerinaStatement> getStatementList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaStatement.class);
+  }
+
+  public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place) {
+    return BallerinaPsiImplUtil.processDeclarations(this, processor, state, lastParent, place);
   }
 
 }

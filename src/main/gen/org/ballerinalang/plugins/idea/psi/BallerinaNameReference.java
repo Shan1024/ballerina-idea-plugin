@@ -23,12 +23,21 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.ballerinalang.plugins.idea.stubs.BallerinaNameReferenceStub;
 
-public interface BallerinaNameReference extends BallerinaNamedElement, StubBasedPsiElement<BallerinaNameReferenceStub> {
+public interface BallerinaNameReference extends BallerinaNamedElement, BallerinaReferenceExpressionBase, StubBasedPsiElement<BallerinaNameReferenceStub> {
 
   @Nullable
   BallerinaPackageReference getPackageReference();
 
   @NotNull
   PsiElement getIdentifier();
+
+  @Nullable
+  BallerinaNameReference getQualifier();
+
+  @Nullable
+  BallerinaTypeName resolveType();
+
+  @Nullable
+  boolean isLocalPackageReference();
 
 }

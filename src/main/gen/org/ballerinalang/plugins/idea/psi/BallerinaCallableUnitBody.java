@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaCallableUnitBody extends BallerinaCompositeElement {
 
   @Nullable
-  BallerinaBlockWithEndpoint getBlockWithEndpoint();
+  BallerinaBlock getBlock();
 
   @NotNull
   List<BallerinaEndpointDefinition> getEndpointDefinitionList();

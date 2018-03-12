@@ -15,17 +15,23 @@
  *
  */
 
-package org.ballerinalang.plugins.idea.psi;
+package org.ballerinalang.plugins.idea.psi.scope;
 
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
-public interface BallerinaReferenceExpressionBase extends BallerinaCompositeElement {
+public class BallerinaFunctionProcessor extends BallerinaScopeProcessorBase {
 
-  @NotNull
-  PsiElement getIdentifier();
+//    @Nullable
+//    private final BallerinaCompositeElement myScope;
 
-  @Nullable
-  BallerinaReferenceExpressionBase getQualifier();
+    public BallerinaFunctionProcessor(@NotNull PsiElement requestedNameElement, @NotNull PsiElement origin,
+                                      boolean completion) {
+        super(requestedNameElement, origin, completion);
+    }
+
+    @Override
+    protected boolean crossOff(@NotNull PsiElement e) {
+        return false;
+    }
 }

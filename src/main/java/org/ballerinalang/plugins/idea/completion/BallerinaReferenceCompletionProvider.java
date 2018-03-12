@@ -20,9 +20,12 @@ package org.ballerinalang.plugins.idea.completion;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
+import com.intellij.util.Processor;
 import org.ballerinalang.plugins.idea.psi.BallerinaConnectorDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
@@ -43,10 +46,75 @@ import org.ballerinalang.plugins.idea.stubs.index.BallerinaStructIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaTransformerIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaWorkerIndex;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.Map;
 
 public class BallerinaReferenceCompletionProvider extends CompletionContributor {
+
+//    private static class NamedElementProcessor implements Processor<GoNamedElement> {
+//        @NotNull private final Collection<ElementProcessor> myProcessors;
+//        @NotNull private final CompletionResultSet myResult;
+//        @NotNull private String myName = "";
+//        @NotNull private final Map<String, GoImportSpec> myImportedPackages;
+//        @Nullable
+//        private final Module myModule;
+//        private final boolean myVendoringEnabled;
+//
+//        public NamedElementProcessor(@NotNull Collection<ElementProcessor> processors,
+//                                     @NotNull GoFile contextFile,
+//                                     @NotNull CompletionResultSet result,
+//                                     @Nullable Module module) {
+//            myProcessors = processors;
+//            myVendoringEnabled = GoVendoringUtil.isVendoringEnabled(module);
+//            myImportedPackages = contextFile.getImportedPackagesMap();
+//            myModule = module;
+//            myResult = result;
+//        }
+//
+//        public void setName(@NotNull String name) {
+//            myName = name;
+//        }
+//
+//        @Override
+//        public boolean process(@NotNull GoNamedElement element) {
+//            ProgressManager.checkCanceled();
+//            Boolean allowed = null;
+//            ExistingImportData importData = null;
+//            for (ElementProcessor processor : myProcessors) {
+//                if (processor.isMine(myName, element)) {
+//                    importData = cachedImportData(element, importData);
+//                    allowed = cachedAllowed(element, allowed);
+//                    if (allowed == Boolean.FALSE || importData.isDot) break;
+//                    if (!processor.process(myName, element, importData, myResult)) {
+//                        return false;
+//                    }
+//                }
+//            }
+//            return true;
+//        }
+//
+//        @NotNull
+//        private Boolean cachedAllowed(@NotNull GoNamedElement element, @Nullable Boolean existingValue) {
+//            if (existingValue != null) return existingValue;
+//            return GoPsiImplUtil.canBeAutoImported(element.getContainingFile(), false, myModule);
+//        }
+//
+//        @NotNull
+//        private ExistingImportData cachedImportData(@NotNull GoNamedElement element, @Nullable ExistingImportData existingValue) {
+//            if (existingValue != null) return existingValue;
+//
+//            GoFile declarationFile = element.getContainingFile();
+//            String importPath = declarationFile.getImportPath(myVendoringEnabled);
+//            GoImportSpec existingImport = myImportedPackages.get(importPath);
+//
+//            boolean exists = existingImport != null;
+//            boolean isDot = exists && existingImport.isDot();
+//            String alias = existingImport != null ? existingImport.getAlias() : null;
+//            return new ExistingImportData(exists, isDot, alias, importPath);
+//        }
+//    }
 
     @Override
     public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {

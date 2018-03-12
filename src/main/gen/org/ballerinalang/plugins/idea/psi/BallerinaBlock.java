@@ -20,10 +20,14 @@ package org.ballerinalang.plugins.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 
 public interface BallerinaBlock extends BallerinaCompositeElement {
 
   @NotNull
   List<BallerinaStatement> getStatementList();
+
+  boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place);
 
 }

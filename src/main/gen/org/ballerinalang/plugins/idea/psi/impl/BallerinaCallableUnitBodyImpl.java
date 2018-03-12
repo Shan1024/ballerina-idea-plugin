@@ -43,8 +43,8 @@ public class BallerinaCallableUnitBodyImpl extends BallerinaCompositeElementImpl
 
   @Override
   @Nullable
-  public BallerinaBlockWithEndpoint getBlockWithEndpoint() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaBlockWithEndpoint.class);
+  public BallerinaBlock getBlock() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaBlock.class);
   }
 
   @Override

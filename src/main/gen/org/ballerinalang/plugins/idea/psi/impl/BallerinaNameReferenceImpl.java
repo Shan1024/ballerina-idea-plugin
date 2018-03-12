@@ -59,4 +59,18 @@ public class BallerinaNameReferenceImpl extends BallerinaNamedElementImpl<Baller
     return notNullChild(findChildByType(IDENTIFIER));
   }
 
+  @Nullable
+  public BallerinaNameReference getQualifier() {
+    return BallerinaPsiImplUtil.getQualifier(this);
+  }
+
+  @Nullable
+  public BallerinaTypeName resolveType() {
+    return BallerinaPsiImplUtil.resolveType(this);
+  }
+
+  public boolean isLocalPackageReference() {
+    return BallerinaPsiImplUtil.isLocalPackageReference(this);
+  }
+
 }

@@ -47,7 +47,6 @@ public interface BallerinaTypes {
   IElementType BINARY_OR_EXPRESSION = new BallerinaCompositeElementType("BINARY_OR_EXPRESSION");
   IElementType BINARY_POW_EXPRESSION = new BallerinaCompositeElementType("BINARY_POW_EXPRESSION");
   IElementType BLOCK = new BallerinaCompositeElementType("BLOCK");
-  IElementType BLOCK_WITH_ENDPOINT = new BallerinaCompositeElementType("BLOCK_WITH_ENDPOINT");
   IElementType BRACED_EXPRESSION = new BallerinaCompositeElementType("BRACED_EXPRESSION");
   IElementType BREAK_STATEMENT = new BallerinaCompositeElementType("BREAK_STATEMENT");
   IElementType BUILT_IN_REFERENCE_TYPE_NAME = new BallerinaCompositeElementType("BUILT_IN_REFERENCE_TYPE_NAME");
@@ -413,9 +412,6 @@ public interface BallerinaTypes {
       }
       else if (type == BLOCK) {
         return new BallerinaBlockImpl(node);
-      }
-      else if (type == BLOCK_WITH_ENDPOINT) {
-        return new BallerinaBlockWithEndpointImpl(node);
       }
       else if (type == BRACED_EXPRESSION) {
         return new BallerinaBracedExpressionImpl(node);
