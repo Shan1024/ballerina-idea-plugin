@@ -24,25 +24,39 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.SmartPointerManager;
 import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.scope.PsiScopeProcessor;
+import com.intellij.psi.util.CachedValueProvider;
+import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.util.ArrayUtil;
+import com.intellij.util.containers.ContainerUtil;
+import com.intellij.util.containers.MultiMap;
 import org.ballerinalang.plugins.idea.psi.BallerinaActionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaAlias;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompositeElement;
 import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
+import org.ballerinalang.plugins.idea.psi.BallerinaImportDeclaration;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaOrgName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageDeclaration;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageName;
+import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageVersion;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaCompletePackageNameReferenceSet;
+import org.ballerinalang.plugins.idea.psi.reference.BallerinaPackageNameReference;
 import org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub;
+import org.ballerinalang.plugins.idea.stubs.BallerinaPackageReferenceStub;
 import org.ballerinalang.plugins.idea.stubs.BallerinaPackageVersionStub;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Collection;
+import java.util.List;
 
 public class BallerinaPsiImplUtil {
 
@@ -205,4 +219,62 @@ public class BallerinaPsiImplUtil {
         return new BallerinaCompletePackageNameReferenceSet(o).getAllReferences();
     }
 
+    @Nullable
+    public static PsiReference getReference(@NotNull BallerinaPackageReference ballerinaPackageReference) {
+
+        BallerinaPackageReferenceStub stub = ballerinaPackageReference.getStub();
+
+        //        return new BallerinaCompletePackageNameReferenceSet(ballerinaPackageReference).getAllReferences();
+
+        BallerinaFile containingFile = ballerinaPackageReference.getContainingFile();
+        MultiMap<String, BallerinaImportDeclaration> importMap = containingFile.getImportMap();
+
+        String packageName = ballerinaPackageReference.getIdentifier().getText();
+        Collection<BallerinaImportDeclaration> ballerinaImportDeclarations = importMap.get(packageName);
+        if (ballerinaImportDeclarations.isEmpty()) {
+            return null;
+        }
+        BallerinaImportDeclaration firstItem = ContainerUtil.getFirstItem(ballerinaImportDeclarations);
+        if (firstItem == null) {
+            return null;
+        }
+        PsiElement shortPackageName = firstItem.getShortPackageName();
+        if (shortPackageName == null) {
+            return null;
+        }
+        PsiReference reference = shortPackageName.getReference();
+        if (reference != null) {
+            return reference;
+        }
+        BallerinaCompletePackageName completePackageName = firstItem.getCompletePackageName();
+        if (completePackageName == null) {
+            return null;
+        }
+        PsiReference[] references = completePackageName.getReferences();
+        if (references.length == 0) {
+            return null;
+        }
+        return new BallerinaPackageNameReference((BallerinaIdentifier)
+                ballerinaPackageReference.getIdentifier(), ArrayUtil.getFirstElement(references));
+    }
+
+    @Nullable
+    public static PsiElement getShortPackageName(@NotNull BallerinaImportDeclaration ballerinaImportDeclaration) {
+        return CachedValuesManager.getCachedValue(ballerinaImportDeclaration, () -> {
+            BallerinaAlias alias = ballerinaImportDeclaration.getAlias();
+            if (alias != null && alias.getIdentifier() != null) {
+                return CachedValueProvider.Result.create(alias.getIdentifier(), ballerinaImportDeclaration);
+            }
+            BallerinaCompletePackageName completePackageName = ballerinaImportDeclaration.getCompletePackageName();
+            if (completePackageName == null) {
+                return CachedValueProvider.Result.create(null, ballerinaImportDeclaration);
+            }
+            List<BallerinaPackageName> packageNameList = completePackageName.getPackageNameList();
+            BallerinaPackageName lastItem = ContainerUtil.getLastItem(packageNameList);
+            if (lastItem != null) {
+                return CachedValueProvider.Result.create(lastItem.getIdentifier(), ballerinaImportDeclaration);
+            }
+            return CachedValueProvider.Result.create(null, ballerinaImportDeclaration);
+        });
+    }
 }

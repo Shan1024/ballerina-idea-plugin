@@ -39,6 +39,8 @@ import java.util.Set;
 
 public class BallerinaCompletePackageNameReference extends FileReference {
 
+    public static final String PACKAGE_VERSION_REGEX = "v\\d+\\.\\d+\\.\\d+";
+
     public BallerinaCompletePackageNameReference(@NotNull FileReferenceSet fileReferenceSet, TextRange range, int index,
                                                  String text) {
         super(fileReferenceSet, range, index, text);
@@ -142,7 +144,7 @@ public class BallerinaCompletePackageNameReference extends FileReference {
         for (PsiFileSystemItem context : contexts) {
             PsiElement[] children = context.getChildren();
             for (PsiElement child : children) {
-                if (!(child instanceof PsiDirectory)) {
+                if (!(child instanceof PsiDirectory) || ((PsiDirectory) child).getName().matches(PACKAGE_VERSION_REGEX)) {
                     continue;
                 }
                 results.add(BallerinaCompletionUtil.createPackageLookupElement((PsiDirectory) child));

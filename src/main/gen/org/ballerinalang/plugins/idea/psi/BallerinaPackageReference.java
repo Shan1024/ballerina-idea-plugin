@@ -22,6 +22,7 @@ import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.StubBasedPsiElement;
 import org.ballerinalang.plugins.idea.stubs.BallerinaPackageReferenceStub;
+import com.intellij.psi.PsiReference;
 
 public interface BallerinaPackageReference extends BallerinaNamedElement, StubBasedPsiElement<BallerinaPackageReferenceStub> {
 
@@ -30,5 +31,8 @@ public interface BallerinaPackageReference extends BallerinaNamedElement, StubBa
 
   @NotNull
   PsiElement getIdentifier();
+
+  @Nullable
+  PsiReference getReference();
 
 }

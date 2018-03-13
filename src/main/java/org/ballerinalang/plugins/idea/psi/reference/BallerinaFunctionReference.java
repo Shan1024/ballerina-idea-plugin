@@ -22,14 +22,18 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
+import org.apache.commons.lang.ArrayUtils;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaElementFactory;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaFunctionIndex;
 import org.jetbrains.annotations.NotNull;
@@ -148,7 +152,13 @@ public class BallerinaFunctionReference extends BallerinaCachedReference<Balleri
             // Todo - Get files in the corresponding package.
             // Todo - Filter public elements? Or show a warning?
             // Todo - Consider package version.
-            GlobalSearchScope scope = GlobalSearchScope.fileScope(myElement.getContainingFile());
+
+            BallerinaPackageReference packageReference = nameReference.getPackageReference();
+            PsiReference reference = packageReference.getReference();
+            PsiElement psiDirectory = reference.resolve();
+
+            List<VirtualFile> virtualFiles = Arrays.asList(((PsiDirectory) psiDirectory).getVirtualFile().getChildren());
+            GlobalSearchScope scope = GlobalSearchScope.filesScope(project, virtualFiles);
             elements = StubIndex.getElements(BallerinaFunctionIndex.KEY, myElement.getText(), project, scope,
                     BallerinaFunctionDefinition.class);
         }

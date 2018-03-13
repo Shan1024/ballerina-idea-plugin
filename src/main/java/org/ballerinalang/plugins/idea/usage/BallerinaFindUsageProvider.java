@@ -23,6 +23,7 @@ import com.intellij.psi.PsiElement;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
+import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -51,68 +52,70 @@ public class BallerinaFindUsageProvider implements FindUsagesProvider {
     @NotNull
     @Override
     public String getType(@NotNull PsiElement element) {
-//        if (!(element.getParent() instanceof ANTLRPsiNode)) {
-//            return "";
-//        }
-//        ANTLRPsiNode parent = (ANTLRPsiNode) element.getParent();
-//        RuleIElementType elType = (RuleIElementType) parent.getNode().getElementType();
-//        // Todo - Add more types
-//        switch (elType.getRuleIndex()) {
-//            case RULE_functionDefinition:
-//                return "Function";
-//            case RULE_connectorDefinition:
-//                return "Connector";
-//            case RULE_actionDefinition:
-//                return "Action";
-//            case RULE_serviceDefinition:
-//                return "Service";
-//            case RULE_variableDefinitionStatement:
-//                return "Variable";
-//            case RULE_parameter:
-//                return "Parameter";
-//            case RULE_packageName:
-//                return "Package";
-//            case RULE_structDefinition:
-//                return "Struct";
-//            case RULE_constantDefinition:
-//                return "Constant";
-//            case RULE_fieldDefinition:
-//                return "Field";
-//            case RULE_annotationDefinition:
-//                return "Annotation";
-//            case RULE_nameReference:
-//                PsiElement parentNode = PsiTreeUtil.getParentOfType(element, FunctionInvocationNode.class);
-//                if (parentNode != null) {
-//                    return "Function";
-//                }
-//                parentNode = PsiTreeUtil.getParentOfType(element, ActionInvocationNode.class);
-//                if (parentNode != null) {
-//                    return "Action";
-//                }
-//                parentNode = PsiTreeUtil.getParentOfType(element, AssignmentStatementNode.class);
-//                if (parentNode != null) {
-//                    return "Variable";
-//                }
-//                break;
-//            case RULE_globalVariableDefinition:
-//                return "Global Variable";
-//            case RULE_namespaceDeclaration:
-//                return "Namespace";
-//            case RULE_workerDeclaration:
-//                return "Worker";
-//            case RULE_enumDefinition:
-//                return "Enum";
-//            case RULE_enumField:
-//                return "Enum Field";
-//            case RULE_endpointDeclaration:
-//                return "Endpoint";
-//        }
+        //        if (!(element.getParent() instanceof ANTLRPsiNode)) {
+        //            return "";
+        //        }
+        //        ANTLRPsiNode parent = (ANTLRPsiNode) element.getParent();
+        //        RuleIElementType elType = (RuleIElementType) parent.getNode().getElementType();
+        //        // Todo - Add more types
+        //        switch (elType.getRuleIndex()) {
+        //            case RULE_functionDefinition:
+        //                return "Function";
+        //            case RULE_connectorDefinition:
+        //                return "Connector";
+        //            case RULE_actionDefinition:
+        //                return "Action";
+        //            case RULE_serviceDefinition:
+        //                return "Service";
+        //            case RULE_variableDefinitionStatement:
+        //                return "Variable";
+        //            case RULE_parameter:
+        //                return "Parameter";
+        //            case RULE_packageName:
+        //                return "Package";
+        //            case RULE_structDefinition:
+        //                return "Struct";
+        //            case RULE_constantDefinition:
+        //                return "Constant";
+        //            case RULE_fieldDefinition:
+        //                return "Field";
+        //            case RULE_annotationDefinition:
+        //                return "Annotation";
+        //            case RULE_nameReference:
+        //                PsiElement parentNode = PsiTreeUtil.getParentOfType(element, FunctionInvocationNode.class);
+        //                if (parentNode != null) {
+        //                    return "Function";
+        //                }
+        //                parentNode = PsiTreeUtil.getParentOfType(element, ActionInvocationNode.class);
+        //                if (parentNode != null) {
+        //                    return "Action";
+        //                }
+        //                parentNode = PsiTreeUtil.getParentOfType(element, AssignmentStatementNode.class);
+        //                if (parentNode != null) {
+        //                    return "Variable";
+        //                }
+        //                break;
+        //            case RULE_globalVariableDefinition:
+        //                return "Global Variable";
+        //            case RULE_namespaceDeclaration:
+        //                return "Namespace";
+        //            case RULE_workerDeclaration:
+        //                return "Worker";
+        //            case RULE_enumDefinition:
+        //                return "Enum";
+        //            case RULE_enumField:
+        //                return "Enum Field";
+        //            case RULE_endpointDeclaration:
+        //                return "Endpoint";
+        //        }
         PsiElement parent = element.getParent();
         if (parent instanceof BallerinaCallableUnitSignature) {
             PsiElement superParent = parent.getParent();
-            if(superParent instanceof BallerinaFunctionDefinition){
+            if (superParent instanceof BallerinaFunctionDefinition) {
                 return "Function";
             }
+        } else if (parent instanceof BallerinaPackageReference) {
+            return "Package";
         }
 
         return "";

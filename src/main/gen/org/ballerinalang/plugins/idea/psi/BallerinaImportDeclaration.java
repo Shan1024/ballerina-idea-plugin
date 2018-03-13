@@ -44,4 +44,7 @@ public interface BallerinaImportDeclaration extends BallerinaCompositeElement {
   @NotNull
   PsiElement getImport();
 
+  @Nullable
+  PsiElement getShortPackageName();
+
 }

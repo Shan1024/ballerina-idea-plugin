@@ -83,4 +83,9 @@ public class BallerinaImportDeclarationImpl extends BallerinaCompositeElementImp
     return notNullChild(findChildByType(IMPORT));
   }
 
+  @Nullable
+  public PsiElement getShortPackageName() {
+    return BallerinaPsiImplUtil.getShortPackageName(this);
+  }
+
 }

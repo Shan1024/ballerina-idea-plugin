@@ -26,6 +26,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.stubs.BallerinaPackageReferenceStub;
 import org.ballerinalang.plugins.idea.psi.*;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.stubs.IStubElementType;
 
 public class BallerinaPackageReferenceImpl extends BallerinaNamedElementImpl<BallerinaPackageReferenceStub> implements BallerinaPackageReference {
@@ -57,6 +58,11 @@ public class BallerinaPackageReferenceImpl extends BallerinaNamedElementImpl<Bal
   @NotNull
   public PsiElement getIdentifier() {
     return notNullChild(findChildByType(IDENTIFIER));
+  }
+
+  @Nullable
+  public PsiReference getReference() {
+    return BallerinaPsiImplUtil.getReference(this);
   }
 
 }
