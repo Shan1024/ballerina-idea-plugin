@@ -18,11 +18,13 @@
 package org.ballerinalang.plugins.idea;
 
 import com.intellij.openapi.util.IconLoader;
+import com.intellij.util.PlatformIcons;
 
 import javax.swing.Icon;
 
 public class BallerinaIcons {
 
     public static final Icon FILE = IconLoader.getIcon("/icons/ballerina.png");
+    public static final Icon PACKAGE = PlatformIcons.DIRECTORY_CLOSED_ICON;
 
 }

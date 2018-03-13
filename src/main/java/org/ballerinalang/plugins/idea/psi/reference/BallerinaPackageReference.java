@@ -21,19 +21,17 @@ import com.intellij.codeInsight.completion.CompletionUtil;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementResolveResult;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileSystemItem;
 import com.intellij.psi.ResolveResult;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
-import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
+import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.Set;
 
 public class BallerinaPackageReference extends FileReference {
@@ -48,28 +46,30 @@ public class BallerinaPackageReference extends FileReference {
     }
 
 
-    @Override
-    protected Object createLookupItem(PsiElement candidate) {
-        if (candidate instanceof PsiDirectory) {
-//            return GoCompletionUtil.createDirectoryLookupElement((PsiDirectory)candidate);
-        }
-        return super.createLookupItem(candidate);
-    }
+//    @Override
+//    protected Object createLookupItem(PsiElement candidate) {
+//        if (candidate instanceof PsiDirectory) {
+//            return BallerinaCompletionUtil.createPackageLookupElement((PsiDirectory) candidate);
+//        }
+//        return null;
+//    }
 
     @NotNull
     @Override
     protected ResolveResult[] innerResolve(boolean caseSensitive, @NotNull PsiFile containingFile) {
-//        if (isFirst()) {
-//            if (".".equals(getCanonicalText())) {
-//                PsiDirectory directory = getDirectory();
-//                return directory != null ? new PsiElementResolveResult[]{new PsiElementResolveResult(directory)} : ResolveResult.EMPTY_ARRAY;
-//            }
-//            else if ("..".equals(getCanonicalText())) {
-//                PsiDirectory directory = getDirectory();
-//                PsiDirectory grandParent = directory != null ? directory.getParentDirectory() : null;
-//                return grandParent != null ? new PsiElementResolveResult[]{new PsiElementResolveResult(grandParent)} : ResolveResult.EMPTY_ARRAY;
-//            }
-//        }
+        //        if (isFirst()) {
+        //            if (".".equals(getCanonicalText())) {
+        //                PsiDirectory directory = getDirectory();
+        //                return directory != null ? new PsiElementResolveResult[]{new PsiElementResolveResult
+        // (directory)} : ResolveResult.EMPTY_ARRAY;
+        //            }
+        //            else if ("..".equals(getCanonicalText())) {
+        //                PsiDirectory directory = getDirectory();
+        //                PsiDirectory grandParent = directory != null ? directory.getParentDirectory() : null;
+        //                return grandParent != null ? new PsiElementResolveResult[]{new PsiElementResolveResult
+        // (grandParent)} : ResolveResult.EMPTY_ARRAY;
+        //            }
+        //        }
 
         String referenceText = getText();
         Set<ResolveResult> result = ContainerUtil.newLinkedHashSet();
@@ -92,21 +92,23 @@ public class BallerinaPackageReference extends FileReference {
 
     @Override
     public PsiElement bindToElement(@NotNull PsiElement element, boolean absolute) throws IncorrectOperationException {
-//        if (!absolute) {
-//            FileReference firstReference = ArrayUtil.getFirstElement(getFileReferenceSet().getAllReferences());
-//            if (firstReference != null) {
-//                Collection<PsiFileSystemItem> contexts = getFileReferenceSet().getDefaultContexts();
-//                for (ResolveResult resolveResult : firstReference.multiResolve(false)) {
-//                    PsiElement resolveResultElement = resolveResult.getElement();
-//                    if (resolveResultElement instanceof PsiFileSystemItem) {
-//                        PsiFileSystemItem parentDirectory = ((PsiFileSystemItem)resolveResultElement).getParent();
-//                        if (parentDirectory != null && contexts.contains(parentDirectory)) {
-//                            return getElement();
-//                        }
-//                    }
-//                }
-//            }
-//        }
+        //        if (!absolute) {
+        //            FileReference firstReference = ArrayUtil.getFirstElement(getFileReferenceSet().getAllReferences
+        // ());
+        //            if (firstReference != null) {
+        //                Collection<PsiFileSystemItem> contexts = getFileReferenceSet().getDefaultContexts();
+        //                for (ResolveResult resolveResult : firstReference.multiResolve(false)) {
+        //                    PsiElement resolveResultElement = resolveResult.getElement();
+        //                    if (resolveResultElement instanceof PsiFileSystemItem) {
+        //                        PsiFileSystemItem parentDirectory = ((PsiFileSystemItem)resolveResultElement)
+        // .getParent();
+        //                        if (parentDirectory != null && contexts.contains(parentDirectory)) {
+        //                            return getElement();
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
         return super.bindToElement(element, true);
     }
 

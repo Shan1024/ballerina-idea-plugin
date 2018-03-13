@@ -22,6 +22,7 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
+import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -98,9 +99,10 @@ public class BallerinaPackageReferenceSet extends FileReferenceSet {
     @Override
     protected Condition<PsiFileSystemItem> getReferenceCompletionFilter() {
         //        if (!isRelativeImport()) {
-        //            return Conditions.alwaysFalse();
+        // Note - This will disable suggestions since it will contain files as well.
+        return Conditions.alwaysFalse();
         //        }
-        return super.getReferenceCompletionFilter();
+        //        return super.getReferenceCompletionFilter();
     }
 
     public boolean absoluteUrlNeedsStartSlash() {
