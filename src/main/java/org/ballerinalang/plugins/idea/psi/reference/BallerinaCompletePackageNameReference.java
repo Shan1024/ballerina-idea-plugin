@@ -18,6 +18,7 @@
 package org.ballerinalang.plugins.idea.psi.reference;
 
 import com.intellij.codeInsight.completion.CompletionUtil;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -32,27 +33,29 @@ import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+import java.util.LinkedList;
 import java.util.Set;
 
-public class BallerinaPackageReference extends FileReference {
+public class BallerinaCompletePackageNameReference extends FileReference {
 
-    public BallerinaPackageReference(@NotNull FileReferenceSet fileReferenceSet, TextRange range, int index,
-                                     String text) {
+    public BallerinaCompletePackageNameReference(@NotNull FileReferenceSet fileReferenceSet, TextRange range, int index,
+                                                 String text) {
         super(fileReferenceSet, range, index, text);
     }
 
-    public BallerinaPackageReference(FileReference original) {
+    public BallerinaCompletePackageNameReference(FileReference original) {
         super(original);
     }
 
 
-//    @Override
-//    protected Object createLookupItem(PsiElement candidate) {
-//        if (candidate instanceof PsiDirectory) {
-//            return BallerinaCompletionUtil.createPackageLookupElement((PsiDirectory) candidate);
-//        }
-//        return null;
-//    }
+    //    @Override
+    //    protected Object createLookupItem(PsiElement candidate) {
+    //        if (candidate instanceof PsiDirectory) {
+    //            return BallerinaCompletionUtil.createPackageLookupElement((PsiDirectory) candidate);
+    //        }
+    //        return null;
+    //    }
 
     @NotNull
     @Override
@@ -126,5 +129,26 @@ public class BallerinaPackageReference extends FileReference {
         PsiElement originalElement = CompletionUtil.getOriginalElement(getElement());
         PsiFile file = originalElement != null ? originalElement.getContainingFile() : getElement().getContainingFile();
         return file.getParent();
+    }
+
+    @NotNull
+    @Override
+    public Object[] getVariants() {
+
+        LinkedList<LookupElement> results = new LinkedList<>();
+
+        Collection<PsiFileSystemItem> contexts = getContexts();
+
+        for (PsiFileSystemItem context : contexts) {
+            PsiElement[] children = context.getChildren();
+            for (PsiElement child : children) {
+                if (!(child instanceof PsiDirectory)) {
+                    continue;
+                }
+                results.add(BallerinaCompletionUtil.createPackageLookupElement((PsiDirectory) child));
+            }
+        }
+
+        return results.toArray(new LookupElement[results.size()]);
     }
 }

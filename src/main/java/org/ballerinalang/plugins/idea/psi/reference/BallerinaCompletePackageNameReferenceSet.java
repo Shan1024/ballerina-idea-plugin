@@ -40,33 +40,33 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 
-public class BallerinaPackageReferenceSet extends FileReferenceSet {
+public class BallerinaCompletePackageNameReferenceSet extends FileReferenceSet {
 
-    public BallerinaPackageReferenceSet(String str, @NotNull PsiElement element, int startInElement,
-                                        PsiReferenceProvider provider, boolean caseSensitive,
-                                        boolean endingSlashNotAllowed, @Nullable FileType[] suitableFileTypes) {
+    public BallerinaCompletePackageNameReferenceSet(String str, @NotNull PsiElement element, int startInElement,
+                                                    PsiReferenceProvider provider, boolean caseSensitive,
+                                                    boolean endingSlashNotAllowed, @Nullable FileType[] suitableFileTypes) {
         super(str, element, startInElement, provider, caseSensitive, endingSlashNotAllowed, suitableFileTypes);
     }
 
-    public BallerinaPackageReferenceSet(String str, @NotNull PsiElement element, int startInElement,
-                                        PsiReferenceProvider provider, boolean caseSensitive,
-                                        boolean endingSlashNotAllowed, @Nullable FileType[] suitableFileTypes,
-                                        boolean init) {
+    public BallerinaCompletePackageNameReferenceSet(String str, @NotNull PsiElement element, int startInElement,
+                                                    PsiReferenceProvider provider, boolean caseSensitive,
+                                                    boolean endingSlashNotAllowed, @Nullable FileType[] suitableFileTypes,
+                                                    boolean init) {
         super(str, element, startInElement, provider, caseSensitive, endingSlashNotAllowed, suitableFileTypes, init);
     }
 
-    public BallerinaPackageReferenceSet(String str, @NotNull PsiElement element, int startInElement,
-                                        @Nullable PsiReferenceProvider provider, boolean isCaseSensitive) {
+    public BallerinaCompletePackageNameReferenceSet(String str, @NotNull PsiElement element, int startInElement,
+                                                    @Nullable PsiReferenceProvider provider, boolean isCaseSensitive) {
         super(str, element, startInElement, provider, isCaseSensitive);
     }
 
-    public BallerinaPackageReferenceSet(@NotNull String str, @NotNull PsiElement element, int startInElement,
-                                        PsiReferenceProvider provider, boolean isCaseSensitive,
-                                        boolean endingSlashNotAllowed) {
+    public BallerinaCompletePackageNameReferenceSet(@NotNull String str, @NotNull PsiElement element, int startInElement,
+                                                    PsiReferenceProvider provider, boolean isCaseSensitive,
+                                                    boolean endingSlashNotAllowed) {
         super(str, element, startInElement, provider, isCaseSensitive, endingSlashNotAllowed);
     }
 
-    public BallerinaPackageReferenceSet(@NotNull PsiElement element) {
+    public BallerinaCompletePackageNameReferenceSet(@NotNull PsiElement element) {
         super(element);
     }
 
@@ -127,6 +127,6 @@ public class BallerinaPackageReferenceSet extends FileReferenceSet {
     @NotNull
     @Override
     public FileReference createFileReference(TextRange range, int index, String text) {
-        return new BallerinaPackageReference(this, range, index, text);
+        return new BallerinaCompletePackageNameReference(this, range, index, text);
     }
 }

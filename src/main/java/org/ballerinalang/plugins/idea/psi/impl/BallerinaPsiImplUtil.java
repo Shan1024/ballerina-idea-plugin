@@ -38,7 +38,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaPackageDeclaration;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageVersion;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
-import org.ballerinalang.plugins.idea.psi.reference.BallerinaPackageReferenceSet;
+import org.ballerinalang.plugins.idea.psi.reference.BallerinaCompletePackageNameReferenceSet;
 import org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub;
 import org.ballerinalang.plugins.idea.stubs.BallerinaPackageVersionStub;
 import org.jetbrains.annotations.NotNull;
@@ -193,7 +193,7 @@ public class BallerinaPsiImplUtil {
         if (o.getTextLength() < 2) {
             return PsiReference.EMPTY_ARRAY;
         }
-        return new BallerinaPackageReferenceSet(o).getAllReferences();
+        return new BallerinaCompletePackageNameReferenceSet(o).getAllReferences();
     }
 
 
@@ -202,7 +202,7 @@ public class BallerinaPsiImplUtil {
         if (o.getTextLength() < 2) {
             return PsiReference.EMPTY_ARRAY;
         }
-        return new BallerinaPackageReferenceSet(o).getAllReferences();
+        return new BallerinaCompletePackageNameReferenceSet(o).getAllReferences();
     }
 
 }

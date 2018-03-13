@@ -27,7 +27,7 @@ public class BallerinaCompletionUtil {
     public static class Lazy {
 
         private static final BallerinaSingleCharacterInsertHandler DIR_INSERT_HANDLER =
-                new BallerinaSingleCharacterInsertHandler('/');
+                new BallerinaSingleCharacterInsertHandler('.');
 
     }
 
