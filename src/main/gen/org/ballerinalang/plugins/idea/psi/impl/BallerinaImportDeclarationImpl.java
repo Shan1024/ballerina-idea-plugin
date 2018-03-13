@@ -61,6 +61,12 @@ public class BallerinaImportDeclarationImpl extends BallerinaCompositeElementImp
 
   @Override
   @Nullable
+  public BallerinaPackageVersion getPackageVersion() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaPackageVersion.class);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getDiv() {
     return findChildByType(DIV);
   }

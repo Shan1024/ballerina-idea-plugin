@@ -21,21 +21,19 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
-import com.intellij.util.ArrayUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaElementFactory;
-import org.ballerinalang.plugins.idea.psi.scope.BallerinaScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class BallerinaCachedReference<T extends PsiElement> extends PsiReferenceBase<T> {
 
-    protected BallerinaCachedReference(@NotNull T element) {
-        super(element, TextRange.from(0, element.getTextLength()));
-    }
-
     private static final ResolveCache.AbstractResolver<BallerinaCachedReference, PsiElement> MY_RESOLVER =
             (r, b) -> r.resolveInner();
+
+    public BallerinaCachedReference(@NotNull T element) {
+        super(element, TextRange.from(0, element.getTextLength()));
+    }
 
     @Nullable
     protected abstract PsiElement resolveInner();
@@ -48,7 +46,7 @@ public abstract class BallerinaCachedReference<T extends PsiElement> extends Psi
                 : null;
     }
 
-    public abstract boolean processResolveVariants(@NotNull BallerinaScopeProcessor processor);
+//    public abstract boolean processResolveVariants(@NotNull BallerinaScopeProcessor processor);
 
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
@@ -56,17 +54,17 @@ public abstract class BallerinaCachedReference<T extends PsiElement> extends Psi
         return myElement;
     }
 
-    @Override
-    public boolean isReferenceTo(PsiElement element) {
-        //    return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
-        return false;
-    }
+//    @Override
+//    public boolean isReferenceTo(PsiElement element) {
+//        //    return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
+//        return false;
+//    }
 
-    @NotNull
-    @Override
-    public Object[] getVariants() {
-        return ArrayUtil.EMPTY_OBJECT_ARRAY;
-    }
+//    @NotNull
+//    @Override
+//    public Object[] getVariants() {
+//        return ArrayUtil.EMPTY_OBJECT_ARRAY;
+//    }
 
     @Override
     public boolean equals(Object o) {

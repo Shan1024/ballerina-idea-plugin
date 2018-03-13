@@ -59,6 +59,9 @@
         <lang.findUsagesProvider language="Ballerina"
                                  implementationClass="org.ballerinalang.plugins.idea.usage.BallerinaFindUsageProvider"/>
 
+        <lang.elementManipulator forClass="org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName"
+                                 implementationClass="org.ballerinalang.plugins.idea.psi.manipulator.BallerinaPackageManipulator"/>
+
     </extensions>
 
 </idea-plugin>

@@ -55,6 +55,12 @@ public class BallerinaPackageDeclarationImpl extends BallerinaStubbedElementImpl
 
   @Override
   @Nullable
+  public BallerinaPackageVersion getPackageVersion() {
+    return PsiTreeUtil.getStubChildOfType(this, BallerinaPackageVersion.class);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
   }

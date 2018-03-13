@@ -20,6 +20,8 @@ package org.ballerinalang.plugins.idea.usage;
 import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
+import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
+import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -105,7 +107,15 @@ public class BallerinaFindUsageProvider implements FindUsagesProvider {
 //            case RULE_endpointDeclaration:
 //                return "Endpoint";
 //        }
-        return "name";
+        PsiElement parent = element.getParent();
+        if (parent instanceof BallerinaCallableUnitSignature) {
+            PsiElement superParent = parent.getParent();
+            if(superParent instanceof BallerinaFunctionDefinition){
+                return "Function";
+            }
+        }
+
+        return "";
     }
 
     @NotNull

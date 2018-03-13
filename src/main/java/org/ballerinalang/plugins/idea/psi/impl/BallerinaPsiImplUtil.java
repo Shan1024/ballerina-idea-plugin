@@ -19,6 +19,7 @@ package org.ballerinalang.plugins.idea.psi.impl;
 
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.SmartPointerManager;
 import com.intellij.psi.SmartPsiElementPointer;
@@ -26,6 +27,7 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import org.ballerinalang.plugins.idea.psi.BallerinaActionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaAlias;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
+import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompositeElement;
 import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
@@ -34,9 +36,9 @@ import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaOrgName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageDeclaration;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageName;
-import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageVersion;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
+import org.ballerinalang.plugins.idea.psi.reference.BallerinaPackageReferenceSet;
 import org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub;
 import org.ballerinalang.plugins.idea.stubs.BallerinaPackageVersionStub;
 import org.jetbrains.annotations.NotNull;
@@ -138,7 +140,7 @@ public class BallerinaPsiImplUtil {
         return null;
     }
 
-    public static boolean isLocalPackageReference(@NotNull BallerinaNameReference ballerinaNameReference) {
+    public static boolean isReferenceToLocalPackage(@NotNull BallerinaNameReference ballerinaNameReference) {
         //        PsiElement resolve = ballerinaNameReference.resolve();
         //        if (resolve instanceof GoTypeSpec) return ((GoTypeSpec) resolve).getSpecType();
         //        // hacky C resolve
@@ -184,6 +186,23 @@ public class BallerinaPsiImplUtil {
         //            return processor.execute(o, state);
         //        }
         return BallerinaCompositeElementImpl.processDeclarationsDefault(o, processor, state, lastParent, place);
+    }
+
+    @NotNull
+    public static PsiReference[] getReferences(@NotNull BallerinaCompletePackageName o) {
+        if (o.getTextLength() < 2) {
+            return PsiReference.EMPTY_ARRAY;
+        }
+        return new BallerinaPackageReferenceSet(o).getAllReferences();
+    }
+
+
+    @NotNull
+    public static PsiReference[] getReferences(@NotNull BallerinaPackageName o) {
+        if (o.getTextLength() < 2) {
+            return PsiReference.EMPTY_ARRAY;
+        }
+        return new BallerinaPackageReferenceSet(o).getAllReferences();
     }
 
 }

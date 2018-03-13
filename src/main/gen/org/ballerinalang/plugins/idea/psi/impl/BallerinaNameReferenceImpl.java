@@ -69,8 +69,8 @@ public class BallerinaNameReferenceImpl extends BallerinaNamedElementImpl<Baller
     return BallerinaPsiImplUtil.resolveType(this);
   }
 
-  public boolean isLocalPackageReference() {
-    return BallerinaPsiImplUtil.isLocalPackageReference(this);
+  public boolean isReferenceToLocalPackage() {
+    return BallerinaPsiImplUtil.isReferenceToLocalPackage(this);
   }
 
 }

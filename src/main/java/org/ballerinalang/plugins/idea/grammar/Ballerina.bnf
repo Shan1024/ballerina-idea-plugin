@@ -186,11 +186,13 @@
 
 CompilationUnit ::= PackageDeclaration? (ImportDeclaration | NamespaceDeclaration)* Definition* <<eof>>
 
-PackageDeclaration ::= package CompletePackageName SEMICOLON {
+PackageDeclaration ::= package CompletePackageName PackageVersion? SEMICOLON {
     pin=1 methods=[getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub"
 }
 
-CompletePackageName ::= PackageName (DOT PackageName)* PackageVersion? {pin(".*")=1}
+CompletePackageName ::= PackageName (DOT PackageName)* {
+    pin(".*")=1 methods=[getReferences]
+}
 
 PackageName ::= identifier {
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageNameStub"
@@ -201,7 +203,7 @@ PackageVersion ::= version identifier {
 }
 
 // Todo - Cache
-ImportDeclaration ::= import (OrgName DIV)? CompletePackageName Alias? SEMICOLON {pin=1}
+ImportDeclaration ::= import (OrgName DIV)? CompletePackageName PackageVersion? Alias? SEMICOLON {pin=1}
 
 OrgName ::= identifier {
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaOrgNameStub"
@@ -547,7 +549,7 @@ TernaryExpression ::= Expression QUESTION_MARK Expression COLON Expression
 
 NameReference ::= PackageReference? identifier {
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaNameReferenceStub"
-    methods=[/*getReference*/ getQualifier /*resolve*/ resolveType isLocalPackageReference]
+    methods=[/*getReference*/ getQualifier /*resolve*/ resolveType isReferenceToLocalPackage]
 }
 
 PackageReference ::= identifier COLON {

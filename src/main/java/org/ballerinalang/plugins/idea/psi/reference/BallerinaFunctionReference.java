@@ -18,22 +18,26 @@
 package org.ballerinalang.plugins.idea.psi.reference;
 
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReferenceBase;
+import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
+import org.ballerinalang.plugins.idea.psi.impl.BallerinaElementFactory;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaFunctionIndex;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 //public class BallerinaFunctionReference extends BallerinaCachedReference<BallerinaIdentifier> {
 //
@@ -85,29 +89,39 @@ import java.util.Collection;
 //    }
 //}
 
-public class BallerinaFunctionReference extends PsiReferenceBase {
-
-    public BallerinaFunctionReference(PsiElement element, TextRange rangeInElement, boolean soft) {
-        super(element, rangeInElement, soft);
-    }
-
-    public BallerinaFunctionReference(PsiElement element, TextRange rangeInElement) {
-        super(element, rangeInElement);
-    }
-
-    public BallerinaFunctionReference(PsiElement element, boolean soft) {
-        super(element, soft);
-    }
+public class BallerinaFunctionReference extends BallerinaCachedReference<BallerinaIdentifier> {
 
     public BallerinaFunctionReference(@NotNull BallerinaIdentifier element) {
-        // Note - Range should be 0 - length. Without this, error will occur.
-        this(element, new TextRange(0, element.getText().length()));
-        //        super(element);
+        super(element);
+    }
+
+    //    public BallerinaFunctionReference(PsiElement element, TextRange rangeInElement, boolean soft) {
+    //        super(element, rangeInElement, soft);
+    //    }
+    //
+    //    public BallerinaFunctionReference(PsiElement element, TextRange rangeInElement) {
+    //        super(element, rangeInElement);
+    //    }
+    //
+    //    public BallerinaFunctionReference(PsiElement element, boolean soft) {
+    //        super(element, soft);
+    //    }
+    //
+    //    public BallerinaFunctionReference(@NotNull BallerinaIdentifier element) {
+    //        // Note - Range should be 0 - length. Without this, error will occur.
+    //        this(element, new TextRange(0, element.getText().length()));
+    //        //        super(element);
+    //    }
+
+    @Override
+    public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
+        myElement.replace(BallerinaElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
+        return myElement;
     }
 
     @Nullable
     @Override
-    public PsiElement resolve() {
+    public PsiElement resolveInner() {
         Project project = myElement.getProject();
 
         BallerinaNameReference nameReference = PsiTreeUtil.getParentOfType(myElement, BallerinaNameReference.class);
@@ -117,19 +131,32 @@ public class BallerinaFunctionReference extends PsiReferenceBase {
         }
 
         Collection<BallerinaFunctionDefinition> elements;
-        if (nameReference.isLocalPackageReference()) {
-            GlobalSearchScope scope = GlobalSearchScope.fileScope(myElement.getContainingFile());
+
+        if (nameReference.isReferenceToLocalPackage()) {
+
+            PsiFile originalFile = myElement.getContainingFile().getOriginalFile();
+            PsiDirectory parent = originalFile.getParent();
+            if (parent == null) {
+                return null;
+            }
+            List<VirtualFile> virtualFiles = Arrays.asList(parent.getVirtualFile().getChildren());
+
+            GlobalSearchScope scope = GlobalSearchScope.filesScope(project, virtualFiles);
             elements = StubIndex.getElements(BallerinaFunctionIndex.KEY, myElement.getText(), project, scope,
                     BallerinaFunctionDefinition.class);
         } else {
+            // Todo - Get files in the corresponding package.
+            // Todo - Filter public elements? Or show a warning?
+            // Todo - Consider package version.
             GlobalSearchScope scope = GlobalSearchScope.fileScope(myElement.getContainingFile());
             elements = StubIndex.getElements(BallerinaFunctionIndex.KEY, myElement.getText(), project, scope,
                     BallerinaFunctionDefinition.class);
         }
-        if (elements.isEmpty()) {
+        BallerinaFunctionDefinition firstItem = ContainerUtil.getFirstItem(elements);
+        if (elements.isEmpty() || firstItem == null) {
             return null;
         }
-        return ContainerUtil.getFirstItem(elements).getIdentifier();
+        return firstItem.getIdentifier();
     }
 
     @NotNull
@@ -143,4 +170,3 @@ public class BallerinaFunctionReference extends PsiReferenceBase {
         return keys.toArray(new String[keys.size()]);
     }
 }
-

@@ -20,8 +20,11 @@ package org.ballerinalang.plugins.idea.psi.impl;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileFactory;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.BallerinaLanguage;
+import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
+import org.ballerinalang.plugins.idea.psi.BallerinaPackageName;
 import org.jetbrains.annotations.NotNull;
 
 public class BallerinaElementFactory {
@@ -38,4 +41,17 @@ public class BallerinaElementFactory {
         return file.getPackage().getCompletePackageName().getPackageNameList().get(0).getIdentifier();
     }
 
+    //    @NotNull
+    //    public static BallerinaCompletePackageName createImportString(@NotNull Project project, @NotNull String
+    // importString) {
+    //        GoImportSpec importSpec = createCompletePackageName(project, packageName);
+    //        return importSpec.getImportString();
+    //    }
+
+    @NotNull
+    public static BallerinaCompletePackageName createCompletePackageName(@NotNull Project project,
+                                                                         @NotNull String packageName) {
+        BallerinaFile file = createFileFromText(project, "package " + packageName + ";");
+        return PsiTreeUtil.findChildOfType(file, BallerinaCompletePackageName.class);
+    }
 }

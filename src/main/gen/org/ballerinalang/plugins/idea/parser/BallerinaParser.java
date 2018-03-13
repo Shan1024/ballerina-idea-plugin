@@ -1090,7 +1090,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PackageName (DOT PackageName)* PackageVersion?
+  // PackageName (DOT PackageName)*
   public static boolean CompletePackageName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CompletePackageName")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
@@ -1098,8 +1098,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, COMPLETE_PACKAGE_NAME, null);
     r = PackageName(b, l + 1);
     p = r; // pin = 1
-    r = r && report_error_(b, CompletePackageName_1(b, l + 1));
-    r = p && CompletePackageName_2(b, l + 1) && r;
+    r = r && CompletePackageName_1(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -1126,13 +1125,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     r = r && PackageName(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
-  }
-
-  // PackageVersion?
-  private static boolean CompletePackageName_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "CompletePackageName_2")) return false;
-    PackageVersion(b, l + 1);
-    return true;
   }
 
   /* ********************************************************** */
@@ -1970,7 +1962,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // import (OrgName DIV)? CompletePackageName Alias? SEMICOLON
+  // import (OrgName DIV)? CompletePackageName PackageVersion? Alias? SEMICOLON
   public static boolean ImportDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ImportDeclaration")) return false;
     if (!nextTokenIs(b, IMPORT)) return false;
@@ -1981,6 +1973,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     r = r && report_error_(b, ImportDeclaration_1(b, l + 1));
     r = p && report_error_(b, CompletePackageName(b, l + 1)) && r;
     r = p && report_error_(b, ImportDeclaration_3(b, l + 1)) && r;
+    r = p && report_error_(b, ImportDeclaration_4(b, l + 1)) && r;
     r = p && consumeToken(b, SEMICOLON) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
@@ -2004,9 +1997,16 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // Alias?
+  // PackageVersion?
   private static boolean ImportDeclaration_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ImportDeclaration_3")) return false;
+    PackageVersion(b, l + 1);
+    return true;
+  }
+
+  // Alias?
+  private static boolean ImportDeclaration_4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ImportDeclaration_4")) return false;
     Alias(b, l + 1);
     return true;
   }
@@ -2586,7 +2586,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // package CompletePackageName SEMICOLON
+  // package CompletePackageName PackageVersion? SEMICOLON
   public static boolean PackageDeclaration(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PackageDeclaration")) return false;
     if (!nextTokenIs(b, PACKAGE)) return false;
@@ -2595,9 +2595,17 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, PACKAGE);
     p = r; // pin = 1
     r = r && report_error_(b, CompletePackageName(b, l + 1));
+    r = p && report_error_(b, PackageDeclaration_2(b, l + 1)) && r;
     r = p && consumeToken(b, SEMICOLON) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  // PackageVersion?
+  private static boolean PackageDeclaration_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "PackageDeclaration_2")) return false;
+    PackageVersion(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */

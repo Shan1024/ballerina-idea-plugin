@@ -53,9 +53,10 @@ public class BallerinaIdentifier extends LeafPsiElement implements PsiNameIdenti
 
     @Override
     public PsiReference getReference() {
-//        if (getParent() instanceof BallerinaNameReference) {
+        // Note - Don't need to return references for definitions.
+        if (getParent() instanceof BallerinaNameReference) {
             return new BallerinaFunctionReference(this);
-//        }
-//        return null;
+        }
+        return null;
     }
 }
