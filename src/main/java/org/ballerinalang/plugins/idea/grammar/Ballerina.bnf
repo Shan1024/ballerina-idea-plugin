@@ -465,7 +465,7 @@ WorkerReply ::= ExpressionList LARROW identifier SEMICOLON {pin=2}
 // Note - Order of 'simpleVariableReference' and 'functionInvocationReference' because otherwise all function
 // invocations will match simpleVariableReference first.
 VariableReference ::= InvocationReference | MapArrayVariableReference | FieldVariableReference | XmlAttribVariableReference
-                      |  FunctionInvocationReference | SimpleVariableReference
+                      | FunctionInvocationReference | SimpleVariableReference
 
 InvocationReference ::= VariableReference Invocation
 MapArrayVariableReference ::= VariableReference Index
@@ -493,7 +493,7 @@ ActionInvocation ::= VariableReference RARROW FunctionInvocation {pin=2}
 
 ExpressionList ::= Expression (COMMA Expression)*
 
-ExpressionStmt ::= (VariableReference | ActionInvocation) SEMICOLON
+ExpressionStmt ::= (VariableReference | ActionInvocation) SEMICOLON {pin=1}
 
 TransactionStatement ::= TransactionClause FailedClause?
 
@@ -575,6 +575,7 @@ NameReference ::= PackageReference? identifier {
 }
 
 PackageReference ::= identifier COLON {
+    pin=2
     methods=[getReference]
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageReferenceStub"
 }

@@ -1591,12 +1591,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean ExpressionStmt(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExpressionStmt")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, EXPRESSION_STMT, null);
     r = ExpressionStmt_0(b, l + 1);
+    p = r; // pin = 1
     r = r && consumeToken(b, SEMICOLON);
-    exit_section_(b, m, EXPRESSION_STMT, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // VariableReference | ActionInvocation
@@ -2627,7 +2628,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, IDENTIFIER, COLON);
+    r = consumeTokens(b, 2, IDENTIFIER, COLON);
     exit_section_(b, m, PACKAGE_REFERENCE, r);
     return r;
   }

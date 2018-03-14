@@ -27,7 +27,7 @@ import org.jetbrains.annotations.Nullable;
 
 public class BallerinaPackageNameReference extends BallerinaCachedReference<BallerinaIdentifier> {
 
-    PsiReference reference;
+    private PsiReference reference;
 
     public BallerinaPackageNameReference(@NotNull BallerinaIdentifier element, PsiReference reference) {
         super(element);

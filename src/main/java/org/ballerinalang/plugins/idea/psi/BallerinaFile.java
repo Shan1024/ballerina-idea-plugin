@@ -128,7 +128,6 @@ public class BallerinaFile extends PsiFileBase {
 
                 //                GoImportString string = importDeclaration.getImportString();
                 //                PsiDirectory dir = string.resolve();
-                //                // todo[zolotov]: implement package modification tracker
                 //                ContainerUtil.addIfNotNull(dependencies, dir);
                 //                Collection<String> packagesInDirectory = GoPackageUtil.getAllPackagesInDirectory
                 // (dir, module, true);

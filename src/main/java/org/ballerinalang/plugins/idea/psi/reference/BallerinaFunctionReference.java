@@ -18,6 +18,7 @@
 package org.ballerinalang.plugins.idea.psi.reference;
 
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -35,6 +36,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaElementFactory;
+import org.ballerinalang.plugins.idea.stubs.filter.BallerinaIdFilter;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaFunctionIndex;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -42,6 +44,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 //public class BallerinaFunctionReference extends BallerinaCachedReference<BallerinaIdentifier> {
 //
@@ -94,6 +97,8 @@ import java.util.List;
 //}
 
 public class BallerinaFunctionReference extends BallerinaCachedReference<BallerinaIdentifier> {
+
+    static int count = 0;
 
     public BallerinaFunctionReference(@NotNull BallerinaIdentifier element) {
         super(element);
@@ -157,7 +162,8 @@ public class BallerinaFunctionReference extends BallerinaCachedReference<Balleri
             PsiReference reference = packageReference.getReference();
             PsiElement psiDirectory = reference.resolve();
 
-            List<VirtualFile> virtualFiles = Arrays.asList(((PsiDirectory) psiDirectory).getVirtualFile().getChildren());
+            List<VirtualFile> virtualFiles = Arrays.asList(((PsiDirectory) psiDirectory).getVirtualFile().getChildren
+                    ());
             GlobalSearchScope scope = GlobalSearchScope.filesScope(project, virtualFiles);
             elements = StubIndex.getElements(BallerinaFunctionIndex.KEY, myElement.getText(), project, scope,
                     BallerinaFunctionDefinition.class);
@@ -173,10 +179,89 @@ public class BallerinaFunctionReference extends BallerinaCachedReference<Balleri
     @Override
     public Object[] getVariants() {
         Project project = myElement.getProject();
-        GlobalSearchScope scope = GlobalSearchScope.fileScope(myElement.getContainingFile());
+        //        GlobalSearchScope scope = GlobalSearchScope.fileScope(myElement.getContainingFile());
 
-        Collection<String> keys = StubIndex.getInstance().getAllKeys(BallerinaFunctionIndex.KEY, project);
+        //        Collection<String> keys = StubIndex.getInstance().getAllKeys(BallerinaFunctionIndex.KEY, project);
 
-        return keys.toArray(new String[keys.size()]);
+        //        return keys.toArray(new String[keys.size()]);
+
+        BallerinaNameReference nameReference = PsiTreeUtil.getParentOfType(myElement, BallerinaNameReference.class);
+
+        if (nameReference == null) {
+            return new Object[0];
+        }
+
+        if (nameReference.isReferenceToLocalPackage()) {
+
+            PsiFile originalFile = myElement.getContainingFile().getOriginalFile();
+            PsiDirectory parent = originalFile.getParent();
+            if (parent == null) {
+                return new Object[0];
+            }
+            List<VirtualFile> virtualFiles = Arrays.asList(parent.getVirtualFile().getChildren());
+            Set<String> results = ContainerUtil.newHashSet();
+            GlobalSearchScope scope = GlobalSearchScope.filesScope(project, virtualFiles);
+            //            StubIndex.getInstance().processAllKeys(BallerinaFunctionIndex.KEY,  new
+            // CancellableCollectProcessor<String>(results) {
+            //                @Override
+            //                protected boolean accept(String s) {
+            //                    return !"_".equals(s) && StringUtil.isCapitalized(s);
+            //                }
+            //            },scope,);
+
+            StubIndex.getInstance().processAllKeys(BallerinaFunctionIndex.KEY, project, new
+                    CancellableCollectProcessor<String>(results) {
+                        @Override
+                        protected boolean accept(String s) {
+                            return !"_".equals(s) && StringUtil.isCapitalized(s);
+                        }
+                    });
+
+
+        } else {
+            // Todo - Get files in the corresponding package.
+            // Todo - Filter public elements? Or show a warning?
+            // Todo - Consider package version.
+
+            BallerinaPackageReference packageReference = nameReference.getPackageReference();
+            PsiReference reference = packageReference.getReference();
+            PsiElement psiDirectory = reference.resolve();
+
+            List<VirtualFile> virtualFiles = Arrays.asList(((PsiDirectory) psiDirectory).getVirtualFile()
+                    .getChildren());
+            GlobalSearchScope scope = GlobalSearchScope.filesScope(project, virtualFiles);
+            //            StubIndex.getInstance().processAllKeys(BallerinaFunctionIndex.KEY, project);
+
+            Set<String> results = ContainerUtil.newHashSet();
+
+            long start = System.currentTimeMillis();
+
+            //            StubIndex.getInstance().processAllKeys(BallerinaFunctionIndex.KEY, project, new
+            //                    CancellableCollectProcessor<String>(results) {
+            //                        @Override
+            //                        protected boolean accept(String s) {
+            //                            count++;
+            //                            return !"_".equals(s) && StringUtil.isCapitalized(s);
+            //                        }
+            //                    });
+
+            count=0;
+
+            StubIndex.getInstance().processAllKeys(BallerinaFunctionIndex.KEY, new
+                    CancellableCollectProcessor<String>(results) {
+                        @Override
+                        protected boolean accept(String s) {
+                            count++;
+                            return !"_".equals(s) && StringUtil.isCapitalized(s);
+                        }
+                    }, scope, BallerinaIdFilter.getFilesFilter(scope));
+
+            long end = System.currentTimeMillis();
+
+            System.out.println("Processed: " + count + " in " + (end - start) + " ms");
+        }
+
+
+        return new Object[0];
     }
 }

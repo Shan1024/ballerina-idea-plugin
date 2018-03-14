@@ -54,9 +54,9 @@ public class BallerinaExpressionStmtImpl extends BallerinaCompositeElementImpl i
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getSemicolon() {
-    return notNullChild(findChildByType(SEMICOLON));
+    return findChildByType(SEMICOLON);
   }
 
 }
