@@ -38,6 +38,7 @@ public interface BallerinaTypes {
   IElementType ARRAY_TYPE_NAME = new BallerinaCompositeElementType("ARRAY_TYPE_NAME");
   IElementType ASSIGNMENT_STATEMENT = new BallerinaCompositeElementType("ASSIGNMENT_STATEMENT");
   IElementType ATTACHMENT_POINT = new BallerinaCompositeElementType("ATTACHMENT_POINT");
+  IElementType ATTACHMENT_POINTS = new BallerinaCompositeElementType("ATTACHMENT_POINTS");
   IElementType ATTRIBUTE = new BallerinaCompositeElementType("ATTRIBUTE");
   IElementType BINARY_ADD_SUB_EXPRESSION = new BallerinaCompositeElementType("BINARY_ADD_SUB_EXPRESSION");
   IElementType BINARY_AND_EXPRESSION = new BallerinaCompositeElementType("BINARY_AND_EXPRESSION");
@@ -385,6 +386,9 @@ public interface BallerinaTypes {
       }
       else if (type == ATTACHMENT_POINT) {
         return new BallerinaAttachmentPointImpl(node);
+      }
+      else if (type == ATTACHMENT_POINTS) {
+        return new BallerinaAttachmentPointsImpl(node);
       }
       else if (type == ATTRIBUTE) {
         return new BallerinaAttributeImpl(node);

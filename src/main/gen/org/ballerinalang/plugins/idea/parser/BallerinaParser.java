@@ -69,6 +69,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == ATTACHMENT_POINT) {
       r = AttachmentPoint(b, 0);
     }
+    else if (t == ATTACHMENT_POINTS) {
+      r = AttachmentPoints(b, 0);
+    }
     else if (t == ATTRIBUTE) {
       r = Attribute(b, 0);
     }
@@ -550,7 +553,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (public)? annotation (LT AttachmentPoint (COMMA AttachmentPoint)* GT)? identifier UserDefineTypeName? SEMICOLON
+  // (public)? annotation (LT AttachmentPoints GT)? identifier UserDefineTypeName? SEMICOLON
   public static boolean AnnotationDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AnnotationDefinition")) return false;
     if (!nextTokenIs(b, "<annotation definition>", ANNOTATION, PUBLIC)) return false;
@@ -574,45 +577,21 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (LT AttachmentPoint (COMMA AttachmentPoint)* GT)?
+  // (LT AttachmentPoints GT)?
   private static boolean AnnotationDefinition_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AnnotationDefinition_2")) return false;
     AnnotationDefinition_2_0(b, l + 1);
     return true;
   }
 
-  // LT AttachmentPoint (COMMA AttachmentPoint)* GT
+  // LT AttachmentPoints GT
   private static boolean AnnotationDefinition_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AnnotationDefinition_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, LT);
-    r = r && AttachmentPoint(b, l + 1);
-    r = r && AnnotationDefinition_2_0_2(b, l + 1);
+    r = r && AttachmentPoints(b, l + 1);
     r = r && consumeToken(b, GT);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (COMMA AttachmentPoint)*
-  private static boolean AnnotationDefinition_2_0_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AnnotationDefinition_2_0_2")) return false;
-    int c = current_position_(b);
-    while (true) {
-      if (!AnnotationDefinition_2_0_2_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "AnnotationDefinition_2_0_2", c)) break;
-      c = current_position_(b);
-    }
-    return true;
-  }
-
-  // COMMA AttachmentPoint
-  private static boolean AnnotationDefinition_2_0_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "AnnotationDefinition_2_0_2_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && AttachmentPoint(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -685,7 +664,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // service (LT identifier? GT)? | resource | connector | action | function | struct | enum | const | TYPE_PARAMETER | annotation | transformer
+  // service (LT identifier? GT)? | resource | connector | action | function | struct | enum | const | TYPE_PARAMETER | annotation | transformer {
+  //     /*recoverWhile=AttachmentPointRecover*/
+  // }
   public static boolean AttachmentPoint(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "AttachmentPoint")) return false;
     boolean r;
@@ -700,7 +681,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, CONST);
     if (!r) r = consumeToken(b, TYPE_PARAMETER);
     if (!r) r = consumeToken(b, ANNOTATION);
-    if (!r) r = consumeToken(b, TRANSFORMER);
+    if (!r) r = AttachmentPoint_10(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
@@ -740,6 +721,63 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "AttachmentPoint_0_1_0_1")) return false;
     consumeToken(b, IDENTIFIER);
     return true;
+  }
+
+  // transformer {
+  //     /*recoverWhile=AttachmentPointRecover*/
+  // }
+  private static boolean AttachmentPoint_10(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AttachmentPoint_10")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, TRANSFORMER);
+    r = r && AttachmentPoint_10_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // {
+  //     /*recoverWhile=AttachmentPointRecover*/
+  // }
+  private static boolean AttachmentPoint_10_1(PsiBuilder b, int l) {
+    return true;
+  }
+
+  /* ********************************************************** */
+  // AttachmentPoint (COMMA AttachmentPoint)*
+  public static boolean AttachmentPoints(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AttachmentPoints")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, ATTACHMENT_POINTS, "<attachment points>");
+    r = AttachmentPoint(b, l + 1);
+    p = r; // pin = 1
+    r = r && AttachmentPoints_1(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // (COMMA AttachmentPoint)*
+  private static boolean AttachmentPoints_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AttachmentPoints_1")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!AttachmentPoints_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "AttachmentPoints_1", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // COMMA AttachmentPoint
+  private static boolean AttachmentPoints_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AttachmentPoints_1_0")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = consumeToken(b, COMMA);
+    p = r; // pin = 1
+    r = r && AttachmentPoint(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */

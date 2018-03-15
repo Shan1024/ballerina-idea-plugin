@@ -20,33 +20,10 @@ package org.ballerinalang.plugins.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.StubBasedPsiElement;
-import org.ballerinalang.plugins.idea.stubs.BallerinaAnnotationDefinitionStub;
 
-public interface BallerinaAnnotationDefinition extends BallerinaNamedElement, StubBasedPsiElement<BallerinaAnnotationDefinitionStub> {
-
-  @Nullable
-  BallerinaAttachmentPoints getAttachmentPoints();
-
-  @Nullable
-  BallerinaUserDefineTypeName getUserDefineTypeName();
-
-  @Nullable
-  PsiElement getGt();
-
-  @Nullable
-  PsiElement getLt();
-
-  @Nullable
-  PsiElement getSemicolon();
+public interface BallerinaAttachmentPoints extends BallerinaCompositeElement {
 
   @NotNull
-  PsiElement getAnnotation();
-
-  @Nullable
-  PsiElement getIdentifier();
-
-  @Nullable
-  PsiElement getPublic();
+  List<BallerinaAttachmentPoint> getAttachmentPointList();
 
 }

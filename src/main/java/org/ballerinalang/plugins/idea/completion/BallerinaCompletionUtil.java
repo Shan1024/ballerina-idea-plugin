@@ -21,7 +21,11 @@ import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.StubBasedPsiElement;
+import com.intellij.psi.stubs.StubElement;
 import org.ballerinalang.plugins.idea.BallerinaIcons;
+import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
+import org.ballerinalang.plugins.idea.stubs.BallerinaFunctionDefinitionStub;
 import org.jetbrains.annotations.NotNull;
 
 public class BallerinaCompletionUtil {
@@ -40,8 +44,8 @@ public class BallerinaCompletionUtil {
     }
 
     @NotNull
-    public static LookupElement createLookupElement(@NotNull PsiElement element) {
-        return LookupElementBuilder.createWithSmartPointer("aaaa",element)
-                .withTypeText("Example");
+    public static LookupElement createFunctionLookupElement(@NotNull BallerinaFunctionDefinition element) {
+        return LookupElementBuilder.createWithSmartPointer(element.getIdentifier().getText(), element.getIdentifier())
+                .withTypeText("Function");
     }
 }

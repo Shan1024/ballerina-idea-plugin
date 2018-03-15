@@ -149,4 +149,8 @@ public class BallerinaFile extends PsiFileBase {
             return CachedValueProvider.Result.create(map, ArrayUtil.toObjectArray(dependencies));
         });
     }
+
+    public List<BallerinaDefinition> getDefinitions() {
+        return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaDefinition.class);
+    }
 }

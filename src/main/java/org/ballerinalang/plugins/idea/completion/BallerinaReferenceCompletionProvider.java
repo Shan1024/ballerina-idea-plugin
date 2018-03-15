@@ -32,12 +32,12 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.util.containers.ContainerUtil;
 import org.ballerinalang.plugins.idea.psi.BallerinaConnectorDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaStructDefinition;
 import org.ballerinalang.plugins.idea.psi.scope.BallerinaScopeProcessor;
-import org.ballerinalang.plugins.idea.stubs.BallerinaFileStub;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaActionIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaAnnotationIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaConnectorIndex;
@@ -55,6 +55,7 @@ import org.ballerinalang.plugins.idea.stubs.index.BallerinaWorkerIndex;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Set;
 
 public class BallerinaReferenceCompletionProvider extends CompletionContributor {
@@ -123,6 +124,8 @@ public class BallerinaReferenceCompletionProvider extends CompletionContributor 
     //        }
     //    }
 
+    static int count = 0;
+
     @Override
     public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
         Project project = parameters.getOriginalFile().getProject();
@@ -160,34 +163,39 @@ public class BallerinaReferenceCompletionProvider extends CompletionContributor 
         Collection<String> allWorkers = StubIndex.getInstance().getAllKeys(BallerinaWorkerIndex.KEY, project);
         Collection<String> allNamespaces = StubIndex.getInstance().getAllKeys(BallerinaNamespaceIndex.KEY, project);
 
+        //        long start = System.currentTimeMillis();
+        //
+        //        Collection<BallerinaStructDefinition> ballerinaStructDefinitions = StubIndex.getElements
+        // (BallerinaStructIndex
+        //                .KEY, "user2", project, GlobalSearchScope.allScope(project), BallerinaStructDefinition.class);
+        //        /*.forEach(def -> System.out.println(def.getIdentifier().getText()));*/
+        //
+        //        //        ballerinaStructDefinitions.forEach(def -> def.isPublic());
+        //
+        //        long end = System.currentTimeMillis();
+        //
+        //        System.out.println("Found " + ballerinaStructDefinitions.size() + " in " + (end - start) + " ms");
+        //        System.out.println("....");
+
         long start = System.currentTimeMillis();
 
-        Collection<BallerinaStructDefinition> ballerinaStructDefinitions = StubIndex.getElements(BallerinaStructIndex
-                .KEY, "user2", project, GlobalSearchScope.allScope(project), BallerinaStructDefinition.class);
-        /*.forEach(def -> System.out.println(def.getIdentifier().getText()));*/
-
-        //        ballerinaStructDefinitions.forEach(def -> def.isPublic());
-
-        long end = System.currentTimeMillis();
-
-        System.out.println("Found " + ballerinaStructDefinitions.size() + " in " + (end - start) + " ms");
-        System.out.println("....");
-
+        count = 0;
         PsiElement position = parameters.getPosition();
         ResolveState state = createContextOnElement(position);
         MyBallerinaScopeProcessor myBallerinaScopeProcessor = new MyBallerinaScopeProcessor(result);
 
-        PsiFile containingFile = position.getContainingFile();
+        PsiFile containingFile = position.getContainingFile().getOriginalFile();
 
-        while (position != null && myBallerinaScopeProcessor.execute(position, state)) {
-            position = position.getParent();
-            if (position instanceof PsiDirectory && position.getParent() instanceof PsiDirectory) {
-                break;
+        PsiDirectory parent = containingFile.getParent();
+
+        if (parent != null) {
+            PsiElement[] children = parent.getChildren();
+            for (PsiElement child : children) {
+                myBallerinaScopeProcessor.execute(child, state);
             }
         }
-
-//        result.stopHere();
-
+        long end = System.currentTimeMillis();
+        System.out.println("Found " + count + " in " + (end - start) + " ms");
     }
 
     private static final Key<SmartPsiElementPointer<PsiElement>> CONTEXT = Key.create("CONTEXT");
@@ -211,18 +219,21 @@ public class BallerinaReferenceCompletionProvider extends CompletionContributor 
         @Override
         public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
             if (accept(element)) {
-
-//                BallerinaFileStub stub = ((BallerinaFile) element).getStub();
-//                if(stub==null)
-                myResult.addElement(BallerinaCompletionUtil.createLookupElement(element));
-                //                addElement(element, state, myProcessedNames, myResult);
+                List<BallerinaDefinition> definitions = ((BallerinaFile) element).getDefinitions();
+                for (BallerinaDefinition definition : definitions) {
+                    PsiElement firstChild = definition.getFirstChild();
+                    if (firstChild instanceof BallerinaFunctionDefinition) {
+                        myResult.addElement(BallerinaCompletionUtil.createFunctionLookupElement((
+                                (BallerinaFunctionDefinition) firstChild)));
+                        count++;
+                    }
+                }
             }
             return true;
         }
 
         protected boolean accept(@NotNull PsiElement element) {
-//            return element instanceof BallerinaFile;
-            return true;
+            return element instanceof BallerinaFile;
         }
 
         @Override
