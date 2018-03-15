@@ -20,17 +20,24 @@ package org.ballerinalang.plugins.idea.completion;
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.util.Key;
+import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.ResolveState;
+import com.intellij.psi.SmartPointerManager;
+import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
-import com.intellij.util.Processor;
+import com.intellij.util.containers.ContainerUtil;
 import org.ballerinalang.plugins.idea.psi.BallerinaConnectorDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaStructDefinition;
+import org.ballerinalang.plugins.idea.psi.scope.BallerinaScopeProcessor;
+import org.ballerinalang.plugins.idea.stubs.BallerinaFileStub;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaActionIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaAnnotationIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaConnectorIndex;
@@ -46,75 +53,75 @@ import org.ballerinalang.plugins.idea.stubs.index.BallerinaStructIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaTransformerIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaWorkerIndex;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Map;
+import java.util.Set;
 
 public class BallerinaReferenceCompletionProvider extends CompletionContributor {
 
-//    private static class NamedElementProcessor implements Processor<GoNamedElement> {
-//        @NotNull private final Collection<ElementProcessor> myProcessors;
-//        @NotNull private final CompletionResultSet myResult;
-//        @NotNull private String myName = "";
-//        @NotNull private final Map<String, GoImportSpec> myImportedPackages;
-//        @Nullable
-//        private final Module myModule;
-//        private final boolean myVendoringEnabled;
-//
-//        public NamedElementProcessor(@NotNull Collection<ElementProcessor> processors,
-//                                     @NotNull GoFile contextFile,
-//                                     @NotNull CompletionResultSet result,
-//                                     @Nullable Module module) {
-//            myProcessors = processors;
-//            myVendoringEnabled = GoVendoringUtil.isVendoringEnabled(module);
-//            myImportedPackages = contextFile.getImportedPackagesMap();
-//            myModule = module;
-//            myResult = result;
-//        }
-//
-//        public void setName(@NotNull String name) {
-//            myName = name;
-//        }
-//
-//        @Override
-//        public boolean process(@NotNull GoNamedElement element) {
-//            ProgressManager.checkCanceled();
-//            Boolean allowed = null;
-//            ExistingImportData importData = null;
-//            for (ElementProcessor processor : myProcessors) {
-//                if (processor.isMine(myName, element)) {
-//                    importData = cachedImportData(element, importData);
-//                    allowed = cachedAllowed(element, allowed);
-//                    if (allowed == Boolean.FALSE || importData.isDot) break;
-//                    if (!processor.process(myName, element, importData, myResult)) {
-//                        return false;
-//                    }
-//                }
-//            }
-//            return true;
-//        }
-//
-//        @NotNull
-//        private Boolean cachedAllowed(@NotNull GoNamedElement element, @Nullable Boolean existingValue) {
-//            if (existingValue != null) return existingValue;
-//            return GoPsiImplUtil.canBeAutoImported(element.getContainingFile(), false, myModule);
-//        }
-//
-//        @NotNull
-//        private ExistingImportData cachedImportData(@NotNull GoNamedElement element, @Nullable ExistingImportData existingValue) {
-//            if (existingValue != null) return existingValue;
-//
-//            GoFile declarationFile = element.getContainingFile();
-//            String importPath = declarationFile.getImportPath(myVendoringEnabled);
-//            GoImportSpec existingImport = myImportedPackages.get(importPath);
-//
-//            boolean exists = existingImport != null;
-//            boolean isDot = exists && existingImport.isDot();
-//            String alias = existingImport != null ? existingImport.getAlias() : null;
-//            return new ExistingImportData(exists, isDot, alias, importPath);
-//        }
-//    }
+    //    private static class NamedElementProcessor implements Processor<GoNamedElement> {
+    //        @NotNull private final Collection<ElementProcessor> myProcessors;
+    //        @NotNull private final CompletionResultSet myResult;
+    //        @NotNull private String myName = "";
+    //        @NotNull private final Map<String, GoImportSpec> myImportedPackages;
+    //        @Nullable
+    //        private final Module myModule;
+    //        private final boolean myVendoringEnabled;
+    //
+    //        public NamedElementProcessor(@NotNull Collection<ElementProcessor> processors,
+    //                                     @NotNull GoFile contextFile,
+    //                                     @NotNull CompletionResultSet result,
+    //                                     @Nullable Module module) {
+    //            myProcessors = processors;
+    //            myVendoringEnabled = GoVendoringUtil.isVendoringEnabled(module);
+    //            myImportedPackages = contextFile.getImportedPackagesMap();
+    //            myModule = module;
+    //            myResult = result;
+    //        }
+    //
+    //        public void setName(@NotNull String name) {
+    //            myName = name;
+    //        }
+    //
+    //        @Override
+    //        public boolean process(@NotNull GoNamedElement element) {
+    //            ProgressManager.checkCanceled();
+    //            Boolean allowed = null;
+    //            ExistingImportData importData = null;
+    //            for (ElementProcessor processor : myProcessors) {
+    //                if (processor.isMine(myName, element)) {
+    //                    importData = cachedImportData(element, importData);
+    //                    allowed = cachedAllowed(element, allowed);
+    //                    if (allowed == Boolean.FALSE || importData.isDot) break;
+    //                    if (!processor.process(myName, element, importData, myResult)) {
+    //                        return false;
+    //                    }
+    //                }
+    //            }
+    //            return true;
+    //        }
+    //
+    //        @NotNull
+    //        private Boolean cachedAllowed(@NotNull GoNamedElement element, @Nullable Boolean existingValue) {
+    //            if (existingValue != null) return existingValue;
+    //            return GoPsiImplUtil.canBeAutoImported(element.getContainingFile(), false, myModule);
+    //        }
+    //
+    //        @NotNull
+    //        private ExistingImportData cachedImportData(@NotNull GoNamedElement element, @Nullable
+    // ExistingImportData existingValue) {
+    //            if (existingValue != null) return existingValue;
+    //
+    //            GoFile declarationFile = element.getContainingFile();
+    //            String importPath = declarationFile.getImportPath(myVendoringEnabled);
+    //            GoImportSpec existingImport = myImportedPackages.get(importPath);
+    //
+    //            boolean exists = existingImport != null;
+    //            boolean isDot = exists && existingImport.isDot();
+    //            String alias = existingImport != null ? existingImport.getAlias() : null;
+    //            return new ExistingImportData(exists, isDot, alias, importPath);
+    //        }
+    //    }
 
     @Override
     public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
@@ -165,5 +172,62 @@ public class BallerinaReferenceCompletionProvider extends CompletionContributor 
 
         System.out.println("Found " + ballerinaStructDefinitions.size() + " in " + (end - start) + " ms");
         System.out.println("....");
+
+        PsiElement position = parameters.getPosition();
+        ResolveState state = createContextOnElement(position);
+        MyBallerinaScopeProcessor myBallerinaScopeProcessor = new MyBallerinaScopeProcessor(result);
+
+        PsiFile containingFile = position.getContainingFile();
+
+        while (position != null && myBallerinaScopeProcessor.execute(position, state)) {
+            position = position.getParent();
+            if (position instanceof PsiDirectory && position.getParent() instanceof PsiDirectory) {
+                break;
+            }
+        }
+
+//        result.stopHere();
+
+    }
+
+    private static final Key<SmartPsiElementPointer<PsiElement>> CONTEXT = Key.create("CONTEXT");
+
+    @NotNull
+    public static ResolveState createContextOnElement(@NotNull PsiElement element) {
+        return ResolveState.initial().put(CONTEXT, SmartPointerManager.getInstance(element.getProject())
+                .createSmartPsiElementPointer(element.getContainingFile()));
+    }
+
+    private static class MyBallerinaScopeProcessor extends BallerinaScopeProcessor {
+
+        @NotNull
+        private final CompletionResultSet myResult;
+        private final Set<String> myProcessedNames = ContainerUtil.newHashSet();
+
+        public MyBallerinaScopeProcessor(@NotNull CompletionResultSet result) {
+            myResult = result;
+        }
+
+        @Override
+        public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
+            if (accept(element)) {
+
+//                BallerinaFileStub stub = ((BallerinaFile) element).getStub();
+//                if(stub==null)
+                myResult.addElement(BallerinaCompletionUtil.createLookupElement(element));
+                //                addElement(element, state, myProcessedNames, myResult);
+            }
+            return true;
+        }
+
+        protected boolean accept(@NotNull PsiElement element) {
+//            return element instanceof BallerinaFile;
+            return true;
+        }
+
+        @Override
+        public boolean isCompletion() {
+            return true;
+        }
     }
 }

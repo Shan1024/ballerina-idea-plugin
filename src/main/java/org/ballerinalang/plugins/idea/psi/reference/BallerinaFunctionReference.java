@@ -245,16 +245,31 @@ public class BallerinaFunctionReference extends BallerinaCachedReference<Balleri
             //                        }
             //                    });
 
-            count=0;
+            count = 0;
 
-            StubIndex.getInstance().processAllKeys(BallerinaFunctionIndex.KEY, new
-                    CancellableCollectProcessor<String>(results) {
-                        @Override
-                        protected boolean accept(String s) {
-                            count++;
-                            return !"_".equals(s) && StringUtil.isCapitalized(s);
-                        }
-                    }, scope, BallerinaIdFilter.getFilesFilter(scope));
+            // Working approach
+            //            StubIndex.getInstance().processAllKeys(BallerinaFunctionIndex.KEY, new
+            //                    CancellableCollectProcessor<String>(results) {
+            //                        @Override
+            //                        protected boolean accept(String s) {
+            //                            count++;
+            //                            return !"_".equals(s) && StringUtil.isCapitalized(s);
+            //                        }
+            //                    }, scope, BallerinaIdFilter.getFilesFilter(scope));
+
+
+            // Working approach when we know the Key
+            Set<BallerinaFunctionDefinition> results2 = ContainerUtil.newHashSet();
+            StubIndex.getInstance().processElements(BallerinaFunctionIndex.KEY, "bar", project, scope,
+                    BallerinaFunctionDefinition.class, new
+                            CancellableCollectProcessor<BallerinaFunctionDefinition>(results2) {
+
+                                @Override
+                                protected boolean accept(BallerinaFunctionDefinition s) {
+                                    count++;
+                                    return true;
+                                }
+                            });
 
             long end = System.currentTimeMillis();
 

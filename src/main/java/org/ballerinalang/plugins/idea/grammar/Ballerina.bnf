@@ -279,10 +279,17 @@ StructBody ::= LEFT_BRACE FieldDefinition* PrivateStructBody? RIGHT_BRACE
 // Todo - Cache
 PrivateStructBody ::= private COLON FieldDefinition* {pin=1}
 
-AnnotationDefinition ::= (public)? annotation (LT AttachmentPoint (COMMA AttachmentPoint)* GT)? identifier UserDefineTypeName? SEMICOLON {
+AnnotationDefinition ::= (public)? annotation (LT AttachmentPoints GT)? identifier UserDefineTypeName? SEMICOLON {
     pin=2
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaAnnotationDefinitionStub"
 }
+
+AttachmentPoints ::= AttachmentPoint (COMMA AttachmentPoint)* {
+    pin(".*")=1
+    /*recoverWhile=AttachmentPointsRecover*/
+}
+
+//private AttachmentPointsRecover ::= !(GT | Identifier | SEMICOLON)
 
 EnumDefinition ::= (public)? enum identifier LEFT_BRACE Enumerator (COMMA Enumerator)* RIGHT_BRACE {
     pin=2
@@ -305,7 +312,11 @@ TransformerDefinition ::= (public)? transformer LT ParameterList GT (identifier 
 
 // Todo - Need to update the service?
 // Note - "parameter" is treated differently here because there is a parser rule named "parameter" as well.
-AttachmentPoint ::= service (LT identifier? GT)? | resource | connector | action | function | struct | enum | const | TYPE_PARAMETER | annotation | transformer
+AttachmentPoint ::= service (LT identifier? GT)? | resource | connector | action | function | struct | enum | const | TYPE_PARAMETER | annotation | transformer {
+    /*recoverWhile=AttachmentPointRecover*/
+}
+
+//private AttachmentPointRecover ::= !(COMMA | GT)
 
 ConstantDefinition ::= (public)? const ValueTypeName identifier ASSIGN Expression SEMICOLON {
     pin=2
@@ -369,6 +380,7 @@ AnnotationAttachment ::= AT NameReference RecordLiteral?
 // STATEMENTS / BLOCKS =================================================================================================
 
 // Todo - Add recovery rules
+// Note - Expression statement should be the first one.
 Statement ::=
         ExpressionStmt
     |   AssignmentStatement
@@ -386,9 +398,10 @@ Statement ::=
     |   TransactionStatement
     |   AbortStatement
     |   LockStatement
-    |   NamespaceDeclarationStatement /*{recoverWhile = StatementRecover}*/
+    |   NamespaceDeclarationStatement {recoverWhile = StatementRecover}
 
-//private StatementRecover ::= !(int | string | '}')
+// Todo - Add more tokens
+private StatementRecover ::= !(int | string | '}' | ';')
 
 //private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
 
@@ -464,8 +477,8 @@ WorkerReply ::= ExpressionList LARROW identifier SEMICOLON {pin=2}
 
 // Note - Order of 'simpleVariableReference' and 'functionInvocationReference' because otherwise all function
 // invocations will match simpleVariableReference first.
-VariableReference ::= InvocationReference | MapArrayVariableReference | FieldVariableReference | XmlAttribVariableReference
-                      | FunctionInvocationReference | SimpleVariableReference
+VariableReference ::= /*InvocationReference | MapArrayVariableReference | FieldVariableReference | XmlAttribVariableReference
+                      |*/ FunctionInvocationReference | SimpleVariableReference
 
 InvocationReference ::= VariableReference Invocation
 MapArrayVariableReference ::= VariableReference Index
@@ -475,25 +488,29 @@ FunctionInvocationReference ::= FunctionInvocation
 SimpleVariableReference ::= NameReference
 
 Field ::= DOT identifier {
-    pin=1
+    /*pin=1*/
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFieldStub"
 }
 
-Index ::= LEFT_BRACKET Expression RIGHT_BRACKET {pin=1}
+Index ::= LEFT_BRACKET Expression RIGHT_BRACKET /*{pin=1}*/
 
-XmlAttrib ::= AT (LEFT_BRACKET Expression RIGHT_BRACKET)? {pin=1}
+XmlAttrib ::= AT (LEFT_BRACKET Expression RIGHT_BRACKET)? /*{pin=1}*/
 
 // Todo - Need to pin?
-FunctionInvocation ::= NameReference LEFT_PARENTHESIS ExpressionList? RIGHT_PARENTHESIS /*{pin=2}*/
+FunctionInvocation ::= NameReference LEFT_PARENTHESIS ExpressionList? RIGHT_PARENTHESIS {pin=2}
 
 // Todo - Adding pin will mess function invocation.
-Invocation ::= DOT AnyIdentifierName LEFT_PARENTHESIS ExpressionList? RIGHT_PARENTHESIS /*{pin=1}*/
+Invocation ::= DOT AnyIdentifierName LEFT_PARENTHESIS ExpressionList? RIGHT_PARENTHESIS {pin=1}
 
-ActionInvocation ::= VariableReference RARROW FunctionInvocation {pin=2}
+ActionInvocation ::= VariableReference RARROW FunctionInvocation /*{pin=2}*/
 
-ExpressionList ::= Expression (COMMA Expression)*
+ExpressionList ::= Expression (COMMA Expression)* {
+    pin(".*")=1
+//    recoverWhile = ExpressionListRecover
+}
+//private ExpressionListRecover ::= !(RIGHT_PARENTHESIS | SEMICOLON)
 
-ExpressionStmt ::= (VariableReference | ActionInvocation) SEMICOLON {pin=1}
+ExpressionStmt ::= (VariableReference | ActionInvocation) SEMICOLON /*{pin=1}*/
 
 TransactionStatement ::= TransactionClause FailedClause?
 

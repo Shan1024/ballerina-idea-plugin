@@ -17,8 +17,10 @@
 
 package org.ballerinalang.plugins.idea.completion;
 
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
 import org.ballerinalang.plugins.idea.BallerinaIcons;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,5 +37,11 @@ public class BallerinaCompletionUtil {
     public static LookupElementBuilder createPackageLookupElement(@NotNull PsiDirectory dir) {
         return LookupElementBuilder.createWithSmartPointer(dir.getName(), dir).withIcon(BallerinaIcons.PACKAGE)
                 .withInsertHandler(dir.getFiles().length == 0 ? Lazy.DIR_INSERT_HANDLER : null);
+    }
+
+    @NotNull
+    public static LookupElement createLookupElement(@NotNull PsiElement element) {
+        return LookupElementBuilder.createWithSmartPointer("aaaa",element)
+                .withTypeText("Example");
     }
 }

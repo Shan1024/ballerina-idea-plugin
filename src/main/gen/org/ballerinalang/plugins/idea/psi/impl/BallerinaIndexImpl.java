@@ -42,9 +42,9 @@ public class BallerinaIndexImpl extends BallerinaCompositeElementImpl implements
   }
 
   @Override
-  @Nullable
+  @NotNull
   public BallerinaExpression getExpression() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaExpression.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaExpression.class));
   }
 
   @Override
@@ -54,9 +54,9 @@ public class BallerinaIndexImpl extends BallerinaCompositeElementImpl implements
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getRightBracket() {
-    return findChildByType(RIGHT_BRACKET);
+    return notNullChild(findChildByType(RIGHT_BRACKET));
   }
 
 }

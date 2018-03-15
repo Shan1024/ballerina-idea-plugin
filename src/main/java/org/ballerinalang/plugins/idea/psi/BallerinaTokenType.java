@@ -28,8 +28,9 @@ public class BallerinaTokenType extends IElementType {
         super(debugName, BallerinaLanguage.INSTANCE);
     }
 
+    // Note - You can update the type names shown in error msg here.
     @Override
     public String toString() {
-        return "BallerinaTokenType." + super.toString();
+        return  super.toString();
     }
 }

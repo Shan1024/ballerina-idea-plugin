@@ -29,7 +29,7 @@ public interface BallerinaExpressionStmt extends BallerinaCompositeElement {
   @Nullable
   BallerinaVariableReference getVariableReference();
 
-  @Nullable
+  @NotNull
   PsiElement getSemicolon();
 
 }
