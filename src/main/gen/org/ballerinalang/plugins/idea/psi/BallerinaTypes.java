@@ -204,7 +204,6 @@ public interface BallerinaTypes {
   IElementType ASSIGN = new BallerinaTokenType("=");
   IElementType AT = new BallerinaTokenType("@");
   IElementType ATTACH = new BallerinaTokenType("attach");
-  IElementType BACKTICK = new BallerinaTokenType("`");
   IElementType BIND = new BallerinaTokenType("bind");
   IElementType BLOB = new BallerinaTokenType("blob");
   IElementType BOOLEAN = new BallerinaTokenType("boolean");
@@ -299,8 +298,8 @@ public interface BallerinaTypes {
   IElementType SOME = new BallerinaTokenType("some");
   IElementType STRING = new BallerinaTokenType("string");
   IElementType STRINGTEMPLATEEXPRESSIONSTART = new BallerinaTokenType("StringTemplateExpressionStart");
-  IElementType STRINGTEMPLATELITERALEND = new BallerinaTokenType("StringTemplateLiteralEnd");
-  IElementType STRINGTEMPLATELITERALSTART = new BallerinaTokenType("StringTemplateLiteralStart");
+  IElementType STRINGTEMPLATELITERALEND = new BallerinaTokenType("`");
+  IElementType STRINGTEMPLATELITERALSTART = new BallerinaTokenType("stringTemplateLiteralStart");
   IElementType STRINGTEMPLATETEXT = new BallerinaTokenType("StringTemplateText");
   IElementType STRUCT = new BallerinaTokenType("struct");
   IElementType SUB = new BallerinaTokenType("-");

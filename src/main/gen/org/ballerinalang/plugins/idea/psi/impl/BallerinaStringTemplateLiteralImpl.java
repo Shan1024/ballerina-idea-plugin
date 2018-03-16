@@ -42,12 +42,6 @@ public class BallerinaStringTemplateLiteralImpl extends BallerinaExpressionImpl 
   }
 
   @Override
-  @Nullable
-  public BallerinaStringTemplateContent getStringTemplateContent() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaStringTemplateContent.class);
-  }
-
-  @Override
   @NotNull
   public PsiElement getStringTemplateLiteralEnd() {
     return notNullChild(findChildByType(STRINGTEMPLATELITERALEND));

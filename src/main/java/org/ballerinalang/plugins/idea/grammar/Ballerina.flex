@@ -10,6 +10,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 %%
 
 %{
+  private boolean inTemplate = false;
   public BallerinaLexer() {
     this((java.io.Reader)null);
   }
@@ -58,7 +59,10 @@ WHITE_SPACE=\s+
 
 LINE_COMMENT = "//" [^\r\n]*
 
-//%state QUOTED_STRING
+StringTemplateLiteralStart = string[ \t\n\x0B\f\r]*`
+StringTemplateLiteralEnd = `
+
+%state STRING_TEMPLATE
 
 %%
 <YYINITIAL> {
@@ -157,18 +161,21 @@ LINE_COMMENT = "//" [^\r\n]*
   "->"                      { return RARROW; }
   "<-"                      { return LARROW; }
   "@"                       { return AT; }
-  "`"                       { return BACKTICK; }
+//  "`"                       { return BACKTICK; }
   ".."                      { return RANGE; }
 
   {QUOTED_STRING_LITERAL}   { return QUOTEDSTRINGLITERAL; }
   {IDENTIFIER}              { return IDENTIFIER; }
   {LINE_COMMENT}            { return LINE_COMMENT; }
   {INTIGER_LITERAL}         { return INTEGERLITERAL; }
-//  .                         { return BAD_CHARACTER; }
+
+  {StringTemplateLiteralStart} { inTemplate = true; yybegin(STRING_TEMPLATE); return STRINGTEMPLATELITERALSTART;}
+  .                         { return BAD_CHARACTER; }
 }
 
-//<QUOTED_STRING>{
-//
-//}
+<STRING_TEMPLATE>{
+  {StringTemplateLiteralEnd} {inTemplate = false; yybegin(YYINITIAL); return STRINGTEMPLATELITERALEND; }
+   .                         {inTemplate = false; return BAD_CHARACTER; }
+}
 
 [^] { return BAD_CHARACTER; }

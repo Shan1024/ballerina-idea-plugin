@@ -162,9 +162,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == FIELD_DEFINITION) {
       r = FieldDefinition(b, 0);
     }
-    else if (t == FIELD_VARIABLE_REFERENCE) {
-      r = FieldVariableReference(b, 0);
-    }
     else if (t == FINALLY_CLAUSE) {
       r = FinallyClause(b, 0);
     }
@@ -179,9 +176,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     }
     else if (t == FUNCTION_INVOCATION) {
       r = FunctionInvocation(b, 0);
-    }
-    else if (t == FUNCTION_INVOCATION_REFERENCE) {
-      r = FunctionInvocationReference(b, 0);
     }
     else if (t == FUNCTION_TYPE_NAME) {
       r = FunctionTypeName(b, 0);
@@ -210,9 +204,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == INVOCATION) {
       r = Invocation(b, 0);
     }
-    else if (t == INVOCATION_REFERENCE) {
-      r = InvocationReference(b, 0);
-    }
     else if (t == JOIN_CLAUSE) {
       r = JoinClause(b, 0);
     }
@@ -227,9 +218,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     }
     else if (t == LOCK_STATEMENT) {
       r = LockStatement(b, 0);
-    }
-    else if (t == MAP_ARRAY_VARIABLE_REFERENCE) {
-      r = MapArrayVariableReference(b, 0);
     }
     else if (t == MAP_TYPE_NAME) {
       r = MapTypeName(b, 0);
@@ -303,9 +291,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == SERVICE_DEFINITION) {
       r = ServiceDefinition(b, 0);
     }
-    else if (t == SIMPLE_VARIABLE_REFERENCE) {
-      r = SimpleVariableReference(b, 0);
-    }
     else if (t == START_TAG) {
       r = StartTag(b, 0);
     }
@@ -361,7 +346,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
       r = VariableDefinitionStatement(b, 0);
     }
     else if (t == VARIABLE_REFERENCE) {
-      r = VariableReference(b, 0);
+      r = VariableReference(b, 0, -1);
     }
     else if (t == VARIABLE_REFERENCE_LIST) {
       r = VariableReferenceList(b, 0);
@@ -380,9 +365,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     }
     else if (t == XML_ATTRIB) {
       r = XmlAttrib(b, 0);
-    }
-    else if (t == XML_ATTRIB_VARIABLE_REFERENCE) {
-      r = XmlAttribVariableReference(b, 0);
     }
     else if (t == XML_DOUBLE_QUOTED_STRING) {
       r = XmlDoubleQuotedString(b, 0);
@@ -511,7 +493,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = VariableReference(b, l + 1);
+    r = VariableReference(b, l + 1, -1);
     r = r && consumeToken(b, RARROW);
     r = r && FunctionInvocation(b, l + 1);
     exit_section_(b, m, ACTION_INVOCATION, r);
@@ -1355,7 +1337,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // AnnotationAttachment* documentationAttachment? deprecatedAttachment? (StructDefinition
   //     | GlobalVariableDefinition | ServiceDefinition | FunctionDefinition | ConnectorDefinition | EnumDefinition
-  //     | AnnotationDefinition | TransformerDefinition | ConstantDefinition | GlobalEndpointDefinition)
+  //     | AnnotationDefinition | TransformerDefinition | ConstantDefinition | GlobalEndpointDefinition) {
+  //    /* recoverWhile=TopLevelDefinitionRecover*/
+  // }
   public static boolean Definition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Definition")) return false;
     boolean r;
@@ -1364,7 +1348,8 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     r = r && Definition_1(b, l + 1);
     r = r && Definition_2(b, l + 1);
     r = r && Definition_3(b, l + 1);
-    exit_section_(b, l, m, r, false, TopLevelDefinitionRecover_parser_);
+    r = r && Definition_4(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -1413,6 +1398,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = GlobalEndpointDefinition(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  // {
+  //    /* recoverWhile=TopLevelDefinitionRecover*/
+  // }
+  private static boolean Definition_4(PsiBuilder b, int l) {
+    return true;
   }
 
   /* ********************************************************** */
@@ -1661,7 +1653,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "ExpressionStmt_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = VariableReference(b, l + 1);
+    r = VariableReference(b, l + 1, -1);
     if (!r) r = ActionInvocation(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
@@ -1724,19 +1716,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, ASSIGN);
     r = r && SimpleLiteral(b, l + 1);
     exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // VariableReference Field
-  public static boolean FieldVariableReference(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FieldVariableReference")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = VariableReference(b, l + 1);
-    r = r && Field(b, l + 1);
-    exit_section_(b, m, FIELD_VARIABLE_REFERENCE, r);
     return r;
   }
 
@@ -1877,18 +1856,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "FunctionInvocation_2")) return false;
     ExpressionList(b, l + 1);
     return true;
-  }
-
-  /* ********************************************************** */
-  // FunctionInvocation
-  public static boolean FunctionInvocationReference(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "FunctionInvocationReference")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = FunctionInvocation(b, l + 1);
-    exit_section_(b, m, FUNCTION_INVOCATION_REFERENCE, r);
-    return r;
   }
 
   /* ********************************************************** */
@@ -2192,19 +2159,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // VariableReference Invocation
-  public static boolean InvocationReference(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "InvocationReference")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = VariableReference(b, l + 1);
-    r = r && Invocation(b, l + 1);
-    exit_section_(b, m, INVOCATION_REFERENCE, r);
-    return r;
-  }
-
-  /* ********************************************************** */
   // join (LEFT_PARENTHESIS JoinConditions RIGHT_PARENTHESIS)? LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Block RIGHT_BRACE
   public static boolean JoinClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "JoinClause")) return false;
@@ -2384,19 +2338,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     r = p && consumeToken(b, RIGHT_BRACE) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
-  }
-
-  /* ********************************************************** */
-  // VariableReference Index
-  public static boolean MapArrayVariableReference(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "MapArrayVariableReference")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = VariableReference(b, l + 1);
-    r = r && Index(b, l + 1);
-    exit_section_(b, m, MAP_ARRAY_VARIABLE_REFERENCE, r);
-    return r;
   }
 
   /* ********************************************************** */
@@ -3148,18 +3089,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // NameReference
-  public static boolean SimpleVariableReference(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SimpleVariableReference")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = NameReference(b, l + 1);
-    exit_section_(b, m, SIMPLE_VARIABLE_REFERENCE, r);
-    return r;
-  }
-
-  /* ********************************************************** */
   // XML_TAG_OPEN XmlQualifiedName Attribute* XML_TAG_CLOSE
   public static boolean StartTag(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StartTag")) return false;
@@ -3725,26 +3654,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // FunctionInvocationReference | SimpleVariableReference
-  public static boolean VariableReference(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "VariableReference")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _COLLAPSE_, VARIABLE_REFERENCE, null);
-    r = FunctionInvocationReference(b, l + 1);
-    if (!r) r = SimpleVariableReference(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  /* ********************************************************** */
   // VariableReference (COMMA VariableReference)*
   public static boolean VariableReferenceList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "VariableReferenceList")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = VariableReference(b, l + 1);
+    r = VariableReference(b, l + 1, -1);
     r = r && VariableReferenceList_1(b, l + 1);
     exit_section_(b, m, VARIABLE_REFERENCE_LIST, r);
     return r;
@@ -3768,7 +3684,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COMMA);
-    r = r && VariableReference(b, l + 1);
+    r = r && VariableReference(b, l + 1, -1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -3859,19 +3775,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     r = r && Expression(b, l + 1, -1);
     r = r && consumeToken(b, RIGHT_BRACKET);
     exit_section_(b, m, null, r);
-    return r;
-  }
-
-  /* ********************************************************** */
-  // VariableReference XmlAttrib
-  public static boolean XmlAttribVariableReference(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "XmlAttribVariableReference")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = VariableReference(b, l + 1);
-    r = r && XmlAttrib(b, l + 1);
-    exit_section_(b, m, XML_ATTRIB_VARIABLE_REFERENCE, r);
     return r;
   }
 
@@ -4855,24 +4758,15 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // StringTemplateLiteralStart StringTemplateContent? StringTemplateLiteralEnd
+  // stringTemplateLiteralStart /*StringTemplateContent?*/ stringTemplateLiteralEnd
   public static boolean StringTemplateLiteral(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StringTemplateLiteral")) return false;
     if (!nextTokenIsSmart(b, STRINGTEMPLATELITERALSTART)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokenSmart(b, STRINGTEMPLATELITERALSTART);
-    r = r && StringTemplateLiteral_1(b, l + 1);
-    r = r && consumeToken(b, STRINGTEMPLATELITERALEND);
+    r = consumeTokensSmart(b, 0, STRINGTEMPLATELITERALSTART, STRINGTEMPLATELITERALEND);
     exit_section_(b, m, STRING_TEMPLATE_LITERAL, r);
     return r;
-  }
-
-  // StringTemplateContent?
-  private static boolean StringTemplateLiteral_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "StringTemplateLiteral_1")) return false;
-    StringTemplateContent(b, l + 1);
-    return true;
   }
 
   // ValueTypeName DOT identifier
@@ -4903,7 +4797,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!nextTokenIsSmart(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = VariableReference(b, l + 1);
+    r = VariableReference(b, l + 1, -1);
     exit_section_(b, m, VARIABLE_REFERENCE_EXPRESSION, r);
     return r;
   }
@@ -5231,14 +5125,83 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
+  /* ********************************************************** */
+  // Expression root: VariableReference
+  // Operator priority table:
+  // 0: POSTFIX(InvocationReference)
+  // 1: POSTFIX(MapArrayVariableReference)
+  // 2: POSTFIX(FieldVariableReference)
+  // 3: POSTFIX(XmlAttribVariableReference)
+  // 4: ATOM(FunctionInvocationReference)
+  // 5: ATOM(SimpleVariableReference)
+  public static boolean VariableReference(PsiBuilder b, int l, int g) {
+    if (!recursion_guard_(b, l, "VariableReference")) return false;
+    addVariant(b, "<variable reference>");
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, "<variable reference>");
+    r = FunctionInvocationReference(b, l + 1);
+    if (!r) r = SimpleVariableReference(b, l + 1);
+    p = r;
+    r = r && VariableReference_0(b, l + 1, g);
+    exit_section_(b, l, m, null, r, p, null);
+    return r || p;
+  }
+
+  public static boolean VariableReference_0(PsiBuilder b, int l, int g) {
+    if (!recursion_guard_(b, l, "VariableReference_0")) return false;
+    boolean r = true;
+    while (true) {
+      Marker m = enter_section_(b, l, _LEFT_, null);
+      if (g < 0 && Invocation(b, l + 1)) {
+        r = true;
+        exit_section_(b, l, m, INVOCATION_REFERENCE, r, true, null);
+      }
+      else if (g < 1 && Index(b, l + 1)) {
+        r = true;
+        exit_section_(b, l, m, MAP_ARRAY_VARIABLE_REFERENCE, r, true, null);
+      }
+      else if (g < 2 && Field(b, l + 1)) {
+        r = true;
+        exit_section_(b, l, m, FIELD_VARIABLE_REFERENCE, r, true, null);
+      }
+      else if (g < 3 && XmlAttrib(b, l + 1)) {
+        r = true;
+        exit_section_(b, l, m, XML_ATTRIB_VARIABLE_REFERENCE, r, true, null);
+      }
+      else {
+        exit_section_(b, l, m, null, false, false, null);
+        break;
+      }
+    }
+    return r;
+  }
+
+  // FunctionInvocation
+  public static boolean FunctionInvocationReference(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FunctionInvocationReference")) return false;
+    if (!nextTokenIsSmart(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = FunctionInvocation(b, l + 1);
+    exit_section_(b, m, FUNCTION_INVOCATION_REFERENCE, r);
+    return r;
+  }
+
+  // NameReference
+  public static boolean SimpleVariableReference(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SimpleVariableReference")) return false;
+    if (!nextTokenIsSmart(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = NameReference(b, l + 1);
+    exit_section_(b, m, SIMPLE_VARIABLE_REFERENCE, r);
+    return r;
+  }
+
   final static Parser StatementRecover_parser_ = new Parser() {
     public boolean parse(PsiBuilder b, int l) {
       return StatementRecover(b, l + 1);
-    }
-  };
-  final static Parser TopLevelDefinitionRecover_parser_ = new Parser() {
-    public boolean parse(PsiBuilder b, int l) {
-      return TopLevelDefinitionRecover(b, l + 1);
     }
   };
 }

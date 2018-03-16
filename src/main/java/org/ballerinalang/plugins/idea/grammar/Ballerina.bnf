@@ -148,6 +148,9 @@
     identifier = 'regexp:[a-zA-Z_][a-zA-Z0-9_]*'
     quotedStringLiteral = "regexp:\"(.*)\""
     integerLiteral = "regexp:\d+"
+
+    stringTemplateLiteralStart = "regexp:string\s*`"
+    stringTemplateLiteralEnd = "`"
   ]
 
     extends("(FunctionInvocation|SimpleVariable|MapArrayVariable|FieldVariable|XmlAttribVariable|Invocation)Reference") = VariableReference
@@ -224,7 +227,7 @@ Alias ::= as identifier {
 Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? (StructDefinition
     | GlobalVariableDefinition | ServiceDefinition | FunctionDefinition | ConnectorDefinition | EnumDefinition
     | AnnotationDefinition | TransformerDefinition | ConstantDefinition | GlobalEndpointDefinition) {
-    recoverWhile=TopLevelDefinitionRecover
+   /* recoverWhile=TopLevelDefinitionRecover*/
 }
 
 private TopLevelDefinitionRecover ::= !(service | function | connector | struct | enum | annotation | transformer | endpoint | const | boolean | int | float | string | blob | public | identifier)
@@ -477,8 +480,8 @@ WorkerReply ::= ExpressionList LARROW identifier SEMICOLON {pin=2}
 
 // Note - Order of 'simpleVariableReference' and 'functionInvocationReference' because otherwise all function
 // invocations will match simpleVariableReference first.
-VariableReference ::= /*InvocationReference | MapArrayVariableReference | FieldVariableReference | XmlAttribVariableReference
-                      |*/ FunctionInvocationReference | SimpleVariableReference
+VariableReference ::= InvocationReference | MapArrayVariableReference | FieldVariableReference | XmlAttribVariableReference
+                      | FunctionInvocationReference | SimpleVariableReference
 
 InvocationReference ::= VariableReference Invocation
 MapArrayVariableReference ::= VariableReference Index
@@ -651,7 +654,8 @@ XmlDoubleQuotedString ::= DOUBLE_QUOTE (XMLDoubleQuotedTemplateString Expression
 
 XmlQualifiedName ::= (XMLQName QNAME_SEPARATOR)? XMLQName | XMLTagExpressionStart Expression ExpressionEnd
 
-StringTemplateLiteral ::= StringTemplateLiteralStart StringTemplateContent? StringTemplateLiteralEnd
+// Todo - Uncomment
+StringTemplateLiteral ::= stringTemplateLiteralStart /*StringTemplateContent?*/ stringTemplateLiteralEnd
 
 StringTemplateContent ::= (StringTemplateExpressionStart Expression ExpressionEnd)+ StringTemplateText? | StringTemplateText
 
