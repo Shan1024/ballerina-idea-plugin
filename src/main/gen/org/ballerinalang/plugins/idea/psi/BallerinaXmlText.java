@@ -27,6 +27,6 @@ public interface BallerinaXmlText extends BallerinaCompositeElement {
   List<BallerinaExpression> getExpressionList();
 
   @Nullable
-  PsiElement getXMLText();
+  PsiElement getXmlTextSequence();
 
 }

@@ -61,8 +61,8 @@ public class BallerinaXmlDoubleQuotedStringImpl extends BallerinaCompositeElemen
 
   @Override
   @Nullable
-  public PsiElement getXMLDoubleQuotedString() {
-    return findChildByType(XMLDOUBLEQUOTEDSTRING);
+  public PsiElement getXmlDoubleQuotedStringSequence() {
+    return findChildByType(XML_DOUBLE_QUOTED_STRING_SEQUENCE);
   }
 
 }

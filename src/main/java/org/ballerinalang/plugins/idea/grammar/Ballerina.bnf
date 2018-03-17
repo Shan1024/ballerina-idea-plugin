@@ -627,40 +627,41 @@ SimpleLiteral ::= (ADD|SUB)? integerLiteral /*| (ADD|SUB)? floatingPointLiteral*
 
 // XML parsing
 
-XmlLiteral ::= XMLLiteralStart XmlItem XMLLiteralEnd
+XmlLiteral ::= xml_literal_start XmlItem xml_literal_end
 
-XmlItem ::= Element | ProcIns | Comment | XmlText | CDATA
+XmlItem ::= Element | ProcIns | Comment | XmlText | cdata
 
-Content ::= XmlText? ((Element | CDATA | ProcIns | Comment) XmlText?)*
+Content ::= XmlText? ((Element | cdata | ProcIns | Comment) XmlText?)*
 
-Comment ::= XML_COMMENT_START (XMLCommentTemplateText Expression ExpressionEnd)* XMLCommentText
+Comment ::= xml_comment_start (xml_comment_template_text Expression expression_end)* xml_comment_text
 
 Element ::= StartTag Content CloseTag | EmptyTag
 
-StartTag ::= XML_TAG_OPEN XmlQualifiedName Attribute* XML_TAG_CLOSE
+StartTag ::= xml_tag_open XmlQualifiedName Attribute* xml_tag_close
 
-CloseTag ::= XML_TAG_OPEN_SLASH XmlQualifiedName XML_TAG_CLOSE
+CloseTag ::= xml_tag_open_slash XmlQualifiedName xml_tag_close
 
-EmptyTag ::= XML_TAG_OPEN XmlQualifiedName Attribute* XML_TAG_SLASH_CLOSE
+EmptyTag ::= xml_tag_open XmlQualifiedName Attribute* xml_tag_slash_close
 
-ProcIns ::= XML_TAG_SPECIAL_OPEN (XMLPITemplateText Expression ExpressionEnd)* XMLPIText
+ProcIns ::= xml_tag_special_open (xml_pi_template_text Expression expression_end)* xml_pi_text
 
 Attribute ::= XmlQualifiedName EQUALS XmlQuotedString;
 
-XmlText ::= (XMLTemplateText Expression ExpressionEnd)+ XMLText? | XMLText
+XmlText ::= (xml_template_text Expression expression_end)+ xml_text_sequence? | xml_text_sequence
 
 XmlQuotedString ::= XmlSingleQuotedString | XmlDoubleQuotedString
 
-XmlSingleQuotedString ::= SINGLE_QUOTE (XMLSingleQuotedTemplateString Expression ExpressionEnd)* XMLSingleQuotedString? SINGLE_QUOTE_END
+XmlSingleQuotedString ::= single_quote (xml_single_quoted_template_string Expression expression_end)* xml_single_quoted_string_sequence? single_quote_end
 
-XmlDoubleQuotedString ::= DOUBLE_QUOTE (XMLDoubleQuotedTemplateString Expression ExpressionEnd)* XMLDoubleQuotedString? DOUBLE_QUOTE_END
+XmlDoubleQuotedString ::= double_quote (xml_double_quoted_template_string Expression expression_end)* xml_double_quoted_string_sequence? double_quote_end
 
-XmlQualifiedName ::= (XMLQName QNAME_SEPARATOR)? XMLQName | XMLTagExpressionStart Expression ExpressionEnd
+XmlQualifiedName ::= (xml_qname QNAME_SEPARATOR)? xml_qname | xml_tag_expression_start Expression expression_end
 
 // Todo - Uncomment
 StringTemplateLiteral ::= string_template_literal_start StringTemplateContent? string_template_literal_end {pin=1 recoverWhile=StringTemplateLiteralRecover}
 
-private StringTemplateLiteralRecover ::= !(SEMICOLON)
+// Todo - Update to statement recover
+private StringTemplateLiteralRecover ::= !(SEMICOLON | string | int | identifier)
 
 StringTemplateContent ::= StringTemplateExpressionContent | StringTemplateTextContent
 

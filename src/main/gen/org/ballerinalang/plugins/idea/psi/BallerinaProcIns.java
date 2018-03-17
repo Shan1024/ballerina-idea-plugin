@@ -27,7 +27,7 @@ public interface BallerinaProcIns extends BallerinaCompositeElement {
   List<BallerinaExpression> getExpressionList();
 
   @NotNull
-  PsiElement getXMLPIText();
+  PsiElement getXmlPiText();
 
   @NotNull
   PsiElement getXmlTagSpecialOpen();

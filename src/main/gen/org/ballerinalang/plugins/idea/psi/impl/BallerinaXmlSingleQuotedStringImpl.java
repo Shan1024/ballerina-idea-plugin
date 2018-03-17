@@ -61,8 +61,8 @@ public class BallerinaXmlSingleQuotedStringImpl extends BallerinaCompositeElemen
 
   @Override
   @Nullable
-  public PsiElement getXMLSingleQuotedString() {
-    return findChildByType(XMLSINGLEQUOTEDSTRING);
+  public PsiElement getXmlSingleQuotedStringSequence() {
+    return findChildByType(XML_SINGLE_QUOTED_STRING_SEQUENCE);
   }
 
 }

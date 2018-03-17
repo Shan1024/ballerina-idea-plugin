@@ -27,9 +27,9 @@ public interface BallerinaComment extends BallerinaCompositeElement {
   List<BallerinaExpression> getExpressionList();
 
   @NotNull
-  PsiElement getXMLCommentText();
+  PsiElement getXmlCommentStart();
 
   @NotNull
-  PsiElement getXmlCommentStart();
+  PsiElement getXmlCommentText();
 
 }

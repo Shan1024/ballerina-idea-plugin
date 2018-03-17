@@ -33,6 +33,6 @@ public interface BallerinaXmlDoubleQuotedString extends BallerinaCompositeElemen
   PsiElement getDoubleQuoteEnd();
 
   @Nullable
-  PsiElement getXMLDoubleQuotedString();
+  PsiElement getXmlDoubleQuotedStringSequence();
 
 }

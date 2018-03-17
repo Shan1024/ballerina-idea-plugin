@@ -49,8 +49,8 @@ public class BallerinaProcInsImpl extends BallerinaCompositeElementImpl implemen
 
   @Override
   @NotNull
-  public PsiElement getXMLPIText() {
-    return notNullChild(findChildByType(XMLPITEXT));
+  public PsiElement getXmlPiText() {
+    return notNullChild(findChildByType(XML_PI_TEXT));
   }
 
   @Override

@@ -27,9 +27,9 @@ public interface BallerinaXmlLiteral extends BallerinaExpression {
   BallerinaXmlItem getXmlItem();
 
   @NotNull
-  PsiElement getXMLLiteralEnd();
+  PsiElement getXmlLiteralEnd();
 
   @NotNull
-  PsiElement getXMLLiteralStart();
+  PsiElement getXmlLiteralStart();
 
 }

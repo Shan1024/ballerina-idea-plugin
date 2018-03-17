@@ -49,14 +49,14 @@ public class BallerinaXmlLiteralImpl extends BallerinaExpressionImpl implements 
 
   @Override
   @NotNull
-  public PsiElement getXMLLiteralEnd() {
-    return notNullChild(findChildByType(XMLLITERALEND));
+  public PsiElement getXmlLiteralEnd() {
+    return notNullChild(findChildByType(XML_LITERAL_END));
   }
 
   @Override
   @NotNull
-  public PsiElement getXMLLiteralStart() {
-    return notNullChild(findChildByType(XMLLITERALSTART));
+  public PsiElement getXmlLiteralStart() {
+    return notNullChild(findChildByType(XML_LITERAL_START));
   }
 
 }

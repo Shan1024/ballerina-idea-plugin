@@ -49,8 +49,8 @@ public class BallerinaXmlTextImpl extends BallerinaCompositeElementImpl implemen
 
   @Override
   @Nullable
-  public PsiElement getXMLText() {
-    return findChildByType(XMLTEXT);
+  public PsiElement getXmlTextSequence() {
+    return findChildByType(XML_TEXT_SEQUENCE);
   }
 
 }

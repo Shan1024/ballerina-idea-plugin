@@ -49,14 +49,14 @@ public class BallerinaCommentImpl extends BallerinaCompositeElementImpl implemen
 
   @Override
   @NotNull
-  public PsiElement getXMLCommentText() {
-    return notNullChild(findChildByType(XMLCOMMENTTEXT));
+  public PsiElement getXmlCommentStart() {
+    return notNullChild(findChildByType(XML_COMMENT_START));
   }
 
   @Override
   @NotNull
-  public PsiElement getXmlCommentStart() {
-    return notNullChild(findChildByType(XML_COMMENT_START));
+  public PsiElement getXmlCommentText() {
+    return notNullChild(findChildByType(XML_COMMENT_TEXT));
   }
 
 }
