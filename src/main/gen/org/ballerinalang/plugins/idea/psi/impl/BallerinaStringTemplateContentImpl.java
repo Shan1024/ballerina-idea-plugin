@@ -50,7 +50,7 @@ public class BallerinaStringTemplateContentImpl extends BallerinaCompositeElemen
   @Override
   @Nullable
   public PsiElement getStringTemplateText() {
-    return findChildByType(STRINGTEMPLATETEXT);
+    return findChildByType(STRING_TEMPLATE_TEXT);
   }
 
 }

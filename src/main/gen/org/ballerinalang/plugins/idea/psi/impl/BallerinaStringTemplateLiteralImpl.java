@@ -42,15 +42,21 @@ public class BallerinaStringTemplateLiteralImpl extends BallerinaExpressionImpl 
   }
 
   @Override
-  @NotNull
+  @Nullable
+  public BallerinaStringTemplateContent getStringTemplateContent() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaStringTemplateContent.class);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getStringTemplateLiteralEnd() {
-    return notNullChild(findChildByType(STRINGTEMPLATELITERALEND));
+    return findChildByType(STRING_TEMPLATE_LITERAL_END);
   }
 
   @Override
   @NotNull
   public PsiElement getStringTemplateLiteralStart() {
-    return notNullChild(findChildByType(STRINGTEMPLATELITERALSTART));
+    return notNullChild(findChildByType(STRING_TEMPLATE_LITERAL_START));
   }
 
 }

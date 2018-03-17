@@ -23,7 +23,10 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaStringTemplateLiteral extends BallerinaExpression {
 
-  @NotNull
+  @Nullable
+  BallerinaStringTemplateContent getStringTemplateContent();
+
+  @Nullable
   PsiElement getStringTemplateLiteralEnd();
 
   @NotNull

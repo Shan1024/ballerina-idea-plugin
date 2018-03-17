@@ -149,8 +149,11 @@
     quotedStringLiteral = "regexp:\"(.*)\""
     integerLiteral = "regexp:\d+"
 
-    stringTemplateLiteralStart = "regexp:string\s*`"
-    stringTemplateLiteralEnd = "`"
+    string_template_literal_start = "regexp:string\s*`"
+    string_template_literal_end = "`"
+
+    string_template_expression_start = "{{"
+    string_template_expression_end = "}}"
   ]
 
     extends("(FunctionInvocation|SimpleVariable|MapArrayVariable|FieldVariable|XmlAttribVariable|Invocation)Reference") = VariableReference
@@ -543,7 +546,6 @@ Expression
     |   ArrayLiteral
     |   RecordLiteral
     |   XmlLiteral
-    |   StringTemplateLiteral
     |   ValueTypeTypeExpression
     |   BuiltInReferenceTypeTypeExpression
     |   VariableReferenceExpression
@@ -562,6 +564,7 @@ Expression
     |   BinaryAndExpression
     |   BinaryOrExpression
     |   TernaryExpression {/*pin=1 */ /*recoverWhile=ExpressionRecover*/}
+    |   StringTemplateLiteral
 
 fake BinaryExpression ::= Expression {
   methods=[left="Expression[0]" right="Expression[1]" getOperator]
@@ -655,9 +658,15 @@ XmlDoubleQuotedString ::= DOUBLE_QUOTE (XMLDoubleQuotedTemplateString Expression
 XmlQualifiedName ::= (XMLQName QNAME_SEPARATOR)? XMLQName | XMLTagExpressionStart Expression ExpressionEnd
 
 // Todo - Uncomment
-StringTemplateLiteral ::= stringTemplateLiteralStart /*StringTemplateContent?*/ stringTemplateLiteralEnd
+StringTemplateLiteral ::= string_template_literal_start StringTemplateContent? string_template_literal_end {pin=1 recoverWhile=StringTemplateLiteralRecover}
 
-StringTemplateContent ::= (StringTemplateExpressionStart Expression ExpressionEnd)+ StringTemplateText? | StringTemplateText
+private StringTemplateLiteralRecover ::= !(SEMICOLON)
+
+StringTemplateContent ::= StringTemplateExpressionContent | StringTemplateTextContent
+
+private StringTemplateExpressionContent ::= StringTemplateExpression+ string_template_text?
+private StringTemplateExpression ::= string_template_expression_start Expression expression_end {pin=1}
+private StringTemplateTextContent ::= string_template_text
 
 AnyIdentifierName ::= identifier | ReservedWord
 

@@ -237,6 +237,7 @@ public interface BallerinaTypes {
   IElementType EQUAL = new BallerinaTokenType("==");
   IElementType EQUALS = new BallerinaTokenType("EQUALS");
   IElementType EXPRESSIONEND = new BallerinaTokenType("ExpressionEnd");
+  IElementType EXPRESSION_END = new BallerinaTokenType("expression_end");
   IElementType FAILED = new BallerinaTokenType("failed");
   IElementType FINALLY = new BallerinaTokenType("finally");
   IElementType FLOAT = new BallerinaTokenType("float");
@@ -297,10 +298,11 @@ public interface BallerinaTypes {
   IElementType SINGLE_QUOTE_END = new BallerinaTokenType("SINGLE_QUOTE_END");
   IElementType SOME = new BallerinaTokenType("some");
   IElementType STRING = new BallerinaTokenType("string");
-  IElementType STRINGTEMPLATEEXPRESSIONSTART = new BallerinaTokenType("StringTemplateExpressionStart");
-  IElementType STRINGTEMPLATELITERALEND = new BallerinaTokenType("`");
-  IElementType STRINGTEMPLATELITERALSTART = new BallerinaTokenType("stringTemplateLiteralStart");
-  IElementType STRINGTEMPLATETEXT = new BallerinaTokenType("StringTemplateText");
+  IElementType STRING_TEMPLATE_EXPRESSION_END = new BallerinaTokenType("}}");
+  IElementType STRING_TEMPLATE_EXPRESSION_START = new BallerinaTokenType("{{");
+  IElementType STRING_TEMPLATE_LITERAL_END = new BallerinaTokenType("`");
+  IElementType STRING_TEMPLATE_LITERAL_START = new BallerinaTokenType("string_template_literal_start");
+  IElementType STRING_TEMPLATE_TEXT = new BallerinaTokenType("string_template_text");
   IElementType STRUCT = new BallerinaTokenType("struct");
   IElementType SUB = new BallerinaTokenType("-");
   IElementType TABLE = new BallerinaTokenType("table");

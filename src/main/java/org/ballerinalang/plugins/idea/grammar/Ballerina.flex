@@ -59,8 +59,25 @@ WHITE_SPACE=\s+
 
 LINE_COMMENT = "//" [^\r\n]*
 
-StringTemplateLiteralStart = string[ \t\n\x0B\f\r]*`
-StringTemplateLiteralEnd = `
+STRING_TEMPLATE_LITERAL_START = string[ \t\n\x0B\f\r]*`
+STRING_TEMPLATE_LITERAL_END = `
+
+EXPRESSION_START = \{\{
+
+EXPRESSION_END = \} {WHITE_SPACE}* \}
+
+STRING_LITERAL_ESCAPED_SEQUENCE = \\\\ | \\\{\{
+STRING_TEMPLATE_VALID_CHAR_SEQUENCE = \{ | \\ ~\\
+STRING_TEMPLATE_STRING_CHAR = [^`\{\\] | \\ [`\{] | {WHITE_SPACE} | {STRING_LITERAL_ESCAPED_SEQUENCE}
+STRING_TEMPLATE_EXPRESSION_START = {STRING_TEMPLATE_TEXT}? {EXPRESSION_START}
+STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_STRING_CHAR} {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}?)+
+                       | {STRING_TEMPLATE_VALID_CHAR_SEQUENCE} ({STRING_TEMPLATE_STRING_CHAR} {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}?)*
+
+
+
+//%state XML
+//%state XML_TAG
+//%state XML_COMMENT
 
 %state STRING_TEMPLATE
 
@@ -164,18 +181,68 @@ StringTemplateLiteralEnd = `
 //  "`"                       { return BACKTICK; }
   ".."                      { return RANGE; }
 
-  {QUOTED_STRING_LITERAL}   { return QUOTEDSTRINGLITERAL; }
-  {IDENTIFIER}              { return IDENTIFIER; }
-  {LINE_COMMENT}            { return LINE_COMMENT; }
-  {INTIGER_LITERAL}         { return INTEGERLITERAL; }
+    {QUOTED_STRING_LITERAL}                 { return QUOTEDSTRINGLITERAL; }
+    {IDENTIFIER}                            { return IDENTIFIER; }
+    {LINE_COMMENT}                          { return LINE_COMMENT; }
+    {INTIGER_LITERAL}                       { return INTEGERLITERAL; }
 
-  {StringTemplateLiteralStart} { inTemplate = true; yybegin(STRING_TEMPLATE); return STRINGTEMPLATELITERALSTART;}
-  .                         { return BAD_CHARACTER; }
+    {STRING_TEMPLATE_LITERAL_START}         { inTemplate = true; yybegin(STRING_TEMPLATE); return STRING_TEMPLATE_LITERAL_START; }
+    {EXPRESSION_END}                        { if(inTemplate) { yybegin(STRING_TEMPLATE); } return EXPRESSION_END; }
+    .                                       { return BAD_CHARACTER; }
 }
 
+//<XML>{
+//    {XML_COMMENT_START}         { yybegin(XML_COMMENT); return XML_COMMENT_START; }
+//    {CDATA}                     { return CDATA;}
+//    {DTD}                       {} // Todo - Need to return a value?
+//    {ENTITY_REF}                { return ENTITY_REF; }
+//    {CHAR_REF}                  { return CHAR_REF; }
+//    {XML_WS}                    { return XML_WS; }
+//    {LT}                        { yybegin(XML_TAG); return XML_TAG_OPEN; }
+//    {XML_TAG_OPEN_SLASH}        { yybegin(XML_TAG); return XML_TAG_OPEN_SLASH; }
+//    {XML_TAG_SPECIAL_OPEN}      { yybegin(XML_PI); return XML_TAG_SPECIAL_OPEN; }
+//    {XML_LITERAL_END}           { inTemplate = false; yybegin(YYINITIAL); return XML_LITERAL_END; }
+//    {EXPRESSION_START}          { return EXPRESSION_START; }
+//    {XML_TEMPLATE_TEXT}         { yybegin(YYINITIAL); return XML_TEMPLATE_TEXT; }
+//    {XML_TEXT}                  { return XML_TEXT; }
+//    {XML_TEXT_CHAR}             { return XML_TEXT_CHAR; }
+//    {XML_ESCAPED_SEQUENCE}      { return XML_ESCAPED_SEQUENCE; }
+//    {XML_BRACES_SEQUENCE}       { return XML_BRACES_SEQUENCE; }
+//}
+//
+//<XML_TAG>{
+//    {XML_TAG_CLOSE}             { yybegin(XML); return XML_TAG_CLOSE; }
+//    {XML_TAG_SPECIAL_CLOSE}     { yybegin(XML); return XML_TAG_SPECIAL_CLOSE; }
+//    {XML_TAG_SLASH_CLOSE}       { yybegin(XML); return XML_TAG_SLASH_CLOSE; }
+//    {SLASH}                     { SLASH; }
+//    {QNAME_SEPARATOR}           { QNAME_SEPARATOR; }
+//    {EQUALS}                    { EQUALS; }
+//    {DOUBLE_QUOTE}              { yybegin(DOUBLE_QUOTED_XML_STRING); DOUBLE_QUOTE; }
+//    {SINGLE_QUOTE}              { yybegin(SINGLE_QUOTED_XML_STRING); SINGLE_QUOTE; }
+//    {XML_QNAME}                 { return XML_QNAME; }
+//    {XML_TAG_WS}                { } // Todo - Need to return a value?
+//    {XML_TAG_EXPRESSION_START}  { return XML_TAG_EXPRESSION_START; }
+//}
+//
+//<XML_COMMENT>{
+//
+//}
+//
+//
+//
+//<XML_PI>{
+//
+//}
+
+
 <STRING_TEMPLATE>{
-  {StringTemplateLiteralEnd} {inTemplate = false; yybegin(YYINITIAL); return STRINGTEMPLATELITERALEND; }
-   .                         {inTemplate = false; return BAD_CHARACTER; }
+    {STRING_TEMPLATE_LITERAL_END}           { inTemplate = false; yybegin(YYINITIAL); return STRING_TEMPLATE_LITERAL_END; }
+    {STRING_TEMPLATE_EXPRESSION_START}      { yybegin(YYINITIAL); return STRING_TEMPLATE_EXPRESSION_START; }
+    {STRING_TEMPLATE_TEXT}                  { return STRING_TEMPLATE_TEXT; }
+//    {STRING_TEMPLATE_STRING_CHAR}           { return STRING_TEMPLATE_STRING_CHAR; }
+//    {STRING_LITERAL_ESCAPED_SEQUENCE}       { return STRING_LITERAL_ESCAPED_SEQUENCE; }
+//    {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}   { return STRING_TEMPLATE_VALID_CHAR_SEQUENCE; }
+    .                                       { inTemplate = false; yybegin(YYINITIAL); return BAD_CHARACTER; }
 }
 
 [^] { return BAD_CHARACTER; }
