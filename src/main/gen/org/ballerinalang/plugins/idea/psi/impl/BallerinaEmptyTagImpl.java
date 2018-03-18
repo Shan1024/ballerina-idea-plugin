@@ -48,9 +48,9 @@ public class BallerinaEmptyTagImpl extends BallerinaCompositeElementImpl impleme
   }
 
   @Override
-  @NotNull
+  @Nullable
   public BallerinaXmlQualifiedName getXmlQualifiedName() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaXmlQualifiedName.class));
+    return PsiTreeUtil.getChildOfType(this, BallerinaXmlQualifiedName.class);
   }
 
   @Override
@@ -60,9 +60,9 @@ public class BallerinaEmptyTagImpl extends BallerinaCompositeElementImpl impleme
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getXmlTagSlashClose() {
-    return notNullChild(findChildByType(XML_TAG_SLASH_CLOSE));
+    return findChildByType(XML_TAG_SLASH_CLOSE);
   }
 
 }

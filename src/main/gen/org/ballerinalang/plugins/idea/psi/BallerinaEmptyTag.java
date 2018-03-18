@@ -26,13 +26,13 @@ public interface BallerinaEmptyTag extends BallerinaCompositeElement {
   @NotNull
   List<BallerinaAttribute> getAttributeList();
 
-  @NotNull
+  @Nullable
   BallerinaXmlQualifiedName getXmlQualifiedName();
 
   @NotNull
   PsiElement getXmlTagOpen();
 
-  @NotNull
+  @Nullable
   PsiElement getXmlTagSlashClose();
 
 }

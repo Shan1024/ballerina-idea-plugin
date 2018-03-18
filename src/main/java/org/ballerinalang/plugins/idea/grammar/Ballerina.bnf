@@ -404,7 +404,7 @@ Statement ::=
     |   TransactionStatement
     |   AbortStatement
     |   LockStatement
-    |   NamespaceDeclarationStatement {recoverWhile = StatementRecover}
+    |   NamespaceDeclarationStatement /*{recoverWhile = StatementRecover}*/
 
 // Todo - Add more tokens
 private StatementRecover ::= !(int | string | '}' | ';')
@@ -542,10 +542,12 @@ NamespaceDeclaration ::= xmlns quotedStringLiteral (as identifier)? SEMICOLON {
 }
 
 Expression
-    ::=  SimpleLiteral
+    ::=
+       StringTemplateLiteral
+    |   XmlLiteral
+    |   SimpleLiteral
     |   ArrayLiteral
     |   RecordLiteral
-    |   XmlLiteral
     |   ValueTypeTypeExpression
     |   BuiltInReferenceTypeTypeExpression
     |   VariableReferenceExpression
@@ -564,7 +566,6 @@ Expression
     |   BinaryAndExpression
     |   BinaryOrExpression
     |   TernaryExpression {/*pin=1 */ /*recoverWhile=ExpressionRecover*/}
-    |   StringTemplateLiteral
 
 fake BinaryExpression ::= Expression {
   methods=[left="Expression[0]" right="Expression[1]" getOperator]
@@ -627,7 +628,7 @@ SimpleLiteral ::= (ADD|SUB)? integerLiteral /*| (ADD|SUB)? floatingPointLiteral*
 
 // XML parsing
 
-XmlLiteral ::= xml_literal_start XmlItem xml_literal_end
+XmlLiteral ::= xml_literal_start XmlItem xml_literal_end {pin=1}
 
 XmlItem ::= Element | ProcIns | Comment | XmlText | cdata
 
@@ -637,11 +638,11 @@ Comment ::= xml_comment_start (xml_comment_template_text Expression expression_e
 
 Element ::= StartTag Content CloseTag | EmptyTag
 
-StartTag ::= xml_tag_open XmlQualifiedName Attribute* xml_tag_close
+StartTag ::= xml_tag_open XmlQualifiedName Attribute* xml_tag_close {pin=1}
 
-CloseTag ::= xml_tag_open_slash XmlQualifiedName xml_tag_close
+CloseTag ::= xml_tag_open_slash XmlQualifiedName xml_tag_close {pin=1}
 
-EmptyTag ::= xml_tag_open XmlQualifiedName Attribute* xml_tag_slash_close
+EmptyTag ::= xml_tag_open XmlQualifiedName Attribute* xml_tag_slash_close {pin=1}
 
 ProcIns ::= xml_tag_special_open (xml_pi_template_text Expression expression_end)* xml_pi_text
 
@@ -658,15 +659,15 @@ XmlDoubleQuotedString ::= double_quote (xml_double_quoted_template_string Expres
 XmlQualifiedName ::= (xml_qname QNAME_SEPARATOR)? xml_qname | xml_tag_expression_start Expression expression_end
 
 // Todo - Uncomment
-StringTemplateLiteral ::= string_template_literal_start StringTemplateContent? string_template_literal_end {pin=1 recoverWhile=StringTemplateLiteralRecover}
+StringTemplateLiteral ::= string_template_literal_start StringTemplateContent? string_template_literal_end {pin=1 /*recoverWhile=StringTemplateLiteralRecover*/}
 
 // Todo - Update to statement recover
-private StringTemplateLiteralRecover ::= !(SEMICOLON | string | int | identifier)
+/*private StringTemplateLiteralRecover ::= !(SEMICOLON | string | int | identifier)*/
 
 StringTemplateContent ::= StringTemplateExpressionContent | StringTemplateTextContent
 
 private StringTemplateExpressionContent ::= StringTemplateExpression+ string_template_text?
-private StringTemplateExpression ::= string_template_expression_start Expression expression_end {pin=1}
+private StringTemplateExpression ::= string_template_expression_start Expression expression_end /*{pin=1}*/
 private StringTemplateTextContent ::= string_template_text
 
 AnyIdentifierName ::= identifier | ReservedWord

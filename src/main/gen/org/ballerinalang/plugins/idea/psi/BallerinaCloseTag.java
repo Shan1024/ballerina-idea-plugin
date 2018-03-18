@@ -23,10 +23,10 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaCloseTag extends BallerinaCompositeElement {
 
-  @NotNull
+  @Nullable
   BallerinaXmlQualifiedName getXmlQualifiedName();
 
-  @NotNull
+  @Nullable
   PsiElement getXmlTagClose();
 
   @NotNull

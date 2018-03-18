@@ -26,10 +26,10 @@ public interface BallerinaStartTag extends BallerinaCompositeElement {
   @NotNull
   List<BallerinaAttribute> getAttributeList();
 
-  @NotNull
+  @Nullable
   BallerinaXmlQualifiedName getXmlQualifiedName();
 
-  @NotNull
+  @Nullable
   PsiElement getXmlTagClose();
 
   @NotNull

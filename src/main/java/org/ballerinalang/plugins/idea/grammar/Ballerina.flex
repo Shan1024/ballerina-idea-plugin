@@ -127,19 +127,19 @@ XML_PI_TEMPLATE_TEXT = {XML_PI_TEXT_FRAGMENT} {XML_ESCAPED_SEQUENCE}
 XML_PI_TEXT_FRAGMENT = {XML_PI_ALLOWED_SEQUENCE}? ({XML_PI_CHAR} {XML_PI_ALLOWED_SEQUENCE}?)*
 XML_PI_CHAR = [^{}?>] | {XML_ESCAPED_SEQUENCE}
 XML_PI_ALLOWED_SEQUENCE = {XML_BRACES_SEQUENCE} | {XML_PI_SPECIAL_SEQUENCE} | ({XML_BRACES_SEQUENCE} {XML_PI_SPECIAL_SEQUENCE})+ {XML_BRACES_SEQUENCE}? | ({XML_PI_SPECIAL_SEQUENCE} {XML_BRACES_SEQUENCE})+ {XML_PI_SPECIAL_SEQUENCE}?
-XML_PI_SPECIAL_SEQUENCE = '>'+ | '>'* '?'+
+XML_PI_SPECIAL_SEQUENCE = ">"+ | ">"* "?"+
 
 // XML_COMMENT
-XML_COMMENT_END = '-->'
-XML_COMMENT_TEXT = {XMLCommentTextFragment} {XML_COMMENT_END}
-XML_COMMENT_TEMPLATE_TEXT = {XMLCommentTextFragment} {EXPRESSION_START}
-XMLCommentTextFragment = {XML_COMMENT_ALLOWED_SEQUENCE}? ({XML_COMMENT_CHAR} {XML_COMMENT_ALLOWED_SEQUENCE}?)*
-XML_COMMENT_CHAR = [^{}>\-] | {XML_ESCAPED_SEQUENCE}
+XML_COMMENT_END = "-->"
+XML_COMMENT_TEXT = {XML_COMMENT_TEXT_FRAGMENT} {XML_COMMENT_END}
+XML_COMMENT_TEMPLATE_TEXT = {XML_COMMENT_TEXT_FRAGMENT} {EXPRESSION_START}
+XML_COMMENT_TEXT_FRAGMENT = {XML_COMMENT_ALLOWED_SEQUENCE}? ({XML_COMMENT_CHAR} {XML_COMMENT_ALLOWED_SEQUENCE}?)*
+XML_COMMENT_CHAR = [^{}>\\-] | {XML_ESCAPED_SEQUENCE}
 XML_COMMENT_ALLOWED_SEQUENCE = {XML_BRACES_SEQUENCE} | {XML_COMMENT_SPECIAL_SEQUENCE} | ({XML_BRACES_SEQUENCE} {XML_COMMENT_SPECIAL_SEQUENCE})+ {XML_BRACES_SEQUENCE}? | ({XML_COMMENT_SPECIAL_SEQUENCE} {XML_BRACES_SEQUENCE})+ {XML_COMMENT_SPECIAL_SEQUENCE}?
-XML_COMMENT_SPECIAL_SEQUENCE = ">"+ | ('>'* '-' '>'+)+ | '-'? '>'* '-'+
+XML_COMMENT_SPECIAL_SEQUENCE = ">"+ | (">"* "-" ">"+)+ | "-"? ">"* "-"+
 
 HEX_DIGITS = {HEX_DIGIT} ({HEX_DIGIT_OR_UNDERSCORE}* {HEX_DIGIT})?
-HEX_DIGIT_OR_UNDERSCORE = {HEX_DIGIT} | '_'
+HEX_DIGIT_OR_UNDERSCORE = {HEX_DIGIT} | "_"
 
 %state XML_MODE
 %state XML_TAG_MODE
@@ -267,9 +267,9 @@ HEX_DIGIT_OR_UNDERSCORE = {HEX_DIGIT} | '_'
     {DTD}                                   {} // Todo - Need to return a value?
     {ENTITY_REF}                            { /*return ENTITY_REF;*/ }
     {CHAR_REF}                              { /*return CHAR_REF;*/ }
-    {XML_TAG_OPEN}                          { yybegin(XML_TAG_MODE); return XML_TAG_OPEN; }
-    {XML_TAG_OPEN_SLASH}                    { yybegin(XML_TAG_MODE); return XML_TAG_OPEN_SLASH; }
     {XML_TAG_SPECIAL_OPEN}                  { yybegin(XML_PI_MODE); return XML_TAG_SPECIAL_OPEN; }
+    {XML_TAG_OPEN_SLASH}                    { yybegin(XML_TAG_MODE); return XML_TAG_OPEN_SLASH; }
+    {XML_TAG_OPEN}                          { yybegin(XML_TAG_MODE); return XML_TAG_OPEN; }
     {XML_LITERAL_END}                       { inTemplate = false; yybegin(YYINITIAL); return XML_LITERAL_END; }
     {XML_TEMPLATE_TEXT}                     { yybegin(YYINITIAL); return XML_TEMPLATE_TEXT; }
     {XML_TEXT_SEQUENCE}                     { return XML_TEXT_SEQUENCE; }
@@ -288,33 +288,33 @@ HEX_DIGIT_OR_UNDERSCORE = {HEX_DIGIT} | '_'
     {XML_QNAME}                             { return XML_QNAME; }
     {XML_TAG_WS}                            { } // Todo - Need to return a value?
     {XML_TAG_EXPRESSION_START}              { yybegin(YYINITIAL); return XML_TAG_EXPRESSION_START; }
-    .                                       { return BAD_CHARACTER; }
+    .                                       { inTemplate = false; return BAD_CHARACTER; }
 }
 
 <DOUBLE_QUOTED_XML_STRING_MODE>{
     {DOUBLE_QUOTE_END}                      { yybegin(XML_TAG_MODE); return DOUBLE_QUOTE_END; }
     {XML_DOUBLE_QUOTED_TEMPLATE_STRING}     { yybegin(YYINITIAL); return XML_DOUBLE_QUOTED_TEMPLATE_STRING; }
     {XML_DOUBLE_QUOTED_STRING_SEQUENCE}     { return XML_DOUBLE_QUOTED_STRING_SEQUENCE; }
-    .                                       { return BAD_CHARACTER; }
+    .                                       { inTemplate = false; return BAD_CHARACTER; }
 }
 
 <SINGLE_QUOTED_XML_STRING_MODE>{
     {SINGLE_QUOTE_END}                      { yybegin(XML_TAG_MODE); return SINGLE_QUOTE_END; }
     {XML_SINGLE_QUOTED_TEMPLATE_STRING}     { yybegin(YYINITIAL); return XML_SINGLE_QUOTED_TEMPLATE_STRING; }
     {XML_SINGLE_QUOTED_STRING_SEQUENCE}     { return XML_SINGLE_QUOTED_STRING_SEQUENCE; }
-    .                                       { return BAD_CHARACTER; }
+    .                                       { inTemplate = false; return BAD_CHARACTER; }
 }
 
 <XML_PI_MODE>{
     {XML_PI_TEXT}                           { yybegin(XML_MODE); return XML_PI_TEXT; }
     {XML_PI_TEMPLATE_TEXT}                  { yybegin(YYINITIAL); return XML_PI_TEMPLATE_TEXT; }
-    .                                       { return BAD_CHARACTER; }
+    .                                       { inTemplate = false; return BAD_CHARACTER; }
 }
 
 <XML_COMMENT_MODE>{
     {XML_COMMENT_TEXT}                      { yybegin(XML_MODE); return XML_COMMENT_TEXT; }
     {XML_COMMENT_TEMPLATE_TEXT}             { yybegin(YYINITIAL); return XML_COMMENT_TEMPLATE_TEXT; }
-    .                                       { return BAD_CHARACTER; }
+    .                                       { inTemplate = false; return BAD_CHARACTER; }
 }
 
 <STRING_TEMPLATE_MODE>{

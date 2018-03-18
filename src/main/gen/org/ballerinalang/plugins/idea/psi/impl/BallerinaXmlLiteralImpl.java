@@ -42,15 +42,15 @@ public class BallerinaXmlLiteralImpl extends BallerinaExpressionImpl implements 
   }
 
   @Override
-  @NotNull
+  @Nullable
   public BallerinaXmlItem getXmlItem() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaXmlItem.class));
+    return PsiTreeUtil.getChildOfType(this, BallerinaXmlItem.class);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getXmlLiteralEnd() {
-    return notNullChild(findChildByType(XML_LITERAL_END));
+    return findChildByType(XML_LITERAL_END);
   }
 
   @Override

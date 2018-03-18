@@ -42,15 +42,15 @@ public class BallerinaCloseTagImpl extends BallerinaCompositeElementImpl impleme
   }
 
   @Override
-  @NotNull
+  @Nullable
   public BallerinaXmlQualifiedName getXmlQualifiedName() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaXmlQualifiedName.class));
+    return PsiTreeUtil.getChildOfType(this, BallerinaXmlQualifiedName.class);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getXmlTagClose() {
-    return notNullChild(findChildByType(XML_TAG_CLOSE));
+    return findChildByType(XML_TAG_CLOSE);
   }
 
   @Override
