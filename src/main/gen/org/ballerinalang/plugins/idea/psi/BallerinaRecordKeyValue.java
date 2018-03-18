@@ -23,13 +23,13 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaRecordKeyValue extends BallerinaCompositeElement {
 
-  @NotNull
+  @Nullable
   BallerinaExpression getExpression();
 
   @NotNull
   BallerinaRecordKey getRecordKey();
 
-  @NotNull
+  @Nullable
   PsiElement getColon();
 
 }

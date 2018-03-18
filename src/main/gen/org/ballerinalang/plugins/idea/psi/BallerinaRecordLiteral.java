@@ -29,7 +29,7 @@ public interface BallerinaRecordLiteral extends BallerinaExpression {
   @NotNull
   PsiElement getLeftBrace();
 
-  @NotNull
+  @Nullable
   PsiElement getRightBrace();
 
 }

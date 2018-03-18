@@ -42,9 +42,9 @@ public class BallerinaRecordKeyValueImpl extends BallerinaCompositeElementImpl i
   }
 
   @Override
-  @NotNull
+  @Nullable
   public BallerinaExpression getExpression() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaExpression.class));
+    return PsiTreeUtil.getChildOfType(this, BallerinaExpression.class);
   }
 
   @Override
@@ -54,9 +54,9 @@ public class BallerinaRecordKeyValueImpl extends BallerinaCompositeElementImpl i
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getColon() {
-    return notNullChild(findChildByType(COLON));
+    return findChildByType(COLON);
   }
 
 }

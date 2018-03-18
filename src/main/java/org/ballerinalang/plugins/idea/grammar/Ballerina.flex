@@ -10,7 +10,9 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 %%
 
 %{
-  private boolean inTemplate = false;
+  private boolean inXmlTemplate = false;
+  private boolean inStringTemplate = false;
+  private boolean inXmlTag = false;
   public BallerinaLexer() {
     this((java.io.Reader)null);
   }
@@ -58,7 +60,8 @@ IDENTIFIER = {LETTER} ({LETTER} | {DIGIT})*
 
 WHITE_SPACE=\s+
 
-LINE_COMMENT = "//" [^\r\n]*
+// Todo - Add inspection
+LINE_COMMENT = "/" "/"? [^\r\n]*
 
 XML_LITERAL_START = xml[ \t\n\x0B\f\r]*`
 
@@ -66,7 +69,7 @@ STRING_TEMPLATE_LITERAL_START = string[ \t\n\x0B\f\r]*`
 STRING_TEMPLATE_LITERAL_END = "`"
 
 EXPRESSION_START = "{{"
-EXPRESSION_END = "}" {WHITE_SPACE}* "}"
+EXPRESSION_END = "}}"
 
 STRING_LITERAL_ESCAPED_SEQUENCE = "\\" | "\{{"
 STRING_TEMPLATE_VALID_CHAR_SEQUENCE = \{ | \\ ~\\
@@ -84,7 +87,7 @@ CHAR_REF = '&#' {DIGIT}+ ';' | '&#x' {HEX_DIGITS}+ ';'
 XML_WS = ' '|'\t'|'\r'? '\n'
 XML_TAG_OPEN = "<"
 XML_TAG_OPEN_SLASH = "</"
-XML_TAG_SPECIAL_OPEN = "<?" ({XML_QNAME} {QNAME_SEPARATOR})? {XML_QNAME} {XML_WS}
+XML_TAG_SPECIAL_OPEN = <\? /*({XML_QNAME} {QNAME_SEPARATOR})? {XML_QNAME} {XML_WS}*/ // Todo - Fix
 XML_LITERAL_END = "`"
 XML_TEMPLATE_TEXT = {XML_TEXT_SEQUENCE}? {EXPRESSION_START}
 XML_TEXT_SEQUENCE = {XML_BRACES_SEQUENCE}? ({XML_TEXT_CHAR} {XML_BRACES_SEQUENCE}?)+ | {XML_BRACES_SEQUENCE} ({XML_TEXT_CHAR} {XML_BRACES_SEQUENCE}?)*
@@ -105,8 +108,8 @@ XML_QNAME = {NAME_START_CHAR} {NAME_CHAR}*
 XML_TAG_WS = [ \t\r\n]
 XML_TAG_EXPRESSION_START = {EXPRESSION_START}
 HEX_DIGIT = [0-9a-fA-F]
-NAME_CHAR = {NAME_START_CHAR} | '-' | '_' | '.' | {DIGIT} | '\u00B7' | '\u0300'..'\u036F' | '\u203F'..'\u2040'
-NAME_START_CHAR = [a-zA-Z] | '\u2070'..'\u218F' | '\u2C00'..'\u2FEF' | '\u3001'..'\uD7FF' | '\uF900'..'\uFDCF' | '\uFDF0'..'\uFFFD'
+NAME_CHAR = {NAME_START_CHAR} | "-" | "_" | "." | {DIGIT} | \u00B7 | [\u0300-\u036F] | [\u203F-\u2040]
+NAME_START_CHAR = [a-zA-Z] | [\u2070-\u218F] | [\u2C00-\u2FEF] | [\u3001-\uD7FF] | [\uF900-\uFDCF] | [\uFDF0-\uFFFD]
 
 // DOUBLE_QUOTED_XML_STRING
 DOUBLE_QUOTE_END = "\""
@@ -255,9 +258,10 @@ HEX_DIGIT_OR_UNDERSCORE = {HEX_DIGIT} | "_"
     {LINE_COMMENT}                          { return LINE_COMMENT; }
     {INTIGER_LITERAL}                       { return INTEGERLITERAL; }
 
-    {XML_LITERAL_START}                     { inTemplate = true; yybegin(XML_MODE); return XML_LITERAL_START; }
-    {STRING_TEMPLATE_LITERAL_START}         { inTemplate = true; yybegin(STRING_TEMPLATE_MODE); return STRING_TEMPLATE_LITERAL_START; }
-    {EXPRESSION_END}                        { if(inTemplate) { yybegin(STRING_TEMPLATE_MODE); } return EXPRESSION_END; }
+    {XML_LITERAL_START}                     { inXmlTemplate = true; yybegin(XML_MODE); return XML_LITERAL_START; }
+    {STRING_TEMPLATE_LITERAL_START}         { inStringTemplate = true; yybegin(STRING_TEMPLATE_MODE); return STRING_TEMPLATE_LITERAL_START; }
+    // Todo - Move to a separate logic
+    {EXPRESSION_END}                        { if(inXmlTag){ yybegin(XML_TAG_MODE); return EXPRESSION_END;} else if(inXmlTemplate) { yybegin(XML_MODE); return EXPRESSION_END; } else if(inStringTemplate){ yybegin(STRING_TEMPLATE_MODE); return EXPRESSION_END; } else { yypushback(1); return RIGHT_BRACE; } }
     .                                       { return BAD_CHARACTER; }
 }
 
@@ -270,10 +274,10 @@ HEX_DIGIT_OR_UNDERSCORE = {HEX_DIGIT} | "_"
     {XML_TAG_SPECIAL_OPEN}                  { yybegin(XML_PI_MODE); return XML_TAG_SPECIAL_OPEN; }
     {XML_TAG_OPEN_SLASH}                    { yybegin(XML_TAG_MODE); return XML_TAG_OPEN_SLASH; }
     {XML_TAG_OPEN}                          { yybegin(XML_TAG_MODE); return XML_TAG_OPEN; }
-    {XML_LITERAL_END}                       { inTemplate = false; yybegin(YYINITIAL); return XML_LITERAL_END; }
+    {XML_LITERAL_END}                       { inXmlTemplate = false; yybegin(YYINITIAL); return XML_LITERAL_END; }
     {XML_TEMPLATE_TEXT}                     { yybegin(YYINITIAL); return XML_TEMPLATE_TEXT; }
     {XML_TEXT_SEQUENCE}                     { return XML_TEXT_SEQUENCE; }
-    .                                       { inTemplate = false; return BAD_CHARACTER; }
+    .                                       { inXmlTemplate = false; return BAD_CHARACTER; }
 }
 
 <XML_TAG_MODE>{
@@ -287,41 +291,41 @@ HEX_DIGIT_OR_UNDERSCORE = {HEX_DIGIT} | "_"
     {SINGLE_QUOTE}                          { yybegin(SINGLE_QUOTED_XML_STRING_MODE); return SINGLE_QUOTE; }
     {XML_QNAME}                             { return XML_QNAME; }
     {XML_TAG_WS}                            { } // Todo - Need to return a value?
-    {XML_TAG_EXPRESSION_START}              { yybegin(YYINITIAL); return XML_TAG_EXPRESSION_START; }
-    .                                       { inTemplate = false; return BAD_CHARACTER; }
+    {XML_TAG_EXPRESSION_START}              { inXmlTag = true; yybegin(YYINITIAL); return XML_TAG_EXPRESSION_START; }
+    .                                       { inXmlTemplate = false; return BAD_CHARACTER; }
 }
 
 <DOUBLE_QUOTED_XML_STRING_MODE>{
     {DOUBLE_QUOTE_END}                      { yybegin(XML_TAG_MODE); return DOUBLE_QUOTE_END; }
     {XML_DOUBLE_QUOTED_TEMPLATE_STRING}     { yybegin(YYINITIAL); return XML_DOUBLE_QUOTED_TEMPLATE_STRING; }
     {XML_DOUBLE_QUOTED_STRING_SEQUENCE}     { return XML_DOUBLE_QUOTED_STRING_SEQUENCE; }
-    .                                       { inTemplate = false; return BAD_CHARACTER; }
+    .                                       { inXmlTemplate = false; return BAD_CHARACTER; }
 }
 
 <SINGLE_QUOTED_XML_STRING_MODE>{
     {SINGLE_QUOTE_END}                      { yybegin(XML_TAG_MODE); return SINGLE_QUOTE_END; }
     {XML_SINGLE_QUOTED_TEMPLATE_STRING}     { yybegin(YYINITIAL); return XML_SINGLE_QUOTED_TEMPLATE_STRING; }
     {XML_SINGLE_QUOTED_STRING_SEQUENCE}     { return XML_SINGLE_QUOTED_STRING_SEQUENCE; }
-    .                                       { inTemplate = false; return BAD_CHARACTER; }
+    .                                       { inXmlTemplate = false; return BAD_CHARACTER; }
 }
 
 <XML_PI_MODE>{
     {XML_PI_TEXT}                           { yybegin(XML_MODE); return XML_PI_TEXT; }
     {XML_PI_TEMPLATE_TEXT}                  { yybegin(YYINITIAL); return XML_PI_TEMPLATE_TEXT; }
-    .                                       { inTemplate = false; return BAD_CHARACTER; }
+    .                                       { inXmlTemplate = false; return BAD_CHARACTER; }
 }
 
 <XML_COMMENT_MODE>{
     {XML_COMMENT_TEXT}                      { yybegin(XML_MODE); return XML_COMMENT_TEXT; }
     {XML_COMMENT_TEMPLATE_TEXT}             { yybegin(YYINITIAL); return XML_COMMENT_TEMPLATE_TEXT; }
-    .                                       { inTemplate = false; return BAD_CHARACTER; }
+    .                                       { inXmlTemplate = false; return BAD_CHARACTER; }
 }
 
 <STRING_TEMPLATE_MODE>{
-    {STRING_TEMPLATE_LITERAL_END}           { inTemplate = false; yybegin(YYINITIAL); return STRING_TEMPLATE_LITERAL_END; }
+    {STRING_TEMPLATE_LITERAL_END}           { inXmlTemplate = false; yybegin(YYINITIAL); return STRING_TEMPLATE_LITERAL_END; }
     {STRING_TEMPLATE_EXPRESSION_START}      { yybegin(YYINITIAL); return STRING_TEMPLATE_EXPRESSION_START; }
     {STRING_TEMPLATE_TEXT}                  { return STRING_TEMPLATE_TEXT; }
-    .                                       { inTemplate = false; yybegin(YYINITIAL); return BAD_CHARACTER; }
+    .                                       { inXmlTemplate = false; yybegin(YYINITIAL); return BAD_CHARACTER; }
 }
 
 [^] { return BAD_CHARACTER; }

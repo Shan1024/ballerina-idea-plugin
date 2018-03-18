@@ -416,9 +416,9 @@ VariableDefinitionStatement ::= TypeName identifier (ASSIGN (Expression | Action
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaVariableDefinitionStatementStub"
 }
 
-RecordLiteral ::= LEFT_BRACE (RecordKeyValue (COMMA RecordKeyValue)*)? RIGHT_BRACE
+RecordLiteral ::= LEFT_BRACE (RecordKeyValue (COMMA RecordKeyValue)*)? RIGHT_BRACE {pin(".*")=1}
 
-RecordKeyValue ::= RecordKey COLON Expression
+RecordKeyValue ::= RecordKey COLON Expression {pin=1}
 
 RecordKey ::= identifier | SimpleLiteral
 
@@ -545,9 +545,9 @@ Expression
     ::=
        StringTemplateLiteral
     |   XmlLiteral
+    |   RecordLiteral
     |   SimpleLiteral
     |   ArrayLiteral
-    |   RecordLiteral
     |   ValueTypeTypeExpression
     |   BuiltInReferenceTypeTypeExpression
     |   VariableReferenceExpression

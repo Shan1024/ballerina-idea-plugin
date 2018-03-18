@@ -2873,13 +2873,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // RecordKey COLON Expression
   public static boolean RecordKeyValue(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RecordKeyValue")) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, RECORD_KEY_VALUE, "<record key value>");
     r = RecordKey(b, l + 1);
-    r = r && consumeToken(b, COLON);
-    r = r && Expression(b, l + 1, -1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, consumeToken(b, COLON));
+    r = p && Expression(b, l + 1, -1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -4551,9 +4552,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // Operator priority table:
   // 0: ATOM(StringTemplateLiteral)
   // 1: ATOM(XmlLiteral)
-  // 2: ATOM(SimpleLiteral)
-  // 3: ATOM(ArrayLiteral)
-  // 4: ATOM(RecordLiteral)
+  // 2: ATOM(RecordLiteral)
+  // 3: ATOM(SimpleLiteral)
+  // 4: ATOM(ArrayLiteral)
   // 5: ATOM(ValueTypeTypeExpression)
   // 6: ATOM(BuiltInReferenceTypeTypeExpression)
   // 7: ATOM(VariableReferenceExpression)
@@ -4579,9 +4580,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, "<expression>");
     r = StringTemplateLiteral(b, l + 1);
     if (!r) r = XmlLiteral(b, l + 1);
+    if (!r) r = RecordLiteral(b, l + 1);
     if (!r) r = SimpleLiteral(b, l + 1);
     if (!r) r = ArrayLiteral(b, l + 1);
-    if (!r) r = RecordLiteral(b, l + 1);
     if (!r) r = ValueTypeTypeExpression(b, l + 1);
     if (!r) r = BuiltInReferenceTypeTypeExpression(b, l + 1);
     if (!r) r = VariableReferenceExpression(b, l + 1);
@@ -4679,6 +4680,63 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
+  // LEFT_BRACE (RecordKeyValue (COMMA RecordKeyValue)*)? RIGHT_BRACE
+  public static boolean RecordLiteral(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RecordLiteral")) return false;
+    if (!nextTokenIsSmart(b, LEFT_BRACE)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, RECORD_LITERAL, null);
+    r = consumeTokenSmart(b, LEFT_BRACE);
+    p = r; // pin = 1
+    r = r && report_error_(b, RecordLiteral_1(b, l + 1));
+    r = p && consumeToken(b, RIGHT_BRACE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // (RecordKeyValue (COMMA RecordKeyValue)*)?
+  private static boolean RecordLiteral_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RecordLiteral_1")) return false;
+    RecordLiteral_1_0(b, l + 1);
+    return true;
+  }
+
+  // RecordKeyValue (COMMA RecordKeyValue)*
+  private static boolean RecordLiteral_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RecordLiteral_1_0")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = RecordKeyValue(b, l + 1);
+    p = r; // pin = 1
+    r = r && RecordLiteral_1_0_1(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // (COMMA RecordKeyValue)*
+  private static boolean RecordLiteral_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RecordLiteral_1_0_1")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!RecordLiteral_1_0_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "RecordLiteral_1_0_1", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // COMMA RecordKeyValue
+  private static boolean RecordLiteral_1_0_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RecordLiteral_1_0_1_0")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = consumeTokenSmart(b, COMMA);
+    p = r; // pin = 1
+    r = r && RecordKeyValue(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
   // (ADD|SUB)? integerLiteral /*| (ADD|SUB)? floatingPointLiteral*/ | quotedStringLiteral
   public static boolean SimpleLiteral(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SimpleLiteral")) return false;
@@ -4737,60 +4795,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "ArrayLiteral_1")) return false;
     ExpressionList(b, l + 1);
     return true;
-  }
-
-  // LEFT_BRACE (RecordKeyValue (COMMA RecordKeyValue)*)? RIGHT_BRACE
-  public static boolean RecordLiteral(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "RecordLiteral")) return false;
-    if (!nextTokenIsSmart(b, LEFT_BRACE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokenSmart(b, LEFT_BRACE);
-    r = r && RecordLiteral_1(b, l + 1);
-    r = r && consumeToken(b, RIGHT_BRACE);
-    exit_section_(b, m, RECORD_LITERAL, r);
-    return r;
-  }
-
-  // (RecordKeyValue (COMMA RecordKeyValue)*)?
-  private static boolean RecordLiteral_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "RecordLiteral_1")) return false;
-    RecordLiteral_1_0(b, l + 1);
-    return true;
-  }
-
-  // RecordKeyValue (COMMA RecordKeyValue)*
-  private static boolean RecordLiteral_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "RecordLiteral_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = RecordKeyValue(b, l + 1);
-    r = r && RecordLiteral_1_0_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (COMMA RecordKeyValue)*
-  private static boolean RecordLiteral_1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "RecordLiteral_1_0_1")) return false;
-    int c = current_position_(b);
-    while (true) {
-      if (!RecordLiteral_1_0_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "RecordLiteral_1_0_1", c)) break;
-      c = current_position_(b);
-    }
-    return true;
-  }
-
-  // COMMA RecordKeyValue
-  private static boolean RecordLiteral_1_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "RecordLiteral_1_0_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokenSmart(b, COMMA);
-    r = r && RecordKeyValue(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   // ValueTypeName DOT identifier
