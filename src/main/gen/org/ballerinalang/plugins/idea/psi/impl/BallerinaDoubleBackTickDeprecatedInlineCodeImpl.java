@@ -43,20 +43,20 @@ public class BallerinaDoubleBackTickDeprecatedInlineCodeImpl extends BallerinaCo
 
   @Override
   @NotNull
-  public PsiElement getDBDeprecatedInlineCodeStart() {
-    return notNullChild(findChildByType(DBDEPRECATEDINLINECODESTART));
+  public PsiElement getDbDeprecatedInlineCodeStart() {
+    return notNullChild(findChildByType(DB_DEPRECATED_INLINE_CODE_START));
   }
 
   @Override
   @Nullable
   public PsiElement getDoubleBackTickInlineCode() {
-    return findChildByType(DOUBLEBACKTICKINLINECODE);
+    return findChildByType(DOUBLE_BACK_TICK_INLINE_CODE);
   }
 
   @Override
   @NotNull
   public PsiElement getDoubleBackTickInlineCodeEnd() {
-    return notNullChild(findChildByType(DOUBLEBACKTICKINLINECODEEND));
+    return notNullChild(findChildByType(DOUBLE_BACK_TICK_INLINE_CODE_END));
   }
 
 }

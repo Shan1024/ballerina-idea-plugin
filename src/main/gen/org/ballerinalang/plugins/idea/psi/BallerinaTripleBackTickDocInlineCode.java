@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaTripleBackTickDocInlineCode extends BallerinaCompositeElement {
 
   @NotNull
-  PsiElement getTBDocInlineCodeStart();
+  PsiElement getTbDocInlineCodeStart();
 
   @Nullable
   PsiElement getTripleBackTickInlineCode();

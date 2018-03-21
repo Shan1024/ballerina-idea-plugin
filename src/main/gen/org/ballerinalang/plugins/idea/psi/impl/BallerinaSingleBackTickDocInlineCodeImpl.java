@@ -43,20 +43,20 @@ public class BallerinaSingleBackTickDocInlineCodeImpl extends BallerinaComposite
 
   @Override
   @NotNull
-  public PsiElement getSBDocInlineCodeStart() {
-    return notNullChild(findChildByType(SBDOCINLINECODESTART));
+  public PsiElement getSbDocInlineCodeStart() {
+    return notNullChild(findChildByType(SB_DOC_INLINE_CODE_START));
   }
 
   @Override
   @Nullable
   public PsiElement getSingleBackTickInlineCode() {
-    return findChildByType(SINGLEBACKTICKINLINECODE);
+    return findChildByType(SINGLE_BACK_TICK_INLINE_CODE);
   }
 
   @Override
   @NotNull
   public PsiElement getSingleBackTickInlineCodeEnd() {
-    return notNullChild(findChildByType(SINGLEBACKTICKINLINECODEEND));
+    return notNullChild(findChildByType(SINGLE_BACK_TICK_INLINE_CODE_END));
   }
 
 }

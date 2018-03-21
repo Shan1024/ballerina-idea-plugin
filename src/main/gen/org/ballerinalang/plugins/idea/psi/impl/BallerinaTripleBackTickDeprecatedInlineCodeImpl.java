@@ -43,20 +43,20 @@ public class BallerinaTripleBackTickDeprecatedInlineCodeImpl extends BallerinaCo
 
   @Override
   @NotNull
-  public PsiElement getTBDeprecatedInlineCodeStart() {
-    return notNullChild(findChildByType(TBDEPRECATEDINLINECODESTART));
+  public PsiElement getTbDeprecatedInlineCodeStart() {
+    return notNullChild(findChildByType(TB_DEPRECATED_INLINE_CODE_START));
   }
 
   @Override
   @Nullable
   public PsiElement getTripleBackTickInlineCode() {
-    return findChildByType(TRIPLEBACKTICKINLINECODE);
+    return findChildByType(TRIPLE_BACK_TICK_INLINE_CODE);
   }
 
   @Override
   @NotNull
   public PsiElement getTripleBackTickInlineCodeEnd() {
-    return notNullChild(findChildByType(TRIPLEBACKTICKINLINECODEEND));
+    return notNullChild(findChildByType(TRIPLE_BACK_TICK_INLINE_CODE_END));
   }
 
 }

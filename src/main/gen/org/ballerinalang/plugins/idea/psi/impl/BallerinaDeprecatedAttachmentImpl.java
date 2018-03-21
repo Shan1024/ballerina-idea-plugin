@@ -50,13 +50,13 @@ public class BallerinaDeprecatedAttachmentImpl extends BallerinaCompositeElement
   @Override
   @NotNull
   public PsiElement getDeprecatedTemplateEnd() {
-    return notNullChild(findChildByType(DEPRECATEDTEMPLATEEND));
+    return notNullChild(findChildByType(DEPRECATED_TEMPLATE_END));
   }
 
   @Override
   @NotNull
   public PsiElement getDeprecatedTemplateStart() {
-    return notNullChild(findChildByType(DEPRECATEDTEMPLATESTART));
+    return notNullChild(findChildByType(DEPRECATED_TEMPLATE_START));
   }
 
 }

@@ -43,20 +43,20 @@ public class BallerinaSingleBackTickDeprecatedInlineCodeImpl extends BallerinaCo
 
   @Override
   @NotNull
-  public PsiElement getSBDeprecatedInlineCodeStart() {
-    return notNullChild(findChildByType(SBDEPRECATEDINLINECODESTART));
+  public PsiElement getSbDeprecatedInlineCodeStart() {
+    return notNullChild(findChildByType(SB_DEPRECATED_INLINE_CODE_START));
   }
 
   @Override
   @Nullable
   public PsiElement getSingleBackTickInlineCode() {
-    return findChildByType(SINGLEBACKTICKINLINECODE);
+    return findChildByType(SINGLE_BACK_TICK_INLINE_CODE);
   }
 
   @Override
   @NotNull
   public PsiElement getSingleBackTickInlineCodeEnd() {
-    return notNullChild(findChildByType(SINGLEBACKTICKINLINECODEEND));
+    return notNullChild(findChildByType(SINGLE_BACK_TICK_INLINE_CODE_END));
   }
 
 }

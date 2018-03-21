@@ -543,7 +543,7 @@ NamespaceDeclaration ::= xmlns quotedStringLiteral (as identifier)? SEMICOLON {
 
 Expression
     ::=
-       StringTemplateLiteral
+        StringTemplateLiteral
     |   XmlLiteral
     |   RecordLiteral
     |   SimpleLiteral
@@ -677,35 +677,35 @@ ReservedWord ::= foreach | map
 
 // Deprecated parsing.
 
-deprecatedAttachment ::= DeprecatedTemplateStart deprecatedText? DeprecatedTemplateEnd
+deprecatedAttachment ::= deprecated_template_start deprecatedText? deprecated_template_end
 
-deprecatedText ::= deprecatedTemplateInlineCode (DeprecatedTemplateText | deprecatedTemplateInlineCode)*
-                   | DeprecatedTemplateText (DeprecatedTemplateText | deprecatedTemplateInlineCode)*
+deprecatedText ::= deprecatedTemplateInlineCode (deprecated_template_text | deprecatedTemplateInlineCode)*
+                   | deprecated_template_text (deprecated_template_text | deprecatedTemplateInlineCode)*
 
 deprecatedTemplateInlineCode ::= singleBackTickDeprecatedInlineCode | doubleBackTickDeprecatedInlineCode | tripleBackTickDeprecatedInlineCode
 
-singleBackTickDeprecatedInlineCode ::= SBDeprecatedInlineCodeStart SingleBackTickInlineCode? SingleBackTickInlineCodeEnd
+singleBackTickDeprecatedInlineCode ::= sb_deprecated_inline_code_start single_back_tick_inline_code? single_back_tick_inline_code_end
 
-doubleBackTickDeprecatedInlineCode ::= DBDeprecatedInlineCodeStart DoubleBackTickInlineCode? DoubleBackTickInlineCodeEnd
+doubleBackTickDeprecatedInlineCode ::= db_deprecated_inline_code_start double_back_tick_inline_code? double_back_tick_inline_code_end
 
-tripleBackTickDeprecatedInlineCode ::= TBDeprecatedInlineCodeStart TripleBackTickInlineCode? TripleBackTickInlineCodeEnd
+tripleBackTickDeprecatedInlineCode ::= tb_deprecated_inline_code_start triple_back_tick_inline_code? triple_back_tick_inline_code_end
 
 
 // Documentation parsing.
 
-documentationAttachment ::= DocumentationTemplateStart documentationTemplateContent? DocumentationTemplateEnd
+documentationAttachment ::= documentation_template_start documentationTemplateContent? documentation_template_end
 
 documentationTemplateContent ::= docText? documentationTemplateAttributeDescription+ | docText
 
-documentationTemplateAttributeDescription ::= DocumentationTemplateAttributeStart Identifier DocumentationTemplateAttributeEnd docText?
+documentationTemplateAttributeDescription ::= documentation_template_attribute_start identifier documentation_template_attribute_end docText?
 
-docText ::= documentationTemplateInlineCode (DocumentationTemplateText | documentationTemplateInlineCode)*
-            | DocumentationTemplateText  (DocumentationTemplateText | documentationTemplateInlineCode)*
+docText ::= documentationTemplateInlineCode (documentation_template_text | documentationTemplateInlineCode)*
+            | documentation_template_text  (documentation_template_text | documentationTemplateInlineCode)*
 
 documentationTemplateInlineCode ::= singleBackTickDocInlineCode | doubleBackTickDocInlineCode | tripleBackTickDocInlineCode
 
-singleBackTickDocInlineCode ::= SBDocInlineCodeStart SingleBackTickInlineCode? SingleBackTickInlineCodeEnd
+singleBackTickDocInlineCode ::= sb_doc_inline_code_start single_back_tick_inline_code? single_back_tick_inline_code_end
 
-doubleBackTickDocInlineCode ::= DBDocInlineCodeStart DoubleBackTickInlineCode? DoubleBackTickInlineCodeEnd
+doubleBackTickDocInlineCode ::= db_doc_inline_code_start double_back_tick_inline_code? double_back_tick_inline_code_end
 
-tripleBackTickDocInlineCode ::= TBDocInlineCodeStart TripleBackTickInlineCode? TripleBackTickInlineCodeEnd
+tripleBackTickDocInlineCode ::= tb_doc_inline_code_start triple_back_tick_inline_code? triple_back_tick_inline_code_end

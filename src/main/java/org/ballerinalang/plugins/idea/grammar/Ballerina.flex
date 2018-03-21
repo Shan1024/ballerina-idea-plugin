@@ -10,12 +10,15 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 %%
 
 %{
-  private boolean inXmlTemplate = false;
-  private boolean inStringTemplate = false;
-  private boolean inXmlTag = false;
-  public BallerinaLexer() {
-    this((java.io.Reader)null);
-  }
+    private boolean inXmlTemplate = false;
+    private boolean inStringTemplate = false;
+    private boolean inXmlTag = false;
+    private boolean inDeprecatedTemplate = false;
+    private boolean inDocTemplate = false;
+
+    public BallerinaLexer() {
+        this((java.io.Reader)null);
+    }
 %}
 
 %public
@@ -53,12 +56,17 @@ DIGITS = {DIGIT}+
 DECIMAL_INTEGER_LITERAL = {DIGITS}
 INTIGER_LITERAL = {DECIMAL_INTEGER_LITERAL}
 
-LETTER = [:letter:] | '_'
-DIGIT =  [:digit:]
+LETTER = [a-zA-z_] | [^\u0000-\u007F\uD800-\uDBFF] | [\uD800-\uDBFF] [\uDC00-\uDFFF]
+DIGIT = [0-9]
+LETTER_OR_DIGIT = [a-zA-Z0-9_] | [^\u0000-\u007F\uD800-\uDBFF] | [\uD800-\uDBFF] [\uDC00-\uDFFF]
 
-IDENTIFIER = {LETTER} ({LETTER} | {DIGIT})*
+IDENTIFIER = {LETTER} {LETTER_OR_DIGIT}*
 
 WHITE_SPACE=\s+
+
+BACKTICK = "`"
+LEFT_BRACE = "{"
+RIGHT_BRACE = "}"
 
 // Todo - Add inspection
 LINE_COMMENT = "/" "/"? [^\r\n]*
@@ -67,6 +75,11 @@ XML_LITERAL_START = xml[ \t\n\x0B\f\r]*`
 
 STRING_TEMPLATE_LITERAL_START = string[ \t\n\x0B\f\r]*`
 STRING_TEMPLATE_LITERAL_END = "`"
+
+DOCUMENTATION = "documentation"
+DEPRECATED = "deprecated"
+DOCUMENTATION_TEMPLATE_START = {DOCUMENTATION} {WHITE_SPACE}* {LEFT_BRACE}
+DEPRECATED_TEMPLATE_START = {DEPRECATED} {WHITE_SPACE}* {LEFT_BRACE}
 
 EXPRESSION_START = "{{"
 EXPRESSION_END = "}}"
@@ -141,6 +154,51 @@ XML_COMMENT_CHAR = [^{}>\\-] | {XML_ESCAPED_SEQUENCE}
 XML_COMMENT_ALLOWED_SEQUENCE = {XML_BRACES_SEQUENCE} | {XML_COMMENT_SPECIAL_SEQUENCE} | ({XML_BRACES_SEQUENCE} {XML_COMMENT_SPECIAL_SEQUENCE})+ {XML_BRACES_SEQUENCE}? | ({XML_COMMENT_SPECIAL_SEQUENCE} {XML_BRACES_SEQUENCE})+ {XML_COMMENT_SPECIAL_SEQUENCE}?
 XML_COMMENT_SPECIAL_SEQUENCE = ">"+ | (">"* "-" ">"+)+ | "-"? ">"* "-"+
 
+// DOCUMENTATION_TEMPLATE
+
+DOCUMENTATION_TEMPLATE_END = {RIGHT_BRACE}
+DOCUMENTATION_TEMPLATE_ATTRIBUTE_START = {ATTRIBUTE_PREFIX} {EXPRESSION_START}
+SB_DOC_INLINE_CODE_START = {ATTRIBUTE_PREFIX}? {DOC_BACK_TICK}
+DB_DOC_INLINE_CODE_START = {ATTRIBUTE_PREFIX}? {DOC_BACK_TICK} {DOC_BACK_TICK}
+TB_DOC_INLINE_CODE_START = {ATTRIBUTE_PREFIX}? {DOC_BACK_TICK} {DOC_BACK_TICK} {DOC_BACK_TICK}
+DOCUMENTATION_TEMPLATE_TEXT = {DOCUMENTATION_VALID_CHAR_SEQUENCE}? ({DOCUMENTATION_TEMPLATE_STRING_CHAR} {DOCUMENTATION_VALID_CHAR_SEQUENCE}?)+ | {DOCUMENTATION_VALID_CHAR_SEQUENCE} ({DOCUMENTATION_TEMPLATE_STRING_CHAR} {DOCUMENTATION_VALID_CHAR_SEQUENCE}?)*
+DOCUMENTATION_TEMPLATE_STRING_CHAR = [^`{}\\FPTRV] | '\\' [{}`] | {WHITE_SPACE} | {DOCUMENTATION_ESCAPED_SEQUENCE}
+ATTRIBUTE_PREFIX = [FPTRV]
+DOC_BACK_TICK = '`'
+DOCUMENTATION_ESCAPED_SEQUENCE = '\\\\'
+DOCUMENTATION_VALID_CHAR_SEQUENCE = [FPTRV] [^`{}\\] | [FPTRV] '\\' [{}`] | [FPTRV] '\\' ~[{}`] | '\\' ~'\\'
+
+// TRIPLE_BACKTICK_INLINE_CODE
+
+TRIPLE_BACK_TICK_INLINE_CODE_END = {BACKTICK} {BACKTICK} {BACKTICK}
+TRIPLE_BACK_TICK_INLINE_CODE = {TRIPLE_BACK_TICK_INLINE_CODE_CHAR}+
+TRIPLE_BACK_TICK_INLINE_CODE_CHAR = [^`] | [`] [^`] | [`] [`] [^`]
+
+// DOUBLE_BACKTICK_INLINE_CODE
+
+DOUBLE_BACK_TICK_INLINE_CODE_END = {BACKTICK} {BACKTICK}
+DOUBLE_BACK_TICK_INLINE_CODE = {DOUBLE_BACK_TICK_INLINE_CODE_CHAR}+
+DOUBLE_BACK_TICK_INLINE_CODE_CHAR = [^`] | [`] [^`]
+
+// SINGLE_BACKTICK_INLINE_CODE
+
+SINGLE_BACK_TICK_INLINE_CODE_END = {BACKTICK}
+SINGLE_BACK_TICK_INLINE_CODE = {SINGLE_BACK_TICK_INLINE_CODE_CHAR}+
+SINGLE_BACK_TICK_INLINE_CODE_CHAR = [^`]
+
+// DEPRECATED_TEMPLATE
+
+DEPRECATED_TEMPLATE_END = {RIGHT_BRACE}
+SB_DEPRECATED_INLINE_CODE_START = {DEPRECATED_BACK_TICK}
+DB_DEPRECATED_INLINE_CODE_START = {DEPRECATED_BACK_TICK} {DEPRECATED_BACK_TICK}
+TB_DEPRECATED_INLINE_CODE_START = {DEPRECATED_BACK_TICK} {DEPRECATED_BACK_TICK} {DEPRECATED_BACK_TICK}
+DEPRECATED_TEMPLATE_TEXT = {DEPRECATED_VALID_CHAR_SEQUENCE}? ({DEPRECATED_TEMPLATE_STRING_CHAR} {DEPRECATED_VALID_CHAR_SEQUENCE}?)+ | {DEPRECATED_VALID_CHAR_SEQUENCE} ({DEPRECATED_TEMPLATE_STRING_CHAR} {DEPRECATED_VALID_CHAR_SEQUENCE}?)*
+DEPRECATED_TEMPLATE_STRING_CHAR = [^`{}\\] | '\\' [{}`] | {WHITE_SPACE} | {DEPRECATED_ESCAPED_SEQUENCE}
+DEPRECATED_BACK_TICK = '`'
+DEPRECATED_ESCAPED_SEQUENCE = '\\\\'
+DEPRECATED_VALID_CHAR_SEQUENCE = '\\' ~'\\'
+
+
 HEX_DIGITS = {HEX_DIGIT} ({HEX_DIGIT_OR_UNDERSCORE}* {HEX_DIGIT})?
 HEX_DIGIT_OR_UNDERSCORE = {HEX_DIGIT} | "_"
 
@@ -151,107 +209,113 @@ HEX_DIGIT_OR_UNDERSCORE = {HEX_DIGIT} | "_"
 %state XML_PI_MODE
 %state XML_COMMENT_MODE
 
+%state DOCUMENTATION_TEMPLATE
+%state TRIPLE_BACKTICK_INLINE_CODE
+%state DOUBLE_BACKTICK_INLINE_CODE
+%state SINGLE_BACKTICK_INLINE_CODE
+%state DEPRECATED_TEMPLATE
+
 %state STRING_TEMPLATE_MODE
 
 %%
 <YYINITIAL> {
-  {WHITE_SPACE}             { return WHITE_SPACE; }
+    {WHITE_SPACE}             { return WHITE_SPACE; }
 
-  "abort"                   { return ABORT; }
-  "action"                  { return ACTION; }
-  "all"                     { return ALL; }
-  "annotation"              { return ANNOTATION; }
-  "any"                     { return ANY; }
-  "as"                      { return AS; }
-  "attach"                  { return ATTACH; }
-  "bind"                    { return BIND; }
-  "blob"                    { return BLOB; }
-  "boolean"                 { return BOOLEAN; }
-  "break"                   { return BREAK; }
-  "catch"                   { return CATCH; }
-  "connector"               { return CONNECTOR; }
-  "const"                   { return CONST; }
-  "create"                  { return CREATE; }
-  "else"                    { return ELSE; }
-  "endpoint"                { return ENDPOINT; }
-  "enum"                    { return ENUM; }
-  "failed"                  { return FAILED; }
-  "finally"                 { return FINALLY; }
-  "float"                   { return FLOAT; }
-  "foreach"                 { return FOREACH; }
-  "fork"                    { return FORK; }
-  "function"                { return FUNCTION; }
-  "if"                      { return IF; }
-  "import"                  { return IMPORT; }
-  "in"                      { return IN; }
-  "int"                     { return INT; }
-  "join"                    { return JOIN; }
-  "json"                    { return JSON; }
-  "lengthof"                { return LENGTHOF; }
-  "lock"                    { return LOCK; }
-  "map"                     { return MAP; }
-  "native"                  { return NATIVE; }
-  "next"                    { return NEXT; }
-  "package"                 { return PACKAGE; }
-  "parameter"               { return TYPE_PARAMETER; }
-  "private"                 { return PRIVATE; }
-  "public"                  { return PUBLIC; }
-  "resource"                { return RESOURCE; }
-  "retries"                 { return RETRIES; }
-  "return"                  { return RETURN; }
-  "returns"                 { return RETURNS; }
-  "service"                 { return SERVICE; }
-  "some"                    { return SOME; }
-  "string"                  { return STRING; }
-  "struct"                  { return STRUCT; }
-  "table"                   { return TABLE; }
-  "timeout"                 { return TIMEOUT; }
-  "transaction"             { return TRANSACTION; }
-  "transformer"             { return TRANSFORMER; }
-  "try"                     { return TRY; }
-  "type"                    { return TYPE; }
-  "typeof"                  { return TYPEOF; }
-  "throw"                   { return THROW; }
-  "while"                   { return WHILE; }
-  "with"                    { return WITH; }
-  "worker"                  { return WORKER; }
-  "var"                     { return VAR; }
-  "version"                 { return VERSION; }
-  "xml"                     { return XML; }
-  "xmlns"                   { return XMLNS; }
+    "abort"                   { return ABORT; }
+    "action"                  { return ACTION; }
+    "all"                     { return ALL; }
+    "annotation"              { return ANNOTATION; }
+    "any"                     { return ANY; }
+    "as"                      { return AS; }
+    "attach"                  { return ATTACH; }
+    "bind"                    { return BIND; }
+    "blob"                    { return BLOB; }
+    "boolean"                 { return BOOLEAN; }
+    "break"                   { return BREAK; }
+    "catch"                   { return CATCH; }
+    "connector"               { return CONNECTOR; }
+    "const"                   { return CONST; }
+    "create"                  { return CREATE; }
+    "else"                    { return ELSE; }
+    "endpoint"                { return ENDPOINT; }
+    "enum"                    { return ENUM; }
+    "failed"                  { return FAILED; }
+    "finally"                 { return FINALLY; }
+    "float"                   { return FLOAT; }
+    "foreach"                 { return FOREACH; }
+    "fork"                    { return FORK; }
+    "function"                { return FUNCTION; }
+    "if"                      { return IF; }
+    "import"                  { return IMPORT; }
+    "in"                      { return IN; }
+    "int"                     { return INT; }
+    "join"                    { return JOIN; }
+    "json"                    { return JSON; }
+    "lengthof"                { return LENGTHOF; }
+    "lock"                    { return LOCK; }
+    "map"                     { return MAP; }
+    "native"                  { return NATIVE; }
+    "next"                    { return NEXT; }
+    "package"                 { return PACKAGE; }
+    "parameter"               { return TYPE_PARAMETER; }
+    "private"                 { return PRIVATE; }
+    "public"                  { return PUBLIC; }
+    "resource"                { return RESOURCE; }
+    "retries"                 { return RETRIES; }
+    "return"                  { return RETURN; }
+    "returns"                 { return RETURNS; }
+    "service"                 { return SERVICE; }
+    "some"                    { return SOME; }
+    "string"                  { return STRING; }
+    "struct"                  { return STRUCT; }
+    "table"                   { return TABLE; }
+    "timeout"                 { return TIMEOUT; }
+    "transaction"             { return TRANSACTION; }
+    "transformer"             { return TRANSFORMER; }
+    "try"                     { return TRY; }
+    "type"                    { return TYPE; }
+    "typeof"                  { return TYPEOF; }
+    "throw"                   { return THROW; }
+    "while"                   { return WHILE; }
+    "with"                    { return WITH; }
+    "worker"                  { return WORKER; }
+    "var"                     { return VAR; }
+    "version"                 { return VERSION; }
+    "xml"                     { return XML; }
+    "xmlns"                   { return XMLNS; }
 
-  ";"                       { return SEMICOLON; }
-  ":"                       { return COLON; }
-  "."                       { return DOT; }
-  ","                       { return COMMA; }
-  "{"                       { return LEFT_BRACE; }
-  "}"                       { return RIGHT_BRACE; }
-  "("                       { return LEFT_PARENTHESIS; }
-  ")"                       { return RIGHT_PARENTHESIS; }
-  "["                       { return LEFT_BRACKET; }
-  "]"                       { return RIGHT_BRACKET; }
-  "?"                       { return QUESTION_MARK; }
-  "="                       { return ASSIGN; }
-  "+"                       { return ADD; }
-  "-"                       { return SUB; }
-  "*"                       { return MUL; }
-  "/"                       { return DIV; }
-  "^"                       { return POW; }
-  "%"                       { return MOD; }
-  "!"                       { return NOT; }
-  "=="                      { return EQUAL; }
-  "!="                      { return NOT_EQUAL; }
-  ">"                       { return GT; }
-  "<"                       { return LT; }
-  ">="                      { return GT_EQUAL; }
-  "<="                      { return LT_EQUAL; }
-  "&&"                      { return AND; }
-  "||"                      { return OR; }
-  "->"                      { return RARROW; }
-  "<-"                      { return LARROW; }
-  "@"                       { return AT; }
-//  "`"                       { return BACKTICK; }
-  ".."                      { return RANGE; }
+    ";"                       { return SEMICOLON; }
+    ":"                       { return COLON; }
+    "."                       { return DOT; }
+    ","                       { return COMMA; }
+    "{"                       { return LEFT_BRACE; }
+    "}"                       { return RIGHT_BRACE; }
+    "("                       { return LEFT_PARENTHESIS; }
+    ")"                       { return RIGHT_PARENTHESIS; }
+    "["                       { return LEFT_BRACKET; }
+    "]"                       { return RIGHT_BRACKET; }
+    "?"                       { return QUESTION_MARK; }
+    "="                       { return ASSIGN; }
+    "+"                       { return ADD; }
+    "-"                       { return SUB; }
+    "*"                       { return MUL; }
+    "/"                       { return DIV; }
+    "^"                       { return POW; }
+    "%"                       { return MOD; }
+    "!"                       { return NOT; }
+    "=="                      { return EQUAL; }
+    "!="                      { return NOT_EQUAL; }
+    ">"                       { return GT; }
+    "<"                       { return LT; }
+    ">="                      { return GT_EQUAL; }
+    "<="                      { return LT_EQUAL; }
+    "&&"                      { return AND; }
+    "||"                      { return OR; }
+    "->"                      { return RARROW; }
+    "<-"                      { return LARROW; }
+    "@"                       { return AT; }
+    //  "`"                       { return BACKTICK; }
+    ".."                      { return RANGE; }
 
     {QUOTED_STRING_LITERAL}                 { return QUOTEDSTRINGLITERAL; }
     {IDENTIFIER}                            { return IDENTIFIER; }
@@ -262,6 +326,9 @@ HEX_DIGIT_OR_UNDERSCORE = {HEX_DIGIT} | "_"
     {STRING_TEMPLATE_LITERAL_START}         { inStringTemplate = true; yybegin(STRING_TEMPLATE_MODE); return STRING_TEMPLATE_LITERAL_START; }
     // Todo - Move to a separate logic
     {EXPRESSION_END}                        { if(inXmlTag){ yybegin(XML_TAG_MODE); return EXPRESSION_END;} else if(inXmlTemplate) { yybegin(XML_MODE); return EXPRESSION_END; } else if(inStringTemplate){ yybegin(STRING_TEMPLATE_MODE); return EXPRESSION_END; } else { yypushback(1); return RIGHT_BRACE; } }
+
+    {DOCUMENTATION_TEMPLATE_START}          { inDocTemplate = true; yybegin(DOCUMENTATION_TEMPLATE); return DOCUMENTATION_TEMPLATE_START; }
+    {DEPRECATED_TEMPLATE_START}             { inDeprecatedTemplate = true; yybegin(DEPRECATED_TEMPLATE); return DEPRECATED_TEMPLATE_START; }
     .                                       { return BAD_CHARACTER; }
 }
 
@@ -326,6 +393,44 @@ HEX_DIGIT_OR_UNDERSCORE = {HEX_DIGIT} | "_"
     {STRING_TEMPLATE_EXPRESSION_START}      { yybegin(YYINITIAL); return STRING_TEMPLATE_EXPRESSION_START; }
     {STRING_TEMPLATE_TEXT}                  { return STRING_TEMPLATE_TEXT; }
     .                                       { inXmlTemplate = false; yybegin(YYINITIAL); return BAD_CHARACTER; }
+}
+
+<DOCUMENTATION_TEMPLATE>{
+    {DOCUMENTATION_TEMPLATE_END}            { inDocTemplate = false; yybegin(YYINITIAL); return DOCUMENTATION_TEMPLATE_END; }
+    {DOCUMENTATION_TEMPLATE_ATTRIBUTE_START} { yybegin(YYINITIAL); return DOCUMENTATION_TEMPLATE_ATTRIBUTE_START; }
+    {SB_DOC_INLINE_CODE_START}              { yybegin(SINGLE_BACKTICK_INLINE_CODE); return SB_DOC_INLINE_CODE_START; }
+    {DB_DOC_INLINE_CODE_START}              { yybegin(DOUBLE_BACKTICK_INLINE_CODE); return DB_DOC_INLINE_CODE_START; }
+    {TB_DOC_INLINE_CODE_START}              { yybegin(TRIPLE_BACKTICK_INLINE_CODE); return TB_DOC_INLINE_CODE_START; }
+    {DOCUMENTATION_TEMPLATE_TEXT}           { return DOCUMENTATION_TEMPLATE_TEXT; }
+    .                                       { yybegin(YYINITIAL); return BAD_CHARACTER; }
+}
+
+<TRIPLE_BACKTICK_INLINE_CODE>{
+    {TRIPLE_BACK_TICK_INLINE_CODE_END}      { if(inDocTemplate) { yybegin(DOCUMENTATION_TEMPLATE); } else if(inDeprecatedTemplate) { yybegin(DEPRECATED_TEMPLATE); } return TRIPLE_BACK_TICK_INLINE_CODE_END; }
+    {TRIPLE_BACK_TICK_INLINE_CODE}          { return TRIPLE_BACK_TICK_INLINE_CODE; }
+     .                                      { if(inDocTemplate) { yybegin(DOCUMENTATION_TEMPLATE); } else if(inDeprecatedTemplate) { yybegin(DEPRECATED_TEMPLATE); } return BAD_CHARACTER; }
+}
+
+<DOUBLE_BACKTICK_INLINE_CODE>{
+    {DOUBLE_BACK_TICK_INLINE_CODE_END}      { if(inDocTemplate) { yybegin(DOCUMENTATION_TEMPLATE); } else if(inDeprecatedTemplate) { yybegin(DEPRECATED_TEMPLATE); } return DOUBLE_BACK_TICK_INLINE_CODE_END; }
+    {DOUBLE_BACK_TICK_INLINE_CODE}          { return DOUBLE_BACK_TICK_INLINE_CODE; }
+     .                                      { if(inDocTemplate) { yybegin(DOCUMENTATION_TEMPLATE); } else if(inDeprecatedTemplate) { yybegin(DEPRECATED_TEMPLATE); } return BAD_CHARACTER; }
+}
+
+<SINGLE_BACKTICK_INLINE_CODE>{
+    {SINGLE_BACK_TICK_INLINE_CODE_END}      { if(inDocTemplate) { yybegin(DOCUMENTATION_TEMPLATE); } else if(inDeprecatedTemplate) { yybegin(DEPRECATED_TEMPLATE); } return SINGLE_BACK_TICK_INLINE_CODE_END; }
+    {SINGLE_BACK_TICK_INLINE_CODE}          { return SINGLE_BACK_TICK_INLINE_CODE; }
+     .                                      { if(inDocTemplate) { yybegin(DOCUMENTATION_TEMPLATE); } else if(inDeprecatedTemplate) { yybegin(DEPRECATED_TEMPLATE); } return BAD_CHARACTER; }
+}
+
+<DEPRECATED_TEMPLATE>{
+    {DEPRECATED_TEMPLATE_END}               { inDeprecatedTemplate = false; yybegin(YYINITIAL); return DEPRECATED_TEMPLATE_END; }
+    {SB_DEPRECATED_INLINE_CODE_START}       { yybegin(SINGLE_BACKTICK_INLINE_CODE); return DEPRECATED_TEMPLATE_END; }
+    {DB_DEPRECATED_INLINE_CODE_START}       { yybegin(DOUBLE_BACKTICK_INLINE_CODE); return DB_DEPRECATED_INLINE_CODE_START; }
+    {TB_DEPRECATED_INLINE_CODE_START}       { yybegin(TRIPLE_BACKTICK_INLINE_CODE); return TB_DEPRECATED_INLINE_CODE_START; }
+    {DEPRECATED_TEMPLATE_TEXT}              { return DEPRECATED_TEMPLATE_TEXT; }
+    .                                       { yybegin(YYINITIAL); return BAD_CHARACTER; }
+
 }
 
 [^] { return BAD_CHARACTER; }

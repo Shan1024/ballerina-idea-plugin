@@ -50,13 +50,13 @@ public class BallerinaDocumentationAttachmentImpl extends BallerinaCompositeElem
   @Override
   @NotNull
   public PsiElement getDocumentationTemplateEnd() {
-    return notNullChild(findChildByType(DOCUMENTATIONTEMPLATEEND));
+    return notNullChild(findChildByType(DOCUMENTATION_TEMPLATE_END));
   }
 
   @Override
   @NotNull
   public PsiElement getDocumentationTemplateStart() {
-    return notNullChild(findChildByType(DOCUMENTATIONTEMPLATESTART));
+    return notNullChild(findChildByType(DOCUMENTATION_TEMPLATE_START));
   }
 
 }

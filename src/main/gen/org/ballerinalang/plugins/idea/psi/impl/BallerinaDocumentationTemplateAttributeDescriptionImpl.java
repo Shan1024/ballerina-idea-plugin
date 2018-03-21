@@ -50,13 +50,13 @@ public class BallerinaDocumentationTemplateAttributeDescriptionImpl extends Ball
   @Override
   @NotNull
   public PsiElement getDocumentationTemplateAttributeEnd() {
-    return notNullChild(findChildByType(DOCUMENTATIONTEMPLATEATTRIBUTEEND));
+    return notNullChild(findChildByType(DOCUMENTATION_TEMPLATE_ATTRIBUTE_END));
   }
 
   @Override
   @NotNull
   public PsiElement getDocumentationTemplateAttributeStart() {
-    return notNullChild(findChildByType(DOCUMENTATIONTEMPLATEATTRIBUTESTART));
+    return notNullChild(findChildByType(DOCUMENTATION_TEMPLATE_ATTRIBUTE_START));
   }
 
   @Override

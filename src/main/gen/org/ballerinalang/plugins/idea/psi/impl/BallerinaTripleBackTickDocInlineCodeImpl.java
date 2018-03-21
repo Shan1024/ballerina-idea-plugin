@@ -43,20 +43,20 @@ public class BallerinaTripleBackTickDocInlineCodeImpl extends BallerinaComposite
 
   @Override
   @NotNull
-  public PsiElement getTBDocInlineCodeStart() {
-    return notNullChild(findChildByType(TBDOCINLINECODESTART));
+  public PsiElement getTbDocInlineCodeStart() {
+    return notNullChild(findChildByType(TB_DOC_INLINE_CODE_START));
   }
 
   @Override
   @Nullable
   public PsiElement getTripleBackTickInlineCode() {
-    return findChildByType(TRIPLEBACKTICKINLINECODE);
+    return findChildByType(TRIPLE_BACK_TICK_INLINE_CODE);
   }
 
   @Override
   @NotNull
   public PsiElement getTripleBackTickInlineCodeEnd() {
-    return notNullChild(findChildByType(TRIPLEBACKTICKINLINECODEEND));
+    return notNullChild(findChildByType(TRIPLE_BACK_TICK_INLINE_CODE_END));
   }
 
 }

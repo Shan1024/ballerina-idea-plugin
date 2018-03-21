@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaSingleBackTickDeprecatedInlineCode extends BallerinaCompositeElement {
 
   @NotNull
-  PsiElement getSBDeprecatedInlineCodeStart();
+  PsiElement getSbDeprecatedInlineCodeStart();
 
   @Nullable
   PsiElement getSingleBackTickInlineCode();

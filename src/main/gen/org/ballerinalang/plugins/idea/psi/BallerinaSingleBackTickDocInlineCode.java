@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaSingleBackTickDocInlineCode extends BallerinaCompositeElement {
 
   @NotNull
-  PsiElement getSBDocInlineCodeStart();
+  PsiElement getSbDocInlineCodeStart();
 
   @Nullable
   PsiElement getSingleBackTickInlineCode();

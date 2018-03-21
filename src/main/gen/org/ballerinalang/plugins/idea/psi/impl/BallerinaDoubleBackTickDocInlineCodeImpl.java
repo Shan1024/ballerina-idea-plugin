@@ -43,20 +43,20 @@ public class BallerinaDoubleBackTickDocInlineCodeImpl extends BallerinaComposite
 
   @Override
   @NotNull
-  public PsiElement getDBDocInlineCodeStart() {
-    return notNullChild(findChildByType(DBDOCINLINECODESTART));
+  public PsiElement getDbDocInlineCodeStart() {
+    return notNullChild(findChildByType(DB_DOC_INLINE_CODE_START));
   }
 
   @Override
   @Nullable
   public PsiElement getDoubleBackTickInlineCode() {
-    return findChildByType(DOUBLEBACKTICKINLINECODE);
+    return findChildByType(DOUBLE_BACK_TICK_INLINE_CODE);
   }
 
   @Override
   @NotNull
   public PsiElement getDoubleBackTickInlineCodeEnd() {
-    return notNullChild(findChildByType(DOUBLEBACKTICKINLINECODEEND));
+    return notNullChild(findChildByType(DOUBLE_BACK_TICK_INLINE_CODE_END));
   }
 
 }
