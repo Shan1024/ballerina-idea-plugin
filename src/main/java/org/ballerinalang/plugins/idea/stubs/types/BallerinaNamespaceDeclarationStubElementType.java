@@ -24,14 +24,10 @@ import com.intellij.psi.stubs.StubIndexKey;
 import com.intellij.psi.stubs.StubInputStream;
 import com.intellij.psi.stubs.StubOutputStream;
 import com.intellij.util.containers.ContainerUtil;
-import org.ballerinalang.plugins.idea.psi.BallerinaActionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaNamedElement;
 import org.ballerinalang.plugins.idea.psi.BallerinaNamespaceDeclaration;
-import org.ballerinalang.plugins.idea.psi.impl.BallerinaActionDefinitionImpl;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaNamespaceDeclarationImpl;
-import org.ballerinalang.plugins.idea.stubs.BallerinaActionDefinitionStub;
 import org.ballerinalang.plugins.idea.stubs.BallerinaNamespaceDeclarationStub;
-import org.ballerinalang.plugins.idea.stubs.index.BallerinaActionIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaNamespaceIndex;
 import org.jetbrains.annotations.NotNull;
 

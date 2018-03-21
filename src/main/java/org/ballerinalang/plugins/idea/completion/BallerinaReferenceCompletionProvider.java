@@ -31,16 +31,13 @@ import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.util.containers.ContainerUtil;
-import org.ballerinalang.plugins.idea.psi.BallerinaConnectorDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaStructDefinition;
 import org.ballerinalang.plugins.idea.psi.scope.BallerinaScopeProcessor;
-import org.ballerinalang.plugins.idea.stubs.index.BallerinaActionIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaAnnotationIndex;
-import org.ballerinalang.plugins.idea.stubs.index.BallerinaConnectorIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaConstantIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaEndpointIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaEnumIndex;
@@ -143,15 +140,15 @@ public class BallerinaReferenceCompletionProvider extends CompletionContributor 
                 StubIndex.getElements(BallerinaGlobalVariableIndex.KEY, "test", project, GlobalSearchScope.allScope
                         (project), BallerinaGlobalVariableDefinition.class);
 
-        Collection<BallerinaConnectorDefinition> ballerinaConnector = StubIndex.getElements(BallerinaConnectorIndex.KEY,
-                "test", project, GlobalSearchScope.allScope(project), BallerinaConnectorDefinition.class);
+//        Collection<BallerinaConnectorDefinition> ballerinaConnector = StubIndex.getElements(BallerinaConnectorIndex.KEY,
+//                "test", project, GlobalSearchScope.allScope(project), BallerinaConnectorDefinition.class);
 
         Collection<String> allPackages = StubIndex.getInstance().getAllKeys(BallerinaPackageIndex.KEY, project);
         Collection<String> allFunctions = StubIndex.getInstance().getAllKeys(BallerinaFunctionIndex.KEY, project);
         Collection<String> allStructs = StubIndex.getInstance().getAllKeys(BallerinaStructIndex.KEY, project);
         Collection<String> allGlobalVariables = StubIndex.getInstance().getAllKeys(BallerinaGlobalVariableIndex.KEY,
                 project);
-        Collection<String> allConnectors = StubIndex.getInstance().getAllKeys(BallerinaConnectorIndex.KEY, project);
+//        Collection<String> allConnectors = StubIndex.getInstance().getAllKeys(BallerinaConnectorIndex.KEY, project);
         Collection<String> allEnums = StubIndex.getInstance().getAllKeys(BallerinaEnumIndex.KEY, project);
         Collection<String> allAnnotations = StubIndex.getInstance().getAllKeys(BallerinaAnnotationIndex.KEY, project);
         Collection<String> allTransformers = StubIndex.getInstance().getAllKeys(BallerinaTransformerIndex.KEY, project);
@@ -159,7 +156,7 @@ public class BallerinaReferenceCompletionProvider extends CompletionContributor 
         Collection<String> allGlobalEndpoints = StubIndex.getInstance().getAllKeys(BallerinaGlobalEndpointIndex.KEY,
                 project);
         Collection<String> allEndpoints = StubIndex.getInstance().getAllKeys(BallerinaEndpointIndex.KEY, project);
-        Collection<String> allActions = StubIndex.getInstance().getAllKeys(BallerinaActionIndex.KEY, project);
+//        Collection<String> allActions = StubIndex.getInstance().getAllKeys(BallerinaActionIndex.KEY, project);
         Collection<String> allWorkers = StubIndex.getInstance().getAllKeys(BallerinaWorkerIndex.KEY, project);
         Collection<String> allNamespaces = StubIndex.getInstance().getAllKeys(BallerinaNamespaceIndex.KEY, project);
 

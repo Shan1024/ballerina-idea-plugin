@@ -43,6 +43,18 @@ public class BallerinaCallableUnitSignatureImpl extends BallerinaCompositeElemen
 
   @Override
   @Nullable
+  public BallerinaFormalParameterList getFormalParameterList() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaFormalParameterList.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaReturnParameter getReturnParameter() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaReturnParameter.class);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getLeftParenthesis() {
     return findChildByType(LEFT_PARENTHESIS);
   }
@@ -54,21 +66,9 @@ public class BallerinaCallableUnitSignatureImpl extends BallerinaCompositeElemen
   }
 
   @Override
-  @Nullable
-  public PsiElement getFormalParameterList() {
-    return findChildByType(FORMALPARAMETERLIST);
-  }
-
-  @Override
   @NotNull
   public PsiElement getIdentifier() {
     return notNullChild(findChildByType(IDENTIFIER));
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getReturnParameter() {
-    return findChildByType(RETURNPARAMETER);
   }
 
 }

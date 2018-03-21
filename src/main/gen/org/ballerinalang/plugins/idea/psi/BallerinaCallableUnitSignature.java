@@ -24,18 +24,18 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaCallableUnitSignature extends BallerinaCompositeElement {
 
   @Nullable
+  BallerinaFormalParameterList getFormalParameterList();
+
+  @Nullable
+  BallerinaReturnParameter getReturnParameter();
+
+  @Nullable
   PsiElement getLeftParenthesis();
 
   @Nullable
   PsiElement getRightParenthesis();
 
-  @Nullable
-  PsiElement getFormalParameterList();
-
   @NotNull
   PsiElement getIdentifier();
-
-  @Nullable
-  PsiElement getReturnParameter();
 
 }

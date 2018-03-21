@@ -23,13 +23,4 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaTypeName extends BallerinaCompositeElement {
 
-  @Nullable
-  BallerinaAnnotatedTypeName getAnnotatedTypeName();
-
-  @Nullable
-  BallerinaGroupTypeName getGroupTypeName();
-
-  @Nullable
-  BallerinaTupleTypeName getTupleTypeName();
-
 }

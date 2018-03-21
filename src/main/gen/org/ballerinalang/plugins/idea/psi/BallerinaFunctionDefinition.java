@@ -56,9 +56,6 @@ public interface BallerinaFunctionDefinition extends BallerinaNamedElement, Stub
   PsiElement getPublic();
 
   @Nullable
-  PsiElement getIdentifier();
-
-  @Nullable
   String getName();
 
 }

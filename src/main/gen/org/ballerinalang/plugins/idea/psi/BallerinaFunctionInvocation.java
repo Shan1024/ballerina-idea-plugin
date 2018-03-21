@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaFunctionInvocation extends BallerinaCompositeElement {
 
   @Nullable
-  BallerinaExpressionList getExpressionList();
+  BallerinaInvocationArgList getInvocationArgList();
 
   @NotNull
   BallerinaNameReference getNameReference();
@@ -32,7 +32,10 @@ public interface BallerinaFunctionInvocation extends BallerinaCompositeElement {
   @NotNull
   PsiElement getLeftParenthesis();
 
-  @Nullable
+  @NotNull
   PsiElement getRightParenthesis();
+
+  @Nullable
+  PsiElement getAsync();
 
 }

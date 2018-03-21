@@ -61,8 +61,8 @@ public class BallerinaBuiltInTypeNameImpl extends BallerinaCompositeElementImpl 
 
   @Override
   @Nullable
-  public BallerinaTypeTypeName getTypeTypeName() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaTypeTypeName.class);
+  public BallerinaTypeDescTypeName getTypeDescTypeName() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaTypeDescTypeName.class);
   }
 
   @Override

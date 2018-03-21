@@ -33,6 +33,9 @@ public interface BallerinaStatement extends BallerinaCompositeElement {
   BallerinaBreakStatement getBreakStatement();
 
   @Nullable
+  BallerinaCompoundAssignmentStatement getCompoundAssignmentStatement();
+
+  @Nullable
   BallerinaExpressionStmt getExpressionStmt();
 
   @Nullable
@@ -52,6 +55,9 @@ public interface BallerinaStatement extends BallerinaCompositeElement {
 
   @Nullable
   BallerinaNextStatement getNextStatement();
+
+  @Nullable
+  BallerinaPostIncrementStatement getPostIncrementStatement();
 
   @Nullable
   BallerinaReturnStatement getReturnStatement();

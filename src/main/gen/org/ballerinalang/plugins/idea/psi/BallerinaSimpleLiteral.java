@@ -24,15 +24,24 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaSimpleLiteral extends BallerinaExpression {
 
   @Nullable
+  BallerinaIntegerLiteral getIntegerLiteral();
+
+  @Nullable
   PsiElement getAdd();
 
   @Nullable
-  PsiElement getSub();
+  PsiElement getBooleanLiteral();
 
   @Nullable
-  PsiElement getIntegerLiteral();
+  PsiElement getFloatingPointLiteral();
+
+  @Nullable
+  PsiElement getNullLiteral();
 
   @Nullable
   PsiElement getQuotedStringLiteral();
+
+  @Nullable
+  PsiElement getSub();
 
 }

@@ -43,26 +43,44 @@ public class BallerinaSimpleLiteralImpl extends BallerinaExpressionImpl implemen
 
   @Override
   @Nullable
+  public BallerinaIntegerLiteral getIntegerLiteral() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaIntegerLiteral.class);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getAdd() {
     return findChildByType(ADD);
   }
 
   @Override
   @Nullable
-  public PsiElement getSub() {
-    return findChildByType(SUB);
+  public PsiElement getBooleanLiteral() {
+    return findChildByType(BOOLEAN_LITERAL);
   }
 
   @Override
   @Nullable
-  public PsiElement getIntegerLiteral() {
-    return findChildByType(INTEGER_LITERAL);
+  public PsiElement getFloatingPointLiteral() {
+    return findChildByType(FLOATING_POINT_LITERAL);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getNullLiteral() {
+    return findChildByType(NULL_LITERAL);
   }
 
   @Override
   @Nullable
   public PsiElement getQuotedStringLiteral() {
     return findChildByType(QUOTED_STRING_LITERAL);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSub() {
+    return findChildByType(SUB);
   }
 
 }

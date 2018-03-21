@@ -98,8 +98,9 @@
 
         LINE_COMMENT        = 'regexp://[^\r\n]*'
 
-        //    WHITE_SPACE = 'regexp:\s+'
-        //    identifier = 'regexp:[a-zA-Z_][a-zA-Z0-9_]*'
+        WHITE_SPACE = 'regexp:\s+'
+        identifier = 'regexp:[a-zA-Z_][a-zA-Z0-9_]*'
+
         //    quotedStringLiteral = "regexp:\"(.*)\""
         //    integerLiteral = "regexp:\d+"
         //
@@ -112,7 +113,7 @@
 
     extends("(FunctionInvocation|SimpleVariable|MapArrayVariable|FieldVariable|XmlAttribVariable|Invocation)Reference") = VariableReference
 
-    extends("((ValueType|BuiltInReferenceType)Type|VariableReference|LambdaFunction|TypeInit|Type(Casting|Conversion|Access)|Braced)Expression") = Expression
+    extends("((ValueType|BuiltInReferenceType)Type|VariableReference|LambdaFunction|TypeInit|Type(Casting|Conversion|Access)|Braced|Await)Expression") = Expression
     extends("(Unary|Binary|Ternary)Expression") = Expression
     extends("((Simple|Array|Record|Xml|StringTemplate)Literal)") = Expression
     extends("Binary(Pow|DivMulMod|AddSub|Compare|Equal|And|Or)Expression") = BinaryExpression
@@ -181,21 +182,20 @@ Alias ::= as identifier {
 }
 
 // Note - Global variable definition should be the first definition since it can contain identifier as type.
-Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? (StructDefinition
-    | GlobalVariableDefinition | ServiceDefinition | FunctionDefinition | ConnectorDefinition | EnumDefinition
-    | AnnotationDefinition | TransformerDefinition | ConstantDefinition | GlobalEndpointDefinition | objectDefinition
-    | streamletDefinition) {
+Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? ( ObjectDefinition|StructDefinition
+    | GlobalVariableDefinition | ServiceDefinition | FunctionDefinition | EnumDefinition | AnnotationDefinition
+    | TransformerDefinition | ConstantDefinition | GlobalEndpointDefinition) {
    /* recoverWhile=TopLevelDefinitionRecover*/
 }
 
-private TopLevelDefinitionRecover ::= !(service | function | connector | struct | enum | annotation | transformer | endpoint | const | boolean | int | float | string | blob | public | identifier)
+//private TopLevelDefinitionRecover ::= !(service | function | connector | struct | enum | annotation | transformer | endpoint | const | boolean | int | float | string | blob | public | identifier)
 
 ServiceDefinition ::= service (LT NameReference GT) identifier ServiceEndpointAttachments?  ServiceBody {pin=1}
-ServiceEndpointAttachments ::= BIND NameReference (COMMA NameReference)*
+ServiceEndpointAttachments ::= bind NameReference (COMMA NameReference)* {pin=1}
 ServiceBody ::= LEFT_BRACE EndpointDefinition* VariableDefinitionStatement* ResourceDefinition* RIGHT_BRACE
 
 ResourceDefinition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? identifier LEFT_PARENTHESIS resourceParameterList? RIGHT_PARENTHESIS CallableUnitBody {pin=4}
-resourceParameterList ::=  ENDPOINT identifier (COMMA ParameterList)? | ParameterList
+resourceParameterList ::= endpoint identifier (COMMA ParameterList)? | ParameterList {pin=1}
 
 CallableUnitBody ::= LEFT_BRACE BlockWithEndpoint RIGHT_BRACE | LEFT_BRACE BlockWithEndpointAndWorker RIGHT_BRACE
 
@@ -207,16 +207,17 @@ BlockWithEndpointAndWorker ::= EndpointDefinition* WorkerDefinition+ {elementTyp
 
 //private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
 
+// Todo - Need getIdentifier?
 FunctionDefinition ::= FunctionWithReceiver | FunctionWithoutReceiver {
-    pin=1 methods=[getIdentifier getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFunctionDefinitionStub"
+    pin=1 methods=[/*getIdentifier*/ getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFunctionDefinitionStub"
 }
 private FunctionWithReceiver ::= (public)? (native)? function (LT Parameter GT)? CallableUnitSignature (CallableUnitBody | SEMICOLON) {pin=3}
 private FunctionWithoutReceiver ::= (public)? (native)? function identifier CallableUnitSignature CallableUnitBody {pin=3}
 
-LambdaFunction ::= function LEFT_PARENTHESIS formalParameterList? RIGHT_PARENTHESIS returnParameter? CallableUnitBody {pin=1}
+LambdaFunction ::= function LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS ReturnParameter? CallableUnitBody {pin=1}
 
 // Todo - cache and add Signature owner?
-CallableUnitSignature ::= identifier LEFT_PARENTHESIS formalParameterList? RIGHT_PARENTHESIS returnParameter? {pin=1}
+CallableUnitSignature ::= identifier LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS ReturnParameter? {pin=1}
 
 StructDefinition ::= (public)? struct identifier StructBody {
     pin=2
@@ -229,15 +230,15 @@ StructBody ::= LEFT_BRACE FieldDefinition* PrivateStructBody? RIGHT_BRACE
 // Todo - Cache
 PrivateStructBody ::= private COLON FieldDefinition* {pin=1}
 
-objectDefinition ::= TYPE_TYPE identifier OBJECT LEFT_BRACE objectBody RIGHT_BRACE {pin=1}
+ObjectDefinition ::= type identifier object LEFT_BRACE objectBody RIGHT_BRACE {pin=1}
 
 objectBody ::= publicObjectFields? privateObjectFields? objectInitializer? objectFunctions?
 
-publicObjectFields ::= PUBLIC LEFT_BRACE objectFieldDefinition* RIGHT_BRACE {pin=1}
+publicObjectFields ::= public LEFT_BRACE objectFieldDefinition* RIGHT_BRACE {pin=1}
 
-privateObjectFields ::= PRIVATE LEFT_BRACE objectFieldDefinition* RIGHT_BRACE {pin=1}
+privateObjectFields ::= private LEFT_BRACE objectFieldDefinition* RIGHT_BRACE {pin=1}
 
-objectInitializer ::= AnnotationAttachment* documentationAttachment? (PUBLIC)? (NATIVE)? NEW objectInitializerParameterList CallableUnitBody
+objectInitializer ::= AnnotationAttachment* documentationAttachment? (public)? (native)? new objectInitializerParameterList CallableUnitBody {pin=5}
 
 objectInitializerParameterList ::= LEFT_PARENTHESIS objectParameterList? RIGHT_PARENTHESIS
 
@@ -256,10 +257,10 @@ objectParameter ::= AnnotationAttachment* TypeName? identifier
 objectDefaultableParameter ::= objectParameter COLON Expression
 
 // TODO merge with functionDefinition later
-objectFunctionDefinition ::= (PUBLIC)? (NATIVE)? FUNCTION objectCallableUnitSignature (CallableUnitBody | SEMICOLON)
+objectFunctionDefinition ::= (public)? (native)? function objectCallableUnitSignature (CallableUnitBody | SEMICOLON)
 
 //TODO merge with callableUnitSignature later
-objectCallableUnitSignature ::= identifier LEFT_PARENTHESIS formalParameterList? RIGHT_PARENTHESIS returnParameter?
+objectCallableUnitSignature ::= identifier LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS ReturnParameter?
 
 
 
@@ -331,21 +332,21 @@ TypeName ::= SimpleTypeName
              | TupleTypeName
              | AnnotatedTypeName
 ArrayTypeName ::= TypeName (LEFT_BRACKET RIGHT_BRACKET)+
-NullableTypeName ::= TypeName PIPE null_literal
+NullableTypeName ::= TypeName PIPE NULL_LITERAL
 UnionTypeName ::= TypeName (PIPE TypeName)+
 GroupTypeName ::= LEFT_PARENTHESIS TypeName RIGHT_PARENTHESIS
 TupleTypeName ::= LEFT_PARENTHESIS TypeName (COMMA TypeName)* RIGHT_PARENTHESIS
 AnnotatedTypeName ::= SimpleTypeName | AnnotationAttachment* SimpleTypeName
 
 SimpleTypeName ::= AnyTypeName
-                   | TypeTypeName
+                   | TypeDescTypeName
                    | ValueTypeName
                    | ReferenceTypeName
 AnyTypeName ::= any
-TypeTypeName ::= type
+TypeDescTypeName ::= typedesc
 
 BuiltInTypeName ::= AnyTypeName
-                    | TypeTypeName
+                    | TypeDescTypeName
                     | ValueTypeName
                     | BuiltInReferenceTypeName
                     | SimpleTypeName (LEFT_BRACKET RIGHT_BRACKET)+
@@ -381,7 +382,7 @@ AggregationTypeName ::= TYPE_AGGREGATION (LT NameReference GT)?
 // Todo - Pin 1?
 FunctionTypeName ::= function LEFT_PARENTHESIS (ParameterList | ParameterTypeNameList)? RIGHT_PARENTHESIS ReturnParameter? {pin=3}
 
-XmlNamespaceName ::= quoted_string_literal
+XmlNamespaceName ::= QUOTED_STRING_LITERAL
 
 XmlLocalName ::= identifier
 
@@ -413,10 +414,10 @@ Statement ::=
     |   AbortStatement
     |   LockStatement
     |   NamespaceDeclarationStatement
-    |   StreamingQueryStatement /*{recoverWhile = StatementRecover}*/
+//    |   StreamingQueryStatement /*{recoverWhile = StatementRecover}*/
 
 // Todo - Add more tokens
-private StatementRecover ::= !(int | string | '}' | ';')
+//private StatementRecover ::= !(int | string | '}' | ';')
 
 //private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
 
@@ -473,7 +474,7 @@ ForkJoinStatement ::= fork LEFT_BRACE WorkerDefinition* RIGHT_BRACE JoinClause? 
 JoinClause ::= join (LEFT_PARENTHESIS JoinConditions RIGHT_PARENTHESIS)? LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
 // Todo - Needs reorder?
-JoinConditions ::= (some integer_literal | all) (identifier (COMMA identifier)*)? {pin=1}
+JoinConditions ::= (some IntegerLiteral | all) (identifier (COMMA identifier)*)? {pin=1}
 
 // below typeName is only 'message[]'
 TimeoutClause ::= timeout LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Block RIGHT_BRACE {pin=1}
@@ -500,8 +501,12 @@ WorkerReply ::= ExpressionList LARROW identifier SEMICOLON {pin=2}
 
 // Note - Order of 'simpleVariableReference' and 'functionInvocationReference' because otherwise all function
 // invocations will match simpleVariableReference first.
-VariableReference ::= InvocationReference | MapArrayVariableReference | FieldVariableReference | XmlAttribVariableReference
-                      | FunctionInvocationReference | SimpleVariableReference
+VariableReference ::= InvocationReference
+                      | MapArrayVariableReference
+                      | FieldVariableReference
+                      | XmlAttribVariableReference
+                      | FunctionInvocationReference
+                      | SimpleVariableReference
 
 InvocationReference ::= VariableReference Invocation
 MapArrayVariableReference ::= VariableReference Index
@@ -520,10 +525,14 @@ Index ::= LEFT_BRACKET Expression RIGHT_BRACKET /*{pin=1}*/
 XmlAttrib ::= AT (LEFT_BRACKET Expression RIGHT_BRACKET)? /*{pin=1}*/
 
 // Todo - Need to pin?
-FunctionInvocation ::= NameReference LEFT_PARENTHESIS ExpressionList? RIGHT_PARENTHESIS {pin=2}
+FunctionInvocation ::= async? NameReference LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS
 
 // Todo - Adding pin will mess function invocation.
-Invocation ::= DOT AnyIdentifierName LEFT_PARENTHESIS ExpressionList? RIGHT_PARENTHESIS {pin=1}
+Invocation ::= DOT AnyIdentifierName LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS {pin=1}
+
+InvocationArgList ::= InvocationArg (COMMA InvocationArg)*
+
+InvocationArg ::= Expression | NamedArgs | RestArgs
 
 ActionInvocation ::= VariableReference RARROW FunctionInvocation /*{pin=2}*/
 
@@ -553,7 +562,7 @@ RetriesStatement ::= retries LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS {pin=
 
 NamespaceDeclarationStatement ::= NamespaceDeclaration /*{pin=1}*/
 
-NamespaceDeclaration ::= xmlns quoted_String_Literal (as identifier)? SEMICOLON {
+NamespaceDeclaration ::= xmlns QUOTED_STRING_LITERAL (as identifier)? SEMICOLON {
     pin=1
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaNamespaceDeclarationStub"
 }
@@ -583,6 +592,7 @@ Expression
     |   BinaryAndExpression
     |   BinaryOrExpression
     |   TernaryExpression {/*pin=1 */ /*recoverWhile=ExpressionRecover*/}
+    |   AwaitExpression
 
 fake BinaryExpression ::= Expression {
   methods=[left="Expression[0]" right="Expression[1]" getOperator]
@@ -607,7 +617,7 @@ BinaryEqualExpression ::= Expression (EQUAL | NOT_EQUAL) Expression
 BinaryAndExpression ::= Expression AND Expression
 BinaryOrExpression ::= Expression OR Expression
 TernaryExpression ::= Expression QUESTION_MARK Expression COLON Expression
-
+AwaitExpression ::= await Expression
 //reusable productions
 
 NameReference ::= PackageReference? identifier {
@@ -621,7 +631,7 @@ PackageReference ::= identifier COLON {
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageReferenceStub"
 }
 
-ReturnParameters ::= RETURNS? LEFT_PARENTHESIS (ParameterList | ParameterTypeNameList) RIGHT_PARENTHESIS {pin=3}
+ReturnParameter ::= returns TypeName
 
 ParameterTypeNameList ::= parameterTypeName (COMMA parameterTypeName)* {pin=1 /*recoverWhile=RecoverParameter*/}
 
@@ -635,57 +645,75 @@ Parameter ::= AnnotationAttachment* TypeName identifier {
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaParameterStub"
 }
 
+DefaultableParameter ::= Parameter ASSIGN Expression
+
+RestParameter ::= AnnotationAttachment* TypeName ELLIPSIS identifier
+
+FormalParameterList ::= (Parameter | DefaultableParameter) (COMMA (Parameter | DefaultableParameter))* (COMMA RestParameter)? | RestParameter
+
 // Todo - cache
 FieldDefinition ::= TypeName identifier (ASSIGN SimpleLiteral)? SEMICOLON {
     pin=1
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFieldDefinitionStub"
 }
 
-SimpleLiteral ::= (ADD|SUB)? integer_literal /*| (ADD|SUB)? floatingPointLiteral*/ | quoted_String_Literal /*| booleanLiteral | nullLiteral*/ {pin=1}
+SimpleLiteral ::= (ADD|SUB)? IntegerLiteral
+                  | (ADD|SUB)? FLOATING_POINT_LITERAL
+                  | QUOTED_STRING_LITERAL
+                  | BOOLEAN_LITERAL
+                  | NULL_LITERAL {pin=1}
+
+
+// §3.10.1 Integer Literals
+IntegerLiteral ::= DECIMAL_INTEGER_LITERAL | HEX_INTEGER_LITERAL | OCTAL_INTEGER_LITERAL | BINARY_INTEGER_LITERAL
+
+NamedArgs ::= identifier ASSIGN Expression
+
+RestArgs ::= ELLIPSIS Expression
 
 // XML parsing
 
-XmlLiteral ::= xml_literal_start XmlItem xml_literal_end {pin=1}
+XmlLiteral ::= XML_LITERAL_START XmlItem XML_LITERAL_END {pin=1}
 
 XmlItem ::= Element | ProcIns | Comment | XmlText | cdata
 
 Content ::= XmlText? ((Element | cdata | ProcIns | Comment) XmlText?)*
 
-Comment ::= xml_comment_start (xml_comment_template_text Expression expression_end)* xml_comment_text
+Comment ::= XML_COMMENT_START (XML_COMMENT_TEMPLATE_TEXT Expression EXPRESSION_END)* XML_COMMENT_TEXT
 
 Element ::= StartTag Content CloseTag | EmptyTag
 
-StartTag ::= xml_tag_open XmlQualifiedName Attribute* xml_tag_close {pin=1}
+StartTag ::= XML_TAG_OPEN XmlQualifiedName Attribute* XML_TAG_CLOSE {pin=1}
 
-CloseTag ::= xml_tag_open_slash XmlQualifiedName xml_tag_close {pin=1}
+CloseTag ::= XML_TAG_OPEN_SLASH XmlQualifiedName XML_TAG_CLOSE {pin=1}
 
-EmptyTag ::= xml_tag_open XmlQualifiedName Attribute* xml_tag_slash_close {pin=1}
+EmptyTag ::= XML_TAG_OPEN XmlQualifiedName Attribute* XML_TAG_SLASH_CLOSE {pin=1}
 
-ProcIns ::= xml_tag_special_open (xml_pi_template_text Expression expression_end)* xml_pi_text
+ProcIns ::= XML_TAG_SPECIAL_OPEN (XML_PI_TEMPLATE_TEXT Expression EXPRESSION_END)* XML_PI_TEXT
 
 Attribute ::= XmlQualifiedName EQUALS XmlQuotedString;
 
-XmlText ::= (xml_template_text Expression expression_end)+ xml_text_sequence? | xml_text_sequence
+XmlText ::= (XML_TEMPLATE_TEXT Expression EXPRESSION_END)+ XML_TEXT_SEQUENCE? | XML_TEXT_SEQUENCE
 
 XmlQuotedString ::= XmlSingleQuotedString | XmlDoubleQuotedString
 
-XmlSingleQuotedString ::= single_quote (xml_single_quoted_template_string Expression expression_end)* xml_single_quoted_string_sequence? single_quote_end
+XmlSingleQuotedString ::= SINGLE_QUOTE (XML_SINGLE_QUOTED_TEMPLATE_STRING Expression EXPRESSION_END)* XML_SINGLE_QUOTED_STRING_SEQUENCE? SINGLE_QUOTE_END
 
-XmlDoubleQuotedString ::= double_quote (xml_double_quoted_template_string Expression expression_end)* xml_double_quoted_string_sequence? double_quote_end
+XmlDoubleQuotedString ::= DOUBLE_QUOTE (XML_DOUBLE_QUOTED_TEMPLATE_STRING Expression EXPRESSION_END)* XML_DOUBLE_QUOTED_STRING_SEQUENCE? DOUBLE_QUOTE_END
 
-XmlQualifiedName ::= (xml_qname QNAME_SEPARATOR)? xml_qname | xml_tag_expression_start Expression expression_end
+XmlQualifiedName ::= (XML_QNAME QNAME_SEPARATOR)? XML_QNAME | XML_TAG_EXPRESSION_START Expression EXPRESSION_END
 
 // Todo - Uncomment
-StringTemplateLiteral ::= string_template_literal_start StringTemplateContent? string_template_literal_end {pin=1 /*recoverWhile=StringTemplateLiteralRecover*/}
+StringTemplateLiteral ::= STRING_TEMPLATE_LITERAL_START StringTemplateContent? STRING_TEMPLATE_LITERAL_END {pin=1 /*recoverWhile=StringTemplateLiteralRecover*/}
 
 // Todo - Update to statement recover
 /*private StringTemplateLiteralRecover ::= !(SEMICOLON | string | int | identifier)*/
 
 StringTemplateContent ::= StringTemplateExpressionContent | StringTemplateTextContent
 
-private StringTemplateExpressionContent ::= StringTemplateExpression+ string_template_text?
-private StringTemplateExpression ::= string_template_expression_start Expression expression_end /*{pin=1}*/
-private StringTemplateTextContent ::= string_template_text
+private StringTemplateExpressionContent ::= StringTemplateExpression+ STRING_TEMPLATE_TEXT?
+private StringTemplateExpression ::= STRING_TEMPLATE_EXPRESSION_START Expression EXPRESSION_END /*{pin=1}*/
+private StringTemplateTextContent ::= STRING_TEMPLATE_TEXT
 
 AnyIdentifierName ::= identifier | ReservedWord
 
@@ -694,35 +722,35 @@ ReservedWord ::= foreach | map
 
 // Deprecated parsing.
 
-deprecatedAttachment ::= deprecated_template_start deprecatedText? deprecated_template_end
+deprecatedAttachment ::= DEPRECATED_TEMPLATE_START deprecatedText? DEPRECATED_TEMPLATE_END
 
-deprecatedText ::= deprecatedTemplateInlineCode (deprecated_template_text | deprecatedTemplateInlineCode)*
-                   | deprecated_template_text (deprecated_template_text | deprecatedTemplateInlineCode)*
+deprecatedText ::= deprecatedTemplateInlineCode (DEPRECATED_TEMPLATE_TEXT | deprecatedTemplateInlineCode)*
+                   | DEPRECATED_TEMPLATE_TEXT (DEPRECATED_TEMPLATE_TEXT | deprecatedTemplateInlineCode)*
 
 deprecatedTemplateInlineCode ::= singleBackTickDeprecatedInlineCode | doubleBackTickDeprecatedInlineCode | tripleBackTickDeprecatedInlineCode
 
-singleBackTickDeprecatedInlineCode ::= sb_deprecated_inline_code_start single_back_tick_inline_code? single_back_tick_inline_code_end
+singleBackTickDeprecatedInlineCode ::= SB_DEPRECATED_INLINE_CODE_START SINGLE_BACK_TICK_INLINE_CODE? SINGLE_BACK_TICK_INLINE_CODE_END
 
-doubleBackTickDeprecatedInlineCode ::= db_deprecated_inline_code_start double_back_tick_inline_code? double_back_tick_inline_code_end
+doubleBackTickDeprecatedInlineCode ::= DB_DEPRECATED_INLINE_CODE_START DOUBLE_BACK_TICK_INLINE_CODE? DOUBLE_BACK_TICK_INLINE_CODE_END
 
-tripleBackTickDeprecatedInlineCode ::= tb_deprecated_inline_code_start triple_back_tick_inline_code? triple_back_tick_inline_code_end
+tripleBackTickDeprecatedInlineCode ::= TB_DEPRECATED_INLINE_CODE_START TRIPLE_BACK_TICK_INLINE_CODE? TRIPLE_BACK_TICK_INLINE_CODE_END
 
 
 // Documentation parsing.
 
-documentationAttachment ::= documentation_template_start documentationTemplateContent? documentation_template_end
+documentationAttachment ::= DOCUMENTATION_TEMPLATE_START documentationTemplateContent? DOCUMENTATION_TEMPLATE_END
 
 documentationTemplateContent ::= docText? documentationTemplateAttributeDescription+ | docText
 
-documentationTemplateAttributeDescription ::= documentation_template_attribute_start identifier documentation_template_attribute_end docText?
+documentationTemplateAttributeDescription ::= DOCUMENTATION_TEMPLATE_ATTRIBUTE_START identifier DOCUMENTATION_TEMPLATE_ATTRIBUTE_END docText?
 
-docText ::= documentationTemplateInlineCode (documentation_template_text | documentationTemplateInlineCode)*
-            | documentation_template_text  (documentation_template_text | documentationTemplateInlineCode)*
+docText ::= documentationTemplateInlineCode (DOCUMENTATION_TEMPLATE_TEXT | documentationTemplateInlineCode)*
+            | DOCUMENTATION_TEMPLATE_TEXT  (DOCUMENTATION_TEMPLATE_TEXT | documentationTemplateInlineCode)*
 
 documentationTemplateInlineCode ::= singleBackTickDocInlineCode | doubleBackTickDocInlineCode | tripleBackTickDocInlineCode
 
-singleBackTickDocInlineCode ::= sb_doc_inline_code_start single_back_tick_inline_code? single_back_tick_inline_code_end
+singleBackTickDocInlineCode ::= SB_DOC_INLINE_CODE_START SINGLE_BACK_TICK_INLINE_CODE? SINGLE_BACK_TICK_INLINE_CODE_END
 
-doubleBackTickDocInlineCode ::= db_doc_inline_code_start double_back_tick_inline_code? double_back_tick_inline_code_end
+doubleBackTickDocInlineCode ::= DB_DOC_INLINE_CODE_START DOUBLE_BACK_TICK_INLINE_CODE? DOUBLE_BACK_TICK_INLINE_CODE_END
 
-tripleBackTickDocInlineCode ::= tb_doc_inline_code_start triple_back_tick_inline_code? triple_back_tick_inline_code_end
+tripleBackTickDocInlineCode ::= TB_DOC_INLINE_CODE_START TRIPLE_BACK_TICK_INLINE_CODE? TRIPLE_BACK_TICK_INLINE_CODE_END

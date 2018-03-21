@@ -19,10 +19,8 @@ package org.ballerinalang.plugins.idea.stubs.factory;
 
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.util.containers.HashMap;
-import org.ballerinalang.plugins.idea.stubs.types.BallerinaActionDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaAliasStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaAnnotationDefinitionStubElementType;
-import org.ballerinalang.plugins.idea.stubs.types.BallerinaConnectorDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaConstantDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaEndpointDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaEnumDefinitionStubElementType;
@@ -79,8 +77,6 @@ public class BallerinaElementTypeFactory {
                 return new BallerinaStructDefinitionStubElementType(name);
             case "GLOBAL_VARIABLE_DEFINITION":
                 return new BallerinaGlobalVariableDefinitionStubElementType(name);
-            case "CONNECTOR_DEFINITION":
-                return new BallerinaConnectorDefinitionStubElementType(name);
             case "ENUM_DEFINITION":
                 return new BallerinaEnumDefinitionStubElementType(name);
             case "ANNOTATION_DEFINITION":
@@ -93,8 +89,6 @@ public class BallerinaElementTypeFactory {
                 return new BallerinaGlobalEndpointDefinitionStubElementType(name);
             case "ENDPOINT_DEFINITION":
                 return new BallerinaEndpointDefinitionStubElementType(name);
-            case "ACTION_DEFINITION":
-                return new BallerinaActionDefinitionStubElementType(name);
             case "WORKER_DEFINITION":
                 return new BallerinaWorkerDefinitionStubElementType(name);
             case "PACKAGE_NAME":

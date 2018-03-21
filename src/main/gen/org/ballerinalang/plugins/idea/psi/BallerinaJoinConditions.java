@@ -24,10 +24,10 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaJoinConditions extends BallerinaCompositeElement {
 
   @Nullable
-  PsiElement getAll();
+  BallerinaIntegerLiteral getIntegerLiteral();
 
   @Nullable
-  PsiElement getIntegerLiteral();
+  PsiElement getAll();
 
   @Nullable
   PsiElement getSome();

@@ -43,8 +43,8 @@ public class BallerinaFunctionInvocationImpl extends BallerinaCompositeElementIm
 
   @Override
   @Nullable
-  public BallerinaExpressionList getExpressionList() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaExpressionList.class);
+  public BallerinaInvocationArgList getInvocationArgList() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaInvocationArgList.class);
   }
 
   @Override
@@ -60,9 +60,15 @@ public class BallerinaFunctionInvocationImpl extends BallerinaCompositeElementIm
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getRightParenthesis() {
-    return findChildByType(RIGHT_PARENTHESIS);
+    return notNullChild(findChildByType(RIGHT_PARENTHESIS));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getAsync() {
+    return findChildByType(ASYNC);
   }
 
 }

@@ -29,7 +29,6 @@ import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
-import org.ballerinalang.plugins.idea.psi.BallerinaActionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaAlias;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
@@ -112,11 +111,11 @@ public class BallerinaPsiImplUtil {
         return endpointDeclaration.getIdentifier();
     }
 
-    @Nullable
-    public static PsiElement getIdentifier(BallerinaActionDefinition ballerinaActionDefinition) {
-        BallerinaCallableUnitSignature callableUnitSignature = ballerinaActionDefinition.getCallableUnitSignature();
-        return callableUnitSignature != null ? callableUnitSignature.getIdentifier() : null;
-    }
+//    @Nullable
+//    public static PsiElement getIdentifier(BallerinaActionDefinition ballerinaActionDefinition) {
+//        BallerinaCallableUnitSignature callableUnitSignature = ballerinaActionDefinition.getCallableUnitSignature();
+//        return callableUnitSignature != null ? callableUnitSignature.getIdentifier() : null;
+//    }
 
     @Nullable
     public static String getName(BallerinaFunctionDefinition ballerinaFunctionDefinition) {

@@ -49,6 +49,12 @@ public class BallerinaNamespaceDeclarationImpl extends BallerinaNamedElementImpl
 
   @Override
   @Nullable
+  public PsiElement getQuotedStringLiteral() {
+    return findChildByType(QUOTED_STRING_LITERAL);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
   }
@@ -63,12 +69,6 @@ public class BallerinaNamespaceDeclarationImpl extends BallerinaNamedElementImpl
   @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getQuotedStringLiteral() {
-    return findChildByType(QUOTED_STRING_LITERAL);
   }
 
   @Override

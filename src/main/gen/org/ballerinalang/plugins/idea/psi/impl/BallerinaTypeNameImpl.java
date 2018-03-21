@@ -26,7 +26,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaTypeNameImpl extends BallerinaCompositeElementImpl implements BallerinaTypeName {
+public abstract class BallerinaTypeNameImpl extends BallerinaCompositeElementImpl implements BallerinaTypeName {
 
   public BallerinaTypeNameImpl(ASTNode node) {
     super(node);
@@ -39,24 +39,6 @@ public class BallerinaTypeNameImpl extends BallerinaCompositeElementImpl impleme
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof BallerinaVisitor) accept((BallerinaVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaAnnotatedTypeName getAnnotatedTypeName() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaAnnotatedTypeName.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaGroupTypeName getGroupTypeName() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaGroupTypeName.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaTupleTypeName getTupleTypeName() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaTupleTypeName.class);
   }
 
 }

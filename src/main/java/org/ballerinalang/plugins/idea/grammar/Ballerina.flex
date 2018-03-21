@@ -291,6 +291,8 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "next"                                      { return NEXT; }
     "new"                                       { return NEW; }
 
+    "object"                                    { return OBJECT; }
+
     "package"                                   { return PACKAGE; }
     "parameter"                                 { return TYPE_PARAMETER; }
     "private"                                   { return PRIVATE; }

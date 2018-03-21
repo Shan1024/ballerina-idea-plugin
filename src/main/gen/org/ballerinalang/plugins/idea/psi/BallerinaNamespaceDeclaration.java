@@ -26,6 +26,9 @@ import org.ballerinalang.plugins.idea.stubs.BallerinaNamespaceDeclarationStub;
 public interface BallerinaNamespaceDeclaration extends BallerinaNamedElement, StubBasedPsiElement<BallerinaNamespaceDeclarationStub> {
 
   @Nullable
+  PsiElement getQuotedStringLiteral();
+
+  @Nullable
   PsiElement getSemicolon();
 
   @Nullable
@@ -33,9 +36,6 @@ public interface BallerinaNamespaceDeclaration extends BallerinaNamedElement, St
 
   @Nullable
   PsiElement getIdentifier();
-
-  @Nullable
-  PsiElement getQuotedStringLiteral();
 
   @NotNull
   PsiElement getXmlns();

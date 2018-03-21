@@ -27,10 +27,10 @@ public interface BallerinaXmlQualifiedName extends BallerinaCompositeElement {
   BallerinaExpression getExpression();
 
   @Nullable
-  PsiElement getQnameSeparator();
+  PsiElement getExpressionEnd();
 
   @Nullable
-  PsiElement getExpressionEnd();
+  PsiElement getQnameSeparator();
 
   @Nullable
   PsiElement getXmlTagExpressionStart();

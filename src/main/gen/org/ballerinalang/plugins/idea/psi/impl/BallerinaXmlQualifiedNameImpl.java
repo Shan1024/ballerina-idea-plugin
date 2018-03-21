@@ -49,14 +49,14 @@ public class BallerinaXmlQualifiedNameImpl extends BallerinaCompositeElementImpl
 
   @Override
   @Nullable
-  public PsiElement getQnameSeparator() {
-    return findChildByType(QNAME_SEPARATOR);
+  public PsiElement getExpressionEnd() {
+    return findChildByType(EXPRESSION_END);
   }
 
   @Override
   @Nullable
-  public PsiElement getExpressionEnd() {
-    return findChildByType(EXPRESSION_END);
+  public PsiElement getQnameSeparator() {
+    return findChildByType(QNAME_SEPARATOR);
   }
 
   @Override

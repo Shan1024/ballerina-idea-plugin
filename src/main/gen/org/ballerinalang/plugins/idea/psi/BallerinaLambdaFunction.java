@@ -27,18 +27,18 @@ public interface BallerinaLambdaFunction extends BallerinaCompositeElement {
   BallerinaCallableUnitBody getCallableUnitBody();
 
   @Nullable
+  BallerinaFormalParameterList getFormalParameterList();
+
+  @Nullable
+  BallerinaReturnParameter getReturnParameter();
+
+  @Nullable
   PsiElement getLeftParenthesis();
 
   @Nullable
   PsiElement getRightParenthesis();
 
-  @Nullable
-  PsiElement getFormalParameterList();
-
   @NotNull
   PsiElement getFunction();
-
-  @Nullable
-  PsiElement getReturnParameter();
 
 }

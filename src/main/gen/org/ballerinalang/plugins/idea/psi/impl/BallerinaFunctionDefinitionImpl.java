@@ -108,11 +108,6 @@ public class BallerinaFunctionDefinitionImpl extends BallerinaNamedElementImpl<B
   }
 
   @Nullable
-  public PsiElement getIdentifier() {
-    return BallerinaPsiImplUtil.getIdentifier(this);
-  }
-
-  @Nullable
   public String getName() {
     return BallerinaPsiImplUtil.getName(this);
   }

@@ -33,7 +33,7 @@ public interface BallerinaBuiltInTypeName extends BallerinaCompositeElement {
   BallerinaSimpleTypeName getSimpleTypeName();
 
   @Nullable
-  BallerinaTypeTypeName getTypeTypeName();
+  BallerinaTypeDescTypeName getTypeDescTypeName();
 
   @Nullable
   BallerinaValueTypeName getValueTypeName();

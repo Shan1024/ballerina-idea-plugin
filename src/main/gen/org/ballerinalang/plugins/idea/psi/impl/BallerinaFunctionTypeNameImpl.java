@@ -54,6 +54,12 @@ public class BallerinaFunctionTypeNameImpl extends BallerinaCompositeElementImpl
   }
 
   @Override
+  @Nullable
+  public BallerinaReturnParameter getReturnParameter() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaReturnParameter.class);
+  }
+
+  @Override
   @NotNull
   public PsiElement getLeftParenthesis() {
     return notNullChild(findChildByType(LEFT_PARENTHESIS));
@@ -63,12 +69,6 @@ public class BallerinaFunctionTypeNameImpl extends BallerinaCompositeElementImpl
   @Nullable
   public PsiElement getRightParenthesis() {
     return findChildByType(RIGHT_PARENTHESIS);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getReturnParameter() {
-    return findChildByType(RETURNPARAMETER);
   }
 
   @Override

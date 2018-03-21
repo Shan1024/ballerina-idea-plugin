@@ -27,7 +27,7 @@ public interface BallerinaInvocation extends BallerinaCompositeElement {
   BallerinaAnyIdentifierName getAnyIdentifierName();
 
   @Nullable
-  BallerinaExpressionList getExpressionList();
+  BallerinaInvocationArgList getInvocationArgList();
 
   @NotNull
   PsiElement getDot();

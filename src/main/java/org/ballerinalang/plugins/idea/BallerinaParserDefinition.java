@@ -35,20 +35,16 @@ import org.ballerinalang.plugins.idea.psi.BallerinaTypes;
 import org.jetbrains.annotations.NotNull;
 
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ABORT;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ACTION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ALL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ANNOTATION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ANY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.AS;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ATTACH;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BIND;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BLOB;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BOOLEAN;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BREAK;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CATCH;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CONNECTOR;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CONST;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CREATE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ELSE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ENDPOINT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ENUM;
@@ -62,7 +58,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IF;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IMPORT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IN;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INT;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INTEGERLITERAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INTEGER_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.JOIN;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.JSON;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LENGTHOF;
@@ -75,7 +71,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PACKAGE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PARAMETER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PRIVATE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PUBLIC;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.QUOTEDSTRINGLITERAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.QUOTED_STRING_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RESOURCE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETRIES;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETURN;
@@ -105,12 +101,12 @@ public class BallerinaParserDefinition implements ParserDefinition {
     public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);
     public static final TokenSet COMMENTS = TokenSet.create(LINE_COMMENT);
 
-    public static final TokenSet STRINGS = TokenSet.create(QUOTEDSTRINGLITERAL);
+    public static final TokenSet STRINGS = TokenSet.create(QUOTED_STRING_LITERAL);
 
-    public static final TokenSet NUMBERS = TokenSet.create(INTEGERLITERAL);
+    public static final TokenSet NUMBERS = TokenSet.create(INTEGER_LITERAL);
 
-    public static final TokenSet KEYWORDS = TokenSet.create(ABORT, ACTION, ALL, ANNOTATION, ANY, AS, ATTACH, BIND,
-            BLOB, BOOLEAN, BREAK, CATCH, CONNECTOR, CONST, CREATE, ELSE, ENDPOINT, ENUM, FAILED, FINALLY, FLOAT,
+    public static final TokenSet KEYWORDS = TokenSet.create(ABORT, ALL, ANNOTATION, ANY, AS, BIND,
+            BLOB, BOOLEAN, BREAK, CATCH, CONST, ELSE, ENDPOINT, ENUM, FAILED, FINALLY, FLOAT,
             FOREACH, FORK, FUNCTION, IF, IMPORT, IN, INT, JOIN, JSON, LENGTHOF, LOCK, MAP, NATIVE, NEXT, PACKAGE,
             PARAMETER, PRIVATE, PUBLIC, RESOURCE, RETRIES, RETURN, RETURNS, SERVICE, SOME, STRING, STRUCT, TABLE,
             TIMEOUT, TRANSACTION, TRANSFORMER, TRY, TYPE, TYPEOF, THROW, WHILE, WITH, WORKER, VAR, VERSION, XML, XMLNS);
