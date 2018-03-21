@@ -109,12 +109,9 @@ DOCUMENTATION_TEMPLATE_ATTRIBUTE_END = {RIGHT_BRACE} {RIGHT_BRACE}
 EXPRESSION_START = "{{"
 EXPRESSION_END = "}}"
 
-STRING_LITERAL_ESCAPED_SEQUENCE = "\\" | "\{{"
-STRING_TEMPLATE_VALID_CHAR_SEQUENCE = \{ | \\ ~\\
-STRING_TEMPLATE_STRING_CHAR = [^`\{\\] | \\ [`\{] | {WHITE_SPACE} | {STRING_LITERAL_ESCAPED_SEQUENCE}
-STRING_TEMPLATE_EXPRESSION_START = {STRING_TEMPLATE_TEXT}? {EXPRESSION_START}
-STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_STRING_CHAR} {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}?)+
-                       | {STRING_TEMPLATE_VALID_CHAR_SEQUENCE} ({STRING_TEMPLATE_STRING_CHAR} {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}?)*
+HEX_DIGITS = {HEX_DIGIT} ({HEX_DIGIT_OR_UNDERSCORE}* {HEX_DIGIT})?
+HEX_DIGIT_OR_UNDERSCORE = {HEX_DIGIT} | "_"
+
 
 // XML
 XML_COMMENT_START = "<!--"
@@ -180,7 +177,6 @@ XML_COMMENT_ALLOWED_SEQUENCE = {XML_BRACES_SEQUENCE} | {XML_COMMENT_SPECIAL_SEQU
 XML_COMMENT_SPECIAL_SEQUENCE = ">"+ | (">"* "-" ">"+)+ | "-"? ">"* "-"+
 
 // DOCUMENTATION_TEMPLATE
-
 DOCUMENTATION_TEMPLATE_END = {RIGHT_BRACE}
 DOCUMENTATION_TEMPLATE_ATTRIBUTE_START = {ATTRIBUTE_PREFIX} {EXPRESSION_START}
 SB_DOC_INLINE_CODE_START = {ATTRIBUTE_PREFIX}? {DOC_BACK_TICK}
@@ -194,25 +190,21 @@ DOCUMENTATION_ESCAPED_SEQUENCE = '\\\\'
 DOCUMENTATION_VALID_CHAR_SEQUENCE = [FPTRV] [^`{}\\] | [FPTRV] '\\' [{}`] | [FPTRV] '\\' [^{}`] | '\\' ~'\\'
 
 // TRIPLE_BACKTICK_INLINE_CODE
-
 TRIPLE_BACK_TICK_INLINE_CODE_END = {BACKTICK} {BACKTICK} {BACKTICK}
 TRIPLE_BACK_TICK_INLINE_CODE = {TRIPLE_BACK_TICK_INLINE_CODE_CHAR}+
 TRIPLE_BACK_TICK_INLINE_CODE_CHAR = [^`] | [`] [^`] | [`] [`] [^`]
 
 // DOUBLE_BACKTICK_INLINE_CODE
-
 DOUBLE_BACK_TICK_INLINE_CODE_END = {BACKTICK} {BACKTICK}
 DOUBLE_BACK_TICK_INLINE_CODE = {DOUBLE_BACK_TICK_INLINE_CODE_CHAR}+
 DOUBLE_BACK_TICK_INLINE_CODE_CHAR = [^`] | [`] [^`]
 
 // SINGLE_BACKTICK_INLINE_CODE
-
 SINGLE_BACK_TICK_INLINE_CODE_END = {BACKTICK}
 SINGLE_BACK_TICK_INLINE_CODE = {SINGLE_BACK_TICK_INLINE_CODE_CHAR}+
 SINGLE_BACK_TICK_INLINE_CODE_CHAR = [^`]
 
 // DEPRECATED_TEMPLATE
-
 DEPRECATED_TEMPLATE_END = {RIGHT_BRACE}
 SB_DEPRECATED_INLINE_CODE_START = {DEPRECATED_BACK_TICK}
 DB_DEPRECATED_INLINE_CODE_START = {DEPRECATED_BACK_TICK} {DEPRECATED_BACK_TICK}
@@ -223,9 +215,13 @@ DEPRECATED_BACK_TICK = '`'
 DEPRECATED_ESCAPED_SEQUENCE = '\\\\'
 DEPRECATED_VALID_CHAR_SEQUENCE = '\\' ~'\\'
 
-
-HEX_DIGITS = {HEX_DIGIT} ({HEX_DIGIT_OR_UNDERSCORE}* {HEX_DIGIT})?
-HEX_DIGIT_OR_UNDERSCORE = {HEX_DIGIT} | "_"
+// STRING_TEMPLATE
+STRING_LITERAL_ESCAPED_SEQUENCE = "\\" | "\{{"
+STRING_TEMPLATE_VALID_CHAR_SEQUENCE = \{ | \\ ~\\
+STRING_TEMPLATE_STRING_CHAR = [^`\{\\] | \\ [`\{] | {WHITE_SPACE} | {STRING_LITERAL_ESCAPED_SEQUENCE}
+STRING_TEMPLATE_EXPRESSION_START = {STRING_TEMPLATE_TEXT}? {EXPRESSION_START}
+STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_STRING_CHAR} {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}?)+
+                       | {STRING_TEMPLATE_VALID_CHAR_SEQUENCE} ({STRING_TEMPLATE_STRING_CHAR} {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}?)*
 
 %state XML_MODE
 %state XML_TAG_MODE
@@ -244,103 +240,139 @@ HEX_DIGIT_OR_UNDERSCORE = {HEX_DIGIT} | "_"
 
 %%
 <YYINITIAL> {
-    {WHITE_SPACE}             { return WHITE_SPACE; }
+    "abort"                                     { return ABORT; }
+    "all"                                       { return ALL; }
+    "annotation"                                { return ANNOTATION; }
+    "any"                                       { return ANY; }
+    "as"                                        { return AS; }
+    "async"                                     { return ASYNC; }
+    "await"                                     { return AWAIT; }
 
-    "abort"                   { return ABORT; }
-    "action"                  { return ACTION; }
-    "all"                     { return ALL; }
-    "annotation"              { return ANNOTATION; }
-    "any"                     { return ANY; }
-    "as"                      { return AS; }
-    "attach"                  { return ATTACH; }
-    "bind"                    { return BIND; }
-    "blob"                    { return BLOB; }
-    "boolean"                 { return BOOLEAN; }
-    "break"                   { return BREAK; }
-    "catch"                   { return CATCH; }
-    "connector"               { return CONNECTOR; }
-    "const"                   { return CONST; }
-    "create"                  { return CREATE; }
-    "else"                    { return ELSE; }
-    "endpoint"                { return ENDPOINT; }
-    "enum"                    { return ENUM; }
-    "failed"                  { return FAILED; }
-    "finally"                 { return FINALLY; }
-    "float"                   { return FLOAT; }
-    "foreach"                 { return FOREACH; }
-    "fork"                    { return FORK; }
-    "function"                { return FUNCTION; }
-    "if"                      { return IF; }
-    "import"                  { return IMPORT; }
-    "in"                      { return IN; }
-    "int"                     { return INT; }
-    "join"                    { return JOIN; }
-    "json"                    { return JSON; }
-    "lengthof"                { return LENGTHOF; }
-    "lock"                    { return LOCK; }
-    "map"                     { return MAP; }
-    "native"                  { return NATIVE; }
-    "next"                    { return NEXT; }
-    "package"                 { return PACKAGE; }
-    "parameter"               { return TYPE_PARAMETER; }
-    "private"                 { return PRIVATE; }
-    "public"                  { return PUBLIC; }
-    "resource"                { return RESOURCE; }
-    "retries"                 { return RETRIES; }
-    "return"                  { return RETURN; }
-    "returns"                 { return RETURNS; }
-    "service"                 { return SERVICE; }
-    "some"                    { return SOME; }
-    "string"                  { return STRING; }
-    "struct"                  { return STRUCT; }
-    "table"                   { return TABLE; }
-    "timeout"                 { return TIMEOUT; }
-    "transaction"             { return TRANSACTION; }
-    "transformer"             { return TRANSFORMER; }
-    "try"                     { return TRY; }
-    "type"                    { return TYPE; }
-    "typeof"                  { return TYPEOF; }
-    "throw"                   { return THROW; }
-    "while"                   { return WHILE; }
-    "with"                    { return WITH; }
-    "worker"                  { return WORKER; }
-    "var"                     { return VAR; }
-    "version"                 { return VERSION; }
-    "xml"                     { return XML; }
-    "xmlns"                   { return XMLNS; }
+    "bind"                                      { return BIND; }
+    "blob"                                      { return BLOB; }
+    "boolean"                                   { return BOOLEAN; }
+    "break"                                     { return BREAK; }
 
-    ";"                       { return SEMICOLON; }
-    ":"                       { return COLON; }
-    "."                       { return DOT; }
-    ","                       { return COMMA; }
-    "{"                       { return LEFT_BRACE; }
-    "}"                       { return RIGHT_BRACE; }
-    "("                       { return LEFT_PARENTHESIS; }
-    ")"                       { return RIGHT_PARENTHESIS; }
-    "["                       { return LEFT_BRACKET; }
-    "]"                       { return RIGHT_BRACKET; }
-    "?"                       { return QUESTION_MARK; }
-    "="                       { return ASSIGN; }
-    "+"                       { return ADD; }
-    "-"                       { return SUB; }
-    "*"                       { return MUL; }
-    "/"                       { return DIV; }
-    "^"                       { return POW; }
-    "%"                       { return MOD; }
-    "!"                       { return NOT; }
-    "=="                      { return EQUAL; }
-    "!="                      { return NOT_EQUAL; }
-    ">"                       { return GT; }
-    "<"                       { return LT; }
-    ">="                      { return GT_EQUAL; }
-    "<="                      { return LT_EQUAL; }
-    "&&"                      { return AND; }
-    "||"                      { return OR; }
-    "->"                      { return RARROW; }
-    "<-"                      { return LARROW; }
-    "@"                       { return AT; }
-    //  "`"                       { return BACKTICK; }
-    ".."                      { return RANGE; }
+    "catch"                                     { return CATCH; }
+    "const"                                     { return CONST; }
+
+    "documentation"                             { return DOCUMENTATION; }
+    "deprecated"                                { return DEPRECATED; }
+
+    "else"                                      { return ELSE; }
+    "endpoint"                                  { return ENDPOINT; }
+    "enum"                                      { return ENUM; }
+
+    "failed"                                    { return FAILED; }
+    "finally"                                   { return FINALLY; }
+    "float"                                     { return FLOAT; }
+    "foreach"                                   { return FOREACH; }
+    "fork"                                      { return FORK; }
+    "function"                                  { return FUNCTION; }
+
+    "if"                                        { return IF; }
+    "import"                                    { return IMPORT; }
+    "in"                                        { return IN; }
+    "int"                                       { return INT; }
+
+    "join"                                      { return JOIN; }
+    "json"                                      { return JSON; }
+
+    "lengthof"                                  { return LENGTHOF; }
+    "lock"                                      { return LOCK; }
+
+    "map"                                       { return MAP; }
+
+    "native"                                    { return NATIVE; }
+    "next"                                      { return NEXT; }
+    "new"                                       { return NEW; }
+
+    "package"                                   { return PACKAGE; }
+    "parameter"                                 { return TYPE_PARAMETER; }
+    "private"                                   { return PRIVATE; }
+    "public"                                    { return PUBLIC; }
+
+    "retries"                                   { return RETRIES; }
+    "return"                                    { return RETURN; }
+    "returns"                                   { return RETURNS; }
+
+    "service"                                   { return SERVICE; }
+    "some"                                      { return SOME; }
+    "string"                                    { return STRING; }
+    "streamlet"                                 { return STREAMLET; }
+    "struct"                                    { return STRUCT; }
+
+    "table"                                     { return TABLE; }
+    "timeout"                                   { return TIMEOUT; }
+    "transaction"                               { return TRANSACTION; }
+    "transformer"                               { return TRANSFORMER; }
+    "try"                                       { return TRY; }
+    "type"                                      { return TYPE; }
+    "typedesc"                                  { return TYPEDESC; }
+    "typeof"                                    { return TYPEOF; }
+    "throw"                                     { return THROW; }
+
+    "while"                                     { return WHILE; }
+    "with"                                      { return WITH; }
+    "worker"                                    { return WORKER; }
+
+    "var"                                       { return VAR; }
+    "version"                                   { return VERSION; }
+
+    "xml"                                       { return XML; }
+    "xmlns"                                     { return XMLNS; }
+
+    ";"                                         { return SEMICOLON; }
+    ":"                                         { return COLON; }
+    "::"                                        { return DOUBLE_COLON; }
+    "."                                         { return DOT; }
+    ","                                         { return COMMA; }
+    "{"                                         { return LEFT_BRACE; }
+    "}"                                         { return RIGHT_BRACE; }
+    "("                                         { return LEFT_PARENTHESIS; }
+    ")"                                         { return RIGHT_PARENTHESIS; }
+    "["                                         { return LEFT_BRACKET; }
+    "]"                                         { return RIGHT_BRACKET; }
+    "?"                                         { return QUESTION_MARK; }
+
+    "="                                         { return ASSIGN; }
+    "+"                                         { return ADD; }
+    "-"                                         { return SUB; }
+    "*"                                         { return MUL; }
+    "/"                                         { return DIV; }
+    "^"                                         { return POW; }
+    "%"                                         { return MOD; }
+
+    "!"                                         { return NOT; }
+    "=="                                        { return EQUAL; }
+    "!="                                        { return NOT_EQUAL; }
+    ">"                                         { return GT; }
+    "<"                                         { return LT; }
+    ">="                                        { return GT_EQUAL; }
+    "<="                                        { return LT_EQUAL; }
+    "&&"                                        { return AND; }
+    "||"                                        { return OR; }
+
+    "->"                                        { return RARROW; }
+    "<-"                                        { return LARROW; }
+    "@"                                         { return AT; }
+    "`"                                         { return BACKTICK; }
+    ".."                                        { return RANGE; }
+    "..."                                       { return ELLIPSIS; }
+    "|"                                         { return PIPE; }
+    "=>"                                        { return EQUAL_GT; }
+
+    "+="                                        { return COMPOUND_ADD; }
+    "-="                                        { return COMPOUND_SUB; }
+    "*="                                        { return COMPOUND_MUL; }
+    "/="                                        { return COMPOUND_DIV; }
+
+    "=?"                                        { return SAFE_ASSIGNMENT; }
+
+    "++"                                        { return INCREMENT; }
+    "--"                                        { return DECREMENT; }
+
+    {WHITE_SPACE}                               { return WHITE_SPACE; }
 
     {QUOTED_STRING_LITERAL}                     { return QUOTEDSTRINGLITERAL; }
     {IDENTIFIER}                                { return IDENTIFIER; }
@@ -349,11 +381,9 @@ HEX_DIGIT_OR_UNDERSCORE = {HEX_DIGIT} | "_"
 
     {XML_LITERAL_START}                         { inXmlTemplate = true; yybegin(XML_MODE); return XML_LITERAL_START; }
     {STRING_TEMPLATE_LITERAL_START}             { inStringTemplate = true; yybegin(STRING_TEMPLATE_MODE); return STRING_TEMPLATE_LITERAL_START; }
-    // Todo - Move to a separate logic
     {EXPRESSION_END}                            { return checkExpressionEnd(); }
 
     {DOCUMENTATION_TEMPLATE_START}              { inDocTemplate = true; yybegin(DOCUMENTATION_TEMPLATE_MODE); return DOCUMENTATION_TEMPLATE_START; }
-    {DOCUMENTATION_TEMPLATE_ATTRIBUTE_END}      { if(inDocTemplate) {yybegin(DOCUMENTATION_TEMPLATE_MODE); } return DOCUMENTATION_TEMPLATE_ATTRIBUTE_END; }
     {DEPRECATED_TEMPLATE_START}                 { inDeprecatedTemplate = true; yybegin(DEPRECATED_TEMPLATE_MODE); return DEPRECATED_TEMPLATE_START; }
     .                                           { return BAD_CHARACTER; }
 }
