@@ -42,21 +42,9 @@ public class BallerinaCallableUnitBodyImpl extends BallerinaCompositeElementImpl
   }
 
   @Override
-  @Nullable
+  @NotNull
   public BallerinaBlock getBlock() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaBlock.class);
-  }
-
-  @Override
-  @NotNull
-  public List<BallerinaEndpointDefinition> getEndpointDefinitionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaEndpointDefinition.class);
-  }
-
-  @Override
-  @NotNull
-  public List<BallerinaWorkerDefinition> getWorkerDefinitionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaWorkerDefinition.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaBlock.class));
   }
 
   @Override

@@ -48,9 +48,9 @@ public class BallerinaAnnotationDefinitionImpl extends BallerinaNamedElementImpl
   }
 
   @Override
-  @Nullable
-  public BallerinaAttachmentPoints getAttachmentPoints() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaAttachmentPoints.class);
+  @NotNull
+  public List<BallerinaAttachmentPoint> getAttachmentPointList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaAttachmentPoint.class);
   }
 
   @Override

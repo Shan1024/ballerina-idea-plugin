@@ -24,9 +24,18 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaBuiltInTypeName extends BallerinaCompositeElement {
 
   @Nullable
+  BallerinaAnyTypeName getAnyTypeName();
+
+  @Nullable
   BallerinaBuiltInReferenceTypeName getBuiltInReferenceTypeName();
 
   @Nullable
-  BallerinaTypeName getTypeName();
+  BallerinaSimpleTypeName getSimpleTypeName();
+
+  @Nullable
+  BallerinaTypeTypeName getTypeTypeName();
+
+  @Nullable
+  BallerinaValueTypeName getValueTypeName();
 
 }

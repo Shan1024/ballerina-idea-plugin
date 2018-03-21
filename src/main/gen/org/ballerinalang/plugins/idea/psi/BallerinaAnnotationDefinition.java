@@ -25,8 +25,8 @@ import org.ballerinalang.plugins.idea.stubs.BallerinaAnnotationDefinitionStub;
 
 public interface BallerinaAnnotationDefinition extends BallerinaNamedElement, StubBasedPsiElement<BallerinaAnnotationDefinitionStub> {
 
-  @Nullable
-  BallerinaAttachmentPoints getAttachmentPoints();
+  @NotNull
+  List<BallerinaAttachmentPoint> getAttachmentPointList();
 
   @Nullable
   BallerinaUserDefineTypeName getUserDefineTypeName();

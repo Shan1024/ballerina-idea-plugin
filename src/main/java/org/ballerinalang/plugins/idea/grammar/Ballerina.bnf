@@ -34,126 +34,80 @@
 
     tokenTypeClass = "org.ballerinalang.plugins.idea.psi.BallerinaTokenType"
 
-    tokens=[
-    // Todo -  remove keywords after uncommenting all parser rules
-    PACKAGE         = 'package'
-    IMPORT          = 'import'
-    AS              = 'as'
-    PUBLIC          = 'public'
-    PRIVATE         = 'private'
-    NATIVE          = 'native'
-    SERVICE         = 'service'
-    RESOURCE        = 'resource'
-    FUNCTION        = 'function'
-    CONNECTOR       = 'connector'
-    ACTION          = 'action'
-    STRUCT          = 'struct'
-    ANNOTATION      = 'annotation'
-    ENUM            = 'enum'
-    TYPE_PARAMETER  = 'parameter'
-    CONST           = 'const'
-    TRANSFORMER     = 'transformer'
-    WORKER          = 'worker'
-    ENDPOINT        = 'endpoint'
-    XMLNS           = 'xmlns'
-    RETURNS         = 'returns'
-    VERSION         = 'version'
+    tokens = [
 
-    INT             = 'int'
-    FLOAT           = 'float'
-    BOOLEAN         = 'boolean'
-    STRING          = 'string'
-    BLOB            = 'blob'
-    MAP             = 'map'
-    JSON            = 'json'
-    XML             = 'xml'
-    TABLE           = 'table'
-    ANY             = 'any'
-    TYPE            = 'type'
+        DOCUMENTATION       = 'documentation';
+        DEPRECATED          = 'deprecated';
 
-    VAR             = 'var'
-    CREATE          = 'create'
-    ATTACH          = 'attach'
-    IF              = 'if'
-    ELSE            = 'else'
-    FOREACH         = 'foreach'
-    WHILE           = 'while'
-    NEXT            = 'next'
-    BREAK           = 'break'
-    FORK            = 'fork'
-    JOIN            = 'join'
-    SOME            = 'some'
-    ALL             = 'all'
-    TIMEOUT         = 'timeout'
-    TRY             = 'try'
-    CATCH           = 'catch'
-    FINALLY         = 'finally'
-    THROW           = 'throw'
-    RETURN          = 'return'
-    TRANSACTION     = 'transaction'
-    ABORT           = 'abort'
-    FAILED          = 'failed'
-    RETRIES         = 'retries'
-    LENGTHOF        = 'lengthof'
-    TYPEOF          = 'typeof'
-    WITH            = 'with'
-    BIND            = 'bind'
-    IN              = 'in'
-    LOCK            = 'lock'
+        // Separators
+        SEMICOLON           = ';' ;
+        COLON               = ':' ;
+        DOUBLE_COLON        = '::' ;
+        DOT                 = '.' ;
+        COMMA               = ',' ;
+        LEFT_BRACE          = '{' ;
+        RIGHT_BRACE         = '}' ;
+        LEFT_PARENTHESIS    = '(' ;
+        RIGHT_PARENTHESIS   = ')' ;
+        LEFT_BRACKET        = '[' ;
+        RIGHT_BRACKET       = ']' ;
+        QUESTION_MARK       = '?' ;
 
-    // Separators
+        // Arithmetic operators
+        ASSIGN              = '=' ;
+        ADD                 = '+' ;
+        SUB                 = '-' ;
+        MUL                 = '*' ;
+        DIV                 = '/' ;
+        POW                 = '^' ;
+        MOD                 = '%';
 
-    SEMICOLON           = ';'
-    COLON               = ':'
-    DOT                 = '.'
-    COMMA               = ','
-    LEFT_BRACE          = '{'
-    RIGHT_BRACE         = '}'
-    LEFT_PARENTHESIS    = '('
-    RIGHT_PARENTHESIS   = ')'
-    LEFT_BRACKET        = '['
-    RIGHT_BRACKET       = ']'
-    QUESTION_MARK       = '?'
+        // Relational operators
+        NOT                 = '!' ;
+        EQUAL               = '==' ;
+        NOT_EQUAL           = '!=' ;
+        GT                  = '>' ;
+        LT                  = '<' ;
+        GT_EQUAL            = '>=' ;
+        LT_EQUAL            = '<=' ;
+        AND                 = '&&' ;
+        OR                  = '||' ;
 
-    // Arithmetic operators
+        // Additional symbols
+        RARROW              = '->' ;
+        LARROW              = '<-' ;
+        AT                  = '@' ;
+        BACKTICK            = '`' ;
+        RANGE               = '..' ;
+        ELLIPSIS            = '...' ;
+        PIPE                = '|' ;
+        EQUAL_GT            = '=>' ;
 
-    ASSIGN  = '='
-    ADD     = '+'
-    SUB     = '-'
-    MUL     = '*'
-    DIV     = '/'
-    POW     = '^'
-    MOD     = '%'
+        // Compound Assignment operators.
+        COMPOUND_ADD        = '+=' ;
+        COMPOUND_SUB        = '-=' ;
+        COMPOUND_MUL        = '*=' ;
+        COMPOUND_DIV        = '/=' ;
 
-    // Relational operators
-    NOT         = '!'
-    EQUAL       = '=='
-    NOT_EQUAL   = '!='
-    GT          = '>'
-    LT          = '<'
-    GT_EQUAL    = '>='
-    LT_EQUAL    = '<='
-    AND         = '&&'
-    OR          = '||'
+        // Safe assignment operator
+        SAFE_ASSIGNMENT     = '=?' ;
 
-    // Additional symbols
-    RARROW      = '->'
-    LARROW      = '<-'
-    AT          = '@'
-    BACKTICK    = '`'
-    RANGE       = '..'
+        // Post Arithmetic operators.
+        INCREMENT           = '++' ;
+        DECREMENT           = '--' ;
 
-    WHITE_SPACE = 'regexp:\s+'
-    LINE_COMMENT = 'regexp://[^\r\n]*'
-    identifier = 'regexp:[a-zA-Z_][a-zA-Z0-9_]*'
-    quotedStringLiteral = "regexp:\"(.*)\""
-    integerLiteral = "regexp:\d+"
+        LINE_COMMENT        = 'regexp://[^\r\n]*'
 
-    string_template_literal_start = "regexp:string\s*`"
-    string_template_literal_end = "`"
-
-    string_template_expression_start = "{{"
-    string_template_expression_end = "}}"
+        //    WHITE_SPACE = 'regexp:\s+'
+        //    identifier = 'regexp:[a-zA-Z_][a-zA-Z0-9_]*'
+        //    quotedStringLiteral = "regexp:\"(.*)\""
+        //    integerLiteral = "regexp:\d+"
+        //
+        //    string_template_literal_start = "regexp:string\s*`"
+        //    string_template_literal_end = "`"
+        //
+        //    string_template_expression_start = "{{"
+        //    string_template_expression_end = "}}"
   ]
 
     extends("(FunctionInvocation|SimpleVariable|MapArrayVariable|FieldVariable|XmlAttribVariable|Invocation)Reference") = VariableReference
@@ -163,7 +117,7 @@
     extends("((Simple|Array|Record|Xml|StringTemplate)Literal)") = Expression
     extends("Binary(Pow|DivMulMod|AddSub|Compare|Equal|And|Or)Expression") = BinaryExpression
 
-    extends("(AnyType|TypeType|ValueType|ReferenceType|arrayType)Name|BinaryAndExpression") = TypeName
+    extends("(Simple|Array|Nullable|Union|Group|Tuple|Annotated)TypeName|BinaryAndExpression") = TypeName
 
     // Each named definition (which can be renamed) should implement this interface.
     implements("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
@@ -229,50 +183,40 @@ Alias ::= as identifier {
 // Note - Global variable definition should be the first definition since it can contain identifier as type.
 Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? (StructDefinition
     | GlobalVariableDefinition | ServiceDefinition | FunctionDefinition | ConnectorDefinition | EnumDefinition
-    | AnnotationDefinition | TransformerDefinition | ConstantDefinition | GlobalEndpointDefinition) {
+    | AnnotationDefinition | TransformerDefinition | ConstantDefinition | GlobalEndpointDefinition | objectDefinition
+    | streamletDefinition) {
    /* recoverWhile=TopLevelDefinitionRecover*/
 }
 
 private TopLevelDefinitionRecover ::= !(service | function | connector | struct | enum | annotation | transformer | endpoint | const | boolean | int | float | string | blob | public | identifier)
 
-ServiceDefinition ::= service (LT NameReference GT) identifier ServiceBody {pin=1}
+ServiceDefinition ::= service (LT NameReference GT) identifier ServiceEndpointAttachments?  ServiceBody {pin=1}
+ServiceEndpointAttachments ::= BIND NameReference (COMMA NameReference)*
 ServiceBody ::= LEFT_BRACE EndpointDefinition* VariableDefinitionStatement* ResourceDefinition* RIGHT_BRACE
 
-ResourceDefinition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? resource identifier LEFT_PARENTHESIS ParameterList RIGHT_PARENTHESIS CallableUnitBody {pin=4}
+ResourceDefinition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? identifier LEFT_PARENTHESIS resourceParameterList? RIGHT_PARENTHESIS CallableUnitBody {pin=4}
+resourceParameterList ::=  ENDPOINT identifier (COMMA ParameterList)? | ParameterList
 
-CallableUnitBody ::= LEFT_BRACE BlockWithEndpoint RIGHT_BRACE | LEFT_BRACE EndpointDefinition* WorkerDefinition+ RIGHT_BRACE
+CallableUnitBody ::= LEFT_BRACE BlockWithEndpoint RIGHT_BRACE | LEFT_BRACE BlockWithEndpointAndWorker RIGHT_BRACE
 
 Block ::= Statement* {methods=[processDeclarations]} /*{recoverWhile=StatementRecover}*/
-BlockWithEndpoint ::= EndpointDefinition* Block {elementType=Block}
+BlockWithEndpoint ::= EndpointDefinition* Statement* {elementType=Block}
+BlockWithEndpointAndWorker ::= EndpointDefinition* WorkerDefinition+ {elementType=Block}
 
 //private StatementRecover ::= !(int | string | '}' | '=')
 
 //private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
 
-FunctionDefinition ::= NativeFunctionDefinition | NonNativeFunctionDefinition {
+FunctionDefinition ::= FunctionWithReceiver | FunctionWithoutReceiver {
     pin=1 methods=[getIdentifier getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFunctionDefinitionStub"
 }
-private NativeFunctionDefinition ::= (public)? native function (LT Parameter GT)? CallableUnitSignature SEMICOLON {pin=3}
-private NonNativeFunctionDefinition ::= (public)? function (LT Parameter GT)? CallableUnitSignature CallableUnitBody {pin=2}
+private FunctionWithReceiver ::= (public)? (native)? function (LT Parameter GT)? CallableUnitSignature (CallableUnitBody | SEMICOLON) {pin=3}
+private FunctionWithoutReceiver ::= (public)? (native)? function identifier CallableUnitSignature CallableUnitBody {pin=3}
 
-LambdaFunction ::= function LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ReturnParameters? CallableUnitBody {pin=1}
+LambdaFunction ::= function LEFT_PARENTHESIS formalParameterList? RIGHT_PARENTHESIS returnParameter? CallableUnitBody {pin=1}
 
 // Todo - cache and add Signature owner?
-CallableUnitSignature ::= identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ReturnParameters? {pin=1}
-
-ConnectorDefinition ::= (public)? connector identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS ConnectorBody {
-    pin=2
-    stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaConnectorDefinitionStub"
-}
-
-ConnectorBody ::= LEFT_BRACE EndpointDefinition* VariableDefinitionStatement* ActionDefinition* RIGHT_BRACE
-
-ActionDefinition ::= NativeActionDefinition | NonNativeActionDefinition {
-    methods=[getIdentifier]
-    stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaActionDefinitionStub"
-}
-private NativeActionDefinition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? native action  CallableUnitSignature SEMICOLON {pin=5}
-private NonNativeActionDefinition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? action CallableUnitSignature CallableUnitBody {pin=4}
+CallableUnitSignature ::= identifier LEFT_PARENTHESIS formalParameterList? RIGHT_PARENTHESIS returnParameter? {pin=1}
 
 StructDefinition ::= (public)? struct identifier StructBody {
     pin=2
@@ -285,14 +229,43 @@ StructBody ::= LEFT_BRACE FieldDefinition* PrivateStructBody? RIGHT_BRACE
 // Todo - Cache
 PrivateStructBody ::= private COLON FieldDefinition* {pin=1}
 
-AnnotationDefinition ::= (public)? annotation (LT AttachmentPoints GT)? identifier UserDefineTypeName? SEMICOLON {
+objectDefinition ::= TYPE_TYPE identifier OBJECT LEFT_BRACE objectBody RIGHT_BRACE {pin=1}
+
+objectBody ::= publicObjectFields? privateObjectFields? objectInitializer? objectFunctions?
+
+publicObjectFields ::= PUBLIC LEFT_BRACE objectFieldDefinition* RIGHT_BRACE {pin=1}
+
+privateObjectFields ::= PRIVATE LEFT_BRACE objectFieldDefinition* RIGHT_BRACE {pin=1}
+
+objectInitializer ::= AnnotationAttachment* documentationAttachment? (PUBLIC)? (NATIVE)? NEW objectInitializerParameterList CallableUnitBody
+
+objectInitializerParameterList ::= LEFT_PARENTHESIS objectParameterList? RIGHT_PARENTHESIS
+
+objectFunctions ::= (AnnotationAttachment* documentationAttachment? deprecatedAttachment? objectFunctionDefinition)+
+
+// TODO merge with fieldDefinition later
+objectFieldDefinition ::= TypeName identifier (COLON SimpleLiteral)? (COMMA | SEMICOLON)
+
+// TODO try to merge with formalParameterList later
+objectParameterList ::= (objectParameter | objectDefaultableParameter) (COMMA (objectParameter | objectDefaultableParameter))* (COMMA RestParameter)? | RestParameter
+
+// TODO try to merge with parameter later
+objectParameter ::= AnnotationAttachment* TypeName? identifier
+
+// TODO try to merge with defaultable Parameter later
+objectDefaultableParameter ::= objectParameter COLON Expression
+
+// TODO merge with functionDefinition later
+objectFunctionDefinition ::= (PUBLIC)? (NATIVE)? FUNCTION objectCallableUnitSignature (CallableUnitBody | SEMICOLON)
+
+//TODO merge with callableUnitSignature later
+objectCallableUnitSignature ::= identifier LEFT_PARENTHESIS formalParameterList? RIGHT_PARENTHESIS returnParameter?
+
+
+
+AnnotationDefinition ::= (public)? annotation (LT AttachmentPoint (COMMA AttachmentPoint)* GT)? identifier UserDefineTypeName? SEMICOLON {
     pin=2
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaAnnotationDefinitionStub"
-}
-
-AttachmentPoints ::= AttachmentPoint (COMMA AttachmentPoint)* {
-    pin(".*")=1
-    /*recoverWhile=AttachmentPointsRecover*/
 }
 
 //private AttachmentPointsRecover ::= !(GT | Identifier | SEMICOLON)
@@ -306,7 +279,7 @@ Enumerator ::= identifier {
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaEnumeratorStub"
 }
 
-GlobalVariableDefinition ::= (public)? TypeName identifier (ASSIGN Expression )? SEMICOLON {
+GlobalVariableDefinition ::= (public)? TypeName identifier ((ASSIGN | SAFE_ASSIGNMENT) Expression)? SEMICOLON {
     pin=2
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaGlobalVariableDefinitionStub"
 }
@@ -318,7 +291,7 @@ TransformerDefinition ::= (public)? transformer LT ParameterList GT (identifier 
 
 // Todo - Need to update the service?
 // Note - "parameter" is treated differently here because there is a parser rule named "parameter" as well.
-AttachmentPoint ::= service (LT identifier? GT)? | resource | connector | action | function | struct | enum | const | TYPE_PARAMETER | annotation | transformer {
+AttachmentPoint ::= service | resource | function | struct | streamlet | enum | endpoint | const | TYPE_PARAMETER | annotation | transformer {
     /*recoverWhile=AttachmentPointRecover*/
 }
 
@@ -329,6 +302,7 @@ ConstantDefinition ::= (public)? const ValueTypeName identifier ASSIGN Expressio
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaConstantDefinitionStub"
 }
 
+// Todo - Rename as declaration
 WorkerDefinition ::= worker identifier LEFT_BRACE Block RIGHT_BRACE {
     pin=1
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaWorkerDefinitionStub"
@@ -339,43 +313,75 @@ GlobalEndpointDefinition ::= public? EndpointDefinition {
     methods=[getIdentifier] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaGlobalEndpointDefinitionStub"
 }
 
-EndpointDefinition ::= AnnotationAttachment* endpoint (LT NameReference GT) identifier RecordLiteral? {
+EndpointDefinition ::= AnnotationAttachment* endpoint EndpointType identifier EndpointInitlization? SEMICOLON {
     pin=2
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaEndpointDefinitionStub"
 }
 
-TypeName ::= AnyTypeName | TypeTypeName | ValueTypeName | ReferenceTypeName | arrayTypeName
+EndpointType ::= NameReference
 
-BuiltInTypeName ::= AnyTypeName | TypeTypeName | ValueTypeName | BuiltInReferenceTypeName | arrayTypeName
+EndpointInitlization ::= RecordLiteral | ASSIGN VariableReference
 
-arrayTypeName ::= TypeName (LEFT_BRACKET RIGHT_BRACKET)+
+//todo
+TypeName ::= SimpleTypeName
+             | ArrayTypeName
+             | NullableTypeName
+             | UnionTypeName
+             | GroupTypeName
+             | TupleTypeName
+             | AnnotatedTypeName
+ArrayTypeName ::= TypeName (LEFT_BRACKET RIGHT_BRACKET)+
+NullableTypeName ::= TypeName PIPE null_literal
+UnionTypeName ::= TypeName (PIPE TypeName)+
+GroupTypeName ::= LEFT_PARENTHESIS TypeName RIGHT_PARENTHESIS
+TupleTypeName ::= LEFT_PARENTHESIS TypeName (COMMA TypeName)* RIGHT_PARENTHESIS
+AnnotatedTypeName ::= SimpleTypeName | AnnotationAttachment* SimpleTypeName
 
-ReferenceTypeName ::= BuiltInReferenceTypeName | UserDefineTypeName | AnonStructTypeName
+SimpleTypeName ::= AnyTypeName
+                   | TypeTypeName
+                   | ValueTypeName
+                   | ReferenceTypeName
+AnyTypeName ::= any
+TypeTypeName ::= type
+
+BuiltInTypeName ::= AnyTypeName
+                    | TypeTypeName
+                    | ValueTypeName
+                    | BuiltInReferenceTypeName
+                    | SimpleTypeName (LEFT_BRACKET RIGHT_BRACKET)+
+
+ReferenceTypeName ::= BuiltInReferenceTypeName
+                      | UserDefineTypeName
+                      | AnonStructTypeName
 
 UserDefineTypeName ::= NameReference
 
 AnonStructTypeName ::= struct StructBody {pin=1}
 
-AnyTypeName::= any
-
-TypeTypeName::= type
-
 ValueTypeName ::=   boolean | int | float | string | blob
 
-BuiltInReferenceTypeName ::= MapTypeName | XmlTypeName | JsonTypeName | TableTypeName | FunctionTypeName
-
+BuiltInReferenceTypeName ::= MapTypeName
+                             | FutureTypeName
+                             | XmlTypeName
+                             | JsonTypeName
+                             | TableTypeName
+                             | StreamTypeName
+                             | StreamletTypeName
+                             | AggregationTypeName
+                             | FunctionTypeName
 MapTypeName ::= map (LT TypeName GT)? {pin=1}
-
+FutureTypeName ::= future (LT TypeName GT)?
 XmlTypeName ::= xml (LT (LEFT_BRACE XmlNamespaceName RIGHT_BRACE)? XmlLocalName GT)? {pin=1}
-
 JsonTypeName ::= json (LT NameReference GT)? {pin=1}
-
 TableTypeName ::= table (LT NameReference GT)? {pin=1}
+StreamTypeName ::= stream (LT NameReference GT)? {pin=1}
+StreamletTypeName ::= streamlet
+AggregationTypeName ::= TYPE_AGGREGATION (LT NameReference GT)?
 
 // Todo - Pin 1?
-FunctionTypeName ::= function LEFT_PARENTHESIS (ParameterList | ParameterTypeNameList)? RIGHT_PARENTHESIS ReturnParameters? {pin=3}
+FunctionTypeName ::= function LEFT_PARENTHESIS (ParameterList | ParameterTypeNameList)? RIGHT_PARENTHESIS ReturnParameter? {pin=3}
 
-XmlNamespaceName ::= quotedStringLiteral
+XmlNamespaceName ::= quoted_string_literal
 
 XmlLocalName ::= identifier
 
@@ -390,6 +396,8 @@ AnnotationAttachment ::= AT NameReference RecordLiteral?
 Statement ::=
         ExpressionStmt
     |   AssignmentStatement
+    |   CompoundAssignmentStatement
+    |   PostIncrementStatement
     |   VariableDefinitionStatement
     |   IfElseStatement
     |   ForeachStatement
@@ -404,7 +412,8 @@ Statement ::=
     |   TransactionStatement
     |   AbortStatement
     |   LockStatement
-    |   NamespaceDeclarationStatement /*{recoverWhile = StatementRecover}*/
+    |   NamespaceDeclarationStatement
+    |   StreamingQueryStatement /*{recoverWhile = StatementRecover}*/
 
 // Todo - Add more tokens
 private StatementRecover ::= !(int | string | '}' | ';')
@@ -427,6 +436,14 @@ ArrayLiteral ::= LEFT_BRACKET ExpressionList? RIGHT_BRACKET
 TypeInitExpression ::= new UserDefineTypeName LEFT_PARENTHESIS ExpressionList? RIGHT_PARENTHESIS {pin=1}
 
 AssignmentStatement ::= (var)? VariableReferenceList ASSIGN (Expression | ActionInvocation) SEMICOLON /*{pin=2}*/
+
+CompoundAssignmentStatement ::= VariableReference CompoundOperator Expression SEMICOLON
+
+CompoundOperator ::= COMPOUND_ADD | COMPOUND_SUB | COMPOUND_MUL | COMPOUND_DIV
+
+PostIncrementStatement ::= VariableReference PostArithmeticOperator SEMICOLON
+
+PostArithmeticOperator ::= INCREMENT | DECREMENT
 
 VariableReferenceList ::= VariableReference (COMMA VariableReference)*
 
@@ -456,7 +473,7 @@ ForkJoinStatement ::= fork LEFT_BRACE WorkerDefinition* RIGHT_BRACE JoinClause? 
 JoinClause ::= join (LEFT_PARENTHESIS JoinConditions RIGHT_PARENTHESIS)? LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
 // Todo - Needs reorder?
-JoinConditions ::= (some integerLiteral | all) (identifier (COMMA identifier)*)? {pin=1}
+JoinConditions ::= (some integer_literal | all) (identifier (COMMA identifier)*)? {pin=1}
 
 // below typeName is only 'message[]'
 TimeoutClause ::= timeout LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_PARENTHESIS TypeName identifier RIGHT_PARENTHESIS LEFT_BRACE Block RIGHT_BRACE {pin=1}
@@ -536,7 +553,7 @@ RetriesStatement ::= retries LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS {pin=
 
 NamespaceDeclarationStatement ::= NamespaceDeclaration /*{pin=1}*/
 
-NamespaceDeclaration ::= xmlns quotedStringLiteral (as identifier)? SEMICOLON {
+NamespaceDeclaration ::= xmlns quoted_String_Literal (as identifier)? SEMICOLON {
     pin=1
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaNamespaceDeclarationStub"
 }
@@ -624,7 +641,7 @@ FieldDefinition ::= TypeName identifier (ASSIGN SimpleLiteral)? SEMICOLON {
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFieldDefinitionStub"
 }
 
-SimpleLiteral ::= (ADD|SUB)? integerLiteral /*| (ADD|SUB)? floatingPointLiteral*/ | quotedStringLiteral /*| booleanLiteral | nullLiteral*/ {pin=1}
+SimpleLiteral ::= (ADD|SUB)? integer_literal /*| (ADD|SUB)? floatingPointLiteral*/ | quoted_String_Literal /*| booleanLiteral | nullLiteral*/ {pin=1}
 
 // XML parsing
 

@@ -30,9 +30,6 @@ public interface BallerinaDefinition extends BallerinaCompositeElement {
   BallerinaAnnotationDefinition getAnnotationDefinition();
 
   @Nullable
-  BallerinaConnectorDefinition getConnectorDefinition();
-
-  @Nullable
   BallerinaConstantDefinition getConstantDefinition();
 
   @Nullable
@@ -61,5 +58,14 @@ public interface BallerinaDefinition extends BallerinaCompositeElement {
 
   @Nullable
   BallerinaDocumentationAttachment getDocumentationAttachment();
+
+  @Nullable
+  BallerinaObjectDefinition getObjectDefinition();
+
+  @Nullable
+  PsiElement getConnectorDefinition();
+
+  @Nullable
+  PsiElement getStreamletDefinition();
 
 }

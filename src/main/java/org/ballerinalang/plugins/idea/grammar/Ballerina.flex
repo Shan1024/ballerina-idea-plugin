@@ -65,6 +65,10 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 
 //QUOTED_STRING_LITERAL = \" [^\"]* \"
 
+
+
+
+
 // Note - Invalid escaped characters should be annotated at runtime.
 // This is done becuase otherwise the string wont be identified correctly.
 // Also the strings can either be enclosed in single or double quotes or no quotes at all.
@@ -374,10 +378,10 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
 
     {WHITE_SPACE}                               { return WHITE_SPACE; }
 
-    {QUOTED_STRING_LITERAL}                     { return QUOTEDSTRINGLITERAL; }
     {IDENTIFIER}                                { return IDENTIFIER; }
+    {INTIGER_LITERAL}                           { return INTEGER_LITERAL; }
+    {QUOTED_STRING_LITERAL}                     { return QUOTED_STRING_LITERAL; }
     {LINE_COMMENT}                              { return LINE_COMMENT; }
-    {INTIGER_LITERAL}                           { return INTEGERLITERAL; }
 
     {XML_LITERAL_START}                         { inXmlTemplate = true; yybegin(XML_MODE); return XML_LITERAL_START; }
     {STRING_TEMPLATE_LITERAL_START}             { inStringTemplate = true; yybegin(STRING_TEMPLATE_MODE); return STRING_TEMPLATE_LITERAL_START; }

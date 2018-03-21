@@ -44,7 +44,7 @@ public class BallerinaXmlNamespaceNameImpl extends BallerinaCompositeElementImpl
   @Override
   @NotNull
   public PsiElement getQuotedStringLiteral() {
-    return notNullChild(findChildByType(QUOTEDSTRINGLITERAL));
+    return notNullChild(findChildByType(QUOTED_STRING_LITERAL));
   }
 
 }

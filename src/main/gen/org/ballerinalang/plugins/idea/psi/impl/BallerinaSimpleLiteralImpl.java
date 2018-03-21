@@ -56,13 +56,13 @@ public class BallerinaSimpleLiteralImpl extends BallerinaExpressionImpl implemen
   @Override
   @Nullable
   public PsiElement getIntegerLiteral() {
-    return findChildByType(INTEGERLITERAL);
+    return findChildByType(INTEGER_LITERAL);
   }
 
   @Override
   @Nullable
   public PsiElement getQuotedStringLiteral() {
-    return findChildByType(QUOTEDSTRINGLITERAL);
+    return findChildByType(QUOTED_STRING_LITERAL);
   }
 
 }

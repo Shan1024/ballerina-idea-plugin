@@ -55,26 +55,20 @@ public class BallerinaEndpointDefinitionImpl extends BallerinaNamedElementImpl<B
 
   @Override
   @Nullable
-  public BallerinaNameReference getNameReference() {
-    return PsiTreeUtil.getStubChildOfType(this, BallerinaNameReference.class);
+  public BallerinaEndpointInitlization getEndpointInitlization() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaEndpointInitlization.class);
   }
 
   @Override
   @Nullable
-  public BallerinaRecordLiteral getRecordLiteral() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaRecordLiteral.class);
+  public BallerinaEndpointType getEndpointType() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaEndpointType.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getGt() {
-    return findChildByType(GT);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLt() {
-    return findChildByType(LT);
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
   }
 
   @Override

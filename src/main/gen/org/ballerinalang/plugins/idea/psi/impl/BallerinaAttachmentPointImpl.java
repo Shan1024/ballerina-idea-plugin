@@ -43,26 +43,8 @@ public class BallerinaAttachmentPointImpl extends BallerinaCompositeElementImpl 
 
   @Override
   @Nullable
-  public PsiElement getGt() {
-    return findChildByType(GT);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLt() {
-    return findChildByType(LT);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getTypeParameter() {
     return findChildByType(TYPE_PARAMETER);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getAction() {
-    return findChildByType(ACTION);
   }
 
   @Override
@@ -73,14 +55,14 @@ public class BallerinaAttachmentPointImpl extends BallerinaCompositeElementImpl 
 
   @Override
   @Nullable
-  public PsiElement getConnector() {
-    return findChildByType(CONNECTOR);
+  public PsiElement getConst() {
+    return findChildByType(CONST);
   }
 
   @Override
   @Nullable
-  public PsiElement getConst() {
-    return findChildByType(CONST);
+  public PsiElement getEndpoint() {
+    return findChildByType(ENDPOINT);
   }
 
   @Override
@@ -97,12 +79,6 @@ public class BallerinaAttachmentPointImpl extends BallerinaCompositeElementImpl 
 
   @Override
   @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getResource() {
     return findChildByType(RESOURCE);
   }
@@ -111,6 +87,12 @@ public class BallerinaAttachmentPointImpl extends BallerinaCompositeElementImpl 
   @Nullable
   public PsiElement getService() {
     return findChildByType(SERVICE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getStreamlet() {
+    return findChildByType(STREAMLET);
   }
 
   @Override

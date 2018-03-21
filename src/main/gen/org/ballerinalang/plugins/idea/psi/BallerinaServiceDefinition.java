@@ -30,6 +30,9 @@ public interface BallerinaServiceDefinition extends BallerinaCompositeElement {
   BallerinaServiceBody getServiceBody();
 
   @Nullable
+  BallerinaServiceEndpointAttachments getServiceEndpointAttachments();
+
+  @Nullable
   PsiElement getGt();
 
   @Nullable

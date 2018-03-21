@@ -26,7 +26,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaReferenceTypeNameImpl extends BallerinaTypeNameImpl implements BallerinaReferenceTypeName {
+public class BallerinaReferenceTypeNameImpl extends BallerinaCompositeElementImpl implements BallerinaReferenceTypeName {
 
   public BallerinaReferenceTypeNameImpl(ASTNode node) {
     super(node);

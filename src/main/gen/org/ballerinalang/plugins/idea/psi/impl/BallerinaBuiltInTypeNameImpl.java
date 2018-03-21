@@ -43,14 +43,32 @@ public class BallerinaBuiltInTypeNameImpl extends BallerinaCompositeElementImpl 
 
   @Override
   @Nullable
+  public BallerinaAnyTypeName getAnyTypeName() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaAnyTypeName.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaBuiltInReferenceTypeName getBuiltInReferenceTypeName() {
     return PsiTreeUtil.getChildOfType(this, BallerinaBuiltInReferenceTypeName.class);
   }
 
   @Override
   @Nullable
-  public BallerinaTypeName getTypeName() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class);
+  public BallerinaSimpleTypeName getSimpleTypeName() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaSimpleTypeName.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaTypeTypeName getTypeTypeName() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaTypeTypeName.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaValueTypeName getValueTypeName() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaValueTypeName.class);
   }
 
 }

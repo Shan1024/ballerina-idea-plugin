@@ -29,14 +29,14 @@ public interface BallerinaFunctionTypeName extends BallerinaCompositeElement {
   @Nullable
   BallerinaParameterTypeNameList getParameterTypeNameList();
 
-  @Nullable
-  BallerinaReturnParameters getReturnParameters();
-
   @NotNull
   PsiElement getLeftParenthesis();
 
   @Nullable
   PsiElement getRightParenthesis();
+
+  @Nullable
+  PsiElement getReturnParameter();
 
   @NotNull
   PsiElement getFunction();

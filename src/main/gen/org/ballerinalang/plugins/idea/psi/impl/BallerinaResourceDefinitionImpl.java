@@ -55,12 +55,6 @@ public class BallerinaResourceDefinitionImpl extends BallerinaCompositeElementIm
 
   @Override
   @Nullable
-  public BallerinaParameterList getParameterList() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaParameterList.class);
-  }
-
-  @Override
-  @Nullable
   public BallerinaDeprecatedAttachment getDeprecatedAttachment() {
     return PsiTreeUtil.getChildOfType(this, BallerinaDeprecatedAttachment.class);
   }
@@ -69,6 +63,12 @@ public class BallerinaResourceDefinitionImpl extends BallerinaCompositeElementIm
   @Nullable
   public BallerinaDocumentationAttachment getDocumentationAttachment() {
     return PsiTreeUtil.getChildOfType(this, BallerinaDocumentationAttachment.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaResourceParameterList getResourceParameterList() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaResourceParameterList.class);
   }
 
   @Override
@@ -84,15 +84,9 @@ public class BallerinaResourceDefinitionImpl extends BallerinaCompositeElementIm
   }
 
   @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
-  }
-
-  @Override
   @NotNull
-  public PsiElement getResource() {
-    return notNullChild(findChildByType(RESOURCE));
+  public PsiElement getIdentifier() {
+    return notNullChild(findChildByType(IDENTIFIER));
   }
 
 }

@@ -24,25 +24,16 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaAttachmentPoint extends BallerinaCompositeElement {
 
   @Nullable
-  PsiElement getGt();
-
-  @Nullable
-  PsiElement getLt();
-
-  @Nullable
   PsiElement getTypeParameter();
-
-  @Nullable
-  PsiElement getAction();
 
   @Nullable
   PsiElement getAnnotation();
 
   @Nullable
-  PsiElement getConnector();
+  PsiElement getConst();
 
   @Nullable
-  PsiElement getConst();
+  PsiElement getEndpoint();
 
   @Nullable
   PsiElement getEnum();
@@ -51,13 +42,13 @@ public interface BallerinaAttachmentPoint extends BallerinaCompositeElement {
   PsiElement getFunction();
 
   @Nullable
-  PsiElement getIdentifier();
-
-  @Nullable
   PsiElement getResource();
 
   @Nullable
   PsiElement getService();
+
+  @Nullable
+  PsiElement getStreamlet();
 
   @Nullable
   PsiElement getStruct();

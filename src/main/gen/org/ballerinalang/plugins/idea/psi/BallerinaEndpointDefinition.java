@@ -29,16 +29,13 @@ public interface BallerinaEndpointDefinition extends BallerinaNamedElement, Stub
   List<BallerinaAnnotationAttachment> getAnnotationAttachmentList();
 
   @Nullable
-  BallerinaNameReference getNameReference();
+  BallerinaEndpointInitlization getEndpointInitlization();
 
   @Nullable
-  BallerinaRecordLiteral getRecordLiteral();
+  BallerinaEndpointType getEndpointType();
 
   @Nullable
-  PsiElement getGt();
-
-  @Nullable
-  PsiElement getLt();
+  PsiElement getSemicolon();
 
   @NotNull
   PsiElement getEndpoint();

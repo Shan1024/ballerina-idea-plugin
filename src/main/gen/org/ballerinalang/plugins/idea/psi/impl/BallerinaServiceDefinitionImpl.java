@@ -55,6 +55,12 @@ public class BallerinaServiceDefinitionImpl extends BallerinaCompositeElementImp
 
   @Override
   @Nullable
+  public BallerinaServiceEndpointAttachments getServiceEndpointAttachments() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaServiceEndpointAttachments.class);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getGt() {
     return findChildByType(GT);
   }

@@ -30,13 +30,13 @@ public interface BallerinaResourceDefinition extends BallerinaCompositeElement {
   BallerinaCallableUnitBody getCallableUnitBody();
 
   @Nullable
-  BallerinaParameterList getParameterList();
-
-  @Nullable
   BallerinaDeprecatedAttachment getDeprecatedAttachment();
 
   @Nullable
   BallerinaDocumentationAttachment getDocumentationAttachment();
+
+  @Nullable
+  BallerinaResourceParameterList getResourceParameterList();
 
   @Nullable
   PsiElement getLeftParenthesis();
@@ -44,10 +44,7 @@ public interface BallerinaResourceDefinition extends BallerinaCompositeElement {
   @Nullable
   PsiElement getRightParenthesis();
 
-  @Nullable
-  PsiElement getIdentifier();
-
   @NotNull
-  PsiElement getResource();
+  PsiElement getIdentifier();
 
 }

@@ -68,7 +68,7 @@ public class BallerinaNamespaceDeclarationImpl extends BallerinaNamedElementImpl
   @Override
   @Nullable
   public PsiElement getQuotedStringLiteral() {
-    return findChildByType(QUOTEDSTRINGLITERAL);
+    return findChildByType(QUOTED_STRING_LITERAL);
   }
 
   @Override

@@ -26,7 +26,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaValueTypeNameImpl extends BallerinaTypeNameImpl implements BallerinaValueTypeName {
+public class BallerinaValueTypeNameImpl extends BallerinaCompositeElementImpl implements BallerinaValueTypeName {
 
   public BallerinaValueTypeNameImpl(ASTNode node) {
     super(node);
