@@ -26,61 +26,19 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaResourceDefinitionImpl extends BallerinaCompositeElementImpl implements BallerinaResourceDefinition {
+public class BallerinaNameReferenceWithoutPackageImpl extends BallerinaCompositeElementImpl implements BallerinaNameReferenceWithoutPackage {
 
-  public BallerinaResourceDefinitionImpl(ASTNode node) {
+  public BallerinaNameReferenceWithoutPackageImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitResourceDefinition(this);
+    visitor.visitNameReferenceWithoutPackage(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
     if (visitor instanceof BallerinaVisitor) accept((BallerinaVisitor)visitor);
     else super.accept(visitor);
-  }
-
-  @Override
-  @NotNull
-  public List<BallerinaAnnotationAttachment> getAnnotationAttachmentList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaAnnotationAttachment.class);
-  }
-
-  @Override
-  @NotNull
-  public BallerinaCallableUnitBody getCallableUnitBody() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaCallableUnitBody.class));
-  }
-
-  @Override
-  @Nullable
-  public BallerinaDeprecatedAttachment getDeprecatedAttachment() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaDeprecatedAttachment.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaDocumentationAttachment getDocumentationAttachment() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaDocumentationAttachment.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaResourceParameterList getResourceParameterList() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaResourceParameterList.class);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getLeftParenthesis() {
-    return notNullChild(findChildByType(LEFT_PARENTHESIS));
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getRightParenthesis() {
-    return notNullChild(findChildByType(RIGHT_PARENTHESIS));
   }
 
   @Override

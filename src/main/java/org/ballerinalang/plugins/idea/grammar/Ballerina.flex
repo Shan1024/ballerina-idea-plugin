@@ -66,7 +66,82 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 //QUOTED_STRING_LITERAL = \" [^\"]* \"
 
 
+DECIMAL_INTEGER_LITERAL = {DecimalNumeral} {IntegerTypeSuffix}?
 
+HEX_INTEGER_LITERAL = {HexNumeral} {IntegerTypeSuffix}?
+
+OCTAL_INTEGER_LITERAL = {OctalNumeral} {IntegerTypeSuffix}?
+
+BINARY_INTEGER_LITERAL = {BinaryNumeral} {IntegerTypeSuffix}?
+
+IntegerTypeSuffix = [lL]
+
+DecimalNumeral = 0 | {NonZeroDigit} ({Digits}? | {Underscores} {Digits})
+
+Digits = {Digit} ({DigitOrUnderscore}* {Digit})?
+
+Digit = 0 | {NonZeroDigit}
+
+NonZeroDigit = [1-9]
+
+DigitOrUnderscore = {Digit} | '_'
+
+Underscores = '_'+
+
+HexNumeral = 0 [xX] {HexDigits}
+
+HexDigits = {HexDigit} ({HexDigitOrUnderscore}* {HexDigit})?
+
+HexDigit = [0-9a-fA-F]
+
+HexDigitOrUnderscore = HexDigit | '_'
+
+OctalNumeral = 0 {Underscores}? {OctalDigits}
+
+OctalDigits = {OctalDigit} ({OctalDigitOrUnderscore}* {OctalDigit})?
+
+OctalDigit = [0-7]
+
+OctalDigitOrUnderscore = {OctalDigit} | '_'
+
+BinaryNumeral = 0 [bB] {BinaryDigits}
+
+BinaryDigits = {BinaryDigit} ({BinaryDigitOrUnderscore}* {BinaryDigit})?
+
+BinaryDigit = [01]
+
+BinaryDigitOrUnderscore = {BinaryDigit} | '_'
+
+// §3.10.2 Floating-Point Literals
+
+FLOATING_POINT_LITERAL = {DecimalFloatingPointLiteral} | {HexadecimalFloatingPointLiteral}
+
+DecimalFloatingPointLiteral = {Digits} "." ({Digits} {ExponentPart}? {FloatTypeSuffix}? | {Digits}? {ExponentPart} {FloatTypeSuffix}? | {Digits}? {ExponentPart}? {FloatTypeSuffix})
+    | "." {Digits} {ExponentPart}? {FloatTypeSuffix}?
+    | {Digits} {ExponentPart} {FloatTypeSuffix}?
+    | {Digits} {FloatTypeSuffix}
+
+ExponentPart = {ExponentIndicator} {SignedInteger}
+
+ExponentIndicator = [eE]
+
+SignedInteger = {Sign}? {Digits}
+
+Sign = [+-]
+
+FloatTypeSuffix = [fFdD]
+
+HexadecimalFloatingPointLiteral = {HexSignificand} {BinaryExponent} {FloatTypeSuffix}?
+
+HexSignificand = {HexNumeral} "."? | '0' [xX] {HexDigits}? "." {HexDigits}
+
+BinaryExponent = {BinaryExponentIndicator} {SignedInteger}
+
+BinaryExponentIndicator = [pP]
+
+// §3.10.3 Boolean Literals
+
+BOOLEAN_LITERAL = "true" | "false"
 
 
 // Note - Invalid escaped characters should be annotated at runtime.
@@ -79,16 +154,24 @@ QUOTED_STRING_LITERAL = \" {STRING_CHARACTERS}? \"?
 
 NULL_LITERAL = 'null'
 
-DIGIT = [0-9]
-DIGITS = {DIGIT}+
-DECIMAL_INTEGER_LITERAL = {DIGITS}
-INTIGER_LITERAL = {DECIMAL_INTEGER_LITERAL}
+//DIGIT = [0-9]
+//DIGITS = {DIGIT}+
+//DECIMAL_INTEGER_LITERAL = {DIGITS}
+//INTIGER_LITERAL = {DECIMAL_INTEGER_LITERAL}
 
-LETTER = [a-zA-z_] | [^\u0000-\u007F\uD800-\uDBFF] | [\uD800-\uDBFF] [\uDC00-\uDFFF]
+LETTER = [a-zA-Z_] | [^\u0000-\u007F\uD800-\uDBFF] | [\uD800-\uDBFF] [\uDC00-\uDFFF]
 DIGIT = [0-9]
 LETTER_OR_DIGIT = [a-zA-Z0-9_] | [^\u0000-\u007F\uD800-\uDBFF] | [\uD800-\uDBFF] [\uDC00-\uDFFF]
 
-IDENTIFIER = {LETTER} {LETTER_OR_DIGIT}*
+IDENTIFIER = {LETTER} {LETTER_OR_DIGIT}* | {IdentifierLiteral}
+
+IdentifierLiteral = \^ \" {IdentifierLiteralChar}+ \"
+
+IdentifierLiteralChar = [^|\"\\\b\f\n\r\t] | {IdentifierLiteralEscapeSequence}
+
+IdentifierLiteralEscapeSequence = \\ [|\"\\\/] | \\\\ [btnfr] | {UnicodeEscape}
+
+UnicodeEscape = "\\u" {HexDigit} {HexDigit} {HexDigit} {HexDigit}
 
 WHITE_SPACE=\s+
 
@@ -110,6 +193,7 @@ DOCUMENTATION_TEMPLATE_START = {DOCUMENTATION} {WHITE_SPACE}* {LEFT_BRACE}
 DEPRECATED_TEMPLATE_START = {DEPRECATED} {WHITE_SPACE}* {LEFT_BRACE}
 
 // Todo - Need to add spaces between braces?
+// Note - This is used in checkExpressionEnd() function.
 DOCUMENTATION_TEMPLATE_ATTRIBUTE_END = {RIGHT_BRACE} {RIGHT_BRACE}
 
 EXPRESSION_START = "{{"
@@ -389,9 +473,15 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     {WHITE_SPACE}                               { return WHITE_SPACE; }
 
     {NULL_LITERAL}                              { return NULL_LITERAL; }
-    {IDENTIFIER}                                { return IDENTIFIER; }
-    {INTIGER_LITERAL}                           { return INTEGER_LITERAL; }
+    {BOOLEAN_LITERAL}                           { return BOOLEAN_LITERAL; }
+    {DECIMAL_INTEGER_LITERAL}                   { return DECIMAL_INTEGER_LITERAL; }
+    {HEX_INTEGER_LITERAL}                       { return HEX_INTEGER_LITERAL; }
+    {OCTAL_INTEGER_LITERAL}                     { return OCTAL_INTEGER_LITERAL; }
+    {BINARY_INTEGER_LITERAL}                    { return BINARY_INTEGER_LITERAL; }
+    {FLOATING_POINT_LITERAL}                    { return FLOATING_POINT_LITERAL; }
     {QUOTED_STRING_LITERAL}                     { return QUOTED_STRING_LITERAL; }
+
+    {IDENTIFIER}                                { return IDENTIFIER; }
     {LINE_COMMENT}                              { return LINE_COMMENT; }
 
     {XML_LITERAL_START}                         { inXmlTemplate = true; yybegin(XML_MODE); return XML_LITERAL_START; }

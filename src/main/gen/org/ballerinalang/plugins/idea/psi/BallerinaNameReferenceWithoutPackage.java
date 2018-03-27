@@ -20,28 +20,8 @@ package org.ballerinalang.plugins.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.StubBasedPsiElement;
-import org.ballerinalang.plugins.idea.stubs.BallerinaVariableDefinitionStatementStub;
 
-public interface BallerinaVariableDefinitionStatement extends BallerinaNamedElement, StubBasedPsiElement<BallerinaVariableDefinitionStatementStub> {
-
-  @Nullable
-  BallerinaActionInvocation getActionInvocation();
-
-  @Nullable
-  BallerinaExpression getExpression();
-
-  @NotNull
-  BallerinaTypeName getTypeName();
-
-  @Nullable
-  PsiElement getAssign();
-
-  @Nullable
-  PsiElement getSafeAssignment();
-
-  @NotNull
-  PsiElement getSemicolon();
+public interface BallerinaNameReferenceWithoutPackage extends BallerinaCompositeElement {
 
   @NotNull
   PsiElement getIdentifier();

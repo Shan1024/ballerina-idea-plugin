@@ -55,8 +55,8 @@ public class BallerinaAssignmentStatementImpl extends BallerinaCompositeElementI
 
   @Override
   @NotNull
-  public BallerinaVariableReferenceList getVariableReferenceList() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaVariableReferenceList.class));
+  public BallerinaVariableReference getVariableReference() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaVariableReference.class));
   }
 
   @Override

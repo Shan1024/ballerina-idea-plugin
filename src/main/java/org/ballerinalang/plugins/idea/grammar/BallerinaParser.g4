@@ -635,7 +635,7 @@ awaitExpression
 
 //reusable productions
 
-nameReference
+-nameReference
     :   (Identifier COLON)? Identifier
     ;
 

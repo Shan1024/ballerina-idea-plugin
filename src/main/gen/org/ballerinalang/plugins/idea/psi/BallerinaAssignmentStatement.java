@@ -30,7 +30,7 @@ public interface BallerinaAssignmentStatement extends BallerinaCompositeElement 
   BallerinaExpression getExpression();
 
   @NotNull
-  BallerinaVariableReferenceList getVariableReferenceList();
+  BallerinaVariableReference getVariableReference();
 
   @Nullable
   PsiElement getAssign();

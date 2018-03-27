@@ -45,15 +45,18 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BOOLEAN;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BREAK;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CATCH;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CONST;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DECIMAL_INTEGER_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ELSE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ENDPOINT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ENUM;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FINALLY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FLOAT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FLOATING_POINT_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FOREACH;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FORK;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FUNCTION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FUTURE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.HEX_INTEGER_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IF;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IMPORT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IN;
@@ -70,6 +73,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NATIVE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NEW;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NEXT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OBJECT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OCTAL_INTEGER_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PACKAGE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PARAMETER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PRIVATE;
@@ -106,16 +110,14 @@ public class BallerinaParserDefinition implements ParserDefinition {
 
     public static final TokenSet STRINGS = TokenSet.create(QUOTED_STRING_LITERAL);
 
-    public static final TokenSet NUMBERS = TokenSet.create(INTEGER_LITERAL);
+    public static final TokenSet NUMBERS = TokenSet.create(DECIMAL_INTEGER_LITERAL, HEX_INTEGER_LITERAL,
+            OCTAL_INTEGER_LITERAL, FLOATING_POINT_LITERAL);
 
-    public static final TokenSet KEYWORDS = TokenSet.create(ABORT, ALL, ANNOTATION, ANY, AS, BIND,
-            BLOB, BOOLEAN, BREAK, CATCH, CONST, ELSE, ENDPOINT, ENUM, FINALLY, FLOAT,
-            FOREACH, FORK, FUNCTION, FUTURE, IF, IMPORT, IN, INT, JOIN, JSON, LENGTHOF, LOCK, MAP, MATCH, NATIVE, NEW,
-            NEXT,
-            OBJECT,
-            PACKAGE,
-            PARAMETER, PRIVATE, PUBLIC, RESOURCE, RETRIES, RETURN, RETURNS, SERVICE, SOME, STRING, STRUCT, TABLE,
-            TIMEOUT, TRANSACTION, TRANSFORMER, TRY, TYPE, TYPEOF, THROW, WHILE, WITH, WORKER, VAR, VERSION, XML, XMLNS);
+    public static final TokenSet KEYWORDS = TokenSet.create(ABORT, ALL, ANNOTATION, ANY, AS, BIND, BLOB, BOOLEAN,
+            BREAK, CATCH, CONST, ELSE, ENDPOINT, ENUM, FINALLY, FLOAT, FOREACH, FORK, FUNCTION, FUTURE, IF, IMPORT,
+            IN, INT, JOIN, JSON, LENGTHOF, LOCK, MAP, MATCH, NATIVE, NEW, NEXT, OBJECT, PACKAGE, PARAMETER, PRIVATE,
+            PUBLIC, RESOURCE, RETRIES, RETURN, RETURNS, SERVICE, SOME, STRING, STRUCT, TABLE, TIMEOUT, TRANSACTION,
+            TRANSFORMER, TRY, TYPE, TYPEOF, THROW, WHILE, WITH, WORKER, VAR, VERSION, XML, XMLNS);
 
     public static final TokenSet OPERATORS = TokenSet.create();
 
