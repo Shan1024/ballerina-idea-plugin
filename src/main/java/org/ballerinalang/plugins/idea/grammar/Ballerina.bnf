@@ -22,6 +22,7 @@
     extends = "org.ballerinalang.plugins.idea.psi.impl.BallerinaCompositeElementImpl"
 
     parserClass = "org.ballerinalang.plugins.idea.parser.BallerinaParser"
+  parserUtilClass="org.ballerinalang.plugins.idea.parser.BallerinaParserUtil"
 
     psiClassPrefix = "Ballerina"
     psiImplClassSuffix = "Impl"
@@ -653,15 +654,11 @@ TernaryExpression ::= Expression QUESTION_MARK Expression COLON Expression {pin=
 AwaitExpression ::= await Expression
 //reusable productions
 
-NameReference ::= PackageReference? identifier {
+NameReference ::= <<isPackageExpected>> PackageReference identifier | identifier {
     methods=[/*getReference*/ getQualifier /*resolve*/ resolveType isReferenceToLocalPackage]
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaNameReferenceStub"
 //    extends=test
 //    elementType=test
-}
-
-fake test::= PackageReference? identifier {
-
 }
 
 PackageReference ::= identifier COLON {

@@ -851,10 +851,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitTest(@NotNull BallerinaTest o) {
-    visitCompositeElement(o);
-  }
-
   public void visitTripleBackTickDeprecatedInlineCode(@NotNull BallerinaTripleBackTickDeprecatedInlineCode o) {
     visitCompositeElement(o);
   }

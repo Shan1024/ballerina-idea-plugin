@@ -20,7 +20,7 @@ package org.ballerinalang.plugins.idea.parser;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.PsiBuilder.Marker;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
-import static com.intellij.lang.parser.GeneratedParserUtilBase.*;
+import static org.ballerinalang.plugins.idea.parser.BallerinaParserUtil.*;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.tree.TokenSet;
@@ -1687,11 +1687,10 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // NameReference
   public static boolean EndpointType(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EndpointType")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, ENDPOINT_TYPE, "<endpoint type>");
     r = NameReference(b, l + 1);
-    exit_section_(b, m, ENDPOINT_TYPE, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -2066,7 +2065,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // async? NameReference LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS
   public static boolean FunctionInvocation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionInvocation")) return false;
-    if (!nextTokenIs(b, "<function invocation>", ASYNC, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, FUNCTION_INVOCATION, "<function invocation>");
     r = FunctionInvocation_0(b, l + 1);
@@ -2815,23 +2813,27 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PackageReference? identifier
+  // <<isPackageExpected>> PackageReference identifier | identifier
   public static boolean NameReference(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NameReference")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, NAME_REFERENCE, "<name reference>");
     r = NameReference_0(b, l + 1);
-    r = r && consumeToken(b, IDENTIFIER);
-    exit_section_(b, m, NAME_REFERENCE, r);
+    if (!r) r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
-  // PackageReference?
+  // <<isPackageExpected>> PackageReference identifier
   private static boolean NameReference_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NameReference_0")) return false;
-    PackageReference(b, l + 1);
-    return true;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = isPackageExpected(b, l + 1);
+    r = r && PackageReference(b, l + 1);
+    r = r && consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   /* ********************************************************** */
@@ -4617,11 +4619,10 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // NameReference
   public static boolean UserDefineTypeName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "UserDefineTypeName")) return false;
-    if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, USER_DEFINE_TYPE_NAME, "<user define type name>");
     r = NameReference(b, l + 1);
-    exit_section_(b, m, USER_DEFINE_TYPE_NAME, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
@@ -6709,7 +6710,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // FunctionInvocation
   public static boolean FunctionInvocationReference(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionInvocationReference")) return false;
-    if (!nextTokenIsSmart(b, ASYNC, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, FUNCTION_INVOCATION_REFERENCE, "<function invocation reference>");
     r = FunctionInvocation(b, l + 1);
@@ -6720,11 +6720,10 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // NameReference
   public static boolean SimpleVariableReference(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SimpleVariableReference")) return false;
-    if (!nextTokenIsSmart(b, IDENTIFIER)) return false;
     boolean r;
-    Marker m = enter_section_(b);
+    Marker m = enter_section_(b, l, _NONE_, SIMPLE_VARIABLE_REFERENCE, "<simple variable reference>");
     r = NameReference(b, l + 1);
-    exit_section_(b, m, SIMPLE_VARIABLE_REFERENCE, r);
+    exit_section_(b, l, m, r, false, null);
     return r;
   }
 
