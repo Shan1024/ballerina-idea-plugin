@@ -21,9 +21,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaStreamletTypeName extends BallerinaCompositeElement {
+public interface BallerinaOncommitStatement extends BallerinaCompositeElement {
 
   @NotNull
-  PsiElement getStreamlet();
+  BallerinaExpression getExpression();
+
+  @NotNull
+  PsiElement getAssign();
+
+  @NotNull
+  PsiElement getOncommit();
 
 }

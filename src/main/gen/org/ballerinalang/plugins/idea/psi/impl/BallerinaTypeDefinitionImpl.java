@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaObjectFunctionsImpl extends BallerinaCompositeElementImpl implements BallerinaObjectFunctions {
+public class BallerinaTypeDefinitionImpl extends BallerinaCompositeElementImpl implements BallerinaTypeDefinition {
 
-  public BallerinaObjectFunctionsImpl(ASTNode node) {
+  public BallerinaTypeDefinitionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitObjectFunctions(this);
+    visitor.visitTypeDefinition(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -42,27 +42,27 @@ public class BallerinaObjectFunctionsImpl extends BallerinaCompositeElementImpl 
   }
 
   @Override
-  @NotNull
-  public List<BallerinaAnnotationAttachment> getAnnotationAttachmentList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaAnnotationAttachment.class);
+  @Nullable
+  public BallerinaTypeName getTypeName() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getPublic() {
+    return findChildByType(PUBLIC);
   }
 
   @Override
   @NotNull
-  public List<BallerinaObjectFunctionDefinition> getObjectFunctionDefinitionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaObjectFunctionDefinition.class);
-  }
-
-  @Override
-  @NotNull
-  public List<BallerinaDeprecatedAttachment> getDeprecatedAttachmentList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaDeprecatedAttachment.class);
-  }
-
-  @Override
-  @NotNull
-  public List<BallerinaDocumentationAttachment> getDocumentationAttachmentList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaDocumentationAttachment.class);
+  public PsiElement getType() {
+    return notNullChild(findChildByType(TYPE));
   }
 
 }

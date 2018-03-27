@@ -21,18 +21,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaAggregationTypeName extends BallerinaCompositeElement {
-
-  @Nullable
-  BallerinaNameReference getNameReference();
-
-  @Nullable
-  PsiElement getGt();
-
-  @Nullable
-  PsiElement getLt();
+public interface BallerinaAwaitExpressionReference extends BallerinaVariableReference {
 
   @NotNull
-  PsiElement getTypeAggregation();
+  BallerinaAwaitExpression getAwaitExpression();
 
 }

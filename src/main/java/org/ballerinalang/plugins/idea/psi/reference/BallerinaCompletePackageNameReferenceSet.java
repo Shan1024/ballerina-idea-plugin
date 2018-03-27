@@ -70,10 +70,9 @@ public class BallerinaCompletePackageNameReferenceSet extends FileReferenceSet {
         super(element);
     }
 
-    public String getSeparatorString() {
-        return ".";
-    }
-
+//    public String getSeparatorString() {
+//        return ".";
+//    }
 
     @NotNull
     @Override
@@ -91,7 +90,7 @@ public class BallerinaCompletePackageNameReferenceSet extends FileReferenceSet {
         LinkedHashSet<VirtualFile> sourceRoots = new LinkedHashSet<>();
         sourceRoots.add(module.getModuleFile().getParent());
         // Todo - Add sdk and external
-        //GoSdkUtil.getSourcesPathsToLookup(project, module);
+        //BallerinaSdkUtil.getSourcesPathsToLookup(project, module);
         // Todo - Consider org name.
         return ContainerUtil.mapNotNull(sourceRoots, psiManager::findDirectory);
     }

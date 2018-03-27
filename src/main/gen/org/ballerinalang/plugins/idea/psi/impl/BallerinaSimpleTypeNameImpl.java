@@ -65,4 +65,10 @@ public class BallerinaSimpleTypeNameImpl extends BallerinaTypeNameImpl implement
     return PsiTreeUtil.getChildOfType(this, BallerinaValueTypeName.class);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getNullLiteral() {
+    return findChildByType(NULL_LITERAL);
+  }
+
 }

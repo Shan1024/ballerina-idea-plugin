@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaObjectFunctionsImpl extends BallerinaCompositeElementImpl implements BallerinaObjectFunctions {
+public class BallerinaTupleDestructuringStatementImpl extends BallerinaCompositeElementImpl implements BallerinaTupleDestructuringStatement {
 
-  public BallerinaObjectFunctionsImpl(ASTNode node) {
+  public BallerinaTupleDestructuringStatementImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitObjectFunctions(this);
+    visitor.visitTupleDestructuringStatement(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -42,27 +42,57 @@ public class BallerinaObjectFunctionsImpl extends BallerinaCompositeElementImpl 
   }
 
   @Override
-  @NotNull
-  public List<BallerinaAnnotationAttachment> getAnnotationAttachmentList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaAnnotationAttachment.class);
+  @Nullable
+  public BallerinaActionInvocation getActionInvocation() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaActionInvocation.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaExpression getExpression() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaExpression.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaParameterList getParameterList() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaParameterList.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaVariableReferenceList getVariableReferenceList() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaVariableReferenceList.class);
   }
 
   @Override
   @NotNull
-  public List<BallerinaObjectFunctionDefinition> getObjectFunctionDefinitionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaObjectFunctionDefinition.class);
+  public PsiElement getAssign() {
+    return notNullChild(findChildByType(ASSIGN));
   }
 
   @Override
   @NotNull
-  public List<BallerinaDeprecatedAttachment> getDeprecatedAttachmentList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaDeprecatedAttachment.class);
+  public PsiElement getLeftParenthesis() {
+    return notNullChild(findChildByType(LEFT_PARENTHESIS));
   }
 
   @Override
   @NotNull
-  public List<BallerinaDocumentationAttachment> getDocumentationAttachmentList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaDocumentationAttachment.class);
+  public PsiElement getRightParenthesis() {
+    return notNullChild(findChildByType(RIGHT_PARENTHESIS));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getSemicolon() {
+    return notNullChild(findChildByType(SEMICOLON));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getVar() {
+    return findChildByType(VAR);
   }
 
 }

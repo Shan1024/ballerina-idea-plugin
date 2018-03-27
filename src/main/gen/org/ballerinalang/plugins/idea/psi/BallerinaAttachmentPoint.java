@@ -48,9 +48,6 @@ public interface BallerinaAttachmentPoint extends BallerinaCompositeElement {
   PsiElement getService();
 
   @Nullable
-  PsiElement getStreamlet();
-
-  @Nullable
   PsiElement getStruct();
 
   @Nullable

@@ -43,12 +43,6 @@ public class BallerinaBuiltInReferenceTypeNameImpl extends BallerinaCompositeEle
 
   @Override
   @Nullable
-  public BallerinaAggregationTypeName getAggregationTypeName() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaAggregationTypeName.class);
-  }
-
-  @Override
-  @Nullable
   public BallerinaFunctionTypeName getFunctionTypeName() {
     return PsiTreeUtil.getChildOfType(this, BallerinaFunctionTypeName.class);
   }
@@ -75,12 +69,6 @@ public class BallerinaBuiltInReferenceTypeNameImpl extends BallerinaCompositeEle
   @Nullable
   public BallerinaStreamTypeName getStreamTypeName() {
     return PsiTreeUtil.getChildOfType(this, BallerinaStreamTypeName.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaStreamletTypeName getStreamletTypeName() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaStreamletTypeName.class);
   }
 
   @Override

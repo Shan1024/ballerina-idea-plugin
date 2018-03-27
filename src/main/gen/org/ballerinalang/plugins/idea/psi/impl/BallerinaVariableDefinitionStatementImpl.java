@@ -73,6 +73,12 @@ public class BallerinaVariableDefinitionStatementImpl extends BallerinaNamedElem
 
   @Override
   @Nullable
+  public PsiElement getSafeAssignment() {
+    return findChildByType(SAFE_ASSIGNMENT);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
   }

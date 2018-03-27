@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaAggregationTypeNameImpl extends BallerinaCompositeElementImpl implements BallerinaAggregationTypeName {
+public class BallerinaBracedOrTupleExpressionImpl extends BallerinaExpressionImpl implements BallerinaBracedOrTupleExpression {
 
-  public BallerinaAggregationTypeNameImpl(ASTNode node) {
+  public BallerinaBracedOrTupleExpressionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitAggregationTypeName(this);
+    visitor.visitBracedOrTupleExpression(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -42,27 +42,21 @@ public class BallerinaAggregationTypeNameImpl extends BallerinaCompositeElementI
   }
 
   @Override
-  @Nullable
-  public BallerinaNameReference getNameReference() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaNameReference.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getGt() {
-    return findChildByType(GT);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLt() {
-    return findChildByType(LT);
+  @NotNull
+  public List<BallerinaExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaExpression.class);
   }
 
   @Override
   @NotNull
-  public PsiElement getTypeAggregation() {
-    return notNullChild(findChildByType(TYPE_AGGREGATION));
+  public PsiElement getLeftParenthesis() {
+    return notNullChild(findChildByType(LEFT_PARENTHESIS));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRightParenthesis() {
+    return notNullChild(findChildByType(RIGHT_PARENTHESIS));
   }
 
 }

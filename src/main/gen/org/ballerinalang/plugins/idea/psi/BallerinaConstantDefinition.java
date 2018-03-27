@@ -35,6 +35,9 @@ public interface BallerinaConstantDefinition extends BallerinaNamedElement, Stub
   PsiElement getAssign();
 
   @Nullable
+  PsiElement getSafeAssignment();
+
+  @Nullable
   PsiElement getSemicolon();
 
   @NotNull

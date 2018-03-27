@@ -23,7 +23,13 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaTransactionPropertyInitStatement extends BallerinaCompositeElement {
 
-  @NotNull
+  @Nullable
+  BallerinaOnabortStatement getOnabortStatement();
+
+  @Nullable
+  BallerinaOncommitStatement getOncommitStatement();
+
+  @Nullable
   BallerinaRetriesStatement getRetriesStatement();
 
 }

@@ -37,7 +37,6 @@ import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageDeclarationStu
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageNameStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageReferenceStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageVersionStubElementType;
-import org.ballerinalang.plugins.idea.stubs.types.BallerinaParameterStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaStructDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaTransformerDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaVariableDefinitionStatementStubElementType;
@@ -103,8 +102,8 @@ public class BallerinaElementTypeFactory {
                 return new BallerinaEnumeratorStubElementType(name);
             case "VARIABLE_DEFINITION_STATEMENT":
                 return new BallerinaVariableDefinitionStatementStubElementType(name);
-            case "PARAMETER":
-                return new BallerinaParameterStubElementType(name);
+            //            case "PARAMETER":
+            //                return new BallerinaParameterStubElementType(name);
             case "FIELD_DEFINITION":
                 return new BallerinaFieldDefinitionStubElementType(name);
             case "NAME_REFERENCE":

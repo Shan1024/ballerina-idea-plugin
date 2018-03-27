@@ -23,13 +23,13 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaObjectParameterList extends BallerinaCompositeElement {
 
-  @Nullable
-  BallerinaRestParameter getRestParameter();
-
   @NotNull
   List<BallerinaObjectDefaultableParameter> getObjectDefaultableParameterList();
 
   @NotNull
   List<BallerinaObjectParameter> getObjectParameterList();
+
+  @Nullable
+  BallerinaRestParameter getRestParameter();
 
 }

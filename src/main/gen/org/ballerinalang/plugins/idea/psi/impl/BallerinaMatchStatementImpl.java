@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaObjectFunctionsImpl extends BallerinaCompositeElementImpl implements BallerinaObjectFunctions {
+public class BallerinaMatchStatementImpl extends BallerinaCompositeElementImpl implements BallerinaMatchStatement {
 
-  public BallerinaObjectFunctionsImpl(ASTNode node) {
+  public BallerinaMatchStatementImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitObjectFunctions(this);
+    visitor.visitMatchStatement(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -42,27 +42,33 @@ public class BallerinaObjectFunctionsImpl extends BallerinaCompositeElementImpl 
   }
 
   @Override
-  @NotNull
-  public List<BallerinaAnnotationAttachment> getAnnotationAttachmentList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaAnnotationAttachment.class);
+  @Nullable
+  public BallerinaExpression getExpression() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaExpression.class);
   }
 
   @Override
   @NotNull
-  public List<BallerinaObjectFunctionDefinition> getObjectFunctionDefinitionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaObjectFunctionDefinition.class);
+  public List<BallerinaMatchPatternClause> getMatchPatternClauseList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaMatchPatternClause.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getLeftBrace() {
+    return findChildByType(LEFT_BRACE);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightBrace() {
+    return findChildByType(RIGHT_BRACE);
   }
 
   @Override
   @NotNull
-  public List<BallerinaDeprecatedAttachment> getDeprecatedAttachmentList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaDeprecatedAttachment.class);
-  }
-
-  @Override
-  @NotNull
-  public List<BallerinaDocumentationAttachment> getDocumentationAttachmentList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaDocumentationAttachment.class);
+  public PsiElement getMatch() {
+    return notNullChild(findChildByType(MATCH));
   }
 
 }

@@ -67,6 +67,12 @@ public class BallerinaConstantDefinitionImpl extends BallerinaNamedElementImpl<B
 
   @Override
   @Nullable
+  public PsiElement getSafeAssignment() {
+    return findChildByType(SAFE_ASSIGNMENT);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getSemicolon() {
     return findChildByType(SEMICOLON);
   }

@@ -42,9 +42,9 @@ public class BallerinaReturnParameterImpl extends BallerinaCompositeElementImpl 
   }
 
   @Override
-  @NotNull
+  @Nullable
   public BallerinaTypeName getTypeName() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class));
+    return PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class);
   }
 
   @Override

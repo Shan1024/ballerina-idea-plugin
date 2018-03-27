@@ -45,9 +45,6 @@ public interface BallerinaDefinition extends BallerinaCompositeElement {
   BallerinaGlobalVariableDefinition getGlobalVariableDefinition();
 
   @Nullable
-  BallerinaObjectDefinition getObjectDefinition();
-
-  @Nullable
   BallerinaServiceDefinition getServiceDefinition();
 
   @Nullable
@@ -55,6 +52,9 @@ public interface BallerinaDefinition extends BallerinaCompositeElement {
 
   @Nullable
   BallerinaTransformerDefinition getTransformerDefinition();
+
+  @Nullable
+  BallerinaTypeDefinition getTypeDefinition();
 
   @Nullable
   BallerinaDeprecatedAttachment getDeprecatedAttachment();

@@ -21,18 +21,18 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaFailedClause extends BallerinaCompositeElement {
+public interface BallerinaTypeDefinition extends BallerinaCompositeElement {
 
   @Nullable
-  BallerinaBlock getBlock();
+  BallerinaTypeName getTypeName();
 
   @Nullable
-  PsiElement getLeftBrace();
+  PsiElement getIdentifier();
 
   @Nullable
-  PsiElement getRightBrace();
+  PsiElement getPublic();
 
   @NotNull
-  PsiElement getFailed();
+  PsiElement getType();
 
 }

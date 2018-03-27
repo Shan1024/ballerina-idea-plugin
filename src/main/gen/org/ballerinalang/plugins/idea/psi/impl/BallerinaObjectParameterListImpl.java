@@ -42,12 +42,6 @@ public class BallerinaObjectParameterListImpl extends BallerinaCompositeElementI
   }
 
   @Override
-  @Nullable
-  public BallerinaRestParameter getRestParameter() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaRestParameter.class);
-  }
-
-  @Override
   @NotNull
   public List<BallerinaObjectDefaultableParameter> getObjectDefaultableParameterList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaObjectDefaultableParameter.class);
@@ -57,6 +51,12 @@ public class BallerinaObjectParameterListImpl extends BallerinaCompositeElementI
   @NotNull
   public List<BallerinaObjectParameter> getObjectParameterList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaObjectParameter.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaRestParameter getRestParameter() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaRestParameter.class);
   }
 
 }

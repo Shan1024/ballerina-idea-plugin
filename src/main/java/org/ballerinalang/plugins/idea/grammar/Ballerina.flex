@@ -77,6 +77,8 @@ STRING_CHARACTER =  [^\"] | {ESCAPE_SEQUENCE}
 STRING_CHARACTERS = {STRING_CHARACTER}+
 QUOTED_STRING_LITERAL = \" {STRING_CHARACTERS}? \"?
 
+NULL_LITERAL = 'null'
+
 DIGIT = [0-9]
 DIGITS = {DIGIT}+
 DECIMAL_INTEGER_LITERAL = {DIGITS}
@@ -95,7 +97,7 @@ LEFT_BRACE = "{"
 RIGHT_BRACE = "}"
 
 // Todo - Add inspection
-LINE_COMMENT = "/" "/"? [^\r\n]*
+LINE_COMMENT = "/" "/" [^\r\n]*
 
 XML_LITERAL_START = xml[ \t\n\x0B\f\r]*`
 
@@ -267,12 +269,13 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "endpoint"                                  { return ENDPOINT; }
     "enum"                                      { return ENUM; }
 
-    "failed"                                    { return FAILED; }
+    "fail"                                      { return FAIL; }
     "finally"                                   { return FINALLY; }
     "float"                                     { return FLOAT; }
     "foreach"                                   { return FOREACH; }
     "fork"                                      { return FORK; }
     "function"                                  { return FUNCTION; }
+    "future"                                    { return FUTURE; }
 
     "if"                                        { return IF; }
     "import"                                    { return IMPORT; }
@@ -286,12 +289,16 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "lock"                                      { return LOCK; }
 
     "map"                                       { return MAP; }
+    "match"                                     { return MATCH; }
 
     "native"                                    { return NATIVE; }
     "next"                                      { return NEXT; }
     "new"                                       { return NEW; }
 
     "object"                                    { return OBJECT; }
+    "onabort"                                   { return ONABORT; }
+    "oncommit"                                  { return ONCOMMIT; }
+    "onretry"                                   { return ONRETRY; }
 
     "package"                                   { return PACKAGE; }
     "parameter"                                 { return TYPE_PARAMETER; }
@@ -305,7 +312,6 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "service"                                   { return SERVICE; }
     "some"                                      { return SOME; }
     "string"                                    { return STRING; }
-    "streamlet"                                 { return STREAMLET; }
     "struct"                                    { return STRUCT; }
 
     "table"                                     { return TABLE; }
@@ -317,6 +323,8 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "typedesc"                                  { return TYPEDESC; }
     "typeof"                                    { return TYPEOF; }
     "throw"                                     { return THROW; }
+
+    "untaint"                                   { return UNTAINT; }
 
     "while"                                     { return WHILE; }
     "with"                                      { return WITH; }
@@ -380,6 +388,7 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
 
     {WHITE_SPACE}                               { return WHITE_SPACE; }
 
+    {NULL_LITERAL}                              { return NULL_LITERAL; }
     {IDENTIFIER}                                { return IDENTIFIER; }
     {INTIGER_LITERAL}                           { return INTEGER_LITERAL; }
     {QUOTED_STRING_LITERAL}                     { return QUOTED_STRING_LITERAL; }

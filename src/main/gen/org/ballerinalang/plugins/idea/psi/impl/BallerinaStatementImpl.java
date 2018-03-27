@@ -155,4 +155,22 @@ public class BallerinaStatementImpl extends BallerinaCompositeElementImpl implem
     return PsiTreeUtil.getChildOfType(this, BallerinaWorkerInteractionStatement.class);
   }
 
+  @Override
+  @Nullable
+  public BallerinaFailStatement getFailStatement() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaFailStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaMatchStatement getMatchStatement() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaMatchStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaTupleDestructuringStatement getTupleDestructuringStatement() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaTupleDestructuringStatement.class);
+  }
+
 }

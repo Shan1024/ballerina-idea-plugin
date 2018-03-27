@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaFailedClauseImpl extends BallerinaCompositeElementImpl implements BallerinaFailedClause {
+public class BallerinaFailStatementImpl extends BallerinaCompositeElementImpl implements BallerinaFailStatement {
 
-  public BallerinaFailedClauseImpl(ASTNode node) {
+  public BallerinaFailStatementImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitFailedClause(this);
+    visitor.visitFailStatement(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -43,26 +43,14 @@ public class BallerinaFailedClauseImpl extends BallerinaCompositeElementImpl imp
 
   @Override
   @Nullable
-  public BallerinaBlock getBlock() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaBlock.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLeftBrace() {
-    return findChildByType(LEFT_BRACE);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRightBrace() {
-    return findChildByType(RIGHT_BRACE);
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
   }
 
   @Override
   @NotNull
-  public PsiElement getFailed() {
-    return notNullChild(findChildByType(FAILED));
+  public PsiElement getFail() {
+    return notNullChild(findChildByType(FAIL));
   }
 
 }

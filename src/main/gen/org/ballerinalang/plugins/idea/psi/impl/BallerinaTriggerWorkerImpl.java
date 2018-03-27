@@ -54,9 +54,9 @@ public class BallerinaTriggerWorkerImpl extends BallerinaCompositeElementImpl im
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getSemicolon() {
-    return findChildByType(SEMICOLON);
+    return notNullChild(findChildByType(SEMICOLON));
   }
 
   @Override

@@ -85,12 +85,6 @@ public class BallerinaDefinitionImpl extends BallerinaCompositeElementImpl imple
 
   @Override
   @Nullable
-  public BallerinaObjectDefinition getObjectDefinition() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaObjectDefinition.class);
-  }
-
-  @Override
-  @Nullable
   public BallerinaServiceDefinition getServiceDefinition() {
     return PsiTreeUtil.getChildOfType(this, BallerinaServiceDefinition.class);
   }
@@ -105,6 +99,12 @@ public class BallerinaDefinitionImpl extends BallerinaCompositeElementImpl imple
   @Nullable
   public BallerinaTransformerDefinition getTransformerDefinition() {
     return PsiTreeUtil.getChildOfType(this, BallerinaTransformerDefinition.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaTypeDefinition getTypeDefinition() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaTypeDefinition.class);
   }
 
   @Override

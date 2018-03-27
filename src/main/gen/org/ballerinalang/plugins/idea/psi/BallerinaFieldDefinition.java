@@ -26,7 +26,7 @@ import org.ballerinalang.plugins.idea.stubs.BallerinaFieldDefinitionStub;
 public interface BallerinaFieldDefinition extends BallerinaNamedElement, StubBasedPsiElement<BallerinaFieldDefinitionStub> {
 
   @Nullable
-  BallerinaSimpleLiteral getSimpleLiteral();
+  BallerinaExpression getExpression();
 
   @NotNull
   BallerinaTypeName getTypeName();

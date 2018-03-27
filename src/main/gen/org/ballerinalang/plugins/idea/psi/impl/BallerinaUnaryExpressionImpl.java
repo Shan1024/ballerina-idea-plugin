@@ -77,4 +77,10 @@ public class BallerinaUnaryExpressionImpl extends BallerinaExpressionImpl implem
     return findChildByType(TYPEOF);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getUntaint() {
+    return findChildByType(UNTAINT);
+  }
+
 }

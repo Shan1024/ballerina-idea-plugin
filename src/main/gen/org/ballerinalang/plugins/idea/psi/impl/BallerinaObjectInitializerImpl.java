@@ -55,14 +55,14 @@ public class BallerinaObjectInitializerImpl extends BallerinaCompositeElementImp
 
   @Override
   @Nullable
-  public BallerinaDocumentationAttachment getDocumentationAttachment() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaDocumentationAttachment.class);
+  public BallerinaObjectInitializerParameterList getObjectInitializerParameterList() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaObjectInitializerParameterList.class);
   }
 
   @Override
   @Nullable
-  public BallerinaObjectInitializerParameterList getObjectInitializerParameterList() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaObjectInitializerParameterList.class);
+  public BallerinaDocumentationAttachment getDocumentationAttachment() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaDocumentationAttachment.class);
   }
 
   @Override

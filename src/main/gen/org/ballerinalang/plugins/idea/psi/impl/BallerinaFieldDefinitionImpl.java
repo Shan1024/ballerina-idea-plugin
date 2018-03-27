@@ -49,8 +49,8 @@ public class BallerinaFieldDefinitionImpl extends BallerinaNamedElementImpl<Ball
 
   @Override
   @Nullable
-  public BallerinaSimpleLiteral getSimpleLiteral() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaSimpleLiteral.class);
+  public BallerinaExpression getExpression() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaExpression.class);
   }
 
   @Override

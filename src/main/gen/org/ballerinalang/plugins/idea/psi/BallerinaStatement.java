@@ -80,4 +80,13 @@ public interface BallerinaStatement extends BallerinaCompositeElement {
   @Nullable
   BallerinaWorkerInteractionStatement getWorkerInteractionStatement();
 
+  @Nullable
+  BallerinaFailStatement getFailStatement();
+
+  @Nullable
+  BallerinaMatchStatement getMatchStatement();
+
+  @Nullable
+  BallerinaTupleDestructuringStatement getTupleDestructuringStatement();
+
 }

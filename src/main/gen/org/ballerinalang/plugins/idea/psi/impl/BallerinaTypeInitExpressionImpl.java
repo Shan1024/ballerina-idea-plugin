@@ -43,8 +43,8 @@ public class BallerinaTypeInitExpressionImpl extends BallerinaExpressionImpl imp
 
   @Override
   @Nullable
-  public BallerinaExpressionList getExpressionList() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaExpressionList.class);
+  public BallerinaInvocationArgList getInvocationArgList() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaInvocationArgList.class);
   }
 
   @Override

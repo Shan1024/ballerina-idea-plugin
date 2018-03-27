@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaBracedExpressionImpl extends BallerinaExpressionImpl implements BallerinaBracedExpression {
+public class BallerinaOnabortStatementImpl extends BallerinaCompositeElementImpl implements BallerinaOnabortStatement {
 
-  public BallerinaBracedExpressionImpl(ASTNode node) {
+  public BallerinaOnabortStatementImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitBracedExpression(this);
+    visitor.visitOnabortStatement(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -42,21 +42,21 @@ public class BallerinaBracedExpressionImpl extends BallerinaExpressionImpl imple
   }
 
   @Override
-  @Nullable
+  @NotNull
   public BallerinaExpression getExpression() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaExpression.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaExpression.class));
   }
 
   @Override
   @NotNull
-  public PsiElement getLeftParenthesis() {
-    return notNullChild(findChildByType(LEFT_PARENTHESIS));
+  public PsiElement getAssign() {
+    return notNullChild(findChildByType(ASSIGN));
   }
 
   @Override
-  @Nullable
-  public PsiElement getRightParenthesis() {
-    return findChildByType(RIGHT_PARENTHESIS);
+  @NotNull
+  public PsiElement getOnabort() {
+    return notNullChild(findChildByType(ONABORT));
   }
 
 }

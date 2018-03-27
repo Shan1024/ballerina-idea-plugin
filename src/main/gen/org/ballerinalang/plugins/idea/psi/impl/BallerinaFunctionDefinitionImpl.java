@@ -62,7 +62,7 @@ public class BallerinaFunctionDefinitionImpl extends BallerinaNamedElementImpl<B
   @Override
   @Nullable
   public BallerinaParameter getParameter() {
-    return PsiTreeUtil.getStubChildOfType(this, BallerinaParameter.class);
+    return PsiTreeUtil.getChildOfType(this, BallerinaParameter.class);
   }
 
   @Override

@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaTransactionStatement extends BallerinaCompositeElement {
 
   @Nullable
-  BallerinaFailedClause getFailedClause();
+  BallerinaOnretryClause getOnretryClause();
 
   @NotNull
   BallerinaTransactionClause getTransactionClause();

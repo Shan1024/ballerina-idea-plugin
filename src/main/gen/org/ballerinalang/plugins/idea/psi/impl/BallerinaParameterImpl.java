@@ -24,15 +24,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
-import org.ballerinalang.plugins.idea.stubs.BallerinaParameterStub;
 import org.ballerinalang.plugins.idea.psi.*;
-import com.intellij.psi.stubs.IStubElementType;
 
-public class BallerinaParameterImpl extends BallerinaNamedElementImpl<BallerinaParameterStub> implements BallerinaParameter {
-
-  public BallerinaParameterImpl(BallerinaParameterStub stub, IStubElementType type) {
-    super(stub, type);
-  }
+public class BallerinaParameterImpl extends BallerinaCompositeElementImpl implements BallerinaParameter {
 
   public BallerinaParameterImpl(ASTNode node) {
     super(node);
@@ -55,14 +49,20 @@ public class BallerinaParameterImpl extends BallerinaNamedElementImpl<BallerinaP
 
   @Override
   @NotNull
-  public BallerinaTypeName getTypeName() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class));
+  public List<BallerinaTypeName> getTypeNameList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaTypeName.class);
   }
 
   @Override
-  @NotNull
-  public PsiElement getIdentifier() {
-    return notNullChild(findChildByType(IDENTIFIER));
+  @Nullable
+  public PsiElement getLeftParenthesis() {
+    return findChildByType(LEFT_PARENTHESIS);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightParenthesis() {
+    return findChildByType(RIGHT_PARENTHESIS);
   }
 
 }

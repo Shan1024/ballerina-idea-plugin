@@ -27,12 +27,12 @@ public interface BallerinaObjectFunctions extends BallerinaCompositeElement {
   List<BallerinaAnnotationAttachment> getAnnotationAttachmentList();
 
   @NotNull
+  List<BallerinaObjectFunctionDefinition> getObjectFunctionDefinitionList();
+
+  @NotNull
   List<BallerinaDeprecatedAttachment> getDeprecatedAttachmentList();
 
   @NotNull
   List<BallerinaDocumentationAttachment> getDocumentationAttachmentList();
-
-  @NotNull
-  List<BallerinaObjectFunctionDefinition> getObjectFunctionDefinitionList();
 
 }

@@ -91,12 +91,6 @@ public class BallerinaAttachmentPointImpl extends BallerinaCompositeElementImpl 
 
   @Override
   @Nullable
-  public PsiElement getStreamlet() {
-    return findChildByType(STREAMLET);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getStruct() {
     return findChildByType(STRUCT);
   }

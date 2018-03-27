@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaTypeInitExpression extends BallerinaExpression {
 
   @Nullable
-  BallerinaExpressionList getExpressionList();
+  BallerinaInvocationArgList getInvocationArgList();
 
   @Nullable
   BallerinaUserDefineTypeName getUserDefineTypeName();

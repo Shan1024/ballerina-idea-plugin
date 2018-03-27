@@ -23,7 +23,7 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaReturnParameter extends BallerinaCompositeElement {
 
-  @NotNull
+  @Nullable
   BallerinaTypeName getTypeName();
 
   @NotNull

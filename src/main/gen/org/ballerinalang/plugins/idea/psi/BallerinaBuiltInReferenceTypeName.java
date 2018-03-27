@@ -24,9 +24,6 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaBuiltInReferenceTypeName extends BallerinaCompositeElement {
 
   @Nullable
-  BallerinaAggregationTypeName getAggregationTypeName();
-
-  @Nullable
   BallerinaFunctionTypeName getFunctionTypeName();
 
   @Nullable
@@ -40,9 +37,6 @@ public interface BallerinaBuiltInReferenceTypeName extends BallerinaCompositeEle
 
   @Nullable
   BallerinaStreamTypeName getStreamTypeName();
-
-  @Nullable
-  BallerinaStreamletTypeName getStreamletTypeName();
 
   @Nullable
   BallerinaTableTypeName getTableTypeName();

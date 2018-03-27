@@ -30,10 +30,10 @@ public interface BallerinaObjectInitializer extends BallerinaCompositeElement {
   BallerinaCallableUnitBody getCallableUnitBody();
 
   @Nullable
-  BallerinaDocumentationAttachment getDocumentationAttachment();
+  BallerinaObjectInitializerParameterList getObjectInitializerParameterList();
 
   @Nullable
-  BallerinaObjectInitializerParameterList getObjectInitializerParameterList();
+  BallerinaDocumentationAttachment getDocumentationAttachment();
 
   @Nullable
   PsiElement getNative();

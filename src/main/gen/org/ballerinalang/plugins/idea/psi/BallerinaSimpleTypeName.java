@@ -35,4 +35,7 @@ public interface BallerinaSimpleTypeName extends BallerinaTypeName {
   @Nullable
   BallerinaValueTypeName getValueTypeName();
 
+  @Nullable
+  PsiElement getNullLiteral();
+
 }

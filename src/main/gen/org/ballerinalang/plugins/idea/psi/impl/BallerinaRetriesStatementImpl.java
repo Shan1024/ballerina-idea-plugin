@@ -49,14 +49,8 @@ public class BallerinaRetriesStatementImpl extends BallerinaCompositeElementImpl
 
   @Override
   @Nullable
-  public PsiElement getLeftParenthesis() {
-    return findChildByType(LEFT_PARENTHESIS);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRightParenthesis() {
-    return findChildByType(RIGHT_PARENTHESIS);
+  public PsiElement getAssign() {
+    return findChildByType(ASSIGN);
   }
 
   @Override

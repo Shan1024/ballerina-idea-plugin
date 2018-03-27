@@ -23,7 +23,7 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaInvocation extends BallerinaCompositeElement {
 
-  @Nullable
+  @NotNull
   BallerinaAnyIdentifierName getAnyIdentifierName();
 
   @Nullable
@@ -32,10 +32,10 @@ public interface BallerinaInvocation extends BallerinaCompositeElement {
   @NotNull
   PsiElement getDot();
 
-  @Nullable
+  @NotNull
   PsiElement getLeftParenthesis();
 
-  @Nullable
+  @NotNull
   PsiElement getRightParenthesis();
 
 }
