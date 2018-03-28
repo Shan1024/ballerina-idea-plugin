@@ -31,6 +31,8 @@ import org.ballerinalang.plugins.idea.BallerinaLanguage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
+
 /**
  * Builds the Ballerina file formatting model.
  */
@@ -49,7 +51,75 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
 
     private static SpacingBuilder createSpaceBuilder(CodeStyleSettings settings) {
         return new SpacingBuilder(settings, BallerinaLanguage.INSTANCE)
-//                .aroundInside(DIV, IMPORT_DECLARATION).spaceIf(false)
+                .around(PACKAGE).spaceIf(true)
+                .around(IMPORT).spaceIf(true)
+                .around(AS).spaceIf(true)
+                .around(PUBLIC).spaceIf(true)
+                .around(PRIVATE).spaceIf(true)
+                .around(NATIVE).spaceIf(true)
+                .around(SERVICE).spaceIf(true)
+                .around(RESOURCE).spaceIf(true)
+                .around(FUNCTION).spaceIf(true)
+                .around(STRUCT).spaceIf(true)
+                .around(OBJECT).spaceIf(true)
+                .around(ANNOTATION).spaceIf(true)
+                .around(ENUM).spaceIf(true)
+                .around(PARAMETER).spaceIf(true)
+                .around(CONST).spaceIf(true)
+                .around(TRANSFORMER).spaceIf(true)
+                .around(WORKER).spaceIf(true)
+                .around(ENDPOINT).spaceIf(true)
+                .around(BIND).spaceIf(true)
+                .around(XMLNS).spaceIf(true)
+                .around(RETURNS).spaceIf(true)
+                .around(VERSION).spaceIf(true)
+                .around(DOCUMENTATION).spaceIf(true)
+                .around(DEPRECATED).spaceIf(true)
+
+                .around(VAR).spaceIf(true)
+                .around(NEW).spaceIf(true)
+                .around(IF).spaceIf(true)
+                .around(MATCH).spaceIf(true)
+                .around(ELSE).spaceIf(true)
+                .around(FOREACH).spaceIf(true)
+                .around(WHILE).spaceIf(true)
+                .around(NEXT).spaceIf(true)
+                .around(BREAK).spaceIf(true)
+                .around(FORK).spaceIf(true)
+                .around(JOIN).spaceIf(true)
+                .around(SOME).spaceIf(true) // Todo
+                .around(ALL).spaceIf(true) // Todo
+                .around(TIMEOUT).spaceIf(true)
+                .around(TRY).spaceIf(true)
+                .around(CATCH).spaceIf(true)
+                .around(FINALLY).spaceIf(true)
+                .around(THROW).spaceIf(true)
+                .around(RETURN).spaceIf(true)
+                .around(TRANSACTION).spaceIf(true)
+                .around(ABORT).spaceIf(true)
+                .around(FAIL).spaceIf(true)
+                .around(ONRETRY).spaceIf(true)
+                .around(RETRIES).spaceIf(true)
+                .around(ONABORT).spaceIf(true)
+                .around(ONCOMMIT).spaceIf(true)
+                .around(LENGTHOF).spaceIf(true)
+                .around(TYPEOF).spaceIf(true)
+                .around(WITH).spaceIf(true)
+                .around(IN).spaceIf(true)
+                .around(LOCK).spaceIf(true)
+                .around(UNTAINT).spaceIf(true) // Todo
+                .around(ASYNC).spaceIf(true)
+                .around(AWAIT).spaceIf(true)
+
+                .around(SEMICOLON).spaceIf(false)
+
+                .aroundInside(DIV, IMPORT_DECLARATION).spaceIf(false)
+                .aroundInside(DOT, COMPLETE_PACKAGE_NAME).spaceIf(false)
+                .aroundInside(COLON, PACKAGE_REFERENCE).spaceIf(false)
+                .after(PACKAGE_REFERENCE).spaceIf(false)
+                .aroundInside(NAME_REFERENCE,FUNCTION_INVOCATION).spaceIf(false)
+                .around(INVOCATION_ARG_LIST).spaceIf(false)
+                .around(CALLABLE_UNIT_BODY).spaceIf(false)
 //                .around(OPERATORS).spaceIf(true)
 //                .between(TYPE_NAME, GT).spaceIf(false)
 //                .between(LT, TYPE_NAME).spaceIf(false)

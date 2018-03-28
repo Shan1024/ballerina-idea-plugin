@@ -236,7 +236,7 @@ public class BallerinaBlock extends AbstractBlock {
     private Indent calculateIndent(@NotNull ASTNode child) {
         IElementType childElementType = child.getElementType();
         IElementType parentElementType = myNode.getElementType();
-        if (childElementType == BallerinaTypes.BLOCK){
+        if (childElementType == BallerinaTypes.BLOCK) {
             return Indent.getNormalIndent();
         }
         return Indent.getNoneIndent();
@@ -257,6 +257,7 @@ public class BallerinaBlock extends AbstractBlock {
 
     @Override
     public boolean isIncomplete() {
+        //        return myNode.getElementType() == BallerinaFileElementType.INSTANCE;
         return false;
     }
 
