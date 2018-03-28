@@ -21,17 +21,19 @@ import com.intellij.compiler.CompilerWorkspaceConfiguration;
 import com.intellij.ide.util.projectWizard.JavaModuleBuilder;
 import com.intellij.ide.util.projectWizard.ModuleBuilderListener;
 import com.intellij.ide.util.projectWizard.SourcePathsBuilder;
+import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleType;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.projectRoots.SdkTypeId;
 import com.intellij.openapi.roots.ModifiableRootModel;
 import com.intellij.openapi.util.Pair;
+import com.intellij.util.containers.ContainerUtil;
 import org.ballerinalang.plugins.idea.sdk.BallerinaSdkType;
-import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -39,19 +41,27 @@ import java.util.List;
  */
 public class BallerinaModuleBuilder extends JavaModuleBuilder implements SourcePathsBuilder, ModuleBuilderListener {
 
+    private static final Logger LOG = Logger.getInstance(BallerinaModuleBuilder.class);
+
     @Override
     public void setupRootModel(ModifiableRootModel modifiableRootModel) throws ConfigurationException {
         addListener(this);
         super.setupRootModel(modifiableRootModel);
     }
 
+    // Note - Removing this override will create src directory in the project root.
     public List<Pair<String, String>> getSourcePaths() {
-        final List<Pair<String, String>> paths = new ArrayList<>();
-        @NonNls final String path = getContentEntryPath();
-        //        paths.add(Pair.create(path, ""));
-        // Note - This adds the project root as a source directory.
-        setSourcePaths(paths);
-        return paths;
+        String ballerinaCacheRoot = getContentEntryPath() + File.separator + ".ballerina";
+        new File(ballerinaCacheRoot).mkdirs();
+        String ballerinaTomlFile = getContentEntryPath() + File.separator + "Ballerina.toml";
+        File file = new File(ballerinaTomlFile);
+        try {
+            file.createNewFile();
+            // Todo - Add some content to the toml file?
+        } catch (IOException e) {
+            LOG.debug(e);
+        }
+        return ContainerUtil.emptyList();
     }
 
     @NotNull
