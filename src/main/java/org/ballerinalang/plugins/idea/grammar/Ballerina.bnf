@@ -559,7 +559,7 @@ FunctionInvocation ::= async? NameReference LEFT_PARENTHESIS InvocationArgList? 
 // Todo - Adding pin will mess function invocation.
 Invocation ::= DOT AnyIdentifierName LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS /*{pin=1}*/
 
-InvocationArgList ::= InvocationArg (COMMA InvocationArg)*
+InvocationArgList ::= InvocationArg (COMMA InvocationArg)* {pin(".*")=1}
 
 InvocationArg ::= NamedArgs | RestArgs | Expression
 
@@ -684,7 +684,7 @@ ParameterList ::= Parameter (COMMA Parameter)* {pin=1 /*recoverWhile=RecoverPara
 
 // Todo - Add indexing
 Parameter ::= SimpleParameter | TupleParameter
-private SimpleParameter ::= AnnotationAttachment* TypeName identifier
+private SimpleParameter ::= AnnotationAttachment* TypeName identifier {pin=2}
 private TupleParameter ::= AnnotationAttachment* LEFT_PARENTHESIS TypeName identifier (COMMA TypeName identifier)* RIGHT_PARENTHESIS
 
 DefaultableParameter ::= Parameter ASSIGN Expression
@@ -708,9 +708,9 @@ SimpleLiteral ::= (ADD|SUB)? IntegerLiteral
 // §3.10.1 Integer Literals
 IntegerLiteral ::= DECIMAL_INTEGER_LITERAL | HEX_INTEGER_LITERAL | OCTAL_INTEGER_LITERAL | BINARY_INTEGER_LITERAL
 
-NamedArgs ::= identifier ASSIGN Expression
+NamedArgs ::= identifier ASSIGN Expression {pin=2}
 
-RestArgs ::= ELLIPSIS Expression
+RestArgs ::= ELLIPSIS Expression {pin=1}
 
 // XML parsing
 

@@ -2587,12 +2587,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // InvocationArg (COMMA InvocationArg)*
   public static boolean InvocationArgList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "InvocationArgList")) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, INVOCATION_ARG_LIST, "<invocation arg list>");
     r = InvocationArg(b, l + 1);
+    p = r; // pin = 1
     r = r && InvocationArgList_1(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // (COMMA InvocationArg)*
@@ -2610,12 +2611,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // COMMA InvocationArg
   private static boolean InvocationArgList_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "InvocationArgList_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, COMMA);
+    p = r; // pin = 1
     r = r && InvocationArg(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -2873,12 +2875,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean NamedArgs(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "NamedArgs")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, IDENTIFIER, ASSIGN);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, NAMED_ARGS, null);
+    r = consumeTokens(b, 2, IDENTIFIER, ASSIGN);
+    p = r; // pin = 2
     r = r && Expression(b, l + 1, -1);
-    exit_section_(b, m, NAMED_ARGS, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -3816,12 +3819,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean RestArgs(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RestArgs")) return false;
     if (!nextTokenIs(b, ELLIPSIS)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, REST_ARGS, null);
     r = consumeToken(b, ELLIPSIS);
+    p = r; // pin = 1
     r = r && Expression(b, l + 1, -1);
-    exit_section_(b, m, REST_ARGS, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -4029,13 +4033,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // AnnotationAttachment* TypeName identifier
   static boolean SimpleParameter(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SimpleParameter")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
     r = SimpleParameter_0(b, l + 1);
     r = r && TypeName(b, l + 1, -1);
+    p = r; // pin = 2
     r = r && consumeToken(b, IDENTIFIER);
-    exit_section_(b, m, null, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // AnnotationAttachment*
