@@ -120,6 +120,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .aroundInside(NAME_REFERENCE,FUNCTION_INVOCATION).spaceIf(false)
                 .around(INVOCATION_ARG_LIST).spaceIf(false)
                 .around(CALLABLE_UNIT_BODY).spaceIf(false)
+                .around(SIMPLE_TYPE_NAME).spaceIf(true)
 //                .around(OPERATORS).spaceIf(true)
 //                .between(TYPE_NAME, GT).spaceIf(false)
 //                .between(LT, TYPE_NAME).spaceIf(false)

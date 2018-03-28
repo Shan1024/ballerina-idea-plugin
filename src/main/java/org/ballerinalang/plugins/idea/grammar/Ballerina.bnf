@@ -194,10 +194,10 @@ Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachme
                | TransformerDefinition
                | ConstantDefinition
                | GlobalEndpointDefinition) {
-   /* recoverWhile=TopLevelDefinitionRecover*/
+    recoverWhile=TopLevelDefinitionRecover
 }
 
-//private TopLevelDefinitionRecover ::= !(service | function | connector | struct | enum | annotation | transformer | endpoint | const | boolean | int | float | string | blob | public | identifier)
+private TopLevelDefinitionRecover ::= !(public | type | struct | service | function | enum | annotation | transformer | const | endpoint | boolean | int | float | string | blob | identifier)
 
 ServiceDefinition ::= service (LT NameReference GT) identifier ServiceEndpointAttachments?  ServiceBody {pin=1}
 ServiceEndpointAttachments ::= bind NameReference (COMMA NameReference)* {pin=1}
@@ -405,41 +405,42 @@ AnnotationAttachment ::= AT NameReference RecordLiteral?
 // Todo - Add recovery rules
 // Note - Expression statement should be the first one.
 Statement ::=
-        ExpressionStmt
+        WhileStatement
+    |   NextStatement
+    |   ForeachStatement
+    |   matchStatement
+    |   BreakStatement
+    |   ThrowStatement
+    |   ReturnStatement
+    |   AbortStatement
+    |   failStatement
+    |   LockStatement
+    |   NamespaceDeclarationStatement
+    |   TransactionStatement
+    |   IfElseStatement
+    |   TryCatchStatement
+    |   ForkJoinStatement
+    |   ExpressionStmt
     |   AssignmentStatement
     |   tupleDestructuringStatement
     |   CompoundAssignmentStatement
     |   PostIncrementStatement
     |   VariableDefinitionStatement
-    |   IfElseStatement
-    |   matchStatement
-    |   ForeachStatement
-    |   WhileStatement
-    |   NextStatement
-    |   BreakStatement
-    |   ForkJoinStatement
-    |   TryCatchStatement
-    |   ThrowStatement
-    |   ReturnStatement
     |   WorkerInteractionStatement
-    |   TransactionStatement
-    |   AbortStatement
-    |   failStatement
-    |   LockStatement
-    |   NamespaceDeclarationStatement
     // Todo - Add streaming
 //    |   wheneverStatement
 //    |   streamingQueryStatement
-//    |   StreamingQueryStatement /*{recoverWhile = StatementRecover}*/
+//    |   StreamingQueryStatement
+{recoverWhile = StatementRecover}
 
 // Todo - Add more tokens
-//private StatementRecover ::= !(int | string | '}' | ';')
+private StatementRecover ::= !(int | string | float | boolean | blob | '}' | ';' |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if)
 
 //private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
 
 VariableDefinitionStatement ::= TypeName identifier ((ASSIGN | SAFE_ASSIGNMENT) (ActionInvocation | Expression))? SEMICOLON {
 // Note - Resource definition cannot be identified correctly with this pin.
-//    pin(".*")=1
+    pin(".*")=1
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaVariableDefinitionStatementStub"
 }
 
@@ -487,7 +488,7 @@ ForeachStatement ::= foreach LEFT_PARENTHESIS? VariableReferenceList in (Express
 IntRangeExpression ::= Expression RANGE Expression | (LEFT_BRACKET|LEFT_PARENTHESIS) Expression RANGE Expression (RIGHT_BRACKET|RIGHT_PARENTHESIS)
 
 // Todo - pin 1?
-WhileStatement ::= while LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_BRACE Block RIGHT_BRACE {pin=2}
+WhileStatement ::= while LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_BRACE Block RIGHT_BRACE
 
 NextStatement ::= next SEMICOLON {pin=1}
 
@@ -626,7 +627,11 @@ Expression
     |   BinaryEqualExpression
     |   BinaryAndExpression
     |   BinaryOrExpression
-    |   AwaitExpression
+    |   AwaitExpression {
+    recoverWhile=ExpressionRecover
+}
+
+private ExpressionRecover ::= !(int | string | float | boolean | blob | '}' | ';' |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if)
 
 fake BinaryExpression ::= Expression {
   methods=[left="Expression[0]" right="Expression[1]" getOperator]

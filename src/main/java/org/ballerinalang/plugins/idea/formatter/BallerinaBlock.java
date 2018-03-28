@@ -252,6 +252,9 @@ public class BallerinaBlock extends AbstractBlock {
     @Override
     public ChildAttributes getChildAttributes(int newChildIndex) {
         Indent childIndent = Indent.getNoneIndent();
+        if (myNode.getElementType() == BallerinaTypes.CALLABLE_UNIT_BODY) {
+            childIndent = Indent.getNormalIndent();
+        }
         return new ChildAttributes(childIndent, null);
     }
 

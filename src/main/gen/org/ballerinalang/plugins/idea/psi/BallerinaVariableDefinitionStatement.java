@@ -40,10 +40,10 @@ public interface BallerinaVariableDefinitionStatement extends BallerinaNamedElem
   @Nullable
   PsiElement getSafeAssignment();
 
-  @NotNull
+  @Nullable
   PsiElement getSemicolon();
 
-  @NotNull
+  @Nullable
   PsiElement getIdentifier();
 
 }

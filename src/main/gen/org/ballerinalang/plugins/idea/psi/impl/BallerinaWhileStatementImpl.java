@@ -42,21 +42,21 @@ public class BallerinaWhileStatementImpl extends BallerinaCompositeElementImpl i
   }
 
   @Override
-  @Nullable
+  @NotNull
   public BallerinaBlock getBlock() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaBlock.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaBlock.class));
   }
 
   @Override
-  @Nullable
+  @NotNull
   public BallerinaExpression getExpression() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaExpression.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaExpression.class));
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getLeftBrace() {
-    return findChildByType(LEFT_BRACE);
+    return notNullChild(findChildByType(LEFT_BRACE));
   }
 
   @Override
@@ -66,15 +66,15 @@ public class BallerinaWhileStatementImpl extends BallerinaCompositeElementImpl i
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getRightBrace() {
-    return findChildByType(RIGHT_BRACE);
+    return notNullChild(findChildByType(RIGHT_BRACE));
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getRightParenthesis() {
-    return findChildByType(RIGHT_PARENTHESIS);
+    return notNullChild(findChildByType(RIGHT_PARENTHESIS));
   }
 
   @Override

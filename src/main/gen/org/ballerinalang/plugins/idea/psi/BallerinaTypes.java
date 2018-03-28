@@ -599,6 +599,9 @@ public interface BallerinaTypes {
       else if (type == ENUM_DEFINITION) {
         return new BallerinaEnumDefinitionImpl(node);
       }
+      else if (type == EXPRESSION) {
+        return new BallerinaExpressionImpl(node);
+      }
       else if (type == EXPRESSION_LIST) {
         return new BallerinaExpressionListImpl(node);
       }
