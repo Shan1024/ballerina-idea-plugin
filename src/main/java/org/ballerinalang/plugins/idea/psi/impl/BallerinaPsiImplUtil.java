@@ -220,7 +220,6 @@ public class BallerinaPsiImplUtil {
 
     @Nullable
     public static PsiReference getReference(@NotNull BallerinaPackageReference ballerinaPackageReference) {
-
         BallerinaPackageReferenceStub stub = ballerinaPackageReference.getStub();
 
         //        return new BallerinaCompletePackageNameReferenceSet(ballerinaPackageReference).getAllReferences();

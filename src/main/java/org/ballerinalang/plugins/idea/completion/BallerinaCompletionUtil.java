@@ -20,27 +20,21 @@ package org.ballerinalang.plugins.idea.completion;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.StubBasedPsiElement;
-import com.intellij.psi.stubs.StubElement;
 import org.ballerinalang.plugins.idea.BallerinaIcons;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
-import org.ballerinalang.plugins.idea.stubs.BallerinaFunctionDefinitionStub;
 import org.jetbrains.annotations.NotNull;
 
 public class BallerinaCompletionUtil {
 
     public static class Lazy {
-
-        private static final BallerinaSingleCharacterInsertHandler DIR_INSERT_HANDLER =
-                new BallerinaSingleCharacterInsertHandler('.');
-
+        private static final BallerinaSingleCharacterInsertHandler PACKAGE_INSERT_HANDLER =
+                new BallerinaSingleCharacterInsertHandler(';');
     }
 
     @NotNull
     public static LookupElementBuilder createPackageLookupElement(@NotNull PsiDirectory dir) {
         return LookupElementBuilder.createWithSmartPointer(dir.getName(), dir).withIcon(BallerinaIcons.PACKAGE)
-                .withInsertHandler(dir.getFiles().length == 0 ? Lazy.DIR_INSERT_HANDLER : null);
+                .withInsertHandler(Lazy.PACKAGE_INSERT_HANDLER);
     }
 
     @NotNull

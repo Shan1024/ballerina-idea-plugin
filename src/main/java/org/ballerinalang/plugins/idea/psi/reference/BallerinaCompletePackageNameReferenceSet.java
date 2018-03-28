@@ -77,6 +77,9 @@ public class BallerinaCompletePackageNameReferenceSet extends FileReferenceSet {
     @NotNull
     @Override
     public Collection<PsiFileSystemItem> computeDefaultContexts() {
+
+        // Todo - If the org name is ballerina, then the context should be src in SDK. If there are no org specified,
+        // the local project should be the context (hide directories starting with ".").
         PsiFile file = getContainingFile();
         if (file == null || !file.isValid() || isAbsolutePathReference()) {
             return Collections.emptyList();

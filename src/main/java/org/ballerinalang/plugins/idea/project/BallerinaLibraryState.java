@@ -15,17 +15,27 @@
  *
  */
 
-package org.ballerinalang.plugins.idea;
+package org.ballerinalang.plugins.idea.project;
 
-import com.intellij.openapi.util.IconLoader;
-import com.intellij.util.PlatformIcons;
+import com.intellij.util.containers.ContainerUtil;
+import org.jetbrains.annotations.NotNull;
 
-import javax.swing.Icon;
+import java.util.Collection;
 
-public class BallerinaIcons {
+/**
+ * Represents Ballerina library state.
+ */
+public class BallerinaLibraryState {
 
-    public static final Icon FILE = IconLoader.getIcon("/icons/ballerina.png");
-    public static final Icon ICON = FILE;
-    public static final Icon PACKAGE = PlatformIcons.DIRECTORY_CLOSED_ICON;
+    @NotNull
+    private Collection<String> myUrls = ContainerUtil.newArrayList();
 
+    @NotNull
+    public Collection<String> getUrls() {
+        return myUrls;
+    }
+
+    public void setUrls(@NotNull Collection<String> urls) {
+        myUrls = urls;
+    }
 }

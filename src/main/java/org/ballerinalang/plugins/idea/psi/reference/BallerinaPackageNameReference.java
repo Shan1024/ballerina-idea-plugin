@@ -36,6 +36,7 @@ public class BallerinaPackageNameReference extends BallerinaCachedReference<Ball
 
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
+        // Todo - Update rename logic to consider only the last part of the name (after the last ".").
         myElement.replace(BallerinaElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
         return myElement;
     }
@@ -81,9 +82,14 @@ public class BallerinaPackageNameReference extends BallerinaCachedReference<Ball
         //        return firstItem.getIdentifier();
 
 
-
         return reference.resolve();
+//        return null;
     }
+
+//    @Override
+//    public boolean isReferenceTo(PsiElement element) {
+//        return true;
+//    }
 
     @NotNull
     @Override

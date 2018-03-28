@@ -156,11 +156,20 @@ public class BallerinaFunctionReference extends BallerinaCachedReference<Balleri
             // Todo - Consider package version.
 
             BallerinaPackageReference packageReference = nameReference.getPackageReference();
+            if (packageReference == null) {
+                return null;
+            }
             PsiReference reference = packageReference.getReference();
+            if (reference == null) {
+                return null;
+            }
             PsiElement psiDirectory = reference.resolve();
+            if (psiDirectory == null) {
+                return null;
+            }
 
-            List<VirtualFile> virtualFiles = Arrays.asList(((PsiDirectory) psiDirectory).getVirtualFile().getChildren
-                    ());
+            List<VirtualFile> virtualFiles = Arrays.asList(((PsiDirectory) psiDirectory).getVirtualFile()
+                    .getChildren());
             GlobalSearchScope scope = GlobalSearchScope.filesScope(project, virtualFiles);
             elements = StubIndex.getElements(BallerinaFunctionIndex.KEY, myElement.getText(), project, scope,
                     BallerinaFunctionDefinition.class);
@@ -221,9 +230,17 @@ public class BallerinaFunctionReference extends BallerinaCachedReference<Balleri
             // Todo - Consider package version.
 
             BallerinaPackageReference packageReference = nameReference.getPackageReference();
+            if (packageReference == null) {
+                return new Object[0];
+            }
             PsiReference reference = packageReference.getReference();
+            if (reference == null) {
+                return new Object[0];
+            }
             PsiElement psiDirectory = reference.resolve();
-
+            if (psiDirectory == null) {
+                return new Object[0];
+            }
             List<VirtualFile> virtualFiles = Arrays.asList(((PsiDirectory) psiDirectory).getVirtualFile()
                     .getChildren());
             GlobalSearchScope scope = GlobalSearchScope.filesScope(project, virtualFiles);
