@@ -71,13 +71,16 @@
                            implementationClass="org.ballerinalang.plugins.idea.BallerinaExternalAnnotator"/>
 
         <!--<spellchecker.support language="Ballerina"-->
-                              <!--implementationClass="org.ballerinalang.plugins.idea.spellchecker.BallerinaSpellcheckingStrategy"/>-->
+        <!--implementationClass="org.ballerinalang.plugins.idea.spellchecker.BallerinaSpellcheckingStrategy"/>-->
         <defaultTemplatePropertiesProvider
                 implementation="org.ballerinalang.plugins.idea.actions.BallerinaTemplatePropertiesProvider"/>
 
         <!-- file templates -->
         <internalFileTemplate name="Ballerina File"/>
         <internalFileTemplate name="Ballerina Main"/>
+
+        <lang.braceMatcher language="Ballerina"
+                           implementationClass="org.ballerinalang.plugins.idea.codeinsight.highlighting.BallerinaPairedBraceMatcher"/>
 
         <!--formatter-->
         <lang.formatter language="Ballerina"
@@ -88,10 +91,10 @@
                 implementation="org.ballerinalang.plugins.idea.formatter.settings.BallerinaLanguageCodeStyleSettingsProvider"/>
 
         <!--<quoteHandler fileType="Ballerina file"-->
-                      <!--className="org.ballerinalang.plugins.idea.codeinsight.editoractions.BallerinaQuoteHandler"/>-->
+        <!--className="org.ballerinalang.plugins.idea.codeinsight.editoractions.BallerinaQuoteHandler"/>-->
 
-        <enterHandlerDelegate
-                implementation="org.ballerinalang.plugins.idea.formatter.BallerinaEnterBetweenBracesHandler"/>
+        <!--<enterHandlerDelegate/>-->
+        <!--implementation="org.ballerinalang.plugins.idea.formatter.BallerinaEnterBetweenBracesHandler"/>-->
 
         <!-- sdk -->
         <sdkType implementation="org.ballerinalang.plugins.idea.sdk.BallerinaSdkType"/>
