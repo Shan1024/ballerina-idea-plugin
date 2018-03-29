@@ -1032,37 +1032,47 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LEFT_BRACE BlockWithEndpoint RIGHT_BRACE | LEFT_BRACE BlockWithEndpointAndWorker RIGHT_BRACE
+  // LEFT_BRACE (BlockWithEndpoint RIGHT_BRACE | BlockWithEndpointAndWorker RIGHT_BRACE)
   public static boolean CallableUnitBody(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CallableUnitBody")) return false;
     if (!nextTokenIs(b, LEFT_BRACE)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, CALLABLE_UNIT_BODY, null);
+    r = consumeToken(b, LEFT_BRACE);
+    p = r; // pin = 1
+    r = r && CallableUnitBody_1(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // BlockWithEndpoint RIGHT_BRACE | BlockWithEndpointAndWorker RIGHT_BRACE
+  private static boolean CallableUnitBody_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CallableUnitBody_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = CallableUnitBody_0(b, l + 1);
-    if (!r) r = CallableUnitBody_1(b, l + 1);
-    exit_section_(b, m, CALLABLE_UNIT_BODY, r);
+    r = CallableUnitBody_1_0(b, l + 1);
+    if (!r) r = CallableUnitBody_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
     return r;
   }
 
-  // LEFT_BRACE BlockWithEndpoint RIGHT_BRACE
-  private static boolean CallableUnitBody_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "CallableUnitBody_0")) return false;
+  // BlockWithEndpoint RIGHT_BRACE
+  private static boolean CallableUnitBody_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CallableUnitBody_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, LEFT_BRACE);
-    r = r && BlockWithEndpoint(b, l + 1);
+    r = BlockWithEndpoint(b, l + 1);
     r = r && consumeToken(b, RIGHT_BRACE);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // LEFT_BRACE BlockWithEndpointAndWorker RIGHT_BRACE
-  private static boolean CallableUnitBody_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "CallableUnitBody_1")) return false;
+  // BlockWithEndpointAndWorker RIGHT_BRACE
+  private static boolean CallableUnitBody_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CallableUnitBody_1_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, LEFT_BRACE);
-    r = r && BlockWithEndpointAndWorker(b, l + 1);
+    r = BlockWithEndpointAndWorker(b, l + 1);
     r = r && consumeToken(b, RIGHT_BRACE);
     exit_section_(b, m, null, r);
     return r;
@@ -4137,7 +4147,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !(int | string | float | boolean | blob | '}' | ';' |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if)
+  // !(int | string | float | boolean | blob | '}' | ';' |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if|identifier)
   static boolean StatementRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementRecover")) return false;
     boolean r;
@@ -4147,7 +4157,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // int | string | float | boolean | blob | '}' | ';' |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if
+  // int | string | float | boolean | blob | '}' | ';' |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if|identifier
   private static boolean StatementRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementRecover_0")) return false;
     boolean r;
@@ -4174,6 +4184,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, XMLNS);
     if (!r) r = consumeToken(b, TRANSACTION);
     if (!r) r = consumeToken(b, IF);
+    if (!r) r = consumeToken(b, IDENTIFIER);
     exit_section_(b, m, null, r);
     return r;
   }

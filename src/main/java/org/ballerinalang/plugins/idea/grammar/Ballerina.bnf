@@ -206,7 +206,8 @@ ServiceBody ::= LEFT_BRACE EndpointDefinition* VariableDefinitionStatement* Reso
 ResourceDefinition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? identifier LEFT_PARENTHESIS resourceParameterList? RIGHT_PARENTHESIS CallableUnitBody
 resourceParameterList ::= endpoint identifier (COMMA ParameterList)? | ParameterList {pin=1} // Todo - Extract endpoint?
 
-CallableUnitBody ::= LEFT_BRACE BlockWithEndpoint RIGHT_BRACE | LEFT_BRACE BlockWithEndpointAndWorker RIGHT_BRACE
+// Pin to make sure callable unit is identified correctly
+CallableUnitBody ::= LEFT_BRACE (BlockWithEndpoint RIGHT_BRACE | BlockWithEndpointAndWorker RIGHT_BRACE)  {pin=1}
 
 Block ::= Statement* {methods=[processDeclarations]} /*{recoverWhile=StatementRecover}*/
 BlockWithEndpoint ::= EndpointDefinition* Statement* {elementType=Block}
@@ -434,7 +435,7 @@ Statement ::=
 {recoverWhile = StatementRecover}
 
 // Todo - Add more tokens
-private StatementRecover ::= !(int | string | float | boolean | blob | '}' | ';' |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if)
+private StatementRecover ::= !(int | string | float | boolean | blob | '}' | ';' |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if|identifier)
 
 //private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
 
