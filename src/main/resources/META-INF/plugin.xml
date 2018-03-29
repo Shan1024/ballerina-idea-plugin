@@ -90,8 +90,8 @@
         <langCodeStyleSettingsProvider
                 implementation="org.ballerinalang.plugins.idea.formatter.settings.BallerinaLanguageCodeStyleSettingsProvider"/>
 
-        <!--<quoteHandler fileType="Ballerina file"-->
-        <!--className="org.ballerinalang.plugins.idea.codeinsight.editoractions.BallerinaQuoteHandler"/>-->
+        <quoteHandler fileType="Ballerina file"
+                      className="org.ballerinalang.plugins.idea.codeinsight.editoractions.BallerinaQuoteHandler"/>
 
         <!--<enterHandlerDelegate/>-->
         <!--implementation="org.ballerinalang.plugins.idea.formatter.BallerinaEnterBetweenBracesHandler"/>-->
