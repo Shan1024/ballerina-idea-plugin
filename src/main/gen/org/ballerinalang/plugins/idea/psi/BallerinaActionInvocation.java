@@ -27,9 +27,12 @@ public interface BallerinaActionInvocation extends BallerinaCompositeElement {
   BallerinaFunctionInvocation getFunctionInvocation();
 
   @NotNull
-  BallerinaVariableReference getVariableReference();
+  BallerinaNameReference getNameReference();
 
   @NotNull
   PsiElement getRarrow();
+
+  @Nullable
+  PsiElement getAsync();
 
 }

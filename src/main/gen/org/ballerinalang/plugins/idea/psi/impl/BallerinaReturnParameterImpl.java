@@ -42,6 +42,12 @@ public class BallerinaReturnParameterImpl extends BallerinaCompositeElementImpl 
   }
 
   @Override
+  @NotNull
+  public List<BallerinaAnnotationAttachment> getAnnotationAttachmentList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaAnnotationAttachment.class);
+  }
+
+  @Override
   @Nullable
   public BallerinaTypeName getTypeName() {
     return PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class);

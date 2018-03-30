@@ -28,7 +28,6 @@ public interface BallerinaTypes {
   IElementType ABORT_STATEMENT = new BallerinaCompositeElementType("ABORT_STATEMENT");
   IElementType ACTION_INVOCATION = new BallerinaCompositeElementType("ACTION_INVOCATION");
   IElementType ALIAS = BallerinaElementTypeFactory.stubFactory("ALIAS");
-  IElementType ANNOTATED_TYPE_NAME = new BallerinaCompositeElementType("ANNOTATED_TYPE_NAME");
   IElementType ANNOTATION_ATTACHMENT = new BallerinaCompositeElementType("ANNOTATION_ATTACHMENT");
   IElementType ANNOTATION_DEFINITION = BallerinaElementTypeFactory.stubFactory("ANNOTATION_DEFINITION");
   IElementType ANON_STRUCT_TYPE_NAME = new BallerinaCompositeElementType("ANON_STRUCT_TYPE_NAME");
@@ -431,9 +430,6 @@ public interface BallerinaTypes {
       }
       else if (type == ALIAS) {
         return new BallerinaAliasImpl(node);
-      }
-      else if (type == ANNOTATED_TYPE_NAME) {
-        return new BallerinaAnnotatedTypeNameImpl(node);
       }
       else if (type == ANNOTATION_ATTACHMENT) {
         return new BallerinaAnnotationAttachmentImpl(node);

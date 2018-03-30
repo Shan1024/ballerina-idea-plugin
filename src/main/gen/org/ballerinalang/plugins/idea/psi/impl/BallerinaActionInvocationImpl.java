@@ -49,14 +49,20 @@ public class BallerinaActionInvocationImpl extends BallerinaCompositeElementImpl
 
   @Override
   @NotNull
-  public BallerinaVariableReference getVariableReference() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaVariableReference.class));
+  public BallerinaNameReference getNameReference() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaNameReference.class));
   }
 
   @Override
   @NotNull
   public PsiElement getRarrow() {
     return notNullChild(findChildByType(RARROW));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getAsync() {
+    return findChildByType(ASYNC);
   }
 
 }

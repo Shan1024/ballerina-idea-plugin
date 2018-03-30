@@ -34,10 +34,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitNamedElement(o);
   }
 
-  public void visitAnnotatedTypeName(@NotNull BallerinaAnnotatedTypeName o) {
-    visitTypeName(o);
-  }
-
   public void visitAnnotationAttachment(@NotNull BallerinaAnnotationAttachment o) {
     visitCompositeElement(o);
   }

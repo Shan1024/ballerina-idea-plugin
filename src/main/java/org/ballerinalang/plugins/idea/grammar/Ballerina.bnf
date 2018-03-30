@@ -344,7 +344,7 @@ TypeName ::= TupleTypeName
              | ObjectTypeName
              | ArrayTypeName
              | SimpleTypeName
-             | AnnotatedTypeName
+//             | AnnotatedTypeName
              | NullableTypeName
 
 SimpleTypeName ::= NULL_LITERAL
@@ -355,7 +355,7 @@ SimpleTypeName ::= NULL_LITERAL
 AnyTypeName ::= any
 TypeDescTypeName ::= typedesc
 
-AnnotatedTypeName ::= AnnotationAttachment+ SimpleTypeName
+//AnnotatedTypeName ::= AnnotationAttachment+ SimpleTypeName
 ArrayTypeName ::= TypeName (LEFT_BRACKET RIGHT_BRACKET)+
 NullableTypeName ::= TypeName PIPE NULL_LITERAL
 UnionTypeName ::= TypeName (PIPE TypeName)+
@@ -425,12 +425,12 @@ Statement ::=
     |   TryCatchStatement
     |   ForkJoinStatement
     |   ExpressionStmt
+    |   WorkerInteractionStatement
     |   AssignmentStatement
     |   tupleDestructuringStatement
     |   CompoundAssignmentStatement
     |   PostIncrementStatement
     |   VariableDefinitionStatement
-    |   WorkerInteractionStatement
     // Todo - Add streaming
 //    |   wheneverStatement
 //    |   streamingQueryStatement
@@ -525,7 +525,7 @@ ReturnStatement ::= return ExpressionList? SEMICOLON {pin=1}
 WorkerInteractionStatement ::= TriggerWorker | WorkerReply
 
 // below left identifier is of type TYPE_MESSAGE and the right identifier is of type WORKER
-TriggerWorker ::=  ExpressionList RARROW identifier SEMICOLON | ExpressionList RARROW fork SEMICOLON {pin=2}
+TriggerWorker ::=  ExpressionList RARROW (fork | identifier) SEMICOLON {pin=2}
 
 // below left identifier is of type WORKER and the right identifier is of type message
 WorkerReply ::= ExpressionList LARROW identifier SEMICOLON {pin=2}
@@ -536,7 +536,7 @@ VariableReference ::= MapArrayVariableReference
                       | InvocationReference
                       | FieldVariableReference
                       | XmlAttribVariableReference
-                      | FunctionInvocationReference
+                      |  FunctionInvocationReference
                       | SimpleVariableReference
                       | AwaitExpressionReference
 
@@ -544,7 +544,7 @@ InvocationReference ::= VariableReference Invocation
 MapArrayVariableReference ::= VariableReference Index
 FieldVariableReference ::= VariableReference Field
 XmlAttribVariableReference ::= VariableReference XmlAttrib
-FunctionInvocationReference ::= FunctionInvocation
+FunctionInvocationReference ::= (async)? FunctionInvocation
 SimpleVariableReference ::=  NameReference
 AwaitExpressionReference ::= AwaitExpression
 
@@ -558,7 +558,7 @@ Index ::= LEFT_BRACKET Expression RIGHT_BRACKET /*{pin=1}*/
 XmlAttrib ::= AT (LEFT_BRACKET Expression RIGHT_BRACKET)? /*{pin=1}*/
 
 // Todo - Need to pin?
-FunctionInvocation ::= async? NameReference LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS
+FunctionInvocation ::= NameReference LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS
 
 // Todo - Adding pin will mess function invocation.
 Invocation ::= DOT AnyIdentifierName LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS /*{pin=1}*/
@@ -568,7 +568,7 @@ InvocationArgList ::= InvocationArg (COMMA InvocationArg)* {pin(".*")=1}
 InvocationArg ::= NamedArgs | RestArgs | Expression
 
 // Todo - Update the recovery rule
-ActionInvocation ::= VariableReference RARROW FunctionInvocation {pin=2 /*recoverWhile=StatementRecover*/}
+ActionInvocation ::= async? NameReference RARROW FunctionInvocation {pin=3 /*recoverWhile=StatementRecover*/}
 
 ExpressionList ::= Expression (COMMA Expression)* {
     pin(".*")=1
@@ -680,7 +680,7 @@ PackageReference ::= identifier COLON {
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageReferenceStub"
 }
 
-ReturnParameter ::= returns TypeName {pin=1}
+ReturnParameter ::= returns AnnotationAttachment* TypeName {pin=1}
 
 ParameterTypeNameList ::= parameterTypeName (COMMA parameterTypeName)* {pin=1 /*recoverWhile=RecoverParameter*/}
 

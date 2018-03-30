@@ -224,17 +224,12 @@ endpointInitlization
 
 typeName
     :   simpleTypeName                                                      # simpleTypeNameLabel
-    |   annotatedTypeName                                                   # annotatedTypeNameLabel
     |   typeName (LEFT_BRACKET RIGHT_BRACKET)+                              # arrayTypeNameLabel
     |   typeName PIPE NullLiteral                                           # nullableTypeNameLabel
     |   typeName (PIPE typeName)+                                           # unionTypeNameLabel
     |   LEFT_PARENTHESIS typeName RIGHT_PARENTHESIS                         # groupTypeNameLabel
     |   LEFT_PARENTHESIS typeName (COMMA typeName)* RIGHT_PARENTHESIS       # tupleTypeName
     |   OBJECT LEFT_BRACE objectBody RIGHT_BRACE                            # objectTypeNameLabel
-    ;
-
-annotatedTypeName
-    :   annotationAttachment+ simpleTypeName
     ;
 
 // Temporary production rule name
@@ -328,7 +323,7 @@ statement
     |   failStatement
     |   lockStatement
     |   namespaceDeclarationStatement
-    |   wheneverStatement
+    |   foreverStatement
     |   streamingQueryStatement
     ;
 
@@ -499,7 +494,7 @@ workerReply
 
 variableReference
     :   nameReference                                                           # simpleVariableReference
-    |   functionInvocation                                                      # functionInvocationReference
+    |   ASYNC? functionInvocation                                               # functionInvocationReference
     |   awaitExpression                                                         # awaitExpressionReference
     |   variableReference index                                                 # mapArrayVariableReference
     |   variableReference field                                                 # fieldVariableReference
@@ -520,7 +515,7 @@ xmlAttrib
     ;
 
 functionInvocation
-    : ASYNC? nameReference LEFT_PARENTHESIS invocationArgList? RIGHT_PARENTHESIS
+    : nameReference LEFT_PARENTHESIS invocationArgList? RIGHT_PARENTHESIS
     ;
 
 invocation
@@ -538,7 +533,7 @@ invocationArg
     ;
 
 actionInvocation
-    : nameReference RARROW functionInvocation
+    : ASYNC? nameReference RARROW functionInvocation
     ;
 
 expressionList
@@ -640,7 +635,7 @@ nameReference
     ;
 
 returnParameter
-    : RETURNS typeName
+    : RETURNS annotationAttachment* typeName
     ;
 
 parameterTypeNameList
@@ -805,8 +800,8 @@ aggregationQuery
 
     ;
 
-wheneverStatement
-    :   WHENEVER LEFT_BRACE  streamingQueryStatement+ RIGHT_BRACE
+foreverStatement
+    :   FOREVER LEFT_BRACE  streamingQueryStatement+ RIGHT_BRACE
     ;
 
 streamingQueryStatement

@@ -65,10 +65,4 @@ public class BallerinaFunctionInvocationImpl extends BallerinaCompositeElementIm
     return notNullChild(findChildByType(RIGHT_PARENTHESIS));
   }
 
-  @Override
-  @Nullable
-  public PsiElement getAsync() {
-    return findChildByType(ASYNC);
-  }
-
 }
