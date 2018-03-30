@@ -42,33 +42,9 @@ public class BallerinaTypeInitExpressionImpl extends BallerinaExpressionImpl imp
   }
 
   @Override
-  @Nullable
-  public BallerinaInvocationArgList getInvocationArgList() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaInvocationArgList.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaUserDefineTypeName getUserDefineTypeName() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaUserDefineTypeName.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLeftParenthesis() {
-    return findChildByType(LEFT_PARENTHESIS);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRightParenthesis() {
-    return findChildByType(RIGHT_PARENTHESIS);
-  }
-
-  @Override
   @NotNull
-  public PsiElement getNew() {
-    return notNullChild(findChildByType(NEW));
+  public BallerinaTypeInitExpr getTypeInitExpr() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaTypeInitExpr.class));
   }
 
 }

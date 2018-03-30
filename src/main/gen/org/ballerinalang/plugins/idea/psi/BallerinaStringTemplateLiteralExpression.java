@@ -21,15 +21,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaStringTemplateLiteral extends BallerinaCompositeElement {
-
-  @Nullable
-  BallerinaStringTemplateContent getStringTemplateContent();
-
-  @Nullable
-  PsiElement getStringTemplateLiteralEnd();
+public interface BallerinaStringTemplateLiteralExpression extends BallerinaExpression {
 
   @NotNull
-  PsiElement getStringTemplateLiteralStart();
+  BallerinaStringTemplateLiteral getStringTemplateLiteral();
 
 }

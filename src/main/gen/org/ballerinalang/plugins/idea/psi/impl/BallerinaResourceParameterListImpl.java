@@ -49,20 +49,8 @@ public class BallerinaResourceParameterListImpl extends BallerinaCompositeElemen
 
   @Override
   @Nullable
-  public PsiElement getComma() {
-    return findChildByType(COMMA);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getEndpoint() {
-    return findChildByType(ENDPOINT);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
+  public BallerinaEndpointParameter getEndpointParameter() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaEndpointParameter.class);
   }
 
 }

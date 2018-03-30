@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaStringTemplateLiteralImpl extends BallerinaCompositeElementImpl implements BallerinaStringTemplateLiteral {
+public class BallerinaEndpointParameterImpl extends BallerinaCompositeElementImpl implements BallerinaEndpointParameter {
 
-  public BallerinaStringTemplateLiteralImpl(ASTNode node) {
+  public BallerinaEndpointParameterImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitStringTemplateLiteral(this);
+    visitor.visitEndpointParameter(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -43,20 +43,26 @@ public class BallerinaStringTemplateLiteralImpl extends BallerinaCompositeElemen
 
   @Override
   @Nullable
-  public BallerinaStringTemplateContent getStringTemplateContent() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaStringTemplateContent.class);
+  public BallerinaParameterList getParameterList() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaParameterList.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getStringTemplateLiteralEnd() {
-    return findChildByType(STRING_TEMPLATE_LITERAL_END);
+  public PsiElement getComma() {
+    return findChildByType(COMMA);
   }
 
   @Override
   @NotNull
-  public PsiElement getStringTemplateLiteralStart() {
-    return notNullChild(findChildByType(STRING_TEMPLATE_LITERAL_START));
+  public PsiElement getEndpoint() {
+    return notNullChild(findChildByType(ENDPOINT));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
   }
 
 }

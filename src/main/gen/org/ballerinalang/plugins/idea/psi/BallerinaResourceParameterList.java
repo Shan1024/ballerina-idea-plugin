@@ -27,12 +27,6 @@ public interface BallerinaResourceParameterList extends BallerinaCompositeElemen
   BallerinaParameterList getParameterList();
 
   @Nullable
-  PsiElement getComma();
-
-  @Nullable
-  PsiElement getEndpoint();
-
-  @Nullable
-  PsiElement getIdentifier();
+  BallerinaEndpointParameter getEndpointParameter();
 
 }

@@ -53,4 +53,15 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
         return true;
 
     }
+
+    public static boolean isNotAResourceDefinition(PsiBuilder builder, int level) {
+        if (builder.getTokenType()!= BallerinaTypes.IDENTIFIER) {
+            return false;
+        }
+        IElementType next1Element = builder.lookAhead(1);
+        if (next1Element != null && next1Element.toString().equals("(")) {
+            return true;
+        }
+        return false;
+    }
 }

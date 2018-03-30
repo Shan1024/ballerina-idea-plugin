@@ -21,18 +21,18 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaTypeCastingExpression extends BallerinaExpression {
+public interface BallerinaEndpointParameter extends BallerinaCompositeElement {
 
   @Nullable
-  BallerinaExpression getExpression();
+  BallerinaParameterList getParameterList();
+
+  @Nullable
+  PsiElement getComma();
 
   @NotNull
-  BallerinaTypeName getTypeName();
+  PsiElement getEndpoint();
 
-  @NotNull
-  PsiElement getLeftParenthesis();
-
-  @NotNull
-  PsiElement getRightParenthesis();
+  @Nullable
+  PsiElement getIdentifier();
 
 }

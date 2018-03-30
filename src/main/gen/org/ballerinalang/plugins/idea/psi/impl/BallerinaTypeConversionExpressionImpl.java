@@ -54,9 +54,9 @@ public class BallerinaTypeConversionExpressionImpl extends BallerinaExpressionIm
   }
 
   @Override
-  @NotNull
+  @Nullable
   public BallerinaTypeName getTypeName() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class));
+    return PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class);
   }
 
   @Override
@@ -66,9 +66,9 @@ public class BallerinaTypeConversionExpressionImpl extends BallerinaExpressionIm
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getGt() {
-    return notNullChild(findChildByType(GT));
+    return findChildByType(GT);
   }
 
   @Override

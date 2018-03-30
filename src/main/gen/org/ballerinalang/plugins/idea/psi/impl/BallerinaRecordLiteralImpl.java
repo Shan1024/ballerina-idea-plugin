@@ -26,7 +26,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaRecordLiteralImpl extends BallerinaExpressionImpl implements BallerinaRecordLiteral {
+public class BallerinaRecordLiteralImpl extends BallerinaCompositeElementImpl implements BallerinaRecordLiteral {
 
   public BallerinaRecordLiteralImpl(ASTNode node) {
     super(node);

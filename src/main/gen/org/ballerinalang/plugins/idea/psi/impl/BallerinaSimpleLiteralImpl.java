@@ -26,7 +26,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaSimpleLiteralImpl extends BallerinaExpressionImpl implements BallerinaSimpleLiteral {
+public class BallerinaSimpleLiteralImpl extends BallerinaCompositeElementImpl implements BallerinaSimpleLiteral {
 
   public BallerinaSimpleLiteralImpl(ASTNode node) {
     super(node);

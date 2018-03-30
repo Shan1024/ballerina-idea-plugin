@@ -35,6 +35,9 @@ public interface BallerinaFunctionDefinition extends BallerinaNamedElement, Stub
   BallerinaParameter getParameter();
 
   @Nullable
+  PsiElement getDoubleColon();
+
+  @Nullable
   PsiElement getGt();
 
   @Nullable

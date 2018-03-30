@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaStringTemplateLiteralImpl extends BallerinaCompositeElementImpl implements BallerinaStringTemplateLiteral {
+public class BallerinaVariableDefinitionStatementInServiceImpl extends BallerinaCompositeElementImpl implements BallerinaVariableDefinitionStatementInService {
 
-  public BallerinaStringTemplateLiteralImpl(ASTNode node) {
+  public BallerinaVariableDefinitionStatementInServiceImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitStringTemplateLiteral(this);
+    visitor.visitVariableDefinitionStatementInService(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -43,20 +43,44 @@ public class BallerinaStringTemplateLiteralImpl extends BallerinaCompositeElemen
 
   @Override
   @Nullable
-  public BallerinaStringTemplateContent getStringTemplateContent() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaStringTemplateContent.class);
+  public BallerinaActionInvocation getActionInvocation() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaActionInvocation.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getStringTemplateLiteralEnd() {
-    return findChildByType(STRING_TEMPLATE_LITERAL_END);
+  public BallerinaExpression getExpression() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaExpression.class);
   }
 
   @Override
   @NotNull
-  public PsiElement getStringTemplateLiteralStart() {
-    return notNullChild(findChildByType(STRING_TEMPLATE_LITERAL_START));
+  public BallerinaTypeName getTypeName() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getAssign() {
+    return findChildByType(ASSIGN);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSafeAssignment() {
+    return findChildByType(SAFE_ASSIGNMENT);
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getSemicolon() {
+    return notNullChild(findChildByType(SEMICOLON));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getIdentifier() {
+    return notNullChild(findChildByType(IDENTIFIER));
   }
 
 }

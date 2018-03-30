@@ -21,10 +21,25 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaTest extends BallerinaCompositeElement {
+public interface BallerinaVariableDefinitionStatementInService extends BallerinaCompositeElement {
 
   @Nullable
-  BallerinaPackageReference getPackageReference();
+  BallerinaActionInvocation getActionInvocation();
+
+  @Nullable
+  BallerinaExpression getExpression();
+
+  @NotNull
+  BallerinaTypeName getTypeName();
+
+  @Nullable
+  PsiElement getAssign();
+
+  @Nullable
+  PsiElement getSafeAssignment();
+
+  @NotNull
+  PsiElement getSemicolon();
 
   @NotNull
   PsiElement getIdentifier();

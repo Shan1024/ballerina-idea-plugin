@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaTypeCastingExpressionImpl extends BallerinaExpressionImpl implements BallerinaTypeCastingExpression {
+public class BallerinaRecordLiteralExpressionImpl extends BallerinaExpressionImpl implements BallerinaRecordLiteralExpression {
 
-  public BallerinaTypeCastingExpressionImpl(ASTNode node) {
+  public BallerinaRecordLiteralExpressionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitTypeCastingExpression(this);
+    visitor.visitRecordLiteralExpression(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -42,27 +42,9 @@ public class BallerinaTypeCastingExpressionImpl extends BallerinaExpressionImpl 
   }
 
   @Override
-  @Nullable
-  public BallerinaExpression getExpression() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaExpression.class);
-  }
-
-  @Override
   @NotNull
-  public BallerinaTypeName getTypeName() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class));
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getLeftParenthesis() {
-    return notNullChild(findChildByType(LEFT_PARENTHESIS));
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getRightParenthesis() {
-    return notNullChild(findChildByType(RIGHT_PARENTHESIS));
+  public BallerinaRecordLiteral getRecordLiteral() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaRecordLiteral.class));
   }
 
 }

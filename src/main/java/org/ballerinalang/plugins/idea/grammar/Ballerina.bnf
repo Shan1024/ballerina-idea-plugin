@@ -114,9 +114,9 @@
 
     extends("(FunctionInvocation|SimpleVariable|MapArrayVariable|FieldVariable|XmlAttribVariable|Invocation|AwaitExpression)Reference") = VariableReference
 
-    extends("((ValueType|BuiltInReferenceType)Type|VariableReference|LambdaFunction|TypeInit|Type(Casting|Conversion|Access)|BracedOrTuple|Await)Expression") = Expression
+    extends("((Simple|Array|Record|Xml|StringTemplate)Literal|(ValueType|BuiltInReferenceType)Type|VariableReference|LambdaFunction|TypeInit|Type(Casting|Conversion|Access)|BracedOrTuple|Await)Expression") = Expression
     extends("(Unary|Binary|Ternary)Expression") = Expression
-    extends("((Simple|Array|Record|Xml|StringTemplate)Literal)") = Expression
+
     extends("Binary(Pow|DivMulMod|AddSub|Compare|Equal|And|Or)Expression") = BinaryExpression
 
     extends("(Simple|Array|Nullable|Union|Group|Tuple|Annotated|Object)TypeName|BinaryAndExpression") = TypeName
@@ -193,18 +193,21 @@ Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachme
                | AnnotationDefinition
                | TransformerDefinition
                | ConstantDefinition
-               | GlobalEndpointDefinition) {
+               | GlobalEndpointDefinition
+               ) {
     recoverWhile=TopLevelDefinitionRecover
 }
 
-private TopLevelDefinitionRecover ::= !(public | type | struct | service | function | enum | annotation | transformer | const | endpoint | boolean | int | float | string | blob | identifier)
+private TopLevelDefinitionRecover ::= !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'| public | type | struct | service | function | enum | annotation | transformer | const | endpoint | boolean | int | float | string | blob | identifier)
 
 ServiceDefinition ::= service (LT NameReference GT) identifier ServiceEndpointAttachments?  ServiceBody {pin=1}
 ServiceEndpointAttachments ::= bind NameReference (COMMA NameReference)* {pin=1}
-ServiceBody ::= LEFT_BRACE EndpointDefinition* VariableDefinitionStatement* ResourceDefinition* RIGHT_BRACE
+ServiceBody ::= LEFT_BRACE (/*ResourceDefinition+ | EndpointDefinition+ ResourceDefinition* |*/ EndpointDefinition* VariableDefinitionStatementInService* ResourceDefinition*) RIGHT_BRACE /*{pin=1}*/
 
-ResourceDefinition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? identifier LEFT_PARENTHESIS resourceParameterList? RIGHT_PARENTHESIS CallableUnitBody
-resourceParameterList ::= endpoint identifier (COMMA ParameterList)? | ParameterList {pin=1} // Todo - Extract endpoint?
+VariableDefinitionStatementInService ::= /*<<isNotAResourceDefinition>> VariableDefinitionStatement*/TypeName identifier ((ASSIGN | SAFE_ASSIGNMENT) (ActionInvocation | Expression))? SEMICOLON
+ResourceDefinition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment? identifier LEFT_PARENTHESIS resourceParameterList? RIGHT_PARENTHESIS CallableUnitBody {pin=4}
+resourceParameterList ::= endpointParameter | ParameterList
+endpointParameter ::= endpoint identifier (COMMA ParameterList)? {pin(".*")=1}
 
 // Pin to make sure callable unit is identified correctly
 CallableUnitBody ::= LEFT_BRACE (BlockWithEndpoint RIGHT_BRACE | BlockWithEndpointAndWorker RIGHT_BRACE)  {pin=1}
@@ -222,7 +225,7 @@ FunctionDefinition ::= FunctionWithReceiver | FunctionWithoutReceiver {
     pin=1 methods=[/*getIdentifier*/ getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFunctionDefinitionStub"
 }
 private FunctionWithReceiver ::= (public)? (native)? function (LT Parameter GT)? CallableUnitSignature (CallableUnitBody | SEMICOLON) {pin=3}
-private FunctionWithoutReceiver ::= (public)? (native)? function identifier CallableUnitSignature CallableUnitBody {pin=3}
+private FunctionWithoutReceiver ::= (public)? (native)? function identifier DOUBLE_COLON CallableUnitSignature CallableUnitBody {pin=3}
 
 LambdaFunction ::= function LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS ReturnParameter? CallableUnitBody {pin=1}
 
@@ -435,7 +438,7 @@ Statement ::=
 {recoverWhile = StatementRecover}
 
 // Todo - Add more tokens
-private StatementRecover ::= !(int | string | float | boolean | blob | '}' | ';' |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if|identifier)
+private StatementRecover ::= !(int|string|float|boolean|blob|any|'}'|';'|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if|identifier)
 
 //private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
 
@@ -453,7 +456,7 @@ RecordKey ::= identifier | SimpleLiteral
 
 ArrayLiteral ::= LEFT_BRACKET ExpressionList? RIGHT_BRACKET
 
-TypeInitExpression ::= new (LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS)? | new UserDefineTypeName LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS {pin=1}
+TypeInitExpr ::= new (LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS)? | new UserDefineTypeName LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS {pin=1}
 
 AssignmentStatement ::= (var)? VariableReference (ASSIGN | SAFE_ASSIGNMENT) (ActionInvocation | Expression) SEMICOLON /*{pin=2}*/
 
@@ -564,7 +567,8 @@ InvocationArgList ::= InvocationArg (COMMA InvocationArg)* {pin(".*")=1}
 
 InvocationArg ::= NamedArgs | RestArgs | Expression
 
-ActionInvocation ::= VariableReference RARROW FunctionInvocation {pin=2}
+// Todo - Update the recovery rule
+ActionInvocation ::= VariableReference RARROW FunctionInvocation {pin=2 /*recoverWhile=StatementRecover*/}
 
 ExpressionList ::= Expression (COMMA Expression)* {
     pin(".*")=1
@@ -605,19 +609,18 @@ NamespaceDeclaration ::= xmlns QUOTED_STRING_LITERAL (as identifier)? SEMICOLON 
 
 Expression
     ::=
-        SimpleLiteral
-    |   StringTemplateLiteral
-    |   XmlLiteral
-    |   RecordLiteral
+        SimpleLiteralExpression
+    |   StringTemplateLiteralExpression
+    |   XmlLiteralExpression
+    |   RecordLiteralExpression
     |   BracedOrTupleExpression
     |   TernaryExpression {/*pin=1 */ /*recoverWhile=ExpressionRecover*/}
-    |   ArrayLiteral
+    |   ArrayLiteralExpression
     |   ValueTypeTypeExpression
     |   BuiltInReferenceTypeTypeExpression
     |   VariableReferenceExpression
     |   LambdaFunctionExpression
     |   TypeInitExpression
-    |   TypeCastingExpression
     |   TypeConversionExpression
     |   TypeAccessExpression
     |   UnaryExpression
@@ -632,22 +635,26 @@ Expression
     recoverWhile=ExpressionRecover
 }
 
-private ExpressionRecover ::= !(int | string | float | boolean | blob | '}' | ';' |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if)
+private ExpressionRecover ::= !(int | string | float | boolean | blob |any| '}' | ';'|var |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if)
 
 fake BinaryExpression ::= Expression {
   methods=[left="Expression[0]" right="Expression[1]" getOperator]
 }
 
 //private ExpressionRecover ::=  !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var )
-
+SimpleLiteralExpression ::= SimpleLiteral
+ArrayLiteralExpression ::= ArrayLiteral
+RecordLiteralExpression ::= RecordLiteral
+XmlLiteralExpression ::= XmlLiteral
+StringTemplateLiteralExpression ::= StringTemplateLiteral
 ValueTypeTypeExpression ::= ValueTypeName DOT identifier
 BuiltInReferenceTypeTypeExpression ::= BuiltInReferenceTypeName DOT identifier
 VariableReferenceExpression ::= VariableReference
 LambdaFunctionExpression ::= LambdaFunction
-TypeCastingExpression ::= LEFT_PARENTHESIS TypeName RIGHT_PARENTHESIS Expression
-TypeConversionExpression ::= LT TypeName (COMMA FunctionInvocation)? GT Expression
-TypeAccessExpression ::= typeof BuiltInTypeName
-UnaryExpression ::= (ADD | SUB | NOT | lengthof | typeof | untaint) Expression
+TypeInitExpression ::= TypeInitExpr
+TypeConversionExpression ::= LT TypeName (COMMA FunctionInvocation)? GT Expression {pin=1}
+TypeAccessExpression ::= typeof BuiltInTypeName {pin=1}
+UnaryExpression ::= (ADD | SUB | NOT | lengthof | typeof | untaint) Expression {pin=1}
 BracedOrTupleExpression ::= LEFT_PARENTHESIS Expression (COMMA Expression)* RIGHT_PARENTHESIS
 BinaryPowExpression ::= Expression POW Expression
 BinaryDivMulModExpression ::= Expression (DIV | MUL | MOD) Expression
@@ -679,7 +686,7 @@ ParameterTypeNameList ::= parameterTypeName (COMMA parameterTypeName)* {pin=1 /*
 
 parameterTypeName ::= AnnotationAttachment* TypeName
 
-ParameterList ::= Parameter (COMMA Parameter)* {pin=1 /*recoverWhile=RecoverParameter*/}
+ParameterList ::= Parameter (COMMA Parameter)* {pin(".*")=1 /*recoverWhile=RecoverParameter*/}
 
 //private RecoverParameter ::= !(string | COMMA | RIGHT_PARENTHESIS | identifier)
 

@@ -26,7 +26,7 @@ public interface BallerinaResourceDefinition extends BallerinaCompositeElement {
   @NotNull
   List<BallerinaAnnotationAttachment> getAnnotationAttachmentList();
 
-  @NotNull
+  @Nullable
   BallerinaCallableUnitBody getCallableUnitBody();
 
   @Nullable
@@ -38,10 +38,10 @@ public interface BallerinaResourceDefinition extends BallerinaCompositeElement {
   @Nullable
   BallerinaResourceParameterList getResourceParameterList();
 
-  @NotNull
+  @Nullable
   PsiElement getLeftParenthesis();
 
-  @NotNull
+  @Nullable
   PsiElement getRightParenthesis();
 
   @NotNull

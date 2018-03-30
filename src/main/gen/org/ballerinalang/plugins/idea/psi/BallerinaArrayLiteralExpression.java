@@ -21,9 +21,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaNameReferenceWithoutPackage extends BallerinaCompositeElement {
+public interface BallerinaArrayLiteralExpression extends BallerinaExpression {
 
   @NotNull
-  PsiElement getIdentifier();
+  BallerinaArrayLiteral getArrayLiteral();
 
 }
