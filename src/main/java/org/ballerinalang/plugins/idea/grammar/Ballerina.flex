@@ -376,8 +376,8 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "match"                                     { return MATCH; }
 
     "native"                                    { return NATIVE; }
-    "next"                                      { return NEXT; }
     "new"                                       { return NEW; }
+    "next"                                      { return NEXT; }
 
     "object"                                    { return OBJECT; }
     "onabort"                                   { return ONABORT; }
@@ -389,6 +389,7 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "private"                                   { return PRIVATE; }
     "public"                                    { return PUBLIC; }
 
+    "resource"                                  { return RESOURCE; }
     "retries"                                   { return RETRIES; }
     "return"                                    { return RETURN; }
     "returns"                                   { return RETURNS; }
