@@ -19,43 +19,51 @@ package org.ballerinalang.plugins.idea.parser;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
+import com.intellij.psi.PsiWhiteSpace;
+import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypes;
 
 public class BallerinaParserUtil extends GeneratedParserUtilBase {
 
     public static boolean isPackageExpected(PsiBuilder builder, int level) {
-//        //        if (builder.getTokenType() != BallerinaTypes.IDENTIFIER) {
-//        //            return false;
-//        //        }
-//
         IElementType next1Element = builder.lookAhead(1);
         if (next1Element != null && next1Element.toString().equals(":")) {
             IElementType next2Element = builder.lookAhead(2);
             if (next2Element != null && next2Element == BallerinaTypes.IDENTIFIER) {
                 IElementType next3Element = builder.lookAhead(3);
-                if (next3Element != null && next3Element == BallerinaTypes.SEMICOLON) {
-//                    builder.remapCurrentToken(BallerinaTypes.NAME_REFERENCE);
-//                    builder.advanceLexer();
-                    return false;
+                // The next token can be one of the following tokens.
+                if (next3Element != null && (next3Element == BallerinaTypes.SEMICOLON
+                        || next3Element == BallerinaTypes.COLON || next3Element == BallerinaTypes.RIGHT_PARENTHESIS)) {
+                    // We need to look behind few steps to identify the last token. If this token is not "?" only we
+                    // identify that the package is required.
+                    int steps = -1;
+                    IElementType rawLookup;
+                    do {
+                        rawLookup = builder.rawLookup(steps--);
+                        if (isWhiteSpaceOrComment(rawLookup)) {
+                            continue;
+                        }
+                        if (rawLookup == BallerinaTypes.QUESTION_MARK) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                    while (rawLookup != null && isWhiteSpaceOrComment(rawLookup));
                 }
             }
-
         }
-//        //        LighterASTNode latestDoneMarker = builder.getLatestDoneMarker();
-//        //        if (latestDoneMarker == null) {
-//        //            return true;
-//        //        }
-//        //        if (latestDoneMarker.getTokenType() == BallerinaTypes.BINARY_EQUAL_EXPRESSION) {
-//        //            return false;
-//        //        }
-//        builder.advanceLexer();
         return true;
 
     }
 
+    private static boolean isWhiteSpaceOrComment(IElementType rawLookup) {
+        return rawLookup == TokenType.WHITE_SPACE || rawLookup == BallerinaTypes.COMMENT;
+    }
+
     public static boolean isNotAResourceDefinition(PsiBuilder builder, int level) {
-        if (builder.getTokenType()!= BallerinaTypes.IDENTIFIER) {
+        if (builder.getTokenType() != BallerinaTypes.IDENTIFIER) {
             return false;
         }
         IElementType next1Element = builder.lookAhead(1);

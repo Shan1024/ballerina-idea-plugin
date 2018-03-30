@@ -394,7 +394,7 @@ TableTypeName ::= table (LT NameReference GT)? {pin=1}
 StreamTypeName ::= stream (LT NameReference GT)? {pin=1}
 
 // Todo - Pin 1?
-FunctionTypeName ::= function LEFT_PARENTHESIS (ParameterTypeNameList | ParameterList )? RIGHT_PARENTHESIS ReturnParameter? {pin=3}
+FunctionTypeName ::= function LEFT_PARENTHESIS (ParameterList | ParameterTypeNameList)? RIGHT_PARENTHESIS ReturnParameter? {pin=3}
 
 XmlNamespaceName ::= QUOTED_STRING_LITERAL
 
@@ -438,7 +438,7 @@ Statement ::=
 {recoverWhile = StatementRecover}
 
 // Todo - Add more tokens
-private StatementRecover ::= !(int|string|float|boolean|blob|any|json|xml|xmlns|map|'}'|';'|future|await|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|transaction|if|identifier)
+private StatementRecover ::= !(int|string|float|boolean|blob|any|json|xml|xmlns|map|function|'}'|';'|future|await|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|transaction|if|identifier)
 
 //private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
 
@@ -635,7 +635,7 @@ Expression
     recoverWhile=ExpressionRecover
 }
 
-private ExpressionRecover ::= !(int | string | float | boolean | blob |any| '}' | ';'|var |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if)
+private ExpressionRecover ::= !(int|string|float|boolean|blob|any|function|'}'|';'|var |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if)
 
 fake BinaryExpression ::= Expression {
   methods=[left="Expression[0]" right="Expression[1]" getOperator]
@@ -692,7 +692,7 @@ ParameterList ::= Parameter (COMMA Parameter)* {pin(".*")=1 /*recoverWhile=Recov
 
 // Todo - Add indexing
 Parameter ::= SimpleParameter | TupleParameter
-private SimpleParameter ::= AnnotationAttachment* TypeName identifier {pin=2}
+private SimpleParameter ::= AnnotationAttachment* TypeName identifier /*{pin=2}*/
 private TupleParameter ::= AnnotationAttachment* LEFT_PARENTHESIS TypeName identifier (COMMA TypeName identifier)* RIGHT_PARENTHESIS
 
 DefaultableParameter ::= Parameter ASSIGN Expression
