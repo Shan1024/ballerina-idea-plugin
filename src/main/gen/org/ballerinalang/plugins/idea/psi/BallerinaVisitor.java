@@ -891,6 +891,14 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitMatchStatementBody(@NotNull BallerinaMatchStatementBody o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitNamedPattern(@NotNull BallerinaNamedPattern o) {
+    visitCompositeElement(o);
+  }
+
   public void visitParameterTypeName(@NotNull BallerinaParameterTypeName o) {
     visitCompositeElement(o);
   }
@@ -916,6 +924,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitTupleDestructuringStatement(@NotNull BallerinaTupleDestructuringStatement o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitUnnamedPattern(@NotNull BallerinaUnnamedPattern o) {
     visitCompositeElement(o);
   }
 

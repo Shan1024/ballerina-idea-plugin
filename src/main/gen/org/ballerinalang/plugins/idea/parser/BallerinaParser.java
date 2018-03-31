@@ -576,6 +576,12 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == MATCH_STATEMENT) {
       r = matchStatement(b, 0);
     }
+    else if (t == MATCH_STATEMENT_BODY) {
+      r = matchStatementBody(b, 0);
+    }
+    else if (t == NAMED_PATTERN) {
+      r = namedPattern(b, 0);
+    }
     else if (t == PARAMETER_TYPE_NAME) {
       r = parameterTypeName(b, 0);
     }
@@ -596,6 +602,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     }
     else if (t == TUPLE_DESTRUCTURING_STATEMENT) {
       r = tupleDestructuringStatement(b, 0);
+    }
+    else if (t == UNNAMED_PATTERN) {
+      r = unnamedPattern(b, 0);
     }
     else {
       r = parse_root_(t, b, 0);
@@ -3062,6 +3071,23 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     p = r; // pin = 1
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  /* ********************************************************** */
+  // Statement+
+  public static boolean NonEmptyBlock(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "NonEmptyBlock")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, BLOCK, "<non empty block>");
+    r = Statement(b, l + 1);
+    int c = current_position_(b);
+    while (r) {
+      if (!Statement(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "NonEmptyBlock", c)) break;
+      c = current_position_(b);
+    }
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
   /* ********************************************************** */
@@ -6155,7 +6181,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // match Expression LEFT_BRACE matchPatternClause+ RIGHT_BRACE
+  // match Expression matchStatementBody
   public static boolean matchStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "matchStatement")) return false;
     if (!nextTokenIs(b, MATCH)) return false;
@@ -6164,23 +6190,35 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, MATCH);
     p = r; // pin = 1
     r = r && report_error_(b, Expression(b, l + 1, -1));
-    r = p && report_error_(b, consumeToken(b, LEFT_BRACE)) && r;
-    r = p && report_error_(b, matchStatement_3(b, l + 1)) && r;
-    r = p && consumeToken(b, RIGHT_BRACE) && r;
+    r = p && matchStatementBody(b, l + 1) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
+  /* ********************************************************** */
+  // LEFT_BRACE matchPatternClause+ RIGHT_BRACE
+  public static boolean matchStatementBody(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "matchStatementBody")) return false;
+    if (!nextTokenIs(b, LEFT_BRACE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LEFT_BRACE);
+    r = r && matchStatementBody_1(b, l + 1);
+    r = r && consumeToken(b, RIGHT_BRACE);
+    exit_section_(b, m, MATCH_STATEMENT_BODY, r);
+    return r;
+  }
+
   // matchPatternClause+
-  private static boolean matchStatement_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "matchStatement_3")) return false;
+  private static boolean matchStatementBody_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "matchStatementBody_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = matchPatternClause(b, l + 1);
     int c = current_position_(b);
     while (r) {
       if (!matchPatternClause(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "matchStatement_3", c)) break;
+      if (!empty_element_parsed_guard_(b, "matchStatementBody_1", c)) break;
       c = current_position_(b);
     }
     exit_section_(b, m, null, r);
@@ -6188,11 +6226,11 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // TypeName identifier EQUAL_GT ((LEFT_BRACE Statement+ RIGHT_BRACE)|Statement)
-  static boolean namedPattern(PsiBuilder b, int l) {
+  // TypeName identifier EQUAL_GT (LEFT_BRACE NonEmptyBlock RIGHT_BRACE | Statement)
+  public static boolean namedPattern(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "namedPattern")) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
+    Marker m = enter_section_(b, l, _NONE_, NAMED_PATTERN, "<named pattern>");
     r = TypeName(b, l + 1, -1);
     r = r && consumeTokens(b, 2, IDENTIFIER, EQUAL_GT);
     p = r; // pin = 3
@@ -6201,7 +6239,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // (LEFT_BRACE Statement+ RIGHT_BRACE)|Statement
+  // LEFT_BRACE NonEmptyBlock RIGHT_BRACE | Statement
   private static boolean namedPattern_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "namedPattern_3")) return false;
     boolean r;
@@ -6212,30 +6250,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // LEFT_BRACE Statement+ RIGHT_BRACE
+  // LEFT_BRACE NonEmptyBlock RIGHT_BRACE
   private static boolean namedPattern_3_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "namedPattern_3_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, LEFT_BRACE);
-    r = r && namedPattern_3_0_1(b, l + 1);
+    r = r && NonEmptyBlock(b, l + 1);
     r = r && consumeToken(b, RIGHT_BRACE);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // Statement+
-  private static boolean namedPattern_3_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "namedPattern_3_0_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = Statement(b, l + 1);
-    int c = current_position_(b);
-    while (r) {
-      if (!Statement(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "namedPattern_3_0_1", c)) break;
-      c = current_position_(b);
-    }
     exit_section_(b, m, null, r);
     return r;
   }
@@ -6433,11 +6455,11 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // TypeName EQUAL_GT ((LEFT_BRACE Statement+ RIGHT_BRACE) | Statement)
-  static boolean unnamedPattern(PsiBuilder b, int l) {
+  // TypeName EQUAL_GT (LEFT_BRACE NonEmptyBlock RIGHT_BRACE | Statement)
+  public static boolean unnamedPattern(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "unnamedPattern")) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
+    Marker m = enter_section_(b, l, _NONE_, UNNAMED_PATTERN, "<unnamed pattern>");
     r = TypeName(b, l + 1, -1);
     r = r && consumeToken(b, EQUAL_GT);
     p = r; // pin = 2
@@ -6446,7 +6468,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // (LEFT_BRACE Statement+ RIGHT_BRACE) | Statement
+  // LEFT_BRACE NonEmptyBlock RIGHT_BRACE | Statement
   private static boolean unnamedPattern_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "unnamedPattern_2")) return false;
     boolean r;
@@ -6457,30 +6479,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // LEFT_BRACE Statement+ RIGHT_BRACE
+  // LEFT_BRACE NonEmptyBlock RIGHT_BRACE
   private static boolean unnamedPattern_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "unnamedPattern_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, LEFT_BRACE);
-    r = r && unnamedPattern_2_0_1(b, l + 1);
+    r = r && NonEmptyBlock(b, l + 1);
     r = r && consumeToken(b, RIGHT_BRACE);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // Statement+
-  private static boolean unnamedPattern_2_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "unnamedPattern_2_0_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = Statement(b, l + 1);
-    int c = current_position_(b);
-    while (r) {
-      if (!Statement(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "unnamedPattern_2_0_1", c)) break;
-      c = current_position_(b);
-    }
     exit_section_(b, m, null, r);
     return r;
   }

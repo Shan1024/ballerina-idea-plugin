@@ -113,6 +113,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PUBLIC;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RARROW;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RECORD_KEY_VALUE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RECORD_LITERAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RECORD_LITERAL_BODY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RESOURCE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RESOURCE_DEFINITION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETRIES;
@@ -268,6 +269,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .afterInside(COMMA, RECORD_LITERAL).spaceIf(true)
                 .between(RECORD_KEY_VALUE, RIGHT_BRACE).spaceIf(false)
                 .between(LEFT_BRACE, RIGHT_BRACE).spaceIf(false)
+                .around(RECORD_LITERAL_BODY).spaceIf(false)
 
                 // Statements
                 .between(LEFT_BRACE, RIGHT_BRACE).spaceIf(false)

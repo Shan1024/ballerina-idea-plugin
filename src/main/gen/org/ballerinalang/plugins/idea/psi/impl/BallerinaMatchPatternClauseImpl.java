@@ -42,39 +42,15 @@ public class BallerinaMatchPatternClauseImpl extends BallerinaCompositeElementIm
   }
 
   @Override
-  @NotNull
-  public List<BallerinaStatement> getStatementList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaStatement.class);
-  }
-
-  @Override
-  @NotNull
-  public BallerinaTypeName getTypeName() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class));
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getEqualGt() {
-    return notNullChild(findChildByType(EQUAL_GT));
+  @Nullable
+  public BallerinaNamedPattern getNamedPattern() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaNamedPattern.class);
   }
 
   @Override
   @Nullable
-  public PsiElement getLeftBrace() {
-    return findChildByType(LEFT_BRACE);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRightBrace() {
-    return findChildByType(RIGHT_BRACE);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
+  public BallerinaUnnamedPattern getUnnamedPattern() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaUnnamedPattern.class);
   }
 
 }

@@ -215,7 +215,7 @@ CallableUnitBody ::= LEFT_BRACE (BlockWithEndpoint RIGHT_BRACE | BlockWithEndpoi
 Block ::= Statement* {methods=[processDeclarations]} /*{recoverWhile=StatementRecover}*/
 BlockWithEndpoint ::= EndpointDefinition* Statement* {elementType=Block}
 BlockWithEndpointAndWorker ::= EndpointDefinition* WorkerDefinition+ {elementType=Block}
-
+NonEmptyBlock ::= Statement+ {elementType=Block}
 //private StatementRecover ::= !(int | string | '}' | '=')
 
 //private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
@@ -488,11 +488,13 @@ ElseIfClause ::= else if LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_BRAC
 
 ElseClause ::= else LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
-matchStatement ::= match Expression LEFT_BRACE matchPatternClause+ RIGHT_BRACE {pin=1}
+matchStatement ::= match Expression matchStatementBody {pin=1}
+matchStatementBody ::= LEFT_BRACE matchPatternClause+ RIGHT_BRACE
 
+// Todo - Add fake rule
 matchPatternClause ::= namedPattern | unnamedPattern
-private unnamedPattern ::= TypeName EQUAL_GT ((LEFT_BRACE Statement+ RIGHT_BRACE) | Statement) {pin=2}
-private namedPattern ::= TypeName identifier EQUAL_GT ((LEFT_BRACE Statement+ RIGHT_BRACE)|Statement) {pin=3}
+unnamedPattern ::= TypeName EQUAL_GT (LEFT_BRACE NonEmptyBlock RIGHT_BRACE | Statement) {pin=2}
+namedPattern ::= TypeName identifier EQUAL_GT (LEFT_BRACE NonEmptyBlock RIGHT_BRACE | Statement) {pin=3}
 
 ForeachStatement ::= foreach LEFT_PARENTHESIS? VariableReferenceList in (Expression | IntRangeExpression) RIGHT_PARENTHESIS? LEFT_BRACE Block RIGHT_BRACE {pin=1}
 

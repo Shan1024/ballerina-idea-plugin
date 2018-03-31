@@ -129,7 +129,9 @@ public interface BallerinaTypes {
   IElementType MAP_TYPE_NAME = new BallerinaCompositeElementType("MAP_TYPE_NAME");
   IElementType MATCH_PATTERN_CLAUSE = new BallerinaCompositeElementType("MATCH_PATTERN_CLAUSE");
   IElementType MATCH_STATEMENT = new BallerinaCompositeElementType("MATCH_STATEMENT");
+  IElementType MATCH_STATEMENT_BODY = new BallerinaCompositeElementType("MATCH_STATEMENT_BODY");
   IElementType NAMED_ARGS = new BallerinaCompositeElementType("NAMED_ARGS");
+  IElementType NAMED_PATTERN = new BallerinaCompositeElementType("NAMED_PATTERN");
   IElementType NAMESPACE_DECLARATION = BallerinaElementTypeFactory.stubFactory("NAMESPACE_DECLARATION");
   IElementType NAMESPACE_DECLARATION_STATEMENT = new BallerinaCompositeElementType("NAMESPACE_DECLARATION_STATEMENT");
   IElementType NAME_REFERENCE = BallerinaElementTypeFactory.stubFactory("NAME_REFERENCE");
@@ -221,6 +223,7 @@ public interface BallerinaTypes {
   IElementType TYPE_NAME = new BallerinaCompositeElementType("TYPE_NAME");
   IElementType UNARY_EXPRESSION = new BallerinaCompositeElementType("UNARY_EXPRESSION");
   IElementType UNION_TYPE_NAME = new BallerinaCompositeElementType("UNION_TYPE_NAME");
+  IElementType UNNAMED_PATTERN = new BallerinaCompositeElementType("UNNAMED_PATTERN");
   IElementType USER_DEFINE_TYPE_NAME = new BallerinaCompositeElementType("USER_DEFINE_TYPE_NAME");
   IElementType VALUE_TYPE_NAME = new BallerinaCompositeElementType("VALUE_TYPE_NAME");
   IElementType VALUE_TYPE_TYPE_EXPRESSION = new BallerinaCompositeElementType("VALUE_TYPE_TYPE_EXPRESSION");
@@ -742,8 +745,14 @@ public interface BallerinaTypes {
       else if (type == MATCH_STATEMENT) {
         return new BallerinaMatchStatementImpl(node);
       }
+      else if (type == MATCH_STATEMENT_BODY) {
+        return new BallerinaMatchStatementBodyImpl(node);
+      }
       else if (type == NAMED_ARGS) {
         return new BallerinaNamedArgsImpl(node);
+      }
+      else if (type == NAMED_PATTERN) {
+        return new BallerinaNamedPatternImpl(node);
       }
       else if (type == NAMESPACE_DECLARATION) {
         return new BallerinaNamespaceDeclarationImpl(node);
@@ -1014,6 +1023,9 @@ public interface BallerinaTypes {
       }
       else if (type == UNION_TYPE_NAME) {
         return new BallerinaUnionTypeNameImpl(node);
+      }
+      else if (type == UNNAMED_PATTERN) {
+        return new BallerinaUnnamedPatternImpl(node);
       }
       else if (type == USER_DEFINE_TYPE_NAME) {
         return new BallerinaUserDefineTypeNameImpl(node);
