@@ -484,8 +484,8 @@ ElseClause ::= else LEFT_BRACE Block RIGHT_BRACE {pin=1}
 matchStatement ::= match Expression LEFT_BRACE matchPatternClause+ RIGHT_BRACE {pin=1}
 
 matchPatternClause ::= namedPattern | unnamedPattern
-private unnamedPattern ::= TypeName EQUAL_GT (Statement | (LEFT_BRACE Statement+ RIGHT_BRACE)) {pin=2}
-private namedPattern ::= TypeName identifier EQUAL_GT (Statement | (LEFT_BRACE Statement+ RIGHT_BRACE)) {pin=3}
+private unnamedPattern ::= TypeName EQUAL_GT ((LEFT_BRACE Statement+ RIGHT_BRACE) | Statement) {pin=2}
+private namedPattern ::= TypeName identifier EQUAL_GT ((LEFT_BRACE Statement+ RIGHT_BRACE)|Statement) {pin=3}
 
 ForeachStatement ::= foreach LEFT_PARENTHESIS? VariableReferenceList in (Expression | IntRangeExpression) RIGHT_PARENTHESIS? LEFT_BRACE Block RIGHT_BRACE {pin=1}
 

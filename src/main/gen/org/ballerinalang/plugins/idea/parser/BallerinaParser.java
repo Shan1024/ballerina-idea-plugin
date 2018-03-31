@@ -6060,7 +6060,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // TypeName identifier EQUAL_GT (Statement | (LEFT_BRACE Statement+ RIGHT_BRACE))
+  // TypeName identifier EQUAL_GT ((LEFT_BRACE Statement+ RIGHT_BRACE)|Statement)
   static boolean namedPattern(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "namedPattern")) return false;
     boolean r, p;
@@ -6073,39 +6073,39 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // Statement | (LEFT_BRACE Statement+ RIGHT_BRACE)
+  // (LEFT_BRACE Statement+ RIGHT_BRACE)|Statement
   private static boolean namedPattern_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "namedPattern_3")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Statement(b, l + 1);
-    if (!r) r = namedPattern_3_1(b, l + 1);
+    r = namedPattern_3_0(b, l + 1);
+    if (!r) r = Statement(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // LEFT_BRACE Statement+ RIGHT_BRACE
-  private static boolean namedPattern_3_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "namedPattern_3_1")) return false;
+  private static boolean namedPattern_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "namedPattern_3_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, LEFT_BRACE);
-    r = r && namedPattern_3_1_1(b, l + 1);
+    r = r && namedPattern_3_0_1(b, l + 1);
     r = r && consumeToken(b, RIGHT_BRACE);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // Statement+
-  private static boolean namedPattern_3_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "namedPattern_3_1_1")) return false;
+  private static boolean namedPattern_3_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "namedPattern_3_0_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Statement(b, l + 1);
     int c = current_position_(b);
     while (r) {
       if (!Statement(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "namedPattern_3_1_1", c)) break;
+      if (!empty_element_parsed_guard_(b, "namedPattern_3_0_1", c)) break;
       c = current_position_(b);
     }
     exit_section_(b, m, null, r);
@@ -6305,7 +6305,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // TypeName EQUAL_GT (Statement | (LEFT_BRACE Statement+ RIGHT_BRACE))
+  // TypeName EQUAL_GT ((LEFT_BRACE Statement+ RIGHT_BRACE) | Statement)
   static boolean unnamedPattern(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "unnamedPattern")) return false;
     boolean r, p;
@@ -6318,39 +6318,39 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // Statement | (LEFT_BRACE Statement+ RIGHT_BRACE)
+  // (LEFT_BRACE Statement+ RIGHT_BRACE) | Statement
   private static boolean unnamedPattern_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "unnamedPattern_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Statement(b, l + 1);
-    if (!r) r = unnamedPattern_2_1(b, l + 1);
+    r = unnamedPattern_2_0(b, l + 1);
+    if (!r) r = Statement(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // LEFT_BRACE Statement+ RIGHT_BRACE
-  private static boolean unnamedPattern_2_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "unnamedPattern_2_1")) return false;
+  private static boolean unnamedPattern_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "unnamedPattern_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, LEFT_BRACE);
-    r = r && unnamedPattern_2_1_1(b, l + 1);
+    r = r && unnamedPattern_2_0_1(b, l + 1);
     r = r && consumeToken(b, RIGHT_BRACE);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // Statement+
-  private static boolean unnamedPattern_2_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "unnamedPattern_2_1_1")) return false;
+  private static boolean unnamedPattern_2_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "unnamedPattern_2_0_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = Statement(b, l + 1);
     int c = current_position_(b);
     while (r) {
       if (!Statement(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "unnamedPattern_2_1_1", c)) break;
+      if (!empty_element_parsed_guard_(b, "unnamedPattern_2_0_1", c)) break;
       c = current_position_(b);
     }
     exit_section_(b, m, null, r);
