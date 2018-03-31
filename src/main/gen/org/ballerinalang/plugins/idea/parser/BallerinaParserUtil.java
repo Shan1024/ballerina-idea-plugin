@@ -72,15 +72,19 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                         }
                         // Identifier example - endpoint ServiceEndpoint backendEP {port:getBackendPort()};
                         // Quoted literal string example - {address:{"city":"Colombo", "country":"SriLanka"}, info:info}
-                        // Last condition example - {dataSourceClassName:"org.hsqldb.jdbc.JDBCDataSource",
-                        // datasourceProperties:propertiesMap}
+
                         // Decimal literal example - string a = x == 1 ? s : i;
                         if (rawLookup2 != BallerinaTypes.ASSIGN /*&& rawLookup2 != BallerinaTypes.COLON*/
                                 && rawLookup2 != BallerinaTypes.DOT && rawLookup2 != BallerinaTypes.IDENTIFIER
                                 && rawLookup2 != BallerinaTypes.QUOTED_STRING_LITERAL
                                 && rawLookup2 != BallerinaTypes.DECIMAL_INTEGER_LITERAL
                                 && rawLookup2 != BallerinaTypes.BOOLEAN_LITERAL
-                                && !(rawLookup == BallerinaTypes.COMMA && rawLookup2 == BallerinaTypes.COLON)) {
+                                // Example for below condition - {dataSourceClassName:"org.hsqldb.jdbc.JDBCDataSource",
+                                // datasourceProperties:propertiesMap}
+                                && !(rawLookup == BallerinaTypes.COMMA && rawLookup2 == BallerinaTypes.COLON)
+                                // Example for below condition - worker w {a:b();}
+                                || (rawLookup == BallerinaTypes.LEFT_BRACE
+                                && rawLookup2 == BallerinaTypes.IDENTIFIER)) {
                             return true;
                         } else {
                             return false;
