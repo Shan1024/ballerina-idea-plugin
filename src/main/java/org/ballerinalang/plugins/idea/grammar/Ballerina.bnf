@@ -680,7 +680,8 @@ PackageReference ::= identifier COLON {
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageReferenceStub"
 }
 
-ReturnParameter ::= returns AnnotationAttachment* TypeName {pin=1}
+ReturnParameter ::= returns ReturnType {pin=1}
+ReturnType ::= AnnotationAttachment* TypeName
 
 ParameterTypeNameList ::= parameterTypeName (COMMA parameterTypeName)* {pin=1 /*recoverWhile=RecoverParameter*/}
 

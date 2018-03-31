@@ -174,6 +174,7 @@ public interface BallerinaTypes {
   IElementType RETRIES_STATEMENT = new BallerinaCompositeElementType("RETRIES_STATEMENT");
   IElementType RETURN_PARAMETER = new BallerinaCompositeElementType("RETURN_PARAMETER");
   IElementType RETURN_STATEMENT = new BallerinaCompositeElementType("RETURN_STATEMENT");
+  IElementType RETURN_TYPE = new BallerinaCompositeElementType("RETURN_TYPE");
   IElementType SERVICE_BODY = new BallerinaCompositeElementType("SERVICE_BODY");
   IElementType SERVICE_DEFINITION = new BallerinaCompositeElementType("SERVICE_DEFINITION");
   IElementType SERVICE_ENDPOINT_ATTACHMENTS = new BallerinaCompositeElementType("SERVICE_ENDPOINT_ATTACHMENTS");
@@ -868,6 +869,9 @@ public interface BallerinaTypes {
       }
       else if (type == RETURN_STATEMENT) {
         return new BallerinaReturnStatementImpl(node);
+      }
+      else if (type == RETURN_TYPE) {
+        return new BallerinaReturnTypeImpl(node);
       }
       else if (type == SERVICE_BODY) {
         return new BallerinaServiceBodyImpl(node);

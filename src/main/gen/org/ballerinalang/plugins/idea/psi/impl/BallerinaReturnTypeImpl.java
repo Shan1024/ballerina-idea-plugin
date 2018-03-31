@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaReturnParameterImpl extends BallerinaCompositeElementImpl implements BallerinaReturnParameter {
+public class BallerinaReturnTypeImpl extends BallerinaCompositeElementImpl implements BallerinaReturnType {
 
-  public BallerinaReturnParameterImpl(ASTNode node) {
+  public BallerinaReturnTypeImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitReturnParameter(this);
+    visitor.visitReturnType(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -42,15 +42,15 @@ public class BallerinaReturnParameterImpl extends BallerinaCompositeElementImpl 
   }
 
   @Override
-  @Nullable
-  public BallerinaReturnType getReturnType() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaReturnType.class);
+  @NotNull
+  public List<BallerinaAnnotationAttachment> getAnnotationAttachmentList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaAnnotationAttachment.class);
   }
 
   @Override
   @NotNull
-  public PsiElement getReturns() {
-    return notNullChild(findChildByType(RETURNS));
+  public BallerinaTypeName getTypeName() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class));
   }
 
 }

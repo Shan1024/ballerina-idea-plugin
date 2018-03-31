@@ -372,6 +372,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == RETURN_STATEMENT) {
       r = ReturnStatement(b, 0);
     }
+    else if (t == RETURN_TYPE) {
+      r = ReturnType(b, 0);
+    }
     else if (t == SERVICE_BODY) {
       r = ServiceBody(b, 0);
     }
@@ -3998,7 +4001,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // returns AnnotationAttachment* TypeName
+  // returns ReturnType
   public static boolean ReturnParameter(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ReturnParameter")) return false;
     if (!nextTokenIs(b, RETURNS)) return false;
@@ -4006,22 +4009,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, RETURN_PARAMETER, null);
     r = consumeToken(b, RETURNS);
     p = r; // pin = 1
-    r = r && report_error_(b, ReturnParameter_1(b, l + 1));
-    r = p && TypeName(b, l + 1, -1) && r;
+    r = r && ReturnType(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
-  }
-
-  // AnnotationAttachment*
-  private static boolean ReturnParameter_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ReturnParameter_1")) return false;
-    int c = current_position_(b);
-    while (true) {
-      if (!AnnotationAttachment(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "ReturnParameter_1", c)) break;
-      c = current_position_(b);
-    }
-    return true;
   }
 
   /* ********************************************************** */
@@ -4043,6 +4033,30 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   private static boolean ReturnStatement_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ReturnStatement_1")) return false;
     ExpressionList(b, l + 1);
+    return true;
+  }
+
+  /* ********************************************************** */
+  // AnnotationAttachment* TypeName
+  public static boolean ReturnType(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ReturnType")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, RETURN_TYPE, "<return type>");
+    r = ReturnType_0(b, l + 1);
+    r = r && TypeName(b, l + 1, -1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // AnnotationAttachment*
+  private static boolean ReturnType_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ReturnType_0")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!AnnotationAttachment(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "ReturnType_0", c)) break;
+      c = current_position_(b);
+    }
     return true;
   }
 

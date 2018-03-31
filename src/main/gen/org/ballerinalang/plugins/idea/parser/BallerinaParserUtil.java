@@ -50,7 +50,7 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                         }
                         // Left brace is to check in record key literals.
                         if (rawLookup == BallerinaTypes.QUESTION_MARK || rawLookup == BallerinaTypes.LEFT_BRACE
-                                || rawLookup == BallerinaTypes.COMMA) {
+                                || (rawLookup == BallerinaTypes.COMMA && next3Element == BallerinaTypes.RIGHT_BRACE)) {
                             return false;
                         } else {
                             return true;

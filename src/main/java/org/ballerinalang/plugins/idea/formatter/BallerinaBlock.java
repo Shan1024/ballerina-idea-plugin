@@ -59,8 +59,9 @@ public class BallerinaBlock extends AbstractBlock {
     private List<Block> mySubBlocks;
 
 
-    protected BallerinaBlock(@NotNull ASTNode node, @Nullable Alignment alignment, @Nullable Indent indent, @Nullable
-            Wrap wrap, @NotNull CodeStyleSettings settings, SpacingBuilder spacingBuilder) {
+    protected BallerinaBlock
+            (@NotNull ASTNode node, @Nullable Alignment alignment, @Nullable Indent indent,
+             @Nullable Wrap wrap, @NotNull CodeStyleSettings settings, SpacingBuilder spacingBuilder) {
         super(node, wrap, alignment);
 
         this.myNode = node;
@@ -237,6 +238,25 @@ public class BallerinaBlock extends AbstractBlock {
         IElementType childElementType = child.getElementType();
         IElementType parentElementType = myNode.getElementType();
         if (childElementType == BallerinaTypes.BLOCK) {
+            return Indent.getNormalIndent();
+        } else if (parentElementType == BallerinaTypes.RECORD_KEY_VALUE) {
+            return Indent.getNormalIndent();
+        } else if (childElementType == BallerinaTypes.LINE_COMMENT
+                && parentElementType == BallerinaTypes.CALLABLE_UNIT_BODY) {
+            return Indent.getNormalIndent();
+        } else if (parentElementType == BallerinaTypes.CALLABLE_UNIT_SIGNATURE) {
+            return Indent.getNormalIndent();
+        } else if (childElementType == BallerinaTypes.RETURN_PARAMETER) {
+            return Indent.getNormalIndent();
+        } else if (childElementType == BallerinaTypes.RETURN_TYPE) {
+            return Indent.getIndent(Indent.Type.NORMAL, true, true);
+        } else if (childElementType == BallerinaTypes.TUPLE_TYPE_NAME) {
+            return Indent.getIndent(Indent.Type.NORMAL, true, true);
+        } else if (childElementType == BallerinaTypes.SIMPLE_TYPE_NAME
+                && (parentElementType == BallerinaTypes.TUPLE_TYPE_NAME
+                || parentElementType == BallerinaTypes.UNION_TYPE_NAME)) {
+            return Indent.getNormalIndent();
+        } else if (parentElementType == BallerinaTypes.MATCH_PATTERN_CLAUSE) {
             return Indent.getNormalIndent();
         }
         return Indent.getNoneIndent();

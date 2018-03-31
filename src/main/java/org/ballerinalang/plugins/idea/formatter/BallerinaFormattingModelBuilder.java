@@ -31,7 +31,120 @@ import org.ballerinalang.plugins.idea.BallerinaLanguage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ABORT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ADD;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ALL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.AND;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ANNOTATION;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ANY_IDENTIFIER_NAME;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ARRAY_TYPE_NAME;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.AS;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ASSIGN;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ASYNC;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.AWAIT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BIND;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BREAK;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CALLABLE_UNIT_BODY;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CALLABLE_UNIT_SIGNATURE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CATCH;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COLON;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMMA;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMPLETE_PACKAGE_NAME;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMPOUND_OPERATOR;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CONST;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DECIMAL_INTEGER_LITERAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DEPRECATED;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DIV;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DOCUMENTATION;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DOT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ELSE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ENDPOINT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ENUM;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EQUAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EQUAL_GT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EXPRESSION_LIST;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FAIL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FINALLY;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FLOATING_POINT_LITERAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FOREACH;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FORK;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FUNCTION;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FUNCTION_INVOCATION;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.GT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.GT_EQUAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IDENTIFIER;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IF;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IMPORT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IMPORT_DECLARATION;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IN;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INTEGER_LITERAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INVOCATION;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INVOCATION_ARG;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INVOCATION_ARG_LIST;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.JOIN;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LARROW;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LEFT_BRACE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LEFT_BRACKET;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LEFT_PARENTHESIS;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LENGTHOF;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LOCK;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LT_EQUAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MATCH;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MOD;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MUL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NAME_REFERENCE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NATIVE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NEW;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NEXT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NOT_EQUAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OBJECT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONABORT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONCOMMIT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONRETRY;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OR;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PACKAGE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PACKAGE_REFERENCE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PARAMETER;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.POW;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PRIVATE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PUBLIC;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RARROW;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RECORD_KEY_VALUE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RECORD_LITERAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RESOURCE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETRIES;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETURN;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETURNS;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETURN_PARAMETER;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETURN_TYPE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RIGHT_BRACE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RIGHT_BRACKET;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RIGHT_PARENTHESIS;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SAFE_ASSIGNMENT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SEMICOLON;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SERVICE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SIMPLE_TYPE_NAME;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SIMPLE_VARIABLE_REFERENCE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SOME;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.STRUCT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SUB;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.THROW;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TIMEOUT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TRANSACTION;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TRANSFORMER;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TRY;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TUPLE_TYPE_NAME;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TYPEOF;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TYPE_CONVERSION_EXPRESSION;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.UNION_TYPE_NAME;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.UNTAINT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.VAR;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.VERSION;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WHILE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WITH;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WORKER;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.XMLNS;
 
 /**
  * Builds the Ballerina file formatting model.
@@ -51,6 +164,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
 
     private static SpacingBuilder createSpaceBuilder(CodeStyleSettings settings) {
         return new SpacingBuilder(settings, BallerinaLanguage.INSTANCE)
+                // Keywords
                 .around(PACKAGE).spaceIf(true)
                 .around(IMPORT).spaceIf(true)
                 .around(AS).spaceIf(true)
@@ -64,7 +178,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(OBJECT).spaceIf(true)
                 .around(ANNOTATION).spaceIf(true)
                 .around(ENUM).spaceIf(true)
-                .around(PARAMETER).spaceIf(true)
+                // .around(PARAMETER).spaceIf(true) // Todo
                 .around(CONST).spaceIf(true)
                 .around(TRANSFORMER).spaceIf(true)
                 .around(WORKER).spaceIf(true)
@@ -111,198 +225,86 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(ASYNC).spaceIf(true)
                 .around(AWAIT).spaceIf(true)
 
+                // Common tokens
+                .before(COMMA).spaceIf(false)
+                .after(COMMA).spaceIf(true)
                 .around(SEMICOLON).spaceIf(false)
+
+                // Function signature
+                .between(LEFT_PARENTHESIS, RIGHT_PARENTHESIS).spaceIf(false)
+                .around(RETURN_PARAMETER).spaceIf(true)
+                .between(SIMPLE_TYPE_NAME, IDENTIFIER).spaceIf(true)
+                .between(SIMPLE_TYPE_NAME, EQUAL_GT).spaceIf(true)
+                .around(SIMPLE_TYPE_NAME).spaceIf(false)
+                .around(NAME_REFERENCE).spaceIf(false)
+                .before(RETURN_TYPE).spaceIf(false)
+                .after(RETURN_TYPE).spaceIf(true)
+                .around(UNION_TYPE_NAME).spaceIf(false)
+                .around(TUPLE_TYPE_NAME).spaceIf(false)
+                .around(PARAMETER).spaceIf(false)
 
                 .aroundInside(DIV, IMPORT_DECLARATION).spaceIf(false)
                 .aroundInside(DOT, COMPLETE_PACKAGE_NAME).spaceIf(false)
                 .aroundInside(COLON, PACKAGE_REFERENCE).spaceIf(false)
+                .afterInside(IDENTIFIER, CALLABLE_UNIT_SIGNATURE).spaceIf(false)
+                .around(CALLABLE_UNIT_SIGNATURE).spaceIf(true)
                 .after(PACKAGE_REFERENCE).spaceIf(false)
-                .aroundInside(NAME_REFERENCE,FUNCTION_INVOCATION).spaceIf(false)
+                .aroundInside(NAME_REFERENCE, FUNCTION_INVOCATION).spaceIf(false)
                 .around(INVOCATION_ARG_LIST).spaceIf(false)
                 .around(CALLABLE_UNIT_BODY).spaceIf(false)
                 .around(SIMPLE_TYPE_NAME).spaceIf(true)
-//                .around(OPERATORS).spaceIf(true)
-//                .between(TYPE_NAME, GT).spaceIf(false)
-//                .between(LT, TYPE_NAME).spaceIf(false)
-//                .between(IDENTIFIER, LT).spaceIf(false)
-//                .between(GT, SIMPLE_EXPRESSION).spaceIf(false)
-//                .between(RPAREN, SIMPLE_EXPRESSION).spaceIf(false)
-//                .aroundInside(LT, EXPRESSION).spaceIf(true)
-//                .aroundInside(GT, EXPRESSION).spaceIf(true)
-//                .between(ADD, SIMPLE_EXPRESSION).spaceIf(false)
-//                .between(SUB, SIMPLE_EXPRESSION).spaceIf(false)
-//                .between(ADD, INTEGER_LITERAL).spaceIf(false)
-//                .between(SUB, INTEGER_LITERAL).spaceIf(false)
-//                .between(ADD, FLOATING_POINT).spaceIf(false)
-//                .between(SUB, FLOATING_POINT).spaceIf(false)
-//                .between(BANG, SIMPLE_EXPRESSION).spaceIf(false)
-//                .around(ADD).spaceIf(true)
-//                .around(SUB).spaceIf(true)
-//                .before(ALL).spaceIf(false)
-//                .after(ALL).spaceIf(true)
-//                .before(ANY).spaceIf(false)
-//                .after(ANY).spaceIf(true)
-//                .around(AS).spaceIf(true)
-//                .around(BIND).spaceIf(true)
-//                .around(BY).spaceIf(true)
-//                .around(BREAK).spaceIf(false)
-//                .around(CATCH).spaceIf(true)
-//                .around(CURRENT).spaceIf(true)
-//                .around(EVENTS).spaceIf(true)
-//                .around(EVERY).spaceIf(true)
-//                .around(EXPIRED).spaceIf(true)
-//                .around(COMPOUND_OPERATOR).spaceIf(true)
-//                .around(ONABORT).spaceIf(true)
-//                .around(ONCOMMIT).spaceIf(true)
-//                .around(ONRETRY).spaceIf(true)
-//                .around(DOUBLE_COLON).spaceIf(false)
-//                .after(FAIL).spaceIf(true)
-//                .around(FINALLY).spaceIf(true)
-//                .around(GROUP).spaceIf(true)
-//                .after(CONST).spaceIf(true)
-//                .around(DAY).spaceIf(true)
-//                .around(DELETE).spaceIf(true)
-//                .after(ENDPOINT).spaceIf(true)
-//                .around(ELSE).spaceIf(true)
-//                .between(FORK, LBRACE).spaceIf(true)
-//                .around(FIRST).spaceIf(true)
-//                .around(FOLLOWED).spaceIf(true)
-//                .around(FOR).spaceIf(true)
-//                .around(FROM).spaceIf(true)
-//                .around(FULL).spaceIf(true)
-//                .between(EXPRESSION, LBRACE).spaceIf(true)
-//                .between(FORK, SEMI).spaceIf(false)
-//                .after(FUNCTION).spaceIf(true)
-//                .after(IF).spaceIf(true)
-//                .around(INSERT).spaceIf(true)
-//                .around(INTO).spaceIf(true)
-//                .around(HAVING).spaceIf(true)
-//                .around(HOUR).spaceIf(true)
-//                .after(IMPORT).spaceIf(true)
-//                .after(FOREACH).spaceIf(true)
-//                .around(IN).spaceIf(true)
-//                .around(JOIN).spaceIf(true)
-//                .around(LAST).spaceIf(true)
-//                .around(LEFT).spaceIf(true)
-//                .after(MATCH).spaceIf(true)
-//                .around(MINUTE).spaceIf(true)
-//                .around(MONTH).spaceIf(true)
-//                .after(NATIVE).spaceIf(true)
-//                .after(NEW).spaceIf(true)
-//                .around(OBJECT).spaceIf(true)
-//                .around(ON).spaceIf(true)
-//                .around(ORDER).spaceIf(true)
-//                .around(OUTER).spaceIf(true)
-//                .after(PACKAGE).spaceIf(true)
-//                .around(QUERY).spaceIf(true)
-//                .around(REDUCE).spaceIf(true)
-//                .after(RETRIES).spaceIf(false)
-//                .around(RIGHT).spaceIf(true)
-//                .after(TRANSACTION_PROPERTY_INIT_STATEMENT_LIST).spaceIf(true)
-//                .after(RESOURCE).spaceIf(true)
-//                .around(SECOND).spaceIf(true)
-//                .around(SELECT).spaceIf(true)
-//                .around(SET).spaceIf(true)
-//                .between(SERVICE, LT).spaceIf(false)
-//                .between(TYPE_STREAM, LT).spaceIf(false)
-//                .between(SERVICE, IDENTIFIER).spaceIf(true)
-//                .around(SNAPSHOT).spaceIf(true)
-//                .after(STRUCT).spaceIf(true)
-//                .after(THROW).spaceIf(true)
-//                .around(TIMEOUT).spaceIf(true)
-//                .after(TRY).spaceIf(true)
-//                .after(TYPE).spaceIf(true)
-//                .around(TYPE_STREAM).spaceIf(true)
-//                .around(UNIDIRECTIONAL).spaceIf(true)
-//                .after(UNTAINT).spaceIf(true)
-//                .around(UPDATE).spaceIf(true)
-//                .after(VAR).spaceIf(true)
-//                .after(WHENEVER).spaceIf(true)
-//                .around(WHERE).spaceIf(true)
-//                .around(WHERE_CLAUSE).spaceIf(true)
-//                .after(WHILE).spaceIf(true)
-//                .around(WITHIN).spaceIf(true)
-//                .around(WINDOW).spaceIf(true)
-//                .after(WORKER).spaceIf(true)
-//                .around(WITH).spaceIf(true)
-//                .after(XMLNS).spaceIf(true)
-//                .around(YEAR).spaceIf(true)
-//                .after(TYPEOF).spaceIf(true)
-//                .after(LENGTHOF).spaceIf(true)
-//                .after(LOCK).spaceIf(true)
-//                .before(SEMI).spaceIf(false)
-//                .around(DOT).spaceIf(false)
-//                .between(TYPE_NAME, QUESTION_MARK).spaceIf(false)
-//                .around(QUESTION_MARK).spaceIf(true)
-//                .around(PUBLIC).spaceIf(true)
-//                .between(LPAREN, RPAREN).spaceIf(false)
-//                .between(RPAREN, LBRACE).spaceIf(true)
-//                .aroundInside(COLON, EXPRESSION).spaceIf(true)
-//                .around(COLON).spaceIf(false)
-//                .between(COMMA, PARAMETER).spaceIf(true)
-//                .around(PARAMETER).spaceIf(false)
-//                .between(COMMA, PARAMETER_LIST).spaceIf(true)
-//                .around(PARAMETER_LIST).spaceIf(false)
-//                .around(TYPE_LIST).spaceIf(false)
-//                .before(COMMA).spaceIf(false)
-//                .after(COMMA).spaceIf(true)
-//                .between(TYPE_NAME, IDENTIFIER).spaceIf(true)
-//                .between(IDENTIFIER, TYPE_NAME).spaceIf(true)
-//                .around(LBRACK).spaceIf(false)
-//                .between(LBRACE, RBRACE).spaceIf(false)
-//                .before(RPAREN).spaceIf(false)
-//                .after(LPAREN).spaceIf(false)
-//                .between(RPAREN, LPAREN).spaceIf(true)
-//                .after(AT).spaceIf(false)
-//                .between(BIND, EXPRESSION).spaceIf(true)
-//                .around(EXPRESSION).spaceIf(false)
-//                .around(RETURN_PARAMETER).spaceIf(true)
-//                .around(SENDARROW).spaceIf(true)
-//                .around(RECEIVEARROW).spaceIf(true)
-//                .before(TILDE).spaceIf(false)
-//                .between(RETURN, EXPRESSION_LIST).spaceIf(true)
-//                .around(RETURNS).spaceIf(true)
-//                .after(ANNOTATION).spaceIf(true)
-//                .between(ANNOTATION_ATTACHMENT, TYPE_NAME).spaceIf(true)
-//                .between(VALUE_TYPE_NAME, IDENTIFIER).spaceIf(true)
-//                .between(ANNOTATION_ATTACHMENT, TYPE_NAME).spaceIf(true)
-//                .around(TYPE_NAME).spaceIf(false)
-//                .after(TRANSACTION).spaceIf(true)
-//                .between(MAP, LT).spaces(0)
-//                .between(JSON, LT).spaceIf(false)
-//                .between(XML, LT).spaceIf(false)
-//                .between(LT, LBRACE).spaceIf(false)
-//                .before(LBRACE).spaceIf(true)
-//                .between(RBRACE, GT).spaceIf(false)
-//                .between(RBRACE, XML_LOCAL_NAME).spaceIf(true)
-//                .between(XML_LOCAL_NAME, GT).spaceIf(false)
-//                .between(NAME_REFERENCE, LBRACE).spaceIf(true)
-//                .between(VARIABLE_REFERENCE, INDEX).spaceIf(false)
-//                .between(VARIABLE_REFERENCE, FIELD).spaceIf(false)
-//                .between(VARIABLE_REFERENCE, XML_ATTRIB).spaceIf(false)
-//                .between(VARIABLE_REFERENCE, LPAREN).spaceIf(false)
-//                .after(FUNCTION_REFERENCE).spaceIf(false)
-//                .around(NAME_REFERENCE).spaceIf(false)
-//                .between(VALUE_TYPE_NAME, IDENTIFIER).spaceIf(true)
-//                .between(IDENTIFIER, LBRACE).spaceIf(true)
-//                .between(ATTACHMENT_POINT, LBRACE).spaceIf(true)
-//                .around(RECORD_KEY_VALUE).spaceIf(false)
-//                .between(XML, LT).spaceIf(false)
-//                .around(XML_NAMESPACE_NAME).spaceIf(false)
-//                .around(EXPRESSION_LIST).spaceIf(false)
-//                .aroundInside(INTEGER_LITERAL, JOIN_CONDITIONS).spaceIf(true)
-//                .between(LT, IDENTIFIER).spaceIf(true)
-//                .withinPairInside(IDENTIFIER, LBRACE, FUNCTION_DEFINITION).spaceIf(true)
-//                .withinPairInside(IDENTIFIER, LBRACE, SERVICE_DEFINITION).spaceIf(true)
-//                .withinPairInside(IDENTIFIER, LBRACE, RESOURCE_DEFINITION).spaceIf(true)
-//                .before(INVOCATION).spaceIf(false)
-//                .afterInside(IDENTIFIER, INVOCATION).spaceIf(false)
-//                .around(ANY_IDENTIFIER_NAME).spaceIf(false)
-//                .after(BIND).spaceIf(true)
-//                .after(ENDPOINT).spaceIf(false)
-//                .between(GT, IDENTIFIER).spaceIf(true)
-//                .after(TRANSFORMER).spaceIf(true)
-//                .around(TRANSFORMER_INVOCATION).spaceIf(false)
+
+                // Record Literals
+                .aroundInside(COLON, RECORD_KEY_VALUE).spaceIf(false)
+                .beforeInside(COMMA, RECORD_LITERAL).spaceIf(false)
+                .afterInside(COMMA, RECORD_LITERAL).spaceIf(true)
+                .between(RECORD_KEY_VALUE, RIGHT_BRACE).spaceIf(false)
+                .between(LEFT_BRACE, RIGHT_BRACE).spaceIf(false)
+
+                // Statements
+                .between(LEFT_BRACE, RIGHT_BRACE).spaceIf(false)
+                .between(LEFT_BRACKET, RIGHT_BRACKET).spaceIf(false)
+                .between(SIMPLE_VARIABLE_REFERENCE, ASSIGN).spaceIf(true)
+                .after(SIMPLE_VARIABLE_REFERENCE).spaceIf(false)
+                .aroundInside(DOT, INVOCATION).spaceIf(false)
+                .between(INVOCATION_ARG, COMMA).spaceIf(false)
+                .between(ANY_IDENTIFIER_NAME, LEFT_PARENTHESIS).spaceIf(false)
+                .around(EXPRESSION_LIST).spaceIf(false)
+                .between(ARRAY_TYPE_NAME, IDENTIFIER).spaceIf(true)
+                .aroundInside(GT, TYPE_CONVERSION_EXPRESSION).spaceIf(false)
+                .after(LEFT_PARENTHESIS).spaceIf(false)
+                .before(RIGHT_PARENTHESIS).spaceIf(false)
+
+                .between(ADD, INTEGER_LITERAL).spaceIf(false)
+                .between(SUB, INTEGER_LITERAL).spaceIf(false)
+                .between(ADD, FLOATING_POINT_LITERAL).spaceIf(false)
+                .between(SUB, FLOATING_POINT_LITERAL).spaceIf(false)
+
+                // Operators
+                .around(ASSIGN).spaceIf(true)
+                .around(ADD).spaceIf(true)
+                .around(SUB).spaceIf(true)
+                .around(DIV).spaceIf(true)
+                .around(MUL).spaceIf(true)
+                .around(POW).spaceIf(true)
+                .around(MOD).spaceIf(true)
+
+                .around(EQUAL).spaceIf(true)
+                .around(NOT_EQUAL).spaceIf(true)
+                .around(GT).spaceIf(true)
+                .around(LT).spaceIf(true)
+                .around(GT_EQUAL).spaceIf(true)
+                .around(LT_EQUAL).spaceIf(true)
+                .around(AND).spaceIf(true)
+                .around(OR).spaceIf(true)
+
+                .around(RARROW).spaceIf(true)
+                .around(LARROW).spaceIf(true)
+                .around(EQUAL_GT).spaceIf(true)
+
+                .around(COMPOUND_OPERATOR).spaceIf(true)
+
+                .around(SAFE_ASSIGNMENT).spaceIf(true)
                 ;
     }
 
