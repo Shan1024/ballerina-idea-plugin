@@ -6778,10 +6778,10 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // 0: ATOM(TupleTypeName)
   // 1: PREFIX(GroupTypeName)
   // 2: POSTFIX(ArrayTypeName)
-  // 3: N_ARY(UnionTypeName)
-  // 4: ATOM(ObjectTypeName)
-  // 5: ATOM(SimpleTypeName)
-  // 6: POSTFIX(NullableTypeName)
+  // 3: POSTFIX(NullableTypeName)
+  // 4: N_ARY(UnionTypeName)
+  // 5: ATOM(ObjectTypeName)
+  // 6: ATOM(SimpleTypeName)
   public static boolean TypeName(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "TypeName")) return false;
     addVariant(b, "<type name>");
@@ -6806,16 +6806,16 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
         r = true;
         exit_section_(b, l, m, ARRAY_TYPE_NAME, r, true, null);
       }
-      else if (g < 3 && consumeTokenSmart(b, PIPE)) {
+      else if (g < 3 && parseTokensSmart(b, 0, PIPE, NULL_LITERAL)) {
+        r = true;
+        exit_section_(b, l, m, NULLABLE_TYPE_NAME, r, true, null);
+      }
+      else if (g < 4 && consumeTokenSmart(b, PIPE)) {
         while (true) {
-          r = report_error_(b, TypeName(b, l, 3));
+          r = report_error_(b, TypeName(b, l, 4));
           if (!consumeTokenSmart(b, PIPE)) break;
         }
         exit_section_(b, l, m, UNION_TYPE_NAME, r, true, null);
-      }
-      else if (g < 6 && parseTokensSmart(b, 0, PIPE, NULL_LITERAL)) {
-        r = true;
-        exit_section_(b, l, m, NULLABLE_TYPE_NAME, r, true, null);
       }
       else {
         exit_section_(b, l, m, null, false, false, null);

@@ -44,6 +44,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.AWAIT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BIND;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BLOB;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BOOLEAN;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BOOLEAN_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BREAK;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CATCH;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CONST;
@@ -76,6 +77,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MATCH;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NATIVE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NEW;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NEXT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NULL_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OBJECT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OCTAL_INTEGER_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONABORT;
@@ -127,7 +129,8 @@ public class BallerinaParserDefinition implements ParserDefinition {
             FLOAT, FOREACH, FORK, FUNCTION, FUTURE, IF, IMPORT, IN, INT, JOIN, JSON, LENGTHOF, LOCK, MAP, MATCH,
             NATIVE, NEW, NEXT, OBJECT, ONABORT, ONCOMMIT, ONRETRY, PACKAGE, PARAMETER, PRIVATE, PUBLIC, RESOURCE,
             RETRIES, RETURN, RETURNS, SERVICE, SOME, STRING, STRUCT, TABLE, TIMEOUT, TRANSACTION, TRANSFORMER, TRY,
-            TYPE, TYPEDESC, TYPEOF, THROW, UNTAINT, WHILE, WITH, WORKER, VAR, VERSION, XML, XMLNS);
+            TYPE, TYPEDESC, TYPEOF, THROW, UNTAINT, WHILE, WITH, WORKER, VAR, VERSION, XML, XMLNS, BOOLEAN_LITERAL,
+            NULL_LITERAL);
 
     public static final TokenSet OPERATORS = TokenSet.create();
 
