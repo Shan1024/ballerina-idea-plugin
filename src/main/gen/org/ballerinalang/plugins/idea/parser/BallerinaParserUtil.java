@@ -46,6 +46,7 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                 || next3Element == BallerinaTypes.EQUAL || next3Element == BallerinaTypes.NOT_EQUAL
                 || next3Element == BallerinaTypes.GT || next3Element == BallerinaTypes.LT
                 || next3Element == BallerinaTypes.GT_EQUAL || next3Element == BallerinaTypes.LT_EQUAL
+                || next3Element == BallerinaTypes.DOT
         )) {
             // We need to look behind few steps to identify the last token. If this token is not "?" only we
             // identify that the package is required.
@@ -60,14 +61,16 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                 // {name:"Child", parent:parent}
                 if (rawLookup == BallerinaTypes.QUESTION_MARK || rawLookup == BallerinaTypes.LEFT_BRACE
                         || (rawLookup == BallerinaTypes.COMMA
-                        && (next3Element == BallerinaTypes.RIGHT_BRACE || next3Element == BallerinaTypes.COMMA)
+                        && (next3Element == BallerinaTypes.RIGHT_BRACE || next3Element == BallerinaTypes.COMMA
+                        || next3Element == BallerinaTypes.DOT)
                 )) {
                     // Note - Another raw lookup is added for situations like below. Second record key value
                     // pair does not get identified correctly otherwise.
                     // {sqlType:sql:Type.INTEGER, value:xmlDataArray};
-                    IElementType rawLookup2 = builder.rawLookup(steps - 1);
+                    IElementType rawLookup2;
                     do {
-                        if (isWhiteSpaceOrComment(rawLookup)) {
+                        rawLookup2 = builder.rawLookup(--steps);
+                        if (isWhiteSpaceOrComment(rawLookup2)) {
                             continue;
                         }
                         // Identifier example - endpoint ServiceEndpoint backendEP {port:getBackendPort()};
@@ -76,6 +79,7 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                         // Decimal literal example - string a = x == 1 ? s : i;
                         if (rawLookup2 != BallerinaTypes.ASSIGN /*&& rawLookup2 != BallerinaTypes.COLON*/
                                 && rawLookup2 != BallerinaTypes.DOT && rawLookup2 != BallerinaTypes.IDENTIFIER
+                                && rawLookup2 != BallerinaTypes.RIGHT_BRACE
                                 && rawLookup2 != BallerinaTypes.QUOTED_STRING_LITERAL
                                 && rawLookup2 != BallerinaTypes.DECIMAL_INTEGER_LITERAL
                                 && rawLookup2 != BallerinaTypes.BOOLEAN_LITERAL
@@ -83,8 +87,9 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                                 // datasourceProperties:propertiesMap}
                                 && !(rawLookup == BallerinaTypes.COMMA && rawLookup2 == BallerinaTypes.COLON)
                                 // Example for below condition - worker w {a:b();}
-                                || (rawLookup == BallerinaTypes.LEFT_BRACE
-                                && rawLookup2 == BallerinaTypes.IDENTIFIER)) {
+                                && !(rawLookup == BallerinaTypes.LEFT_BRACE && rawLookup2 == BallerinaTypes.COMMA)
+                                || (rawLookup == BallerinaTypes.LEFT_BRACE && rawLookup2 == BallerinaTypes.IDENTIFIER)
+                                ) {
                             return true;
                         } else {
                             return false;

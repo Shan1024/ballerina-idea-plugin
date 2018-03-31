@@ -292,6 +292,9 @@ public class BallerinaBlock extends AbstractBlock {
             return Indent.getNormalIndent();
         } else if (childElementType == BallerinaTypes.MATCH_STATEMENT_BODY) {
             return Indent.getNormalIndent();
+        } else if (childElementType == BallerinaTypes.EXPRESSION_LIST &&
+                parentElementType == BallerinaTypes.ARRAY_LITERAL) {
+            return Indent.getNormalIndent();
         }
         return Indent.getNoneIndent();
     }
@@ -313,6 +316,8 @@ public class BallerinaBlock extends AbstractBlock {
         } else if (myNode.getElementType() == BallerinaTypes.SERVICE_BODY) {
             childIndent = Indent.getNormalIndent();
         } else if (myNode.getElementType() == BallerinaTypes.RECORD_LITERAL) {
+            childIndent = Indent.getNormalIndent();
+        }else if (myNode.getElementType() == BallerinaTypes.RECORD_LITERAL_BODY) {
             childIndent = Indent.getNormalIndent();
         } else if (myNode.getElementType() == BallerinaTypes.STRUCT_BODY) {
             childIndent = Indent.getNormalIndent();
