@@ -198,7 +198,7 @@ Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachme
     recoverWhile=TopLevelDefinitionRecover
 }
 
-private TopLevelDefinitionRecover ::= !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|typedesc|struct|service|function|enum|annotation|transformer|const|endpoint|boolean|int|float|string|blob|map|xml|xmlns|json|identifier)
+private TopLevelDefinitionRecover ::= !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|struct|service|function|enum|annotation|transformer|const|endpoint|boolean|int|float|string|blob|map|xml|xmlns|json|identifier)
 
 ServiceDefinition ::= service (LT NameReference GT) identifier ServiceEndpointAttachments?  ServiceBody {pin=1}
 ServiceEndpointAttachments ::= bind NameReference (COMMA NameReference)* {pin=1}
@@ -456,7 +456,7 @@ RecordKey ::= identifier | SimpleLiteral
 
 ArrayLiteral ::= LEFT_BRACKET ExpressionList? RIGHT_BRACKET
 
-TypeInitExpr ::= new (LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS)? | new UserDefineTypeName LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS {pin=1}
+TypeInitExpr ::= new UserDefineTypeName LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS | new (LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS)? {pin=1}
 
 AssignmentStatement ::= (var)? VariableReference (ASSIGN | SAFE_ASSIGNMENT) (ActionInvocation | Expression) SEMICOLON /*{pin=2}*/
 

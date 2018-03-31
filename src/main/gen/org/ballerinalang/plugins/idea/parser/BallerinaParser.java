@@ -4651,7 +4651,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|typedesc|struct|service|function|enum|annotation|transformer|const|endpoint|boolean|int|float|string|blob|map|xml|xmlns|json|identifier)
+  // !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|struct|service|function|enum|annotation|transformer|const|endpoint|boolean|int|float|string|blob|map|xml|xmlns|json|identifier)
   static boolean TopLevelDefinitionRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopLevelDefinitionRecover")) return false;
     boolean r;
@@ -4661,7 +4661,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|typedesc|struct|service|function|enum|annotation|transformer|const|endpoint|boolean|int|float|string|blob|map|xml|xmlns|json|identifier
+  // DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|struct|service|function|enum|annotation|transformer|const|endpoint|boolean|int|float|string|blob|map|xml|xmlns|json|identifier
   private static boolean TopLevelDefinitionRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopLevelDefinitionRecover_0")) return false;
     boolean r;
@@ -4670,6 +4670,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, DEPRECATED_TEMPLATE_START);
     if (!r) r = consumeToken(b, AT);
     if (!r) r = consumeToken(b, PUBLIC);
+    if (!r) r = consumeToken(b, TYPE);
     if (!r) r = consumeToken(b, TYPEDESC);
     if (!r) r = consumeToken(b, STRUCT);
     if (!r) r = consumeToken(b, SERVICE);
@@ -4977,7 +4978,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // new (LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS)? | new UserDefineTypeName LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS
+  // new UserDefineTypeName LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS | new (LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS)?
   public static boolean TypeInitExpr(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeInitExpr")) return false;
     if (!nextTokenIs(b, NEW)) return false;
@@ -4989,60 +4990,60 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // new (LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS)?
+  // new UserDefineTypeName LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS
   private static boolean TypeInitExpr_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeInitExpr_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, NEW);
-    r = r && TypeInitExpr_0_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // (LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS)?
-  private static boolean TypeInitExpr_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "TypeInitExpr_0_1")) return false;
-    TypeInitExpr_0_1_0(b, l + 1);
-    return true;
-  }
-
-  // LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS
-  private static boolean TypeInitExpr_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "TypeInitExpr_0_1_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, LEFT_PARENTHESIS);
-    r = r && TypeInitExpr_0_1_0_1(b, l + 1);
+    r = r && UserDefineTypeName(b, l + 1);
+    r = r && consumeToken(b, LEFT_PARENTHESIS);
+    r = r && TypeInitExpr_0_3(b, l + 1);
     r = r && consumeToken(b, RIGHT_PARENTHESIS);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // InvocationArgList?
-  private static boolean TypeInitExpr_0_1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "TypeInitExpr_0_1_0_1")) return false;
+  private static boolean TypeInitExpr_0_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeInitExpr_0_3")) return false;
     InvocationArgList(b, l + 1);
     return true;
   }
 
-  // new UserDefineTypeName LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS
+  // new (LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS)?
   private static boolean TypeInitExpr_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeInitExpr_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, NEW);
-    r = r && UserDefineTypeName(b, l + 1);
-    r = r && consumeToken(b, LEFT_PARENTHESIS);
-    r = r && TypeInitExpr_1_3(b, l + 1);
+    r = r && TypeInitExpr_1_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // (LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS)?
+  private static boolean TypeInitExpr_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeInitExpr_1_1")) return false;
+    TypeInitExpr_1_1_0(b, l + 1);
+    return true;
+  }
+
+  // LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS
+  private static boolean TypeInitExpr_1_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeInitExpr_1_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LEFT_PARENTHESIS);
+    r = r && TypeInitExpr_1_1_0_1(b, l + 1);
     r = r && consumeToken(b, RIGHT_PARENTHESIS);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // InvocationArgList?
-  private static boolean TypeInitExpr_1_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "TypeInitExpr_1_3")) return false;
+  private static boolean TypeInitExpr_1_1_0_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeInitExpr_1_1_0_1")) return false;
     InvocationArgList(b, l + 1);
     return true;
   }
