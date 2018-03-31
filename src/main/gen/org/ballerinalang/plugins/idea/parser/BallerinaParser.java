@@ -3339,7 +3339,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (ObjectParameter | ObjectDefaultableParameter) (COMMA (ObjectParameter | ObjectDefaultableParameter))* (COMMA RestParameter)? | RestParameter
+  // (ObjectDefaultableParameter | ObjectParameter) (COMMA (ObjectDefaultableParameter | ObjectParameter))* (COMMA RestParameter)? | RestParameter
   public static boolean ObjectParameterList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ObjectParameterList")) return false;
     boolean r;
@@ -3350,7 +3350,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (ObjectParameter | ObjectDefaultableParameter) (COMMA (ObjectParameter | ObjectDefaultableParameter))* (COMMA RestParameter)?
+  // (ObjectDefaultableParameter | ObjectParameter) (COMMA (ObjectDefaultableParameter | ObjectParameter))* (COMMA RestParameter)?
   private static boolean ObjectParameterList_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ObjectParameterList_0")) return false;
     boolean r;
@@ -3362,18 +3362,18 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ObjectParameter | ObjectDefaultableParameter
+  // ObjectDefaultableParameter | ObjectParameter
   private static boolean ObjectParameterList_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ObjectParameterList_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = ObjectParameter(b, l + 1);
-    if (!r) r = ObjectDefaultableParameter(b, l + 1);
+    r = ObjectDefaultableParameter(b, l + 1);
+    if (!r) r = ObjectParameter(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // (COMMA (ObjectParameter | ObjectDefaultableParameter))*
+  // (COMMA (ObjectDefaultableParameter | ObjectParameter))*
   private static boolean ObjectParameterList_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ObjectParameterList_0_1")) return false;
     int c = current_position_(b);
@@ -3385,7 +3385,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // COMMA (ObjectParameter | ObjectDefaultableParameter)
+  // COMMA (ObjectDefaultableParameter | ObjectParameter)
   private static boolean ObjectParameterList_0_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ObjectParameterList_0_1_0")) return false;
     boolean r;
@@ -3396,13 +3396,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // ObjectParameter | ObjectDefaultableParameter
+  // ObjectDefaultableParameter | ObjectParameter
   private static boolean ObjectParameterList_0_1_0_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ObjectParameterList_0_1_0_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = ObjectParameter(b, l + 1);
-    if (!r) r = ObjectDefaultableParameter(b, l + 1);
+    r = ObjectDefaultableParameter(b, l + 1);
+    if (!r) r = ObjectParameter(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }

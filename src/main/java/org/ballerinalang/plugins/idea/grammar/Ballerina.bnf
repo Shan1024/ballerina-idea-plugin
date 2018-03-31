@@ -261,7 +261,7 @@ ObjectFunctions ::= (AnnotationAttachment* documentationAttachment? deprecatedAt
 ObjectFieldDefinition ::= TypeName identifier (COLON SimpleLiteral)? (COMMA | SEMICOLON)
 
 // TODO try to merge with formalParameterList later
-ObjectParameterList ::= (ObjectParameter | ObjectDefaultableParameter) (COMMA (ObjectParameter | ObjectDefaultableParameter))* (COMMA RestParameter)? | RestParameter
+ObjectParameterList ::= (ObjectDefaultableParameter | ObjectParameter) (COMMA (ObjectDefaultableParameter | ObjectParameter))* (COMMA RestParameter)? | RestParameter
 
 // Todo - Revert back the changes?
 // TODO try to merge with parameter later
