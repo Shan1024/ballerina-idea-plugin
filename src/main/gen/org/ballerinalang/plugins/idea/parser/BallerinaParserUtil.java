@@ -33,9 +33,12 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
             if (next2Element != null && next2Element == BallerinaTypes.IDENTIFIER) {
                 IElementType next3Element = builder.lookAhead(3);
                 // The next token can be one of the following tokens. Right brace is to check in record key literals.
+                // Comma is used for record literals in function invocations - test(a,{b:c, d:e})
+                // Left bracket is used to identify array elements - {name:"Ballerina", address:args[0]};
                 if (next3Element != null && (next3Element == BallerinaTypes.SEMICOLON
                         || next3Element == BallerinaTypes.COLON || next3Element == BallerinaTypes.RIGHT_PARENTHESIS
-                        || next3Element == BallerinaTypes.RIGHT_BRACE)) {
+                        || next3Element == BallerinaTypes.RIGHT_BRACE || next3Element == BallerinaTypes.COMMA
+                        || next3Element == BallerinaTypes.LEFT_BRACKET)) {
                     // We need to look behind few steps to identify the last token. If this token is not "?" only we
                     // identify that the package is required.
                     int steps = -1;
@@ -46,7 +49,8 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                             continue;
                         }
                         // Left brace is to check in record key literals.
-                        if (rawLookup == BallerinaTypes.QUESTION_MARK || rawLookup == BallerinaTypes.LEFT_BRACE) {
+                        if (rawLookup == BallerinaTypes.QUESTION_MARK || rawLookup == BallerinaTypes.LEFT_BRACE
+                                || rawLookup == BallerinaTypes.COMMA) {
                             return false;
                         } else {
                             return true;
