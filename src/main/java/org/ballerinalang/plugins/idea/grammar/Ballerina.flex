@@ -84,9 +84,9 @@ Digit = 0 | {NonZeroDigit}
 
 NonZeroDigit = [1-9]
 
-DigitOrUnderscore = {Digit} | '_'
+DigitOrUnderscore = {Digit} | "_"
 
-Underscores = '_'+
+Underscores = "_"+
 
 HexNumeral = 0 [xX] {HexDigits}
 

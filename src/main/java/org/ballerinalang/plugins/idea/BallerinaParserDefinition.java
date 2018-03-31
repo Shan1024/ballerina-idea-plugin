@@ -41,6 +41,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ANY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.AS;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ASYNC;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.AWAIT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BINARY_INTEGER_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BIND;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BLOB;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BOOLEAN;
@@ -122,7 +123,7 @@ public class BallerinaParserDefinition implements ParserDefinition {
     public static final TokenSet STRINGS = TokenSet.create(QUOTED_STRING_LITERAL);
 
     public static final TokenSet NUMBERS = TokenSet.create(DECIMAL_INTEGER_LITERAL, HEX_INTEGER_LITERAL,
-            OCTAL_INTEGER_LITERAL, FLOATING_POINT_LITERAL);
+            OCTAL_INTEGER_LITERAL, BINARY_INTEGER_LITERAL, FLOATING_POINT_LITERAL);
 
     public static final TokenSet KEYWORDS = TokenSet.create(ABORT, ALL, ANNOTATION, ANY, AS, ASYNC, AWAIT, BIND,
             BLOB, BOOLEAN, BREAK, CATCH, CONST, DOCUMENTATION, DEPRECATED, ELSE, ENDPOINT, ENUM, FAIL, FINALLY,
