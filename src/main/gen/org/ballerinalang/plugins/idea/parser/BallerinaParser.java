@@ -1913,14 +1913,26 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // DOT identifier
+  // DOT (identifier | MUL)
   public static boolean Field(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Field")) return false;
     if (!nextTokenIs(b, DOT)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, DOT, IDENTIFIER);
+    r = consumeToken(b, DOT);
+    r = r && Field_1(b, l + 1);
     exit_section_(b, m, FIELD, r);
+    return r;
+  }
+
+  // identifier | MUL
+  private static boolean Field_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Field_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    if (!r) r = consumeToken(b, MUL);
+    exit_section_(b, m, null, r);
     return r;
   }
 

@@ -548,7 +548,7 @@ FunctionInvocationReference ::= (async)? FunctionInvocation
 SimpleVariableReference ::=  NameReference
 AwaitExpressionReference ::= AwaitExpression
 
-Field ::= DOT identifier {
+Field ::= DOT (identifier | MUL) {
     /*pin=1*/
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFieldStub"
 }

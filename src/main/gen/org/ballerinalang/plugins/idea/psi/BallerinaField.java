@@ -28,7 +28,10 @@ public interface BallerinaField extends BallerinaNamedElement, StubBasedPsiEleme
   @NotNull
   PsiElement getDot();
 
-  @NotNull
+  @Nullable
+  PsiElement getMul();
+
+  @Nullable
   PsiElement getIdentifier();
 
 }
