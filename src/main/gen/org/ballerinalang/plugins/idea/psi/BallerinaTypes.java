@@ -345,6 +345,7 @@ public interface BallerinaTypes {
   IElementType NEXT = new BallerinaTokenType("next");
   IElementType NOT = new BallerinaTokenType("!");
   IElementType NOT_EQUAL = new BallerinaTokenType("!=");
+  IElementType NULL = new BallerinaTokenType("null");
   IElementType NULL_LITERAL = new BallerinaTokenType("NULL_LITERAL");
   IElementType OBJECT = new BallerinaTokenType("object");
   IElementType OCTAL_INTEGER_LITERAL = new BallerinaTokenType("OCTAL_INTEGER_LITERAL");

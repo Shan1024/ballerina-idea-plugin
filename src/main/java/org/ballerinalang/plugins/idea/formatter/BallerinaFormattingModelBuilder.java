@@ -48,22 +48,28 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BREAK;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CALLABLE_UNIT_BODY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CALLABLE_UNIT_SIGNATURE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CATCH;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CATCH_CLAUSE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CATCH_CLAUSES;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COLON;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMMA;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMPLETE_PACKAGE_NAME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMPOUND_OPERATOR;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CONST;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DECIMAL_INTEGER_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DEPRECATED;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DIV;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DOCUMENTATION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DOT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ELSE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ELSE_CLAUSE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ELSE_IF_CLAUSE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ENDPOINT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ENUM;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EQUAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EQUAL_GT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EXPRESSION_LIST;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FAIL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FIELD;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FINALLY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FLOATING_POINT_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FOREACH;
@@ -82,6 +88,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INVOCATION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INVOCATION_ARG;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INVOCATION_ARG_LIST;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.JOIN;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.JSON;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LARROW;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LEFT_BRACE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LEFT_BRACKET;
@@ -90,6 +97,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LENGTHOF;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LOCK;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LT_EQUAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MAP;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MATCH;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MOD;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MUL;
@@ -98,15 +106,19 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NATIVE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NEW;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NEXT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NOT_EQUAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NULLABLE_TYPE_NAME;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NULL_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OBJECT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONABORT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONCOMMIT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONRETRY;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONRETRY_CLAUSE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OR;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PACKAGE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PACKAGE_REFERENCE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PARAMETER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PARAMETER_LIST;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PIPE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.POW;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PRIVATE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PUBLIC;
@@ -216,7 +228,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(THROW).spaceIf(true)
                 .around(RETURN).spaceIf(true)
                 .around(TRANSACTION).spaceIf(true)
-                .around(ABORT).spaceIf(true)
+                .around(ABORT).spaceIf(false)
                 .around(FAIL).spaceIf(true)
                 .around(ONRETRY).spaceIf(true)
                 .around(RETRIES).spaceIf(true)
@@ -276,6 +288,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .between(LEFT_BRACKET, RIGHT_BRACKET).spaceIf(false)
                 .between(SIMPLE_VARIABLE_REFERENCE, ASSIGN).spaceIf(true)
                 .between(SIMPLE_VARIABLE_REFERENCE, SAFE_ASSIGNMENT).spaceIf(true)
+                .between(SIMPLE_VARIABLE_REFERENCE, COMPOUND_OPERATOR).spaceIf(true)
                 .after(SIMPLE_VARIABLE_REFERENCE).spaceIf(false)
                 .aroundInside(DOT, INVOCATION).spaceIf(false)
                 .between(INVOCATION_ARG, COMMA).spaceIf(false)
@@ -300,8 +313,25 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .afterInside(IDENTIFIER, RESOURCE_DEFINITION).spaceIf(false)
 
                 .between(FUNCTION, LT).spaceIf(false)
+                .between(JSON, LT).spaceIf(false)
+                .between(MAP, LT).spaceIf(false)
+
+                .between(PIPE, NULL_LITERAL).spaceIf(false)
+                .around(NULLABLE_TYPE_NAME).spaceIf(false)
 
                 .around(PARAMETER_LIST).spaceIf(false)
+
+                .before(CATCH_CLAUSE).spaceIf(true)
+                .before(CATCH_CLAUSES).spaceIf(true)
+
+                .before(ELSE_IF_CLAUSE).spaceIf(true)
+                .before(ELSE_CLAUSE).spaceIf(true)
+
+                .before(ONRETRY_CLAUSE).spaceIf(true)
+
+                .betweenInside(DOT,MUL,FIELD).spaceIf(false)
+
+                .around(DECIMAL_INTEGER_LITERAL).spaceIf(false)
 
                 // Operators
                 .around(ASSIGN).spaceIf(true)
