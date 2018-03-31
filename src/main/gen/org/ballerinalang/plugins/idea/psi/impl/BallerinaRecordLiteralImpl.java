@@ -42,9 +42,9 @@ public class BallerinaRecordLiteralImpl extends BallerinaCompositeElementImpl im
   }
 
   @Override
-  @NotNull
-  public List<BallerinaRecordKeyValue> getRecordKeyValueList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaRecordKeyValue.class);
+  @Nullable
+  public BallerinaRecordLiteralBody getRecordLiteralBody() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaRecordLiteralBody.class);
   }
 
   @Override

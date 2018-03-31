@@ -52,7 +52,6 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMMA;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMPLETE_PACKAGE_NAME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMPOUND_OPERATOR;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CONST;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DECIMAL_INTEGER_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DEPRECATED;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DIV;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DOCUMENTATION;
@@ -106,6 +105,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OR;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PACKAGE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PACKAGE_REFERENCE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PARAMETER;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PARAMETER_LIST;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.POW;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PRIVATE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PUBLIC;
@@ -177,7 +177,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(NATIVE).spaceIf(true)
                 //                .around(SERVICE).spaceIf(true)
                 .around(RESOURCE).spaceIf(true)
-                .around(FUNCTION).spaceIf(true)
+                //                .around(FUNCTION).spaceIf(true)
                 .around(STRUCT).spaceIf(true)
                 .around(OBJECT).spaceIf(true)
                 .around(ANNOTATION).spaceIf(true)
@@ -245,6 +245,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(NAME_REFERENCE).spaceIf(false)
                 .before(RETURN_TYPE).spaceIf(false)
                 .after(RETURN_TYPE).spaceIf(true)
+                .between(UNION_TYPE_NAME, IDENTIFIER).spaceIf(true)
                 .around(UNION_TYPE_NAME).spaceIf(false)
                 .around(TUPLE_TYPE_NAME).spaceIf(false)
                 .around(PARAMETER).spaceIf(false)
@@ -276,6 +277,8 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .aroundInside(DOT, INVOCATION).spaceIf(false)
                 .between(INVOCATION_ARG, COMMA).spaceIf(false)
                 .between(ANY_IDENTIFIER_NAME, LEFT_PARENTHESIS).spaceIf(false)
+                .between(EXPRESSION_LIST, LARROW).spaceIf(true)
+                .between(EXPRESSION_LIST, RARROW).spaceIf(true)
                 .around(EXPRESSION_LIST).spaceIf(false)
                 .between(ARRAY_TYPE_NAME, IDENTIFIER).spaceIf(true)
                 .aroundInside(GT, TYPE_CONVERSION_EXPRESSION).spaceIf(false)
@@ -291,7 +294,11 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .between(SERVICE, LT).spaceIf(false)
                 .before(SERVICE_ENDPOINT_ATTACHMENTS).spaceIf(true)
 
-                .afterInside(IDENTIFIER,RESOURCE_DEFINITION).spaceIf(true)
+                .afterInside(IDENTIFIER, RESOURCE_DEFINITION).spaceIf(false)
+
+                .between(FUNCTION, LT).spaceIf(false)
+
+                .around(PARAMETER_LIST).spaceIf(false)
 
                 // Operators
                 .around(ASSIGN).spaceIf(true)

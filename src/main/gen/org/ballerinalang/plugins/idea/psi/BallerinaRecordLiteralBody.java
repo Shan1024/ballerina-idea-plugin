@@ -20,21 +20,10 @@ package org.ballerinalang.plugins.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.StubBasedPsiElement;
-import org.ballerinalang.plugins.idea.stubs.BallerinaEnumDefinitionStub;
 
-public interface BallerinaEnumDefinition extends BallerinaNamedElement, StubBasedPsiElement<BallerinaEnumDefinitionStub> {
-
-  @Nullable
-  BallerinaEnumBody getEnumBody();
+public interface BallerinaRecordLiteralBody extends BallerinaCompositeElement {
 
   @NotNull
-  PsiElement getEnum();
-
-  @Nullable
-  PsiElement getIdentifier();
-
-  @Nullable
-  PsiElement getPublic();
+  List<BallerinaRecordKeyValue> getRecordKeyValueList();
 
 }

@@ -285,10 +285,12 @@ AnnotationDefinition ::= (public)? annotation (LT AttachmentPoint (COMMA Attachm
 
 //private AttachmentPointsRecover ::= !(GT | Identifier | SEMICOLON)
 
-EnumDefinition ::= (public)? enum identifier LEFT_BRACE Enumerator (COMMA Enumerator)* RIGHT_BRACE {
+EnumDefinition ::= (public)? enum identifier EnumBody {
     pin=2
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaEnumDefinitionStub"
 }
+
+EnumBody ::= LEFT_BRACE Enumerator (COMMA Enumerator)* RIGHT_BRACE
 
 Enumerator ::= identifier {
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaEnumeratorStub"
@@ -448,7 +450,9 @@ VariableDefinitionStatement ::= TypeName identifier ((ASSIGN | SAFE_ASSIGNMENT) 
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaVariableDefinitionStatementStub"
 }
 
-RecordLiteral ::= LEFT_BRACE (RecordKeyValue (COMMA RecordKeyValue)*)? RIGHT_BRACE {pin(".*")=1}
+RecordLiteral ::= LEFT_BRACE RecordLiteralBody? RIGHT_BRACE {pin(".*")=1}
+
+RecordLiteralBody ::= (RecordKeyValue (COMMA RecordKeyValue)*){pin(".*")=1}
 
 RecordKeyValue ::= RecordKey COLON Expression {pin=1}
 

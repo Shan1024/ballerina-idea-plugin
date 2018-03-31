@@ -222,6 +222,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitEnumBody(@NotNull BallerinaEnumBody o) {
+    visitCompositeElement(o);
+  }
+
   public void visitEnumDefinition(@NotNull BallerinaEnumDefinition o) {
     visitNamedElement(o);
   }
@@ -520,6 +524,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitRecordLiteral(@NotNull BallerinaRecordLiteral o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitRecordLiteralBody(@NotNull BallerinaRecordLiteralBody o) {
     visitCompositeElement(o);
   }
 

@@ -23,8 +23,8 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaRecordLiteral extends BallerinaCompositeElement {
 
-  @NotNull
-  List<BallerinaRecordKeyValue> getRecordKeyValueList();
+  @Nullable
+  BallerinaRecordLiteralBody getRecordLiteralBody();
 
   @NotNull
   PsiElement getLeftBrace();

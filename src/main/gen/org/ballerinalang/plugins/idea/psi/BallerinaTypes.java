@@ -86,6 +86,7 @@ public interface BallerinaTypes {
   IElementType ENDPOINT_PARAMETER = new BallerinaCompositeElementType("ENDPOINT_PARAMETER");
   IElementType ENDPOINT_TYPE = new BallerinaCompositeElementType("ENDPOINT_TYPE");
   IElementType ENUMERATOR = BallerinaElementTypeFactory.stubFactory("ENUMERATOR");
+  IElementType ENUM_BODY = new BallerinaCompositeElementType("ENUM_BODY");
   IElementType ENUM_DEFINITION = BallerinaElementTypeFactory.stubFactory("ENUM_DEFINITION");
   IElementType EXPRESSION = new BallerinaCompositeElementType("EXPRESSION");
   IElementType EXPRESSION_LIST = new BallerinaCompositeElementType("EXPRESSION_LIST");
@@ -164,6 +165,7 @@ public interface BallerinaTypes {
   IElementType RECORD_KEY = new BallerinaCompositeElementType("RECORD_KEY");
   IElementType RECORD_KEY_VALUE = new BallerinaCompositeElementType("RECORD_KEY_VALUE");
   IElementType RECORD_LITERAL = new BallerinaCompositeElementType("RECORD_LITERAL");
+  IElementType RECORD_LITERAL_BODY = new BallerinaCompositeElementType("RECORD_LITERAL_BODY");
   IElementType RECORD_LITERAL_EXPRESSION = new BallerinaCompositeElementType("RECORD_LITERAL_EXPRESSION");
   IElementType REFERENCE_TYPE_NAME = new BallerinaCompositeElementType("REFERENCE_TYPE_NAME");
   IElementType RESERVED_WORD = new BallerinaCompositeElementType("RESERVED_WORD");
@@ -606,6 +608,9 @@ public interface BallerinaTypes {
       else if (type == ENUMERATOR) {
         return new BallerinaEnumeratorImpl(node);
       }
+      else if (type == ENUM_BODY) {
+        return new BallerinaEnumBodyImpl(node);
+      }
       else if (type == ENUM_DEFINITION) {
         return new BallerinaEnumDefinitionImpl(node);
       }
@@ -839,6 +844,9 @@ public interface BallerinaTypes {
       }
       else if (type == RECORD_LITERAL) {
         return new BallerinaRecordLiteralImpl(node);
+      }
+      else if (type == RECORD_LITERAL_BODY) {
+        return new BallerinaRecordLiteralBodyImpl(node);
       }
       else if (type == RECORD_LITERAL_EXPRESSION) {
         return new BallerinaRecordLiteralExpressionImpl(node);

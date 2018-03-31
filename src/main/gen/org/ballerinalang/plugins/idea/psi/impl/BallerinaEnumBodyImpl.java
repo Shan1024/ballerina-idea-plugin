@@ -24,22 +24,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
-import org.ballerinalang.plugins.idea.stubs.BallerinaEnumDefinitionStub;
 import org.ballerinalang.plugins.idea.psi.*;
-import com.intellij.psi.stubs.IStubElementType;
 
-public class BallerinaEnumDefinitionImpl extends BallerinaNamedElementImpl<BallerinaEnumDefinitionStub> implements BallerinaEnumDefinition {
+public class BallerinaEnumBodyImpl extends BallerinaCompositeElementImpl implements BallerinaEnumBody {
 
-  public BallerinaEnumDefinitionImpl(BallerinaEnumDefinitionStub stub, IStubElementType type) {
-    super(stub, type);
-  }
-
-  public BallerinaEnumDefinitionImpl(ASTNode node) {
+  public BallerinaEnumBodyImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitEnumDefinition(this);
+    visitor.visitEnumBody(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -48,27 +42,21 @@ public class BallerinaEnumDefinitionImpl extends BallerinaNamedElementImpl<Balle
   }
 
   @Override
-  @Nullable
-  public BallerinaEnumBody getEnumBody() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaEnumBody.class);
+  @NotNull
+  public List<BallerinaEnumerator> getEnumeratorList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaEnumerator.class);
   }
 
   @Override
   @NotNull
-  public PsiElement getEnum() {
-    return notNullChild(findChildByType(ENUM));
+  public PsiElement getLeftBrace() {
+    return notNullChild(findChildByType(LEFT_BRACE));
   }
 
   @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getPublic() {
-    return findChildByType(PUBLIC);
+  @NotNull
+  public PsiElement getRightBrace() {
+    return notNullChild(findChildByType(RIGHT_BRACE));
   }
 
 }

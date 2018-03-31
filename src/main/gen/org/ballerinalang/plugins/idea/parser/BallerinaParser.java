@@ -147,6 +147,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == ENDPOINT_TYPE) {
       r = EndpointType(b, 0);
     }
+    else if (t == ENUM_BODY) {
+      r = EnumBody(b, 0);
+    }
     else if (t == ENUM_DEFINITION) {
       r = EnumDefinition(b, 0);
     }
@@ -347,6 +350,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     }
     else if (t == RECORD_LITERAL) {
       r = RecordLiteral(b, 0);
+    }
+    else if (t == RECORD_LITERAL_BODY) {
+      r = RecordLiteralBody(b, 0);
     }
     else if (t == REFERENCE_TYPE_NAME) {
       r = ReferenceTypeName(b, 0);
@@ -1750,18 +1756,54 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (public)? enum identifier LEFT_BRACE Enumerator (COMMA Enumerator)* RIGHT_BRACE
+  // LEFT_BRACE Enumerator (COMMA Enumerator)* RIGHT_BRACE
+  public static boolean EnumBody(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EnumBody")) return false;
+    if (!nextTokenIs(b, LEFT_BRACE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LEFT_BRACE);
+    r = r && Enumerator(b, l + 1);
+    r = r && EnumBody_2(b, l + 1);
+    r = r && consumeToken(b, RIGHT_BRACE);
+    exit_section_(b, m, ENUM_BODY, r);
+    return r;
+  }
+
+  // (COMMA Enumerator)*
+  private static boolean EnumBody_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EnumBody_2")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!EnumBody_2_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "EnumBody_2", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
+  // COMMA Enumerator
+  private static boolean EnumBody_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "EnumBody_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, COMMA);
+    r = r && Enumerator(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // (public)? enum identifier EnumBody
   public static boolean EnumDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "EnumDefinition")) return false;
     if (!nextTokenIs(b, "<enum definition>", ENUM, PUBLIC)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, ENUM_DEFINITION, "<enum definition>");
     r = EnumDefinition_0(b, l + 1);
-    r = r && consumeTokens(b, 1, ENUM, IDENTIFIER, LEFT_BRACE);
+    r = r && consumeTokens(b, 1, ENUM, IDENTIFIER);
     p = r; // pin = 2
-    r = r && report_error_(b, Enumerator(b, l + 1));
-    r = p && report_error_(b, EnumDefinition_5(b, l + 1)) && r;
-    r = p && consumeToken(b, RIGHT_BRACE) && r;
+    r = r && EnumBody(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -1771,29 +1813,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "EnumDefinition_0")) return false;
     consumeToken(b, PUBLIC);
     return true;
-  }
-
-  // (COMMA Enumerator)*
-  private static boolean EnumDefinition_5(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "EnumDefinition_5")) return false;
-    int c = current_position_(b);
-    while (true) {
-      if (!EnumDefinition_5_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "EnumDefinition_5", c)) break;
-      c = current_position_(b);
-    }
-    return true;
-  }
-
-  // COMMA Enumerator
-  private static boolean EnumDefinition_5_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "EnumDefinition_5_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, COMMA);
-    r = r && Enumerator(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */
@@ -3811,7 +3830,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LEFT_BRACE (RecordKeyValue (COMMA RecordKeyValue)*)? RIGHT_BRACE
+  // LEFT_BRACE RecordLiteralBody? RIGHT_BRACE
   public static boolean RecordLiteral(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RecordLiteral")) return false;
     if (!nextTokenIs(b, LEFT_BRACE)) return false;
@@ -3825,40 +3844,41 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // (RecordKeyValue (COMMA RecordKeyValue)*)?
+  // RecordLiteralBody?
   private static boolean RecordLiteral_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RecordLiteral_1")) return false;
-    RecordLiteral_1_0(b, l + 1);
+    RecordLiteralBody(b, l + 1);
     return true;
   }
 
+  /* ********************************************************** */
   // RecordKeyValue (COMMA RecordKeyValue)*
-  private static boolean RecordLiteral_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "RecordLiteral_1_0")) return false;
+  public static boolean RecordLiteralBody(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RecordLiteralBody")) return false;
     boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_);
+    Marker m = enter_section_(b, l, _NONE_, RECORD_LITERAL_BODY, "<record literal body>");
     r = RecordKeyValue(b, l + 1);
     p = r; // pin = 1
-    r = r && RecordLiteral_1_0_1(b, l + 1);
+    r = r && RecordLiteralBody_1(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
   // (COMMA RecordKeyValue)*
-  private static boolean RecordLiteral_1_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "RecordLiteral_1_0_1")) return false;
+  private static boolean RecordLiteralBody_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RecordLiteralBody_1")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!RecordLiteral_1_0_1_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "RecordLiteral_1_0_1", c)) break;
+      if (!RecordLiteralBody_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "RecordLiteralBody_1", c)) break;
       c = current_position_(b);
     }
     return true;
   }
 
   // COMMA RecordKeyValue
-  private static boolean RecordLiteral_1_0_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "RecordLiteral_1_0_1_0")) return false;
+  private static boolean RecordLiteralBody_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RecordLiteralBody_1_0")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, COMMA);
