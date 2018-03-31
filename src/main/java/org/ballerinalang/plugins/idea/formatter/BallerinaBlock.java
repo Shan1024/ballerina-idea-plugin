@@ -258,6 +258,15 @@ public class BallerinaBlock extends AbstractBlock {
             return Indent.getNormalIndent();
         } else if (parentElementType == BallerinaTypes.MATCH_PATTERN_CLAUSE) {
             return Indent.getNormalIndent();
+        } else if (parentElementType == BallerinaTypes.SERVICE_BODY && (childElementType == BallerinaTypes.ENDPOINT_TYPE
+                || childElementType == BallerinaTypes.VARIABLE_DEFINITION_STATEMENT
+                || childElementType == BallerinaTypes.RESOURCE_DEFINITION)) {
+            return Indent.getNormalIndent();
+        } else if (parentElementType == BallerinaTypes.STRUCT_BODY
+                && childElementType == BallerinaTypes.FIELD_DEFINITION) {
+            return Indent.getNormalIndent();
+        } else if (childElementType == BallerinaTypes.INVOCATION_ARG_LIST) {
+            return Indent.getIndent(Indent.Type.NORMAL, true, true);
         }
         return Indent.getNoneIndent();
     }
@@ -273,6 +282,12 @@ public class BallerinaBlock extends AbstractBlock {
     public ChildAttributes getChildAttributes(int newChildIndex) {
         Indent childIndent = Indent.getNoneIndent();
         if (myNode.getElementType() == BallerinaTypes.CALLABLE_UNIT_BODY) {
+            childIndent = Indent.getNormalIndent();
+        } else if (myNode.getElementType() == BallerinaTypes.SERVICE_BODY) {
+            childIndent = Indent.getNormalIndent();
+        } else if (myNode.getElementType() == BallerinaTypes.RECORD_LITERAL) {
+            childIndent = Indent.getNormalIndent();
+        } else if (myNode.getElementType() == BallerinaTypes.STRUCT_BODY) {
             childIndent = Indent.getNormalIndent();
         }
         return new ChildAttributes(childIndent, null);

@@ -38,7 +38,8 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                 if (next3Element != null && (next3Element == BallerinaTypes.SEMICOLON
                         || next3Element == BallerinaTypes.COLON || next3Element == BallerinaTypes.RIGHT_PARENTHESIS
                         || next3Element == BallerinaTypes.RIGHT_BRACE || next3Element == BallerinaTypes.COMMA
-                        || next3Element == BallerinaTypes.LEFT_BRACKET)) {
+                        || next3Element == BallerinaTypes.LEFT_BRACKET
+                        || next3Element == BallerinaTypes.LEFT_PARENTHESIS)) {
                     // We need to look behind few steps to identify the last token. If this token is not "?" only we
                     // identify that the package is required.
                     int steps = -1;
@@ -51,17 +52,30 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                         // Left brace is to check in record key literals.
                         if (rawLookup == BallerinaTypes.QUESTION_MARK || rawLookup == BallerinaTypes.LEFT_BRACE
                                 || (rawLookup == BallerinaTypes.COMMA && next3Element == BallerinaTypes.RIGHT_BRACE)) {
-                            return false;
+                            // Note - Another raw lookup is added for situations like below. Second record key value
+                            // pair does not get identified correctly otherwise.
+                            // {sqlType:sql:Type.INTEGER, value:xmlDataArray};
+                            IElementType rawLookup2 = builder.rawLookup(steps - 1);
+                            do {
+                                if (isWhiteSpaceOrComment(rawLookup)) {
+                                    continue;
+                                }
+                                if (rawLookup2 != BallerinaTypes.ASSIGN && rawLookup2 != BallerinaTypes.COLON
+                                        && rawLookup2 != BallerinaTypes.DOT) {
+                                    return true;
+                                } else {
+                                    return false;
+                                }
+                            } while (rawLookup2 != null && isWhiteSpaceOrComment(rawLookup2));
+
                         } else {
                             return true;
                         }
-                    }
-                    while (rawLookup != null && isWhiteSpaceOrComment(rawLookup));
+                    } while (rawLookup != null && isWhiteSpaceOrComment(rawLookup));
                 }
             }
         }
         return true;
-
     }
 
     private static boolean isWhiteSpaceOrComment(IElementType rawLookup) {

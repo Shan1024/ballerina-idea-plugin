@@ -113,6 +113,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RARROW;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RECORD_KEY_VALUE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RECORD_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RESOURCE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RESOURCE_DEFINITION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETRIES;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETURN;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETURNS;
@@ -124,6 +125,8 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RIGHT_PARENTHESI
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SAFE_ASSIGNMENT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SEMICOLON;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SERVICE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SERVICE_BODY;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SERVICE_ENDPOINT_ATTACHMENTS;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SIMPLE_TYPE_NAME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SIMPLE_VARIABLE_REFERENCE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SOME;
@@ -162,6 +165,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
         );
     }
 
+    // Note - In case of multiple matching rules, top rule is the one which will get applied.
     private static SpacingBuilder createSpaceBuilder(CodeStyleSettings settings) {
         return new SpacingBuilder(settings, BallerinaLanguage.INSTANCE)
                 // Keywords
@@ -171,7 +175,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(PUBLIC).spaceIf(true)
                 .around(PRIVATE).spaceIf(true)
                 .around(NATIVE).spaceIf(true)
-                .around(SERVICE).spaceIf(true)
+                //                .around(SERVICE).spaceIf(true)
                 .around(RESOURCE).spaceIf(true)
                 .around(FUNCTION).spaceIf(true)
                 .around(STRUCT).spaceIf(true)
@@ -236,6 +240,8 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .between(SIMPLE_TYPE_NAME, IDENTIFIER).spaceIf(true)
                 .between(SIMPLE_TYPE_NAME, EQUAL_GT).spaceIf(true)
                 .around(SIMPLE_TYPE_NAME).spaceIf(false)
+                .between(NAME_REFERENCE, RARROW).spaceIf(true)
+                .between(NAME_REFERENCE, RECORD_LITERAL).spaceIf(true)
                 .around(NAME_REFERENCE).spaceIf(false)
                 .before(RETURN_TYPE).spaceIf(false)
                 .after(RETURN_TYPE).spaceIf(true)
@@ -251,7 +257,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .after(PACKAGE_REFERENCE).spaceIf(false)
                 .aroundInside(NAME_REFERENCE, FUNCTION_INVOCATION).spaceIf(false)
                 .around(INVOCATION_ARG_LIST).spaceIf(false)
-                .around(CALLABLE_UNIT_BODY).spaceIf(false)
+                .before(CALLABLE_UNIT_BODY).spaceIf(true)
                 .around(SIMPLE_TYPE_NAME).spaceIf(true)
 
                 // Record Literals
@@ -265,6 +271,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .between(LEFT_BRACE, RIGHT_BRACE).spaceIf(false)
                 .between(LEFT_BRACKET, RIGHT_BRACKET).spaceIf(false)
                 .between(SIMPLE_VARIABLE_REFERENCE, ASSIGN).spaceIf(true)
+                .between(SIMPLE_VARIABLE_REFERENCE, SAFE_ASSIGNMENT).spaceIf(true)
                 .after(SIMPLE_VARIABLE_REFERENCE).spaceIf(false)
                 .aroundInside(DOT, INVOCATION).spaceIf(false)
                 .between(INVOCATION_ARG, COMMA).spaceIf(false)
@@ -279,6 +286,12 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .between(SUB, INTEGER_LITERAL).spaceIf(false)
                 .between(ADD, FLOATING_POINT_LITERAL).spaceIf(false)
                 .between(SUB, FLOATING_POINT_LITERAL).spaceIf(false)
+
+                .before(SERVICE_BODY).spaceIf(true)
+                .between(SERVICE, LT).spaceIf(false)
+                .before(SERVICE_ENDPOINT_ATTACHMENTS).spaceIf(true)
+
+                .afterInside(IDENTIFIER,RESOURCE_DEFINITION).spaceIf(true)
 
                 // Operators
                 .around(ASSIGN).spaceIf(true)
