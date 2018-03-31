@@ -43,32 +43,20 @@ public class BallerinaTimeoutClauseImpl extends BallerinaCompositeElementImpl im
 
   @Override
   @Nullable
-  public BallerinaBlock getBlock() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaBlock.class);
-  }
-
-  @Override
-  @Nullable
   public BallerinaExpression getExpression() {
     return PsiTreeUtil.getChildOfType(this, BallerinaExpression.class);
   }
 
   @Override
   @Nullable
+  public BallerinaTimeoutClauseBody getTimeoutClauseBody() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaTimeoutClauseBody.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaTypeName getTypeName() {
     return PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLeftBrace() {
-    return findChildByType(LEFT_BRACE);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRightBrace() {
-    return findChildByType(RIGHT_BRACE);
   }
 
   @Override

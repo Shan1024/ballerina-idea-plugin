@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaJoinClauseImpl extends BallerinaCompositeElementImpl implements BallerinaJoinClause {
+public class BallerinaTimeoutClauseBodyImpl extends BallerinaCompositeElementImpl implements BallerinaTimeoutClauseBody {
 
-  public BallerinaJoinClauseImpl(ASTNode node) {
+  public BallerinaTimeoutClauseBodyImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitJoinClause(this);
+    visitor.visitTimeoutClauseBody(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -42,33 +42,21 @@ public class BallerinaJoinClauseImpl extends BallerinaCompositeElementImpl imple
   }
 
   @Override
-  @Nullable
-  public BallerinaJoinClauseBody getJoinClauseBody() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaJoinClauseBody.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaJoinConditions getJoinConditions() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaJoinConditions.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaTypeName getTypeName() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
+  @NotNull
+  public BallerinaBlock getBlock() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaBlock.class));
   }
 
   @Override
   @NotNull
-  public PsiElement getJoin() {
-    return notNullChild(findChildByType(JOIN));
+  public PsiElement getLeftBrace() {
+    return notNullChild(findChildByType(LEFT_BRACE));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRightBrace() {
+    return notNullChild(findChildByType(RIGHT_BRACE));
   }
 
 }

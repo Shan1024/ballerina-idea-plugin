@@ -21,21 +21,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaTimeoutClause extends BallerinaCompositeElement {
-
-  @Nullable
-  BallerinaExpression getExpression();
-
-  @Nullable
-  BallerinaTimeoutClauseBody getTimeoutClauseBody();
-
-  @Nullable
-  BallerinaTypeName getTypeName();
-
-  @Nullable
-  PsiElement getIdentifier();
+public interface BallerinaForkStatementBody extends BallerinaCompositeElement {
 
   @NotNull
-  PsiElement getTimeout();
+  List<BallerinaWorkerDefinition> getWorkerDefinitionList();
 
 }

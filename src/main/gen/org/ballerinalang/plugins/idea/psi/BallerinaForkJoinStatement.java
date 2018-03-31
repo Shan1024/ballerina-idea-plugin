@@ -24,13 +24,13 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaForkJoinStatement extends BallerinaCompositeElement {
 
   @Nullable
+  BallerinaForkStatementBody getForkStatementBody();
+
+  @Nullable
   BallerinaJoinClause getJoinClause();
 
   @Nullable
   BallerinaTimeoutClause getTimeoutClause();
-
-  @NotNull
-  List<BallerinaWorkerDefinition> getWorkerDefinitionList();
 
   @Nullable
   PsiElement getLeftBrace();

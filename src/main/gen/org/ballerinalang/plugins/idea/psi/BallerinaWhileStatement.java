@@ -24,19 +24,13 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaWhileStatement extends BallerinaCompositeElement {
 
   @NotNull
-  BallerinaBlock getBlock();
-
-  @NotNull
   BallerinaExpression getExpression();
 
   @NotNull
-  PsiElement getLeftBrace();
+  BallerinaWhileStatementBody getWhileStatementBody();
 
   @NotNull
   PsiElement getLeftParenthesis();
-
-  @NotNull
-  PsiElement getRightBrace();
 
   @NotNull
   PsiElement getRightParenthesis();

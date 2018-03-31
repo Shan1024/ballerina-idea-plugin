@@ -270,6 +270,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitForkStatementBody(@NotNull BallerinaForkStatementBody o) {
+    visitCompositeElement(o);
+  }
+
   public void visitFormalParameterList(@NotNull BallerinaFormalParameterList o) {
     visitCompositeElement(o);
   }
@@ -347,6 +351,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitJoinClause(@NotNull BallerinaJoinClause o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitJoinClauseBody(@NotNull BallerinaJoinClauseBody o) {
     visitCompositeElement(o);
   }
 
@@ -647,6 +655,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitTimeoutClauseBody(@NotNull BallerinaTimeoutClauseBody o) {
+    visitCompositeElement(o);
+  }
+
   public void visitTransactionClause(@NotNull BallerinaTransactionClause o) {
     visitCompositeElement(o);
   }
@@ -748,6 +760,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitWhileStatement(@NotNull BallerinaWhileStatement o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitWhileStatementBody(@NotNull BallerinaWhileStatementBody o) {
     visitCompositeElement(o);
   }
 

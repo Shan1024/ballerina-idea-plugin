@@ -246,7 +246,11 @@ public class BallerinaBlock extends AbstractBlock {
                 && (parentElementType == BallerinaTypes.CALLABLE_UNIT_BODY
                 || parentElementType == BallerinaTypes.IF_CLAUSE || parentElementType == BallerinaTypes.ELSE_IF_CLAUSE
                 || parentElementType == BallerinaTypes.ELSE_CLAUSE || parentElementType == BallerinaTypes.ENUM_BODY
-                || parentElementType == BallerinaTypes.WORKER_BODY)) {
+                || parentElementType == BallerinaTypes.WORKER_BODY
+                || parentElementType == BallerinaTypes.FORK_JOIN_STATEMENT
+                || parentElementType == BallerinaTypes.JOIN_CLAUSE_BODY
+                || parentElementType == BallerinaTypes.TIMEOUT_CLAUSE_BODY
+                || parentElementType == BallerinaTypes.WHILE_STATEMENT_BODY)) {
             return Indent.getNormalIndent();
         } else if (parentElementType == BallerinaTypes.CALLABLE_UNIT_SIGNATURE) {
             return Indent.getNormalIndent();
@@ -273,6 +277,12 @@ public class BallerinaBlock extends AbstractBlock {
             return Indent.getIndent(Indent.Type.NORMAL, true, true);
         } else if (childElementType == BallerinaTypes.ENUMERATOR) {
             return Indent.getNormalIndent();
+        } else if (childElementType == BallerinaTypes.FORK_STATEMENT_BODY) {
+            return Indent.getNormalIndent();
+        } else if (childElementType == BallerinaTypes.JOIN_CLAUSE_BODY) {
+            return Indent.getNormalIndent();
+        } else if (childElementType == BallerinaTypes.TIMEOUT_CLAUSE_BODY) {
+            return Indent.getNormalIndent();
         }
         return Indent.getNoneIndent();
     }
@@ -298,6 +308,14 @@ public class BallerinaBlock extends AbstractBlock {
         } else if (myNode.getElementType() == BallerinaTypes.ENUM_BODY) {
             childIndent = Indent.getNormalIndent();
         } else if (myNode.getElementType() == BallerinaTypes.WORKER_BODY) {
+            childIndent = Indent.getNormalIndent();
+        } else if (myNode.getElementType() == BallerinaTypes.WHILE_STATEMENT_BODY) {
+            childIndent = Indent.getNormalIndent();
+        } else if (myNode.getElementType() == BallerinaTypes.FORK_JOIN_STATEMENT) {
+            childIndent = Indent.getNormalIndent();
+        } else if (myNode.getElementType() == BallerinaTypes.JOIN_CLAUSE_BODY) {
+            childIndent = Indent.getNormalIndent();
+        } else if (myNode.getElementType() == BallerinaTypes.TIMEOUT_CLAUSE_BODY) {
             childIndent = Indent.getNormalIndent();
         }
         return new ChildAttributes(childIndent, null);

@@ -98,6 +98,7 @@ public interface BallerinaTypes {
   IElementType FINALLY_CLAUSE = new BallerinaCompositeElementType("FINALLY_CLAUSE");
   IElementType FOREACH_STATEMENT = new BallerinaCompositeElementType("FOREACH_STATEMENT");
   IElementType FORK_JOIN_STATEMENT = new BallerinaCompositeElementType("FORK_JOIN_STATEMENT");
+  IElementType FORK_STATEMENT_BODY = new BallerinaCompositeElementType("FORK_STATEMENT_BODY");
   IElementType FORMAL_PARAMETER_LIST = new BallerinaCompositeElementType("FORMAL_PARAMETER_LIST");
   IElementType FUNCTION_DEFINITION = BallerinaElementTypeFactory.stubFactory("FUNCTION_DEFINITION");
   IElementType FUNCTION_INVOCATION = new BallerinaCompositeElementType("FUNCTION_INVOCATION");
@@ -118,6 +119,7 @@ public interface BallerinaTypes {
   IElementType INVOCATION_ARG_LIST = new BallerinaCompositeElementType("INVOCATION_ARG_LIST");
   IElementType INVOCATION_REFERENCE = new BallerinaCompositeElementType("INVOCATION_REFERENCE");
   IElementType JOIN_CLAUSE = new BallerinaCompositeElementType("JOIN_CLAUSE");
+  IElementType JOIN_CLAUSE_BODY = new BallerinaCompositeElementType("JOIN_CLAUSE_BODY");
   IElementType JOIN_CONDITIONS = new BallerinaCompositeElementType("JOIN_CONDITIONS");
   IElementType JSON_TYPE_NAME = new BallerinaCompositeElementType("JSON_TYPE_NAME");
   IElementType LAMBDA_FUNCTION = new BallerinaCompositeElementType("LAMBDA_FUNCTION");
@@ -198,6 +200,7 @@ public interface BallerinaTypes {
   IElementType TERNARY_EXPRESSION = new BallerinaCompositeElementType("TERNARY_EXPRESSION");
   IElementType THROW_STATEMENT = new BallerinaCompositeElementType("THROW_STATEMENT");
   IElementType TIMEOUT_CLAUSE = new BallerinaCompositeElementType("TIMEOUT_CLAUSE");
+  IElementType TIMEOUT_CLAUSE_BODY = new BallerinaCompositeElementType("TIMEOUT_CLAUSE_BODY");
   IElementType TRANSACTION_CLAUSE = new BallerinaCompositeElementType("TRANSACTION_CLAUSE");
   IElementType TRANSACTION_PROPERTY_INIT_STATEMENT = new BallerinaCompositeElementType("TRANSACTION_PROPERTY_INIT_STATEMENT");
   IElementType TRANSACTION_PROPERTY_INIT_STATEMENT_LIST = new BallerinaCompositeElementType("TRANSACTION_PROPERTY_INIT_STATEMENT_LIST");
@@ -227,6 +230,7 @@ public interface BallerinaTypes {
   IElementType VARIABLE_REFERENCE_EXPRESSION = new BallerinaCompositeElementType("VARIABLE_REFERENCE_EXPRESSION");
   IElementType VARIABLE_REFERENCE_LIST = new BallerinaCompositeElementType("VARIABLE_REFERENCE_LIST");
   IElementType WHILE_STATEMENT = new BallerinaCompositeElementType("WHILE_STATEMENT");
+  IElementType WHILE_STATEMENT_BODY = new BallerinaCompositeElementType("WHILE_STATEMENT_BODY");
   IElementType WORKER_BODY = new BallerinaCompositeElementType("WORKER_BODY");
   IElementType WORKER_DEFINITION = BallerinaElementTypeFactory.stubFactory("WORKER_DEFINITION");
   IElementType WORKER_INTERACTION_STATEMENT = new BallerinaCompositeElementType("WORKER_INTERACTION_STATEMENT");
@@ -645,6 +649,9 @@ public interface BallerinaTypes {
       else if (type == FORK_JOIN_STATEMENT) {
         return new BallerinaForkJoinStatementImpl(node);
       }
+      else if (type == FORK_STATEMENT_BODY) {
+        return new BallerinaForkStatementBodyImpl(node);
+      }
       else if (type == FORMAL_PARAMETER_LIST) {
         return new BallerinaFormalParameterListImpl(node);
       }
@@ -704,6 +711,9 @@ public interface BallerinaTypes {
       }
       else if (type == JOIN_CLAUSE) {
         return new BallerinaJoinClauseImpl(node);
+      }
+      else if (type == JOIN_CLAUSE_BODY) {
+        return new BallerinaJoinClauseBodyImpl(node);
       }
       else if (type == JOIN_CONDITIONS) {
         return new BallerinaJoinConditionsImpl(node);
@@ -945,6 +955,9 @@ public interface BallerinaTypes {
       else if (type == TIMEOUT_CLAUSE) {
         return new BallerinaTimeoutClauseImpl(node);
       }
+      else if (type == TIMEOUT_CLAUSE_BODY) {
+        return new BallerinaTimeoutClauseBodyImpl(node);
+      }
       else if (type == TRANSACTION_CLAUSE) {
         return new BallerinaTransactionClauseImpl(node);
       }
@@ -1025,6 +1038,9 @@ public interface BallerinaTypes {
       }
       else if (type == WHILE_STATEMENT) {
         return new BallerinaWhileStatementImpl(node);
+      }
+      else if (type == WHILE_STATEMENT_BODY) {
+        return new BallerinaWhileStatementBodyImpl(node);
       }
       else if (type == WORKER_BODY) {
         return new BallerinaWorkerBodyImpl(node);

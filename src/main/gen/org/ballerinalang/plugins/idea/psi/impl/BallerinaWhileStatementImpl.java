@@ -43,32 +43,20 @@ public class BallerinaWhileStatementImpl extends BallerinaCompositeElementImpl i
 
   @Override
   @NotNull
-  public BallerinaBlock getBlock() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaBlock.class));
-  }
-
-  @Override
-  @NotNull
   public BallerinaExpression getExpression() {
     return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaExpression.class));
   }
 
   @Override
   @NotNull
-  public PsiElement getLeftBrace() {
-    return notNullChild(findChildByType(LEFT_BRACE));
+  public BallerinaWhileStatementBody getWhileStatementBody() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaWhileStatementBody.class));
   }
 
   @Override
   @NotNull
   public PsiElement getLeftParenthesis() {
     return notNullChild(findChildByType(LEFT_PARENTHESIS));
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getRightBrace() {
-    return notNullChild(findChildByType(RIGHT_BRACE));
   }
 
   @Override

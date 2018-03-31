@@ -24,19 +24,13 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaJoinClause extends BallerinaCompositeElement {
 
   @Nullable
-  BallerinaBlock getBlock();
+  BallerinaJoinClauseBody getJoinClauseBody();
 
   @Nullable
   BallerinaJoinConditions getJoinConditions();
 
   @Nullable
   BallerinaTypeName getTypeName();
-
-  @Nullable
-  PsiElement getLeftBrace();
-
-  @Nullable
-  PsiElement getRightBrace();
 
   @Nullable
   PsiElement getIdentifier();
