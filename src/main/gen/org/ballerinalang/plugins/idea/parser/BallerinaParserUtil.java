@@ -67,11 +67,14 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                         if (isWhiteSpaceOrComment(rawLookup)) {
                             continue;
                         }
-                        // Quoted literal string example - {address:{"city":"Colombo", "country":"SriLanka"},
-                        //info:info}
-                        if (rawLookup2 != BallerinaTypes.ASSIGN && rawLookup2 != BallerinaTypes.COLON
-                                && rawLookup2 != BallerinaTypes.DOT
-                                && rawLookup2 != BallerinaTypes.QUOTED_STRING_LITERAL) {
+                        // Identifier example - endpoint ServiceEndpoint backendEP {port:getBackendPort()};
+                        // Quoted literal string example - {address:{"city":"Colombo", "country":"SriLanka"}, info:info}
+                        // Last condition example - {dataSourceClassName:"org.hsqldb.jdbc.JDBCDataSource",
+                        // datasourceProperties:propertiesMap}
+                        if (rawLookup2 != BallerinaTypes.ASSIGN /*&& rawLookup2 != BallerinaTypes.COLON*/
+                                && rawLookup2 != BallerinaTypes.DOT && rawLookup2 != BallerinaTypes.IDENTIFIER
+                                && rawLookup2 != BallerinaTypes.QUOTED_STRING_LITERAL
+                                && !(rawLookup == BallerinaTypes.COMMA && rawLookup2 == BallerinaTypes.COLON)) {
                             return true;
                         } else {
                             return false;
