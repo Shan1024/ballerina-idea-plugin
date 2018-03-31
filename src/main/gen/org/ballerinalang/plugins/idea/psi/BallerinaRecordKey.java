@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaRecordKey extends BallerinaCompositeElement {
 
   @Nullable
-  BallerinaSimpleLiteral getSimpleLiteral();
+  BallerinaExpression getExpression();
 
   @Nullable
   PsiElement getIdentifier();

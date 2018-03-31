@@ -452,7 +452,7 @@ RecordLiteral ::= LEFT_BRACE (RecordKeyValue (COMMA RecordKeyValue)*)? RIGHT_BRA
 
 RecordKeyValue ::= RecordKey COLON Expression {pin=1}
 
-RecordKey ::= identifier | SimpleLiteral
+RecordKey ::= Expression | identifier
 
 ArrayLiteral ::= LEFT_BRACKET ExpressionList? RIGHT_BRACKET
 
