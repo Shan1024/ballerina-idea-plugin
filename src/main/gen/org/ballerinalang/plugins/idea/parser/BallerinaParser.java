@@ -477,6 +477,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == WHILE_STATEMENT) {
       r = WhileStatement(b, 0);
     }
+    else if (t == WORKER_BODY) {
+      r = WorkerBody(b, 0);
+    }
     else if (t == WORKER_DEFINITION) {
       r = WorkerDefinition(b, 0);
     }
@@ -5287,16 +5290,29 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // worker identifier LEFT_BRACE Block RIGHT_BRACE
+  // LEFT_BRACE Block RIGHT_BRACE
+  public static boolean WorkerBody(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "WorkerBody")) return false;
+    if (!nextTokenIs(b, LEFT_BRACE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LEFT_BRACE);
+    r = r && Block(b, l + 1);
+    r = r && consumeToken(b, RIGHT_BRACE);
+    exit_section_(b, m, WORKER_BODY, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // worker identifier WorkerBody
   public static boolean WorkerDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "WorkerDefinition")) return false;
     if (!nextTokenIs(b, WORKER)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, WORKER_DEFINITION, null);
-    r = consumeTokens(b, 1, WORKER, IDENTIFIER, LEFT_BRACE);
+    r = consumeTokens(b, 1, WORKER, IDENTIFIER);
     p = r; // pin = 1
-    r = r && report_error_(b, Block(b, l + 1));
-    r = p && consumeToken(b, RIGHT_BRACE) && r;
+    r = r && WorkerBody(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }

@@ -19,7 +19,6 @@ package org.ballerinalang.plugins.idea.parser;
 
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
-import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.TokenType;
 import com.intellij.psi.tree.IElementType;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypes;
@@ -39,11 +38,15 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
         // The next token can be one of the following tokens. Right brace is to check in record key literals.
         // Comma is used for record literals in function invocations - test(a,{b:c, d:e})
         // Left bracket is used to identify array elements - {name:"Ballerina", address:args[0]};
+        //
         if (next3Element != null && (next3Element == BallerinaTypes.SEMICOLON
                 || next3Element == BallerinaTypes.COLON || next3Element == BallerinaTypes.RIGHT_PARENTHESIS
                 || next3Element == BallerinaTypes.RIGHT_BRACE || next3Element == BallerinaTypes.COMMA
-                || next3Element == BallerinaTypes.LEFT_BRACKET
-                || next3Element == BallerinaTypes.LEFT_PARENTHESIS)) {
+                || next3Element == BallerinaTypes.LEFT_BRACKET || next3Element == BallerinaTypes.LEFT_PARENTHESIS
+                || next3Element == BallerinaTypes.EQUAL || next3Element == BallerinaTypes.NOT_EQUAL
+                || next3Element == BallerinaTypes.GT || next3Element == BallerinaTypes.LT
+                || next3Element == BallerinaTypes.GT_EQUAL || next3Element == BallerinaTypes.LT_EQUAL
+        )) {
             // We need to look behind few steps to identify the last token. If this token is not "?" only we
             // identify that the package is required.
             int steps = -1;
@@ -71,9 +74,12 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                         // Quoted literal string example - {address:{"city":"Colombo", "country":"SriLanka"}, info:info}
                         // Last condition example - {dataSourceClassName:"org.hsqldb.jdbc.JDBCDataSource",
                         // datasourceProperties:propertiesMap}
+                        // Decimal literal example - string a = x == 1 ? s : i;
                         if (rawLookup2 != BallerinaTypes.ASSIGN /*&& rawLookup2 != BallerinaTypes.COLON*/
                                 && rawLookup2 != BallerinaTypes.DOT && rawLookup2 != BallerinaTypes.IDENTIFIER
                                 && rawLookup2 != BallerinaTypes.QUOTED_STRING_LITERAL
+                                && rawLookup2 != BallerinaTypes.DECIMAL_INTEGER_LITERAL
+                                && rawLookup2 != BallerinaTypes.BOOLEAN_LITERAL
                                 && !(rawLookup == BallerinaTypes.COMMA && rawLookup2 == BallerinaTypes.COLON)) {
                             return true;
                         } else {

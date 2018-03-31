@@ -20,18 +20,16 @@ package org.ballerinalang.plugins.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.StubBasedPsiElement;
-import org.ballerinalang.plugins.idea.stubs.BallerinaWorkerDefinitionStub;
 
-public interface BallerinaWorkerDefinition extends BallerinaNamedElement, StubBasedPsiElement<BallerinaWorkerDefinitionStub> {
-
-  @Nullable
-  BallerinaWorkerBody getWorkerBody();
-
-  @Nullable
-  PsiElement getIdentifier();
+public interface BallerinaWorkerBody extends BallerinaCompositeElement {
 
   @NotNull
-  PsiElement getWorker();
+  BallerinaBlock getBlock();
+
+  @NotNull
+  PsiElement getLeftBrace();
+
+  @NotNull
+  PsiElement getRightBrace();
 
 }

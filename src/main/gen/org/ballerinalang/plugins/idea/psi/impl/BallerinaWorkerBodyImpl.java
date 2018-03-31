@@ -24,22 +24,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
-import org.ballerinalang.plugins.idea.stubs.BallerinaWorkerDefinitionStub;
 import org.ballerinalang.plugins.idea.psi.*;
-import com.intellij.psi.stubs.IStubElementType;
 
-public class BallerinaWorkerDefinitionImpl extends BallerinaNamedElementImpl<BallerinaWorkerDefinitionStub> implements BallerinaWorkerDefinition {
+public class BallerinaWorkerBodyImpl extends BallerinaCompositeElementImpl implements BallerinaWorkerBody {
 
-  public BallerinaWorkerDefinitionImpl(BallerinaWorkerDefinitionStub stub, IStubElementType type) {
-    super(stub, type);
-  }
-
-  public BallerinaWorkerDefinitionImpl(ASTNode node) {
+  public BallerinaWorkerBodyImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitWorkerDefinition(this);
+    visitor.visitWorkerBody(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -48,21 +42,21 @@ public class BallerinaWorkerDefinitionImpl extends BallerinaNamedElementImpl<Bal
   }
 
   @Override
-  @Nullable
-  public BallerinaWorkerBody getWorkerBody() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaWorkerBody.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
+  @NotNull
+  public BallerinaBlock getBlock() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaBlock.class));
   }
 
   @Override
   @NotNull
-  public PsiElement getWorker() {
-    return notNullChild(findChildByType(WORKER));
+  public PsiElement getLeftBrace() {
+    return notNullChild(findChildByType(LEFT_BRACE));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRightBrace() {
+    return notNullChild(findChildByType(RIGHT_BRACE));
   }
 
 }

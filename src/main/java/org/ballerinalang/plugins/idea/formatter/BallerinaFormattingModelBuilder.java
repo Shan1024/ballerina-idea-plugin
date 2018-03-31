@@ -36,6 +36,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ADD;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ALL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.AND;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ANNOTATION;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ANNOTATION_ATTACHMENT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ANY_IDENTIFIER_NAME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ARRAY_TYPE_NAME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.AS;
@@ -239,6 +240,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(RETURN_PARAMETER).spaceIf(true)
                 .between(SIMPLE_TYPE_NAME, IDENTIFIER).spaceIf(true)
                 .between(SIMPLE_TYPE_NAME, EQUAL_GT).spaceIf(true)
+                .after(ANNOTATION_ATTACHMENT).spaceIf(true)
                 .around(SIMPLE_TYPE_NAME).spaceIf(false)
                 .between(NAME_REFERENCE, RARROW).spaceIf(true)
                 .between(NAME_REFERENCE, RECORD_LITERAL).spaceIf(true)
@@ -259,7 +261,6 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .aroundInside(NAME_REFERENCE, FUNCTION_INVOCATION).spaceIf(false)
                 .around(INVOCATION_ARG_LIST).spaceIf(false)
                 .before(CALLABLE_UNIT_BODY).spaceIf(true)
-                .around(SIMPLE_TYPE_NAME).spaceIf(true)
 
                 // Record Literals
                 .aroundInside(COLON, RECORD_KEY_VALUE).spaceIf(false)

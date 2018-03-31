@@ -245,7 +245,8 @@ public class BallerinaBlock extends AbstractBlock {
         } else if (childElementType == BallerinaTypes.LINE_COMMENT
                 && (parentElementType == BallerinaTypes.CALLABLE_UNIT_BODY
                 || parentElementType == BallerinaTypes.IF_CLAUSE || parentElementType == BallerinaTypes.ELSE_IF_CLAUSE
-                || parentElementType == BallerinaTypes.ELSE_CLAUSE)) {
+                || parentElementType == BallerinaTypes.ELSE_CLAUSE || parentElementType == BallerinaTypes.ENUM_BODY
+                || parentElementType == BallerinaTypes.WORKER_BODY)) {
             return Indent.getNormalIndent();
         } else if (parentElementType == BallerinaTypes.CALLABLE_UNIT_SIGNATURE) {
             return Indent.getNormalIndent();
@@ -295,6 +296,8 @@ public class BallerinaBlock extends AbstractBlock {
         } else if (myNode.getElementType() == BallerinaTypes.STRUCT_BODY) {
             childIndent = Indent.getNormalIndent();
         } else if (myNode.getElementType() == BallerinaTypes.ENUM_BODY) {
+            childIndent = Indent.getNormalIndent();
+        } else if (myNode.getElementType() == BallerinaTypes.WORKER_BODY) {
             childIndent = Indent.getNormalIndent();
         }
         return new ChildAttributes(childIndent, null);

@@ -227,6 +227,7 @@ public interface BallerinaTypes {
   IElementType VARIABLE_REFERENCE_EXPRESSION = new BallerinaCompositeElementType("VARIABLE_REFERENCE_EXPRESSION");
   IElementType VARIABLE_REFERENCE_LIST = new BallerinaCompositeElementType("VARIABLE_REFERENCE_LIST");
   IElementType WHILE_STATEMENT = new BallerinaCompositeElementType("WHILE_STATEMENT");
+  IElementType WORKER_BODY = new BallerinaCompositeElementType("WORKER_BODY");
   IElementType WORKER_DEFINITION = BallerinaElementTypeFactory.stubFactory("WORKER_DEFINITION");
   IElementType WORKER_INTERACTION_STATEMENT = new BallerinaCompositeElementType("WORKER_INTERACTION_STATEMENT");
   IElementType WORKER_REPLY = new BallerinaCompositeElementType("WORKER_REPLY");
@@ -1024,6 +1025,9 @@ public interface BallerinaTypes {
       }
       else if (type == WHILE_STATEMENT) {
         return new BallerinaWhileStatementImpl(node);
+      }
+      else if (type == WORKER_BODY) {
+        return new BallerinaWorkerBodyImpl(node);
       }
       else if (type == WORKER_DEFINITION) {
         return new BallerinaWorkerDefinitionImpl(node);

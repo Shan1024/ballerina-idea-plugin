@@ -320,10 +320,12 @@ ConstantDefinition ::= (public)? const ValueTypeName identifier (ASSIGN | SAFE_A
 }
 
 // Todo - Rename as declaration
-WorkerDefinition ::= worker identifier LEFT_BRACE Block RIGHT_BRACE {
+WorkerDefinition ::= worker identifier WorkerBody {
     pin=1
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaWorkerDefinitionStub"
 }
+
+WorkerBody ::= LEFT_BRACE Block RIGHT_BRACE
 
 GlobalEndpointDefinition ::= public? EndpointDefinition {
     pin=2
