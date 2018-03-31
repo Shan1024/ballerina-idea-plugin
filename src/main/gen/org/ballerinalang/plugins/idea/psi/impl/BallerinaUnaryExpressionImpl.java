@@ -73,12 +73,6 @@ public class BallerinaUnaryExpressionImpl extends BallerinaExpressionImpl implem
 
   @Override
   @Nullable
-  public PsiElement getTypeof() {
-    return findChildByType(TYPEOF);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getUntaint() {
     return findChildByType(UNTAINT);
   }

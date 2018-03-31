@@ -101,6 +101,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TRANSACTION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TRANSFORMER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TRY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TYPE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TYPEDESC;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TYPEOF;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.UNTAINT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.VAR;
@@ -126,7 +127,7 @@ public class BallerinaParserDefinition implements ParserDefinition {
             FLOAT, FOREACH, FORK, FUNCTION, FUTURE, IF, IMPORT, IN, INT, JOIN, JSON, LENGTHOF, LOCK, MAP, MATCH,
             NATIVE, NEW, NEXT, OBJECT, ONABORT, ONCOMMIT, ONRETRY, PACKAGE, PARAMETER, PRIVATE, PUBLIC, RESOURCE,
             RETRIES, RETURN, RETURNS, SERVICE, SOME, STRING, STRUCT, TABLE, TIMEOUT, TRANSACTION, TRANSFORMER, TRY,
-            TYPE, TYPEOF, THROW, UNTAINT, WHILE, WITH, WORKER, VAR, VERSION, XML, XMLNS);
+            TYPE, TYPEDESC, TYPEOF, THROW, UNTAINT, WHILE, WITH, WORKER, VAR, VERSION, XML, XMLNS);
 
     public static final TokenSet OPERATORS = TokenSet.create();
 

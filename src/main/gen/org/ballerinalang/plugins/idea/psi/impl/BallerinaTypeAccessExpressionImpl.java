@@ -48,6 +48,12 @@ public class BallerinaTypeAccessExpressionImpl extends BallerinaExpressionImpl i
   }
 
   @Override
+  @Nullable
+  public BallerinaExpression getExpression() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaExpression.class);
+  }
+
+  @Override
   @NotNull
   public PsiElement getTypeof() {
     return notNullChild(findChildByType(TYPEOF));

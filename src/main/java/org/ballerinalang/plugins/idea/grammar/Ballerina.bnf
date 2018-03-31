@@ -198,7 +198,7 @@ Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachme
     recoverWhile=TopLevelDefinitionRecover
 }
 
-private TopLevelDefinitionRecover ::= !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|struct|service|function|enum|annotation|transformer|const|endpoint|boolean|int|float|string|blob|map|xml|xmlns|json|identifier)
+private TopLevelDefinitionRecover ::= !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|typedesc|struct|service|function|enum|annotation|transformer|const|endpoint|boolean|int|float|string|blob|map|xml|xmlns|json|identifier)
 
 ServiceDefinition ::= service (LT NameReference GT) identifier ServiceEndpointAttachments?  ServiceBody {pin=1}
 ServiceEndpointAttachments ::= bind NameReference (COMMA NameReference)* {pin=1}
@@ -340,9 +340,9 @@ EndpointInitlization ::= RecordLiteral | ASSIGN VariableReference
 //todo
 TypeName ::= TupleTypeName
              | GroupTypeName
+             | ArrayTypeName
              | UnionTypeName
              | ObjectTypeName
-             | ArrayTypeName
              | SimpleTypeName
 //             | AnnotatedTypeName
              | NullableTypeName
@@ -364,10 +364,10 @@ TupleTypeName ::= LEFT_PARENTHESIS TypeName (COMMA TypeName)* RIGHT_PARENTHESIS
 ObjectTypeName ::= object LEFT_BRACE ObjectBody RIGHT_BRACE
 
 BuiltInTypeName ::= AnyTypeName
+                    | SimpleTypeName (LEFT_BRACKET RIGHT_BRACKET)+
                     | TypeDescTypeName
                     | ValueTypeName
                     | BuiltInReferenceTypeName
-                    | SimpleTypeName (LEFT_BRACKET RIGHT_BRACKET)+
 
 ReferenceTypeName ::= BuiltInReferenceTypeName
                       | UserDefineTypeName
@@ -438,7 +438,7 @@ Statement ::=
 {recoverWhile = StatementRecover}
 
 // Todo - Add more tokens
-private StatementRecover ::= !(int|string|float|boolean|blob|any|json|xml|xmlns|map|function|'}'|';'|future|await|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|transaction|if|identifier)
+private StatementRecover ::= !(int|string|float|boolean|blob|any|json|xml|xmlns|map|function|'}'|';'|typedesc|future|await|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|transaction|if|identifier)
 
 //private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
 
@@ -473,7 +473,7 @@ PostArithmeticOperator ::= INCREMENT | DECREMENT
 
 VariableReferenceList ::= VariableReference (COMMA VariableReference)*
 
-IfElseStatement ::= IfClause ElseIfClause* ElseClause? {pin=1}
+IfElseStatement ::= IfClause ElseIfClause* ElseClause? /*{pin=1}*/
 
 IfClause ::= if LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
@@ -622,8 +622,8 @@ Expression
     |   LambdaFunctionExpression
     |   TypeInitExpression
     |   TypeConversionExpression
+    |   UnaryExpression // Unary > Type access - if (typeof temp_int)
     |   TypeAccessExpression
-    |   UnaryExpression
     |   BinaryPowExpression
     |   BinaryDivMulModExpression
     |   BinaryAddSubExpression
@@ -653,8 +653,8 @@ VariableReferenceExpression ::= VariableReference
 LambdaFunctionExpression ::= LambdaFunction
 TypeInitExpression ::= TypeInitExpr
 TypeConversionExpression ::= LT TypeName (COMMA FunctionInvocation)? GT Expression {pin=1}
-TypeAccessExpression ::= typeof BuiltInTypeName {pin=1}
-UnaryExpression ::= (ADD | SUB | NOT | lengthof | typeof | untaint) Expression {pin=1}
+TypeAccessExpression ::= typeof (BuiltInTypeName | Expression){pin=1}
+UnaryExpression ::= (ADD | SUB | NOT | lengthof | untaint) Expression {pin=1}
 BracedOrTupleExpression ::= LEFT_PARENTHESIS Expression (COMMA Expression)* RIGHT_PARENTHESIS
 BinaryPowExpression ::= Expression POW Expression
 BinaryDivMulModExpression ::= Expression (DIV | MUL | MOD) Expression
