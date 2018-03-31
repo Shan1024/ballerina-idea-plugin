@@ -4366,7 +4366,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !(int|string|float|boolean|blob|any|json|xml|xmlns|map|table|function|'}'|';'|typedesc|future|await|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|transaction|if|identifier)
+  // !(int|string|float|boolean|blob|any|json|xml|xmlns|map|table|function|'('|'}'|';'|typedesc|future|await|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|transaction|if|identifier)
   static boolean StatementRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementRecover")) return false;
     boolean r;
@@ -4376,7 +4376,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // int|string|float|boolean|blob|any|json|xml|xmlns|map|table|function|'}'|';'|typedesc|future|await|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|transaction|if|identifier
+  // int|string|float|boolean|blob|any|json|xml|xmlns|map|table|function|'('|'}'|';'|typedesc|future|await|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|transaction|if|identifier
   private static boolean StatementRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementRecover_0")) return false;
     boolean r;
@@ -4393,6 +4393,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, MAP);
     if (!r) r = consumeToken(b, TABLE);
     if (!r) r = consumeToken(b, FUNCTION);
+    if (!r) r = consumeToken(b, LEFT_PARENTHESIS);
     if (!r) r = consumeToken(b, RIGHT_BRACE);
     if (!r) r = consumeToken(b, SEMICOLON);
     if (!r) r = consumeToken(b, TYPEDESC);
