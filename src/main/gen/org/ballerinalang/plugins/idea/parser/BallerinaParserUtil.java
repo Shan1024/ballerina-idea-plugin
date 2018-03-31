@@ -32,9 +32,10 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
             IElementType next2Element = builder.lookAhead(2);
             if (next2Element != null && next2Element == BallerinaTypes.IDENTIFIER) {
                 IElementType next3Element = builder.lookAhead(3);
-                // The next token can be one of the following tokens.
+                // The next token can be one of the following tokens. Right brace is to check in record key literals.
                 if (next3Element != null && (next3Element == BallerinaTypes.SEMICOLON
-                        || next3Element == BallerinaTypes.COLON || next3Element == BallerinaTypes.RIGHT_PARENTHESIS)) {
+                        || next3Element == BallerinaTypes.COLON || next3Element == BallerinaTypes.RIGHT_PARENTHESIS
+                        || next3Element == BallerinaTypes.RIGHT_BRACE)) {
                     // We need to look behind few steps to identify the last token. If this token is not "?" only we
                     // identify that the package is required.
                     int steps = -1;
@@ -44,7 +45,8 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                         if (isWhiteSpaceOrComment(rawLookup)) {
                             continue;
                         }
-                        if (rawLookup == BallerinaTypes.QUESTION_MARK) {
+                        // Left brace is to check in record key literals.
+                        if (rawLookup == BallerinaTypes.QUESTION_MARK || rawLookup == BallerinaTypes.LEFT_BRACE) {
                             return false;
                         } else {
                             return true;
