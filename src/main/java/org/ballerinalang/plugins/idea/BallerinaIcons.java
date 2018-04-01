@@ -17,8 +17,11 @@
 
 package org.ballerinalang.plugins.idea;
 
+import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.IconLoader;
+import com.intellij.ui.LayeredIcon;
 import com.intellij.util.PlatformIcons;
+import org.jetbrains.annotations.NotNull;
 
 import javax.swing.Icon;
 
@@ -26,6 +29,24 @@ public class BallerinaIcons {
 
     public static final Icon FILE = IconLoader.getIcon("/icons/ballerina.png");
     public static final Icon ICON = FILE;
+    public static final Icon APPLICATION_RUN = createIconWithShift(ICON, AllIcons.Nodes.RunnableMark);
+    public static final Icon RUN = AllIcons.RunConfigurations.TestState.Run;
     public static final Icon PACKAGE = PlatformIcons.DIRECTORY_CLOSED_ICON;
 
+    private BallerinaIcons() {
+
+    }
+
+    @NotNull
+    private static LayeredIcon createIconWithShift(@NotNull Icon base, Icon mark) {
+        LayeredIcon icon = new LayeredIcon(2) {
+            @Override
+            public int getIconHeight() {
+                return base.getIconHeight();
+            }
+        };
+        icon.setIcon(base, 0);
+        icon.setIcon(mark, 1, 0, base.getIconWidth() / 2);
+        return icon;
+    }
 }

@@ -17,7 +17,13 @@
 
 package org.ballerinalang.plugins.idea.psi.impl;
 
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.roots.OrderRootType;
+import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Key;
+import com.intellij.openapi.vfs.VfsUtilCore;
+import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
@@ -274,5 +280,29 @@ public class BallerinaPsiImplUtil {
             }
             return CachedValueProvider.Result.create(null, ballerinaImportDeclaration);
         });
+    }
+
+    /**
+     * Finds a file in the project SDK.
+     *
+     * @param project current project
+     * @param path    relative file path in the SDK
+     * @return {@code null} if the file cannot be found, otherwise returns the corresponding {@link VirtualFile}.
+     */
+    @Nullable
+    public static VirtualFile findFileInProjectSDK(@NotNull Project project, @NotNull String path) {
+        Sdk projectSdk = ProjectRootManager.getInstance(project).getProjectSdk();
+        if (projectSdk == null) {
+            return null;
+        }
+        VirtualFile[] roots = projectSdk.getSdkModificator().getRoots(OrderRootType.SOURCES);
+        VirtualFile file;
+        for (VirtualFile root : roots) {
+            file = VfsUtilCore.findRelativeFile(path, root);
+            if (file != null) {
+                return file;
+            }
+        }
+        return null;
     }
 }

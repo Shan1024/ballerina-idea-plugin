@@ -2,13 +2,21 @@
 package ${PACKAGE_NAME};
 #end
 
-import ballerina.net.http;
+import ballerina/net.http;
 
-service<http> helloWorld {
+@Description {value:"Attributes associated with the service endpoint is defined here."}
+endpoint http:ServiceEndpoint helloWorldEP {
+    port:9090
+};
 
-    resource sayHello (http:Connection conn, http:Request req) {
+@Description {value:"By default Ballerina assumes that the service is to be exposed via HTTP/1.1."}
+service<http:Service> hello bind helloWorldEP {
+    @Description {value:"All resources are invoked with arguments of server connector and request"}
+    sayHello(endpoint conn, http:Request req) {
         http:Response res = {};
+        // A util method that can be used to set string payload.
         res.setStringPayload("Hello, World!");
-        _ = conn.respond(res);
+        // Sends the response back to the client.
+        _ = conn -> respond(res);
     }
 }

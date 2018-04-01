@@ -122,6 +122,21 @@
         <editorNotificationProvider
                 implementation="org.ballerinalang.plugins.idea.inspections.WrongModuleTypeNotificationProvider"/>
 
+        <!-- run application -->
+        <programRunner id="ballerinaRunner" implementation="org.ballerinalang.plugins.idea.runconfig.BallerinaRunner"/>
+
+        <configurationType
+                implementation="org.ballerinalang.plugins.idea.runconfig.application.BallerinaApplicationRunConfigurationType"/>
+        <runConfigurationProducer
+                implementation="org.ballerinalang.plugins.idea.runconfig.application.BallerinaApplicationRunConfigurationProducer"/>
+
+        <runLineMarkerContributor language="Ballerina"
+                                  implementationClass="org.ballerinalang.plugins.idea.runconfig.BallerinaRunLineMarkerProvider"/>
+        <!--<runLineMarkerContributor language="Ballerina"-->
+                                  <!--implementationClass="org.ballerinalang.plugins.idea.runconfig.BallerinaTestLineMarkerProvider"/>-->
+
+        <console.folding implementation="org.ballerinalang.plugins.idea.runconfig.BallerinaConsoleFolding"/>
+
     </extensions>
     <actions>
         <!-- Add your actions here -->
