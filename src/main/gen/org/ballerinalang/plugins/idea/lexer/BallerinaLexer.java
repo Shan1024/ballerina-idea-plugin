@@ -2645,7 +2645,7 @@ public class BallerinaLexer implements FlexLexer {
             }
           case 335: break;
           case 115: 
-            { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return DAY; };
+            { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return DAY; } return IDENTIFIER;
             }
           case 336: break;
           case 116: 
@@ -2713,7 +2713,7 @@ public class BallerinaLexer implements FlexLexer {
             }
           case 352: break;
           case 132: 
-            { if(inSiddhiOutputRateLimit) { inSiddhiTimeScaleQuery = false; return LAST; };
+            { if(inSiddhiOutputRateLimit) { inSiddhiTimeScaleQuery = false; return LAST; } return IDENTIFIER;
             }
           case 353: break;
           case 133: 
@@ -2741,7 +2741,7 @@ public class BallerinaLexer implements FlexLexer {
             }
           case 359: break;
           case 139: 
-            { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return YEAR; };
+            { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return YEAR; } return IDENTIFIER;
             }
           case 360: break;
           case 140: 
@@ -2749,7 +2749,7 @@ public class BallerinaLexer implements FlexLexer {
             }
           case 361: break;
           case 141: 
-            { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return HOUR; };
+            { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return HOUR; } return IDENTIFIER;
             }
           case 362: break;
           case 142: 
@@ -2793,7 +2793,7 @@ public class BallerinaLexer implements FlexLexer {
             }
           case 372: break;
           case 152: 
-            { if(inSiddhiOutputRateLimit) { inSiddhiTimeScaleQuery = false; return FIRST; };
+            { if(inSiddhiOutputRateLimit) { inSiddhiTimeScaleQuery = false; return FIRST; } return IDENTIFIER;
             }
           case 373: break;
           case 153: 
@@ -2821,7 +2821,7 @@ public class BallerinaLexer implements FlexLexer {
             }
           case 379: break;
           case 159: 
-            { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return MONTH; };
+            { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return MONTH; } return IDENTIFIER;
             }
           case 380: break;
           case 160: 
@@ -2849,7 +2849,7 @@ public class BallerinaLexer implements FlexLexer {
             }
           case 386: break;
           case 166: 
-            { if(inSiddhiInsertQuery) { inSiddhiInsertQuery = false; return EVENTS; };
+            { if(inSiddhiInsertQuery) { inSiddhiInsertQuery = false; return EVENTS; } return IDENTIFIER;
             }
           case 387: break;
           case 167: 
@@ -2869,11 +2869,11 @@ public class BallerinaLexer implements FlexLexer {
             }
           case 391: break;
           case 171: 
-            { if(inTableSqlQuery) { inTableSqlQuery = false; return SELECT; };
+            { if(inTableSqlQuery) { inTableSqlQuery = false; return SELECT; } return IDENTIFIER;
             }
           case 392: break;
           case 172: 
-            { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return SECOND; };
+            { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return SECOND; } return IDENTIFIER;
             }
           case 393: break;
           case 173: 
@@ -2893,11 +2893,11 @@ public class BallerinaLexer implements FlexLexer {
             }
           case 397: break;
           case 177: 
-            { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return MINUTE; };
+            { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return MINUTE; } return IDENTIFIER;
             }
           case 398: break;
           case 178: 
-            { if(inSiddhiOutputRateLimit) { inSiddhiTimeScaleQuery = true; return OUTPUT; };
+            { if(inSiddhiOutputRateLimit) { inSiddhiTimeScaleQuery = true; return OUTPUT; } return IDENTIFIER;
             }
           case 399: break;
           case 179: 
