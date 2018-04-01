@@ -25,6 +25,8 @@ import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAtt
 
 public class BallerinaSyntaxHighlightingColors {
 
+    public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("BALLERINA_BAD_TOKEN",
+            HighlighterColors.BAD_CHARACTER);
     public static final TextAttributesKey LINE_COMMENT = createTextAttributesKey("BALLERINA_LINE_COMMENT",
             DefaultLanguageHighlighterColors.LINE_COMMENT);
     public static final TextAttributesKey KEYWORD = createTextAttributesKey("BALLERINA_KEYWORD",
@@ -33,6 +35,8 @@ public class BallerinaSyntaxHighlightingColors {
             DefaultLanguageHighlighterColors.STRING);
     public static final TextAttributesKey NUMBER = createTextAttributesKey("BALLERINA_NUMBER",
             DefaultLanguageHighlighterColors.NUMBER);
-    public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("BALLERINA_BAD_TOKEN",
-            HighlighterColors.BAD_CHARACTER);
+    public static final TextAttributesKey ANNOTATION = createTextAttributesKey("BALLERINA_ANNOTATION",
+            DefaultLanguageHighlighterColors.METADATA);
+    public static final TextAttributesKey PACKAGE = createTextAttributesKey("BALLERINA_PACKAGE",
+            DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
 }

@@ -286,7 +286,7 @@ public interface BallerinaTypes {
   IElementType AND = new BallerinaTokenType("and");
   IElementType ANNOTATION = new BallerinaTokenType("annotation");
   IElementType ANY = new BallerinaTokenType("any");
-  IElementType AS = new BallerinaTokenType("AS");
+  IElementType AS = new BallerinaTokenType("as");
   IElementType ASSIGN = new BallerinaTokenType("=");
   IElementType ASYNC = new BallerinaTokenType("async");
   IElementType AT = new BallerinaTokenType("@");

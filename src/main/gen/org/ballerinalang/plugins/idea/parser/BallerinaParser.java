@@ -4732,7 +4732,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Expression (AS identifier)?
+  // Expression (as identifier)?
   public static boolean SelectExpression(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SelectExpression")) return false;
     boolean r;
@@ -4743,14 +4743,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (AS identifier)?
+  // (as identifier)?
   private static boolean SelectExpression_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SelectExpression_1")) return false;
     SelectExpression_1_0(b, l + 1);
     return true;
   }
 
-  // AS identifier
+  // as identifier
   private static boolean SelectExpression_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SelectExpression_1_0")) return false;
     boolean r;
@@ -5135,7 +5135,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   //     |   CompoundAssignmentStatement
   //     |   PostIncrementStatement
   //     |   VariableDefinitionStatement
-  //     |   ForeverStatement
+  // //    |   ForeverStatement
   //     |   StreamingQueryStatement
   public static boolean Statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Statement")) return false;
@@ -5163,7 +5163,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = CompoundAssignmentStatement(b, l + 1);
     if (!r) r = PostIncrementStatement(b, l + 1);
     if (!r) r = VariableDefinitionStatement(b, l + 1);
-    if (!r) r = ForeverStatement(b, l + 1);
     if (!r) r = StreamingQueryStatement(b, l + 1);
     exit_section_(b, l, m, r, false, StatementRecover_parser_);
     return r;
