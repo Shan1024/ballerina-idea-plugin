@@ -60,6 +60,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DEPRECATED;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DIV;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DOCUMENTATION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DOT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ELLIPSIS;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ELSE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ELSE_CLAUSE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ELSE_IF_CLAUSE;
@@ -157,6 +158,8 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TYPE_CONVERSION_
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.UNION_TYPE_NAME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.UNTAINT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.VAR;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.VARIABLE_REFERENCE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.VARIABLE_REFERENCE_EXPRESSION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.VERSION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WHILE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WITH;
@@ -216,7 +219,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(FOREACH).spaceIf(true)
                 .around(WHILE).spaceIf(true)
                 .around(NEXT).spaceIf(true)
-                .around(BREAK).spaceIf(true)
+                .around(BREAK).spaceIf(false)
                 .around(FORK).spaceIf(true)
                 .around(JOIN).spaceIf(true)
                 .around(SOME).spaceIf(true) // Todo
@@ -329,9 +332,11 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
 
                 .before(ONRETRY_CLAUSE).spaceIf(true)
 
-                .betweenInside(DOT,MUL,FIELD).spaceIf(false)
+                .betweenInside(DOT, MUL, FIELD).spaceIf(false)
 
                 .around(DECIMAL_INTEGER_LITERAL).spaceIf(false)
+
+                .between(ELLIPSIS, VARIABLE_REFERENCE_EXPRESSION).spaceIf(false)
 
                 // Operators
                 .around(ASSIGN).spaceIf(true)

@@ -74,108 +74,8 @@ public class BallerinaBlock extends AbstractBlock {
 
     @Override
     protected List<Block> buildChildren() {
-        //        List<Block> blocks = new ArrayList<>();
-        //        ASTNode child = node.getFirstChildNode();
-        //        IElementType parentElementType = node.getElementType();
-        //
-        //        while (child != null) {
-        //            IElementType childElementType = child.getElementType();
-        //            if (childElementType != TokenType.WHITE_SPACE) {
-        //
-        //                Indent indent = Indent.getNoneIndent();
-        //
-        //                //                if (isInsideADefinitionElement(childElementType)) {
-        //                //                    if (child.getFirstChildNode() != null && child.getLastChildNode() !=
-        // null) {
-        //                //                        indent = Indent.getSpaceIndent(4);
-        //                //                    }
-        //                //                } else if (childElementType == COMMENT_STATEMENT) {
-        //                //                    if (isADefinitionElement(parentElementType) || isACodeBlock
-        // (parentElementType)) {
-        //                //                        indent = Indent.getSpaceIndent(4);
-        //                //                    }
-        //                //                } else if (childElementType == WORKER_DECLARATION) {
-        //                //                    if (parentElementType == FORK_JOIN_STATEMENT) {
-        //                //                        indent = Indent.getSpaceIndent(4);
-        //                //                    }
-        //                //                } else if (childElementType == WORKER_BODY) {
-        //                //                    if (parentElementType == WORKER_DECLARATION) {
-        //                //                        indent = Indent.getSpaceIndent(4);
-        //                //                    }
-        //                //                } else if (childElementType == RECORD_KEY_VALUE) {
-        //                //                    indent = Indent.getSpaceIndent(4);
-        //                //                } else if (childElementType == CODE_BLOCK_BODY || childElementType ==
-        //                // NON_EMPTY_CODE_BLOCK_BODY
-        //                //                        || childElementType == ENUM_FIELD_LIST) {
-        //                //                    indent = Indent.getSpaceIndent(4);
-        //                //                } else if (childElementType == EXPRESSION_LIST) {
-        //                //                    if (parentElementType == VARIABLE_REFERENCE) {
-        //                //                        indent = Indent.getSpaceIndent(4);
-        //                //                    }
-        //                //                } else if (childElementType == FIELD_DEFINITION) {
-        //                //                    if (parentElementType == PRIVATE_STRUCT_BODY) {
-        //                //                        indent = Indent.getSpaceIndent(4);
-        //                //                    }
-        //                //                } else if (childElementType == MATCH_PATTERN_CLAUSE) {
-        //                //                    indent = Indent.getSpaceIndent(4);
-        //                //                } else if (childElementType == OBJECT_BODY) {
-        //                //                    indent = Indent.getSpaceIndent(4);
-        //                //                } else if (childElementType == OBJECT_FIELD_DEFINITION) {
-        //                //                    indent = Indent.getSpaceIndent(4);
-        //                //                } else if (childElementType == STREAMING_QUERY_STATEMENT) {
-        //                //                    indent = Indent.getSpaceIndent(4);
-        //                //                }
-        //
-        //                // If the child node text is empty, the IDEA core will throw an exception.
-        //                if (!child.getText().isEmpty()) {
-        //                    Block block = new BallerinaBlock(
-        //                            child,
-        //                            Alignment.createAlignment(),
-        //                            indent,
-        //                            null,
-        //                            mySettings,
-        //                            spacingBuilder
-        //                    );
-        //                    blocks.add(block);
-        //                }
-        //            }
-        //            child = child.getTreeNext();
-        //        }
-        //        return blocks;
         return new LinkedList<>();
     }
-
-    //    private static boolean isADefinitionElement(@NotNull final IElementType parentElementType) {
-    //        if (parentElementType == FUNCTION_DEFINITION || parentElementType == SERVICE_DEFINITION
-    //                || parentElementType == RESOURCE_DEFINITION || parentElementType == STRUCT_DEFINITION
-    //                || parentElementType == OBJECT_INITIALIZER || parentElementType == OBJECT_FUNCTION_DEFINITION) {
-    //            return true;
-    //        }
-    //        return false;
-    //    }
-    //
-    //    private static boolean isInsideADefinitionElement(@NotNull final IElementType childElementType) {
-    //        if (childElementType == FUNCTION_BODY || childElementType == SERVICE_BODY || childElementType ==
-    // STRUCT_BODY) {
-    //            return true;
-    //        }
-    //        return false;
-    //    }
-    //
-    //    private static boolean isACodeBlock(@NotNull final IElementType parentElementType) {
-    //        if (parentElementType == IF_ELSE_STATEMENT || parentElementType == FOREACH_STATEMENT
-    //                || parentElementType == WHILE_STATEMENT || parentElementType == WORKER_DECLARATION
-    //                || parentElementType == FORK_JOIN_STATEMENT || parentElementType == TRANSACTION_STATEMENT
-    //                || parentElementType == IF_CLAUSE || parentElementType == ELSE_IF_CLAUSE
-    //                || parentElementType == ELSE_CLAUSE || parentElementType == TRY_CATCH_STATEMENT
-    //                || parentElementType == CATCH_CLAUSE || parentElementType == CATCH_CLAUSES
-    //                || parentElementType == FINALLY_CLAUSE || parentElementType == JOIN_CLAUSE
-    //                || parentElementType == TIMEOUT_CLAUSE || parentElementType == ON_ABORT_CLAUSE
-    //                || parentElementType == ON_COMMIT_CLAUSE || parentElementType == ON_RETRY_CLAUSE) {
-    //            return true;
-    //        }
-    //        return false;
-    //    }
 
     @NotNull
     @Override
@@ -257,6 +157,10 @@ public class BallerinaBlock extends AbstractBlock {
                 || parentElementType == BallerinaTypes.UNNAMED_PATTERN
                 || parentElementType == BallerinaTypes.RECORD_LITERAL
                 || parentElementType == BallerinaTypes.FOREACH_STATEMENT
+                || parentElementType == BallerinaTypes.LOCK_STATEMENT
+                || parentElementType == BallerinaTypes.OBJECT_TYPE_NAME
+                || parentElementType == BallerinaTypes.PRIVATE_OBJECT_FIELDS
+                || parentElementType == BallerinaTypes.PUBLIC_OBJECT_FIELDS
         )) {
             return Indent.getNormalIndent();
         } else if (parentElementType == BallerinaTypes.CALLABLE_UNIT_SIGNATURE) {
@@ -267,10 +171,10 @@ public class BallerinaBlock extends AbstractBlock {
             return Indent.getIndent(Indent.Type.NORMAL, true, true);
             //        } else if (childElementType == BallerinaTypes.TUPLE_TYPE_NAME) {
             //            return Indent.getIndent(Indent.Type.NORMAL, true, true);
-            //        } else if (childElementType == BallerinaTypes.SIMPLE_TYPE_NAME
-            //                && (parentElementType == BallerinaTypes.TUPLE_TYPE_NAME
-            //                || parentElementType == BallerinaTypes.UNION_TYPE_NAME)) {
-            //            return Indent.getNormalIndent();
+        } else if ((childElementType == BallerinaTypes.TUPLE_TYPE_NAME
+                || childElementType == BallerinaTypes.UNION_TYPE_NAME)
+                && (parentElementType == BallerinaTypes.RETURN_TYPE)) {
+            return Indent.getIndent(Indent.Type.NORMAL, true, true);
         } else if (parentElementType == BallerinaTypes.MATCH_PATTERN_CLAUSE) {
             return Indent.getNormalIndent();
         } else if (parentElementType == BallerinaTypes.SERVICE_BODY && (childElementType == BallerinaTypes.ENDPOINT_TYPE
@@ -295,6 +199,10 @@ public class BallerinaBlock extends AbstractBlock {
         } else if (childElementType == BallerinaTypes.EXPRESSION_LIST &&
                 parentElementType == BallerinaTypes.ARRAY_LITERAL) {
             return Indent.getNormalIndent();
+        } else if (childElementType == BallerinaTypes.OBJECT_BODY) {
+            return Indent.getNormalIndent();
+        } else if (childElementType == BallerinaTypes.OBJECT_FIELD_DEFINITION) {
+            return Indent.getNormalIndent();
         }
         return Indent.getNoneIndent();
     }
@@ -311,13 +219,13 @@ public class BallerinaBlock extends AbstractBlock {
         Indent childIndent = Indent.getNoneIndent();
         if (myNode.getElementType() == BallerinaTypes.CALLABLE_UNIT_BODY) {
             childIndent = Indent.getNormalIndent();
-        } else if (myNode.getElementType() == BallerinaTypes.BLOCK) {
-            childIndent = Indent.getNormalIndent();
+            //        } else if (myNode.getElementType() == BallerinaTypes.BLOCK) {
+            //            childIndent = Indent.getNormalIndent();
         } else if (myNode.getElementType() == BallerinaTypes.SERVICE_BODY) {
             childIndent = Indent.getNormalIndent();
         } else if (myNode.getElementType() == BallerinaTypes.RECORD_LITERAL) {
             childIndent = Indent.getNormalIndent();
-        }else if (myNode.getElementType() == BallerinaTypes.RECORD_LITERAL_BODY) {
+        } else if (myNode.getElementType() == BallerinaTypes.RECORD_LITERAL_BODY) {
             childIndent = Indent.getNormalIndent();
         } else if (myNode.getElementType() == BallerinaTypes.STRUCT_BODY) {
             childIndent = Indent.getNormalIndent();
@@ -346,6 +254,24 @@ public class BallerinaBlock extends AbstractBlock {
         } else if (myNode.getElementType() == BallerinaTypes.ELSE_IF_CLAUSE) {
             childIndent = Indent.getNormalIndent();
         } else if (myNode.getElementType() == BallerinaTypes.ELSE_CLAUSE) {
+            childIndent = Indent.getNormalIndent();
+        } else if (myNode.getElementType() == BallerinaTypes.TRANSACTION_CLAUSE) {
+            childIndent = Indent.getNormalIndent();
+        } else if (myNode.getElementType() == BallerinaTypes.ONRETRY_CLAUSE) {
+            childIndent = Indent.getNormalIndent();
+        } else if (myNode.getElementType() == BallerinaTypes.TRY_CATCH_STATEMENT) {
+            childIndent = Indent.getNormalIndent();
+        } else if (myNode.getElementType() == BallerinaTypes.CATCH_CLAUSES) {
+            childIndent = Indent.getNormalIndent();
+        } else if (myNode.getElementType() == BallerinaTypes.FINALLY_CLAUSE) {
+            childIndent = Indent.getNormalIndent();
+        } else if (myNode.getElementType() == BallerinaTypes.LOCK_STATEMENT) {
+            childIndent = Indent.getNormalIndent();
+        } else if (myNode.getElementType() == BallerinaTypes.OBJECT_TYPE_NAME) {
+            childIndent = Indent.getNormalIndent();
+        } else if (myNode.getElementType() == BallerinaTypes.PUBLIC_OBJECT_FIELDS) {
+            childIndent = Indent.getNormalIndent();
+        } else if (myNode.getElementType() == BallerinaTypes.PRIVATE_OBJECT_FIELDS) {
             childIndent = Indent.getNormalIndent();
         }
         return new ChildAttributes(childIndent, null);
