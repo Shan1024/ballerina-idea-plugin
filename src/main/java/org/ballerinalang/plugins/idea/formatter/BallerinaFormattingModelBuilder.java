@@ -84,6 +84,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IF;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IMPORT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IMPORT_DECLARATION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IN;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INDEX;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INTEGER_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INVOCATION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INVOCATION_ARG;
@@ -250,6 +251,8 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .before(COMMA).spaceIf(false)
                 .after(COMMA).spaceIf(true)
                 .around(SEMICOLON).spaceIf(false)
+                .after(LEFT_BRACKET).spaceIf(false)
+                .before(RIGHT_BRACKET).spaceIf(false)
 
                 // Function signature
                 .between(LEFT_PARENTHESIS, RIGHT_PARENTHESIS).spaceIf(false)
@@ -337,6 +340,8 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(DECIMAL_INTEGER_LITERAL).spaceIf(false)
 
                 .between(ELLIPSIS, VARIABLE_REFERENCE_EXPRESSION).spaceIf(false)
+
+                .before(INDEX).spaceIf(false)
 
                 // Operators
                 .around(ASSIGN).spaceIf(true)
