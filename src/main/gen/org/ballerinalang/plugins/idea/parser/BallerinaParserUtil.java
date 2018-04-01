@@ -17,6 +17,7 @@
 
 package org.ballerinalang.plugins.idea.parser;
 
+import com.intellij.lang.LighterASTNode;
 import com.intellij.lang.PsiBuilder;
 import com.intellij.lang.parser.GeneratedParserUtilBase;
 import com.intellij.psi.TokenType;
@@ -85,18 +86,54 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                                 && rawLookup2 != BallerinaTypes.BOOLEAN_LITERAL
                                 // Example for below condition - {dataSourceClassName:"org.hsqldb.jdbc.JDBCDataSource",
                                 // datasourceProperties:propertiesMap}
-                                // Messes up - authorization-test.bal
-                                /*&& !(rawLookup == BallerinaTypes.COMMA && rawLookup2 == BallerinaTypes.COLON)*/
+                                && !(rawLookup == BallerinaTypes.COMMA && rawLookup2 == BallerinaTypes.COLON)
                                 // Example for below condition - worker w {a:b();}
                                 && !(rawLookup == BallerinaTypes.LEFT_BRACE && rawLookup2 == BallerinaTypes.COMMA)
-                                /*|| (rawLookup == BallerinaTypes.LEFT_BRACE && rawLookup2 == BallerinaTypes.IDENTIFIER)*/
+                                /*|| (rawLookup == BallerinaTypes.LEFT_BRACE && rawLookup2 == BallerinaTypes
+                                .IDENTIFIER)*/
                                 ) {
                             return true;
                         } else {
+                            LighterASTNode latestDoneMarker = builder.getLatestDoneMarker();
+                            // sql:ConnectionProperties properties3 = {dataSourceClassName:"org.hsqldb.jdbc
+                            // .JDBCDataSource", datasourceProperties:propertiesMap};
+                            if (rawLookup == BallerinaTypes.COMMA && rawLookup2 == BallerinaTypes.COLON) {
+
+                                if (latestDoneMarker != null
+                                        && latestDoneMarker.getTokenType() == BallerinaTypes.SIMPLE_TYPE_NAME) {
+                                    return true;
+                                }
+
+                            } else if (rawLookup == BallerinaTypes.COMMA && rawLookup2 == BallerinaTypes.DOT) {
+                                // EmployeeSalary s = {id:e.id, salary:e.salary};
+                                if (latestDoneMarker != null
+                                        && latestDoneMarker.getTokenType() == BallerinaTypes.RECORD_KEY_VALUE) {
+                                    return false;
+                                }
+                                // return (variable:^"person 1".^"first name", variable2:^"person 2".^"current age2");
+                                return true;
+                            } else if (rawLookup == BallerinaTypes.LEFT_BRACE
+                                    && rawLookup2 == BallerinaTypes.IDENTIFIER) {
+                                if (latestDoneMarker != null) {
+                                    IElementType tokenType = latestDoneMarker.getTokenType();
+                                    // io:println(jwtToken); as the first statement in a function.
+                                    // runtime:sleepCurrentWorker(20); in the first statement as the second worker
+                                    if (tokenType == BallerinaTypes.CALLABLE_UNIT_SIGNATURE ||
+                                            tokenType == BallerinaTypes.WORKER_DEFINITION) {
+                                        return true;
+                                    }
+                                }
+                            }
                             return false;
                         }
                     } while (rawLookup2 != null && isWhiteSpaceOrComment(rawLookup2));
                 } else {
+                    LighterASTNode latestDoneMarker = builder.getLatestDoneMarker();
+                    // EmployeeSalary s = {id:e.id, salary:e.salary};
+                    if (latestDoneMarker != null
+                            && latestDoneMarker.getTokenType() == BallerinaTypes.RECORD_KEY_VALUE) {
+                        return false;
+                    }
                     return true;
                 }
             } while (rawLookup != null && isWhiteSpaceOrComment(rawLookup));
