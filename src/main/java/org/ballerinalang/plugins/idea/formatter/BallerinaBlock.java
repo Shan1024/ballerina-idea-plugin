@@ -206,6 +206,8 @@ public class BallerinaBlock extends AbstractBlock {
             return Indent.getNormalIndent();
         } else if (childElementType == BallerinaTypes.OBJECT_FIELD_DEFINITION) {
             return Indent.getNormalIndent();
+        } else if (childElementType == BallerinaTypes.FOREVER_STATEMENT_BODY) {
+            return Indent.getNormalIndent();
         }
         return Indent.getNoneIndent();
     }
@@ -277,6 +279,8 @@ public class BallerinaBlock extends AbstractBlock {
         } else if (myNode.getElementType() == BallerinaTypes.PUBLIC_OBJECT_FIELDS) {
             childIndent = Indent.getNormalIndent();
         } else if (myNode.getElementType() == BallerinaTypes.PRIVATE_OBJECT_FIELDS) {
+            childIndent = Indent.getNormalIndent();
+        }else if (myNode.getElementType() == BallerinaTypes.FOREVER_STATEMENT) {
             childIndent = Indent.getNormalIndent();
         }
         return new ChildAttributes(childIndent, null);

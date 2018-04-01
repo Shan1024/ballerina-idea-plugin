@@ -79,6 +79,12 @@ public class BallerinaStatementImpl extends BallerinaCompositeElementImpl implem
 
   @Override
   @Nullable
+  public BallerinaForeverStatement getForeverStatement() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaForeverStatement.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaForkJoinStatement getForkJoinStatement() {
     return PsiTreeUtil.getChildOfType(this, BallerinaForkJoinStatement.class);
   }
@@ -117,6 +123,12 @@ public class BallerinaStatementImpl extends BallerinaCompositeElementImpl implem
   @Nullable
   public BallerinaReturnStatement getReturnStatement() {
     return PsiTreeUtil.getChildOfType(this, BallerinaReturnStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaStreamingQueryStatement getStreamingQueryStatement() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaStreamingQueryStatement.class);
   }
 
   @Override

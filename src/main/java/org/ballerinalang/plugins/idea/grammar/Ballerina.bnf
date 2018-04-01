@@ -22,7 +22,7 @@
     extends = "org.ballerinalang.plugins.idea.psi.impl.BallerinaCompositeElementImpl"
 
     parserClass = "org.ballerinalang.plugins.idea.parser.BallerinaParser"
-  parserUtilClass="org.ballerinalang.plugins.idea.parser.BallerinaParserUtil"
+    parserUtilClass="org.ballerinalang.plugins.idea.parser.BallerinaParserUtil"
 
     psiClassPrefix = "Ballerina"
     psiImplClassSuffix = "Impl"
@@ -114,7 +114,7 @@
 
     extends("(FunctionInvocation|SimpleVariable|MapArrayVariable|FieldVariable|XmlAttribVariable|Invocation|AwaitExpression)Reference") = VariableReference
 
-    extends("((Simple|Array|Record|Xml|StringTemplate)Literal|(ValueType|BuiltInReferenceType)Type|VariableReference|LambdaFunction|TypeInit|Type(Casting|Conversion|Access)|BracedOrTuple|Await)Expression") = Expression
+    extends("((Simple|Array|Record|Xml|StringTemplate)Literal|(ValueType|BuiltInReferenceType)Type|VariableReference|LambdaFunction|TypeInit|Type(Casting|Conversion|Access)|BracedOrTuple|Await|TableQuery)Expression") = Expression
     extends("(Unary|Binary|Ternary)Expression") = Expression
 
     extends("Binary(Pow|DivMulMod|AddSub|Compare|Equal|And|Or)Expression") = BinaryExpression
@@ -198,7 +198,7 @@ Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachme
     recoverWhile=TopLevelDefinitionRecover
 }
 
-private TopLevelDefinitionRecover ::= !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|struct|service|function|enum|annotation|transformer|const|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|identifier)
+private TopLevelDefinitionRecover ::= !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|struct|service|function|enum|annotation|transformer|const|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|stream|identifier)
 
 ServiceDefinition ::= service (LT NameReference GT) identifier ServiceEndpointAttachments?  ServiceBody {pin=1}
 ServiceEndpointAttachments ::= bind NameReference (COMMA NameReference)* {pin=1}
@@ -387,8 +387,8 @@ BuiltInReferenceTypeName ::= MapTypeName
                              | FutureTypeName
                              | XmlTypeName
                              | JsonTypeName
-                             | TableTypeName
                              | StreamTypeName
+                             | TableTypeName
                              | FunctionTypeName
 MapTypeName ::= map (LT TypeName GT)? {pin=1}
 FutureTypeName ::= future (LT TypeName GT)? {pin=1}
@@ -435,16 +435,14 @@ Statement ::=
     |   CompoundAssignmentStatement
     |   PostIncrementStatement
     |   VariableDefinitionStatement
-    // Todo - Add streaming
-//    |   wheneverStatement
-//    |   streamingQueryStatement
-//    |   StreamingQueryStatement
+    |   ForeverStatement
+    |   StreamingQueryStatement
 {recoverWhile = StatementRecover}
 
 // Todo - Add more tokens
 // Note - Literals are added for worker interactions - 10 -> w2;
 // NULL_LITERAL is added for match pattern -  null => return "error";
-private StatementRecover ::= !(BOOLEAN_LITERAL|QUOTED_STRING_LITERAL|DECIMAL_INTEGER_LITERAL|HEX_INTEGER_LITERAL|OCTAL_INTEGER_LITERAL|BINARY_INTEGER_LITERAL|NULL_LITERAL|int|string|float|boolean|blob|any|json|xml|xmlns|map|table|function|'('|'}'|';'|typedesc|future|await|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|transaction|if|identifier)
+private StatementRecover ::= !(BOOLEAN_LITERAL|QUOTED_STRING_LITERAL|DECIMAL_INTEGER_LITERAL|HEX_INTEGER_LITERAL|OCTAL_INTEGER_LITERAL|BINARY_INTEGER_LITERAL|NULL_LITERAL|int|string|float|boolean|blob|any|json|xml|xmlns|map|table|function|stream|'('|'}'|';'|typedesc|future|await|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|transaction|if|identifier)
 
 //private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
 
@@ -649,11 +647,14 @@ Expression
     |   BinaryEqualExpression
     |   BinaryAndExpression
     |   BinaryOrExpression
+    |   TableQueryExpression
     |   AwaitExpression {
     recoverWhile=ExpressionRecover
 }
 
-private ExpressionRecover ::= !(NULL_LITERAL|int|string|float|boolean|blob|any|map|table|function|'}'|';'|var |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if)
+TableQueryExpression ::= TableQuery
+
+private ExpressionRecover ::= !(NULL_LITERAL|int|string|float|boolean|blob|any|map|table|function|stream|'}'|';'|var |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if)
 
 fake BinaryExpression ::= Expression {
   methods=[left="Expression[0]" right="Expression[1]" getOperator]
@@ -786,6 +787,71 @@ private StringTemplateTextContent ::= STRING_TEMPLATE_TEXT
 AnyIdentifierName ::= identifier | ReservedWord
 
 ReservedWord ::= foreach | map
+
+
+//Siddhi Streams and Tables related
+TableQuery ::= from StreamingInput JoinStreamingInput? SelectClause? OrderByClause?
+
+AggregationQuery ::= from StreamingInput SelectClause? OrderByClause?
+
+ForeverStatement ::= forever LEFT_BRACE ForeverStatementBody RIGHT_BRACE {pin=1}
+ForeverStatementBody ::= StreamingQueryStatement+
+
+StreamingQueryStatement ::= from (StreamingInput (JoinStreamingInput)? | PatternClause)
+        SelectClause?
+        OrderByClause?
+        OutputRateLimit?
+        StreamingAction
+
+PatternClause ::= every? PatternStreamingInput WithinClause?
+
+WithinClause ::= within Expression
+
+OrderByClause ::= order by VariableReferenceList
+
+SelectClause ::= select (MUL| SelectExpressionList) GroupByClause? HavingClause?
+
+SelectExpressionList ::= SelectExpression (COMMA SelectExpression)*
+
+SelectExpression ::= Expression (AS identifier)?
+
+GroupByClause ::= group by VariableReferenceList
+
+HavingClause ::= having Expression
+
+StreamingAction ::= EQUAL_GT LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS CallableUnitBody
+
+SetClause ::= set SetAssignmentClause (COMMA SetAssignmentClause)*
+
+SetAssignmentClause ::= VariableReference ASSIGN Expression
+
+StreamingInput ::= VariableReference WhereClause?  WindowClause? WhereClause? (as identifier)?
+
+JoinStreamingInput ::= (unidirectional JoinType | JoinType unidirectional | JoinType) StreamingInput on Expression
+
+OutputRateLimit ::= output (all | last | first) every (DECIMAL_INTEGER_LITERAL TimeScale | DECIMAL_INTEGER_LITERAL events)
+    | output snapshot every DECIMAL_INTEGER_LITERAL TimeScale
+
+PatternStreamingInput ::= PatternStreamingEdgeInput followed by PatternStreamingInput
+    |   LEFT_PARENTHESIS PatternStreamingInput RIGHT_PARENTHESIS
+    |   foreach PatternStreamingInput
+    |   not PatternStreamingEdgeInput (and PatternStreamingEdgeInput | for STRING_TEMPLATE_TEXT)
+    |   PatternStreamingEdgeInput (and | or) PatternStreamingEdgeInput
+    |   PatternStreamingEdgeInput
+
+PatternStreamingEdgeInput ::= VariableReference WhereClause? IntRangeExpression? (as identifier)?
+
+WhereClause ::= where Expression
+
+FunctionClause ::= function FunctionInvocation
+
+WindowClause ::= window FunctionInvocation
+
+OutputEventType ::= all events | expired events | current events
+
+JoinType ::= left outer join | right outer join | full outer join | outer join | inner? join
+
+TimeScale ::= second | minute | hour | day | month | year
 
 
 // Deprecated parsing.

@@ -16,6 +16,12 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
     private boolean inDeprecatedTemplate = false;
     private boolean inDocTemplate = false;
 
+    private boolean inSiddhi = false;
+    private boolean inTableSqlQuery = false;
+    private boolean inSiddhiInsertQuery = false;
+    private boolean inSiddhiTimeScaleQuery = false;
+    private boolean inSiddhiOutputRateLimit = false;
+
     public BallerinaLexer() {
         this((java.io.Reader)null);
     }
@@ -396,6 +402,7 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
 
     "service"                                   { return SERVICE; }
     "some"                                      { return SOME; }
+    "stream"                                    { return STREAM; }
     "string"                                    { return STRING; }
     "struct"                                    { return STRUCT; }
 
@@ -470,6 +477,47 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
 
     "++"                                        { return INCREMENT; }
     "--"                                        { return DECREMENT; }
+
+    "from"                                      { inSiddhi = false; inTableSqlQuery = true; inSiddhiInsertQuery = true; inSiddhiOutputRateLimit = true; return FROM; }
+    "on"                                        { return ON; }
+    "select"                                    { if(inTableSqlQuery) { inTableSqlQuery = false; return SELECT; }; }
+    "group"                                     { return GROUP; }
+    "by"                                        { return BY; }
+    "having"                                    { return HAVING; }
+    "order"                                     { return ORDER; }
+    "where"                                     { return WHERE; }
+    "followed"                                  { return FOLLOWED; }
+//    "insert"                                    { if(inSiddhi) { inSiddhi = false; return INSERT; }; }
+//    "into"                                      { return INTO; }
+//    "update"                                    { if(inSiddhi) { inSiddhi = false; return UPDATE; }; }
+//    "delete"                                    { if(inSiddhi) { inSiddhi = false; return DELETE; }; }
+    "set"                                       { return SET; }
+    "for"                                       { return FOR; }
+    "window"                                    { return WINDOW; }
+//    "query"                                     { return QUERY; }
+    "expired"                                   { return EXPIRED; }
+    "current"                                   { return CURRENT; }
+    "events"                                    { if(inSiddhiInsertQuery) { inSiddhiInsertQuery = false; return EVENTS; }; }
+    "every"                                     { return EVERY; }
+    "within"                                    { return WITHIN; }
+    "last"                                      { if(inSiddhiOutputRateLimit) { inSiddhiTimeScaleQuery = false; return LAST; }; }
+    "first"                                     { if(inSiddhiOutputRateLimit) { inSiddhiTimeScaleQuery = false; return FIRST; }; }
+    "snapshot"                                  { return SNAPSHOT; }
+    "output"                                    { if(inSiddhiOutputRateLimit) { inSiddhiTimeScaleQuery = true; return OUTPUT; }; }
+    "inner"                                     { return INNER; }
+    "outer"                                     { return OUTER; }
+    "right"                                     { return RIGHT; }
+    "left"                                      { return LEFT; }
+    "full"                                      { return FULL; }
+    "unidirectional"                            { return UNIDIRECTIONAL; }
+//    "reduce"                                    { return REDUCE; }
+    "second"                                    { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return SECOND; }; }
+    "minute"                                    { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return MINUTE; }; }
+    "hour"                                      { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return HOUR; }; }
+    "day"                                       { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return DAY; }; }
+    "month"                                     { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return MONTH; }; }
+    "year"                                      { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return YEAR; }; }
+    "forever"                                   { return FOREVER; }
 
     {WHITE_SPACE}                               { return WHITE_SPACE; }
 

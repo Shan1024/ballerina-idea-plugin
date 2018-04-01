@@ -47,43 +47,67 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BLOB;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BOOLEAN;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BOOLEAN_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BREAK;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CATCH;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CONST;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CURRENT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DAY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DECIMAL_INTEGER_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DEPRECATED;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DOCUMENTATION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ELSE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ENDPOINT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ENUM;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EVENTS;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EVERY;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EXPIRED;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FAIL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FINALLY;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FIRST;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FLOAT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FLOATING_POINT_LITERAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FOLLOWED;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FOR;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FOREACH;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FOREVER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FORK;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FROM;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FULL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FUNCTION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FUTURE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.GROUP;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.HAVING;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.HEX_INTEGER_LITERAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.HOUR;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IF;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IMPORT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IN;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INNER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.JOIN;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.JSON;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LAST;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LEFT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LENGTHOF;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LINE_COMMENT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LOCK;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MAP;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MATCH;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MINUTE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MONTH;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NATIVE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NEW;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NEXT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NULL_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OBJECT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OCTAL_INTEGER_LITERAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ON;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONABORT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONCOMMIT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONRETRY;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ORDER;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OUTER;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OUTPUT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PACKAGE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PARAMETER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PRIVATE;
@@ -93,8 +117,14 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RESOURCE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETRIES;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETURN;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETURNS;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RIGHT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SECOND;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SELECT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SERVICE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SET;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SNAPSHOT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SOME;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.STREAM;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.STRING;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.STRUCT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TABLE;
@@ -106,14 +136,19 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TRY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TYPE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TYPEDESC;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TYPEOF;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.UNIDIRECTIONAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.UNTAINT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.VAR;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.VERSION;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WHERE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WHILE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WINDOW;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WITH;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WITHIN;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WORKER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.XML;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.XMLNS;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.YEAR;
 
 public class BallerinaParserDefinition implements ParserDefinition {
 
@@ -129,9 +164,15 @@ public class BallerinaParserDefinition implements ParserDefinition {
             BLOB, BOOLEAN, BREAK, CATCH, CONST, DOCUMENTATION, DEPRECATED, ELSE, ENDPOINT, ENUM, FAIL, FINALLY,
             FLOAT, FOREACH, FORK, FUNCTION, FUTURE, IF, IMPORT, IN, INT, JOIN, JSON, LENGTHOF, LOCK, MAP, MATCH,
             NATIVE, NEW, NEXT, OBJECT, ONABORT, ONCOMMIT, ONRETRY, PACKAGE, PARAMETER, PRIVATE, PUBLIC, RESOURCE,
-            RETRIES, RETURN, RETURNS, SERVICE, SOME, STRING, STRUCT, TABLE, TIMEOUT, TRANSACTION, TRANSFORMER, TRY,
-            TYPE, TYPEDESC, TYPEOF, THROW, UNTAINT, WHILE, WITH, WORKER, VAR, VERSION, XML, XMLNS, BOOLEAN_LITERAL,
-            NULL_LITERAL);
+            RETRIES, RETURN, RETURNS, SERVICE, SOME, STREAM, STRING, STRUCT, TABLE, TIMEOUT, TRANSACTION, TRANSFORMER,
+            TRY, TYPE, TYPEDESC, TYPEOF, THROW, UNTAINT, WHILE, WITH, WORKER, VAR, VERSION, XML, XMLNS, BOOLEAN_LITERAL,
+            NULL_LITERAL,
+
+            FROM, ON, SELECT, GROUP, BY, HAVING, ORDER, WHERE, FOLLOWED, SET, FOR, WINDOW, EXPIRED, CURRENT, EVENTS,
+            EVERY, WITHIN, LAST, FIRST, SNAPSHOT, OUTPUT, INNER, OUTER, RIGHT, LEFT, FULL, UNIDIRECTIONAL, SECOND,
+            MINUTE, HOUR, DAY, MONTH, YEAR, FOREVER
+
+    );
 
     public static final TokenSet OPERATORS = TokenSet.create();
 

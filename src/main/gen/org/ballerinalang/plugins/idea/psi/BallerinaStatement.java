@@ -42,6 +42,9 @@ public interface BallerinaStatement extends BallerinaCompositeElement {
   BallerinaForeachStatement getForeachStatement();
 
   @Nullable
+  BallerinaForeverStatement getForeverStatement();
+
+  @Nullable
   BallerinaForkJoinStatement getForkJoinStatement();
 
   @Nullable
@@ -61,6 +64,9 @@ public interface BallerinaStatement extends BallerinaCompositeElement {
 
   @Nullable
   BallerinaReturnStatement getReturnStatement();
+
+  @Nullable
+  BallerinaStreamingQueryStatement getStreamingQueryStatement();
 
   @Nullable
   BallerinaThrowStatement getThrowStatement();

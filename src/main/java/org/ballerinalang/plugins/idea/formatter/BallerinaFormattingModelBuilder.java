@@ -45,6 +45,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ASYNC;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.AWAIT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BIND;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BREAK;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CALLABLE_UNIT_BODY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CALLABLE_UNIT_SIGNATURE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CATCH;
@@ -55,6 +56,8 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMMA;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMPLETE_PACKAGE_NAME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMPOUND_OPERATOR;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CONST;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CURRENT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DAY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DECIMAL_INTEGER_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DEPRECATED;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DIV;
@@ -68,23 +71,36 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ENDPOINT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ENUM;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EQUAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EQUAL_GT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EVENTS;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EVERY;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EXPIRED;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EXPRESSION_LIST;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FAIL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FIELD;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FINALLY;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FIRST;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FLOATING_POINT_LITERAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FOLLOWED;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FOR;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FOREACH;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FOREVER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FORK;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FROM;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FULL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FUNCTION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FUNCTION_INVOCATION;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.GROUP;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.GT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.GT_EQUAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.HAVING;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.HOUR;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IDENTIFIER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IF;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IMPORT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IMPORT_DECLARATION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IN;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INDEX;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INNER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INTEGER_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INVOCATION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INVOCATION_ARG;
@@ -92,6 +108,8 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INVOCATION_ARG_L
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.JOIN;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.JSON;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LARROW;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LAST;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LEFT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LEFT_BRACE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LEFT_BRACKET;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LEFT_PARENTHESIS;
@@ -101,7 +119,9 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LT_EQUAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MAP;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MATCH;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MINUTE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MOD;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MONTH;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MUL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NAME_REFERENCE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NATIVE;
@@ -111,11 +131,15 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NOT_EQUAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NULLABLE_TYPE_NAME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NULL_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OBJECT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ON;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONABORT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONCOMMIT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONRETRY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONRETRY_CLAUSE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OR;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ORDER;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OUTER;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OUTPUT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PACKAGE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PACKAGE_REFERENCE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PARAMETER;
@@ -135,17 +159,23 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETURN;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETURNS;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETURN_PARAMETER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETURN_TYPE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RIGHT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RIGHT_BRACE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RIGHT_BRACKET;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RIGHT_PARENTHESIS;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SAFE_ASSIGNMENT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SECOND;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SELECT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SEMICOLON;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SERVICE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SERVICE_BODY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SERVICE_ENDPOINT_ATTACHMENTS;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SET;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SIMPLE_TYPE_NAME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SIMPLE_VARIABLE_REFERENCE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SNAPSHOT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SOME;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.STREAM;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.STRUCT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SUB;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.THROW;
@@ -156,16 +186,22 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TRY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TUPLE_TYPE_NAME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TYPEOF;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TYPE_CONVERSION_EXPRESSION;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.UNIDIRECTIONAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.UNION_TYPE_NAME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.UNTAINT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.VAR;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.VARIABLE_REFERENCE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.VARIABLE_REFERENCE_EXPRESSION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.VERSION;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WHERE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WHERE_CLAUSE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WHILE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WINDOW;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WINDOW_CLAUSE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WITH;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WITHIN;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WORKER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.XMLNS;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.YEAR;
 
 /**
  * Builds the Ballerina file formatting model.
@@ -247,6 +283,42 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(ASYNC).spaceIf(true)
                 .around(AWAIT).spaceIf(true)
 
+                // Streaming keywords
+                .around(FROM).spaceIf(true)
+                .around(ON).spaceIf(true)
+                .around(SELECT).spaceIf(true)
+                .around(GROUP).spaceIf(true)
+                .around(BY).spaceIf(true)
+                .around(HAVING).spaceIf(true)
+                .around(ORDER).spaceIf(true)
+                .around(WHERE).spaceIf(true)
+                .around(FOLLOWED).spaceIf(true)
+                .around(SET).spaceIf(true)
+                .around(FOR).spaceIf(true)
+                .around(WINDOW).spaceIf(true)
+                .around(EXPIRED).spaceIf(true)
+                .around(CURRENT).spaceIf(true)
+                .around(EVENTS).spaceIf(true)
+                .around(EVERY).spaceIf(true)
+                .around(WITHIN).spaceIf(true)
+                .around(LAST).spaceIf(true)
+                .around(FIRST).spaceIf(true)
+                .around(SNAPSHOT).spaceIf(true)
+                .around(OUTPUT).spaceIf(true)
+                .around(INNER).spaceIf(true)
+                .around(OUTER).spaceIf(true)
+                .around(RIGHT).spaceIf(true)
+                .around(LEFT).spaceIf(true)
+                .around(FULL).spaceIf(true)
+                .around(UNIDIRECTIONAL).spaceIf(true)
+                .around(SECOND).spaceIf(true)
+                .around(MINUTE).spaceIf(true)
+                .around(HOUR).spaceIf(true)
+                .around(DAY).spaceIf(true)
+                .around(MONTH).spaceIf(true)
+                .around(YEAR).spaceIf(true)
+                .around(FOREVER).spaceIf(true)
+
                 // Common tokens
                 .before(COMMA).spaceIf(false)
                 .after(COMMA).spaceIf(true)
@@ -295,6 +367,8 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .between(SIMPLE_VARIABLE_REFERENCE, ASSIGN).spaceIf(true)
                 .between(SIMPLE_VARIABLE_REFERENCE, SAFE_ASSIGNMENT).spaceIf(true)
                 .between(SIMPLE_VARIABLE_REFERENCE, COMPOUND_OPERATOR).spaceIf(true)
+                .between(SIMPLE_VARIABLE_REFERENCE, WHERE_CLAUSE).spaceIf(true)
+                .between(SIMPLE_VARIABLE_REFERENCE, WINDOW_CLAUSE).spaceIf(true)
                 .after(SIMPLE_VARIABLE_REFERENCE).spaceIf(false)
                 .aroundInside(DOT, INVOCATION).spaceIf(false)
                 .between(INVOCATION_ARG, COMMA).spaceIf(false)
@@ -321,6 +395,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .between(FUNCTION, LT).spaceIf(false)
                 .between(JSON, LT).spaceIf(false)
                 .between(MAP, LT).spaceIf(false)
+                .between(STREAM, LT).spaceIf(false)
 
                 .between(PIPE, NULL_LITERAL).spaceIf(false)
                 .around(NULLABLE_TYPE_NAME).spaceIf(false)
@@ -342,6 +417,8 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .between(ELLIPSIS, VARIABLE_REFERENCE_EXPRESSION).spaceIf(false)
 
                 .before(INDEX).spaceIf(false)
+
+                // Streaming
 
                 // Operators
                 .around(ASSIGN).spaceIf(true)
