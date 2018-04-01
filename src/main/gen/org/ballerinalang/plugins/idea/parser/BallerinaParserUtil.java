@@ -27,6 +27,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaTypes;
 public class BallerinaParserUtil extends GeneratedParserUtilBase {
 
     public static boolean isPackageExpected(PsiBuilder builder, int level) {
+        // Todo - Refactor code to methods
         IElementType next1Element = builder.lookAhead(1);
         if (next1Element == null || !next1Element.toString().equals(":")) {
             return true;
@@ -91,6 +92,10 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                                 && !(rawLookup == BallerinaTypes.LEFT_BRACE && rawLookup2 == BallerinaTypes.COMMA)
                                 /*|| (rawLookup == BallerinaTypes.LEFT_BRACE && rawLookup2 == BallerinaTypes
                                 .IDENTIFIER)*/
+                                // @Args{value : stringvalue}
+                                && !(rawLookup == BallerinaTypes.LEFT_BRACE && rawLookup2 == BallerinaTypes.AT)
+
+                                && !(rawLookup == BallerinaTypes.LEFT_BRACE && rawLookup2 == BallerinaTypes.COLON)
                                 ) {
                             return true;
                         } else {
@@ -98,12 +103,10 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                             // sql:ConnectionProperties properties3 = {dataSourceClassName:"org.hsqldb.jdbc
                             // .JDBCDataSource", datasourceProperties:propertiesMap};
                             if (rawLookup == BallerinaTypes.COMMA && rawLookup2 == BallerinaTypes.COLON) {
-
                                 if (latestDoneMarker != null
                                         && latestDoneMarker.getTokenType() == BallerinaTypes.SIMPLE_TYPE_NAME) {
                                     return true;
                                 }
-
                             } else if (rawLookup == BallerinaTypes.COMMA && rawLookup2 == BallerinaTypes.DOT) {
                                 // EmployeeSalary s = {id:e.id, salary:e.salary};
                                 if (latestDoneMarker != null

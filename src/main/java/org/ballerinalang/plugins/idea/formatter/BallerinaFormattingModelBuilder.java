@@ -418,11 +418,13 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .between(ELLIPSIS, VARIABLE_REFERENCE_EXPRESSION).spaceIf(false)
 
                 .before(INDEX).spaceIf(false)
+
+                // Streaming
                 .before(WHERE_CLAUSE).spaceIf(true)
                 .before(WINDOW_CLAUSE).spaceIf(true)
                 .around(INT_RANGE_EXPRESSION).spaceIf(true)
 
-                // Streaming
+
 
                 // Operators
                 .around(ASSIGN).spaceIf(true)
