@@ -38,7 +38,7 @@ public interface BallerinaStreamingQueryStatement extends BallerinaCompositeElem
   @Nullable
   BallerinaSelectClause getSelectClause();
 
-  @NotNull
+  @Nullable
   BallerinaStreamingAction getStreamingAction();
 
   @Nullable

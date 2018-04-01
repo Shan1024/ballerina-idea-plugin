@@ -42,9 +42,9 @@ public class BallerinaStreamingActionImpl extends BallerinaCompositeElementImpl 
   }
 
   @Override
-  @NotNull
+  @Nullable
   public BallerinaCallableUnitBody getCallableUnitBody() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaCallableUnitBody.class));
+    return PsiTreeUtil.getChildOfType(this, BallerinaCallableUnitBody.class);
   }
 
   @Override
@@ -60,15 +60,15 @@ public class BallerinaStreamingActionImpl extends BallerinaCompositeElementImpl 
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getLeftParenthesis() {
-    return notNullChild(findChildByType(LEFT_PARENTHESIS));
+    return findChildByType(LEFT_PARENTHESIS);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getRightParenthesis() {
-    return notNullChild(findChildByType(RIGHT_PARENTHESIS));
+    return findChildByType(RIGHT_PARENTHESIS);
   }
 
 }

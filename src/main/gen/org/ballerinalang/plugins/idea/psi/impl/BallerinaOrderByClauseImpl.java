@@ -42,15 +42,15 @@ public class BallerinaOrderByClauseImpl extends BallerinaCompositeElementImpl im
   }
 
   @Override
-  @NotNull
+  @Nullable
   public BallerinaVariableReferenceList getVariableReferenceList() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaVariableReferenceList.class));
+    return PsiTreeUtil.getChildOfType(this, BallerinaVariableReferenceList.class);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getBy() {
-    return notNullChild(findChildByType(BY));
+    return findChildByType(BY);
   }
 
   @Override

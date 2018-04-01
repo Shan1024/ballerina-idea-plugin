@@ -102,6 +102,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IN;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INDEX;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INNER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INTEGER_LITERAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INT_RANGE_EXPRESSION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INVOCATION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INVOCATION_ARG;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INVOCATION_ARG_LIST;
@@ -417,6 +418,9 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .between(ELLIPSIS, VARIABLE_REFERENCE_EXPRESSION).spaceIf(false)
 
                 .before(INDEX).spaceIf(false)
+                .before(WHERE_CLAUSE).spaceIf(true)
+                .before(WINDOW_CLAUSE).spaceIf(true)
+                .around(INT_RANGE_EXPRESSION).spaceIf(true)
 
                 // Streaming
 

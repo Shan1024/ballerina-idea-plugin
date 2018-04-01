@@ -60,9 +60,9 @@ public class BallerinaTableQueryImpl extends BallerinaCompositeElementImpl imple
   }
 
   @Override
-  @NotNull
+  @Nullable
   public BallerinaStreamingInput getStreamingInput() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaStreamingInput.class));
+    return PsiTreeUtil.getChildOfType(this, BallerinaStreamingInput.class);
   }
 
   @Override

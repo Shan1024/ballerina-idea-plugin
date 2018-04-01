@@ -23,7 +23,7 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaStreamingAction extends BallerinaCompositeElement {
 
-  @NotNull
+  @Nullable
   BallerinaCallableUnitBody getCallableUnitBody();
 
   @Nullable
@@ -32,10 +32,10 @@ public interface BallerinaStreamingAction extends BallerinaCompositeElement {
   @NotNull
   PsiElement getEqualGt();
 
-  @NotNull
+  @Nullable
   PsiElement getLeftParenthesis();
 
-  @NotNull
+  @Nullable
   PsiElement getRightParenthesis();
 
 }

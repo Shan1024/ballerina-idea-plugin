@@ -442,7 +442,7 @@ Statement ::=
 // Todo - Add more tokens
 // Note - Literals are added for worker interactions - 10 -> w2;
 // NULL_LITERAL is added for match pattern -  null => return "error";
-private StatementRecover ::= !(BOOLEAN_LITERAL|QUOTED_STRING_LITERAL|DECIMAL_INTEGER_LITERAL|HEX_INTEGER_LITERAL|OCTAL_INTEGER_LITERAL|BINARY_INTEGER_LITERAL|NULL_LITERAL|int|string|float|boolean|blob|any|json|xml|xmlns|map|table|function|stream|'('|'}'|';'|typedesc|future|await|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|transaction|if|identifier)
+private StatementRecover ::= !(BOOLEAN_LITERAL|QUOTED_STRING_LITERAL|DECIMAL_INTEGER_LITERAL|HEX_INTEGER_LITERAL|OCTAL_INTEGER_LITERAL|BINARY_INTEGER_LITERAL|NULL_LITERAL|int|string|float|boolean|blob|any|json|xml|xmlns|map|table|function|stream|'('|'}'|';'|typedesc|future|await|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|transaction|if|forever|identifier)
 
 //private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
 
@@ -654,7 +654,7 @@ Expression
 
 TableQueryExpression ::= TableQuery
 
-private ExpressionRecover ::= !(NULL_LITERAL|int|string|float|boolean|blob|any|map|table|function|stream|'}'|';'|var |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if)
+private ExpressionRecover ::= !(NULL_LITERAL|int|string|float|boolean|blob|any|map|table|function|stream|'}'|';'|var |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if|forever)
 
 fake BinaryExpression ::= Expression {
   methods=[left="Expression[0]" right="Expression[1]" getOperator]
@@ -790,7 +790,7 @@ ReservedWord ::= foreach | map
 
 
 //Siddhi Streams and Tables related
-TableQuery ::= from StreamingInput JoinStreamingInput? SelectClause? OrderByClause?
+TableQuery ::= from StreamingInput JoinStreamingInput? SelectClause? OrderByClause? {pin=1}
 
 AggregationQuery ::= from StreamingInput SelectClause? OrderByClause?
 
@@ -801,27 +801,27 @@ StreamingQueryStatement ::= from (StreamingInput (JoinStreamingInput)? | Pattern
         SelectClause?
         OrderByClause?
         OutputRateLimit?
-        StreamingAction
+        StreamingAction{pin=1}
 
 PatternClause ::= every? PatternStreamingInput WithinClause?
 
-WithinClause ::= within Expression
+WithinClause ::= within Expression {pin=1}
 
-OrderByClause ::= order by VariableReferenceList
+OrderByClause ::= order by VariableReferenceList {pin=1}
 
-SelectClause ::= select (MUL| SelectExpressionList) GroupByClause? HavingClause?
+SelectClause ::= select (MUL| SelectExpressionList) GroupByClause? HavingClause? {pin=1}
 
 SelectExpressionList ::= SelectExpression (COMMA SelectExpression)*
 
-SelectExpression ::= Expression (AS identifier)?
+SelectExpression ::= Expression (as identifier)?
 
-GroupByClause ::= group by VariableReferenceList
+GroupByClause ::= group by VariableReferenceList {pin=1}
 
-HavingClause ::= having Expression
+HavingClause ::= having Expression {pin=1}
 
-StreamingAction ::= EQUAL_GT LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS CallableUnitBody
+StreamingAction ::= EQUAL_GT LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS CallableUnitBody {pin=1}
 
-SetClause ::= set SetAssignmentClause (COMMA SetAssignmentClause)*
+SetClause ::= set SetAssignmentClause (COMMA SetAssignmentClause)* {pin=1}
 
 SetAssignmentClause ::= VariableReference ASSIGN Expression
 
@@ -830,7 +830,7 @@ StreamingInput ::= VariableReference WhereClause?  WindowClause? WhereClause? (a
 JoinStreamingInput ::= (unidirectional JoinType | JoinType unidirectional | JoinType) StreamingInput on Expression
 
 OutputRateLimit ::= output (all | last | first) every (DECIMAL_INTEGER_LITERAL TimeScale | DECIMAL_INTEGER_LITERAL events)
-    | output snapshot every DECIMAL_INTEGER_LITERAL TimeScale
+    | output snapshot every DECIMAL_INTEGER_LITERAL TimeScale {pin=1}
 
 PatternStreamingInput ::= PatternStreamingEdgeInput followed by PatternStreamingInput
     |   LEFT_PARENTHESIS PatternStreamingInput RIGHT_PARENTHESIS
@@ -841,11 +841,11 @@ PatternStreamingInput ::= PatternStreamingEdgeInput followed by PatternStreaming
 
 PatternStreamingEdgeInput ::= VariableReference WhereClause? IntRangeExpression? (as identifier)?
 
-WhereClause ::= where Expression
+WhereClause ::= where Expression {pin=1}
 
 FunctionClause ::= function FunctionInvocation
 
-WindowClause ::= window FunctionInvocation
+WindowClause ::= window FunctionInvocation  {pin=1}
 
 OutputEventType ::= all events | expired events | current events
 

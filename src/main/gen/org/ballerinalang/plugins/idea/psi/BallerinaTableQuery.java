@@ -32,7 +32,7 @@ public interface BallerinaTableQuery extends BallerinaCompositeElement {
   @Nullable
   BallerinaSelectClause getSelectClause();
 
-  @NotNull
+  @Nullable
   BallerinaStreamingInput getStreamingInput();
 
   @NotNull

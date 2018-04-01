@@ -72,9 +72,9 @@ public class BallerinaStreamingQueryStatementImpl extends BallerinaCompositeElem
   }
 
   @Override
-  @NotNull
+  @Nullable
   public BallerinaStreamingAction getStreamingAction() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaStreamingAction.class));
+    return PsiTreeUtil.getChildOfType(this, BallerinaStreamingAction.class);
   }
 
   @Override

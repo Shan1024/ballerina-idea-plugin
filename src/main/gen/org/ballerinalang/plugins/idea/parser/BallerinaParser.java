@@ -2000,7 +2000,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !(NULL_LITERAL|int|string|float|boolean|blob|any|map|table|function|stream|'}'|';'|var |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if)
+  // !(NULL_LITERAL|int|string|float|boolean|blob|any|map|table|function|stream|'}'|';'|var |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if|forever)
   static boolean ExpressionRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExpressionRecover")) return false;
     boolean r;
@@ -2010,7 +2010,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // NULL_LITERAL|int|string|float|boolean|blob|any|map|table|function|stream|'}'|';'|var |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if
+  // NULL_LITERAL|int|string|float|boolean|blob|any|map|table|function|stream|'}'|';'|var |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if|forever
   private static boolean ExpressionRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExpressionRecover_0")) return false;
     boolean r;
@@ -2044,6 +2044,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, XMLNS);
     if (!r) r = consumeToken(b, TRANSACTION);
     if (!r) r = consumeToken(b, IF);
+    if (!r) r = consumeToken(b, FOREVER);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -2642,12 +2643,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean GroupByClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "GroupByClause")) return false;
     if (!nextTokenIs(b, GROUP)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, GROUP, BY);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, GROUP_BY_CLAUSE, null);
+    r = consumeTokens(b, 1, GROUP, BY);
+    p = r; // pin = 1
     r = r && VariableReferenceList(b, l + 1);
-    exit_section_(b, m, GROUP_BY_CLAUSE, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -2655,12 +2657,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean HavingClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "HavingClause")) return false;
     if (!nextTokenIs(b, HAVING)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, HAVING_CLAUSE, null);
     r = consumeToken(b, HAVING);
+    p = r; // pin = 1
     r = r && Expression(b, l + 1, -1);
-    exit_section_(b, m, HAVING_CLAUSE, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -3830,12 +3833,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean OrderByClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "OrderByClause")) return false;
     if (!nextTokenIs(b, ORDER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, ORDER, BY);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, ORDER_BY_CLAUSE, null);
+    r = consumeTokens(b, 1, ORDER, BY);
+    p = r; // pin = 1
     r = r && VariableReferenceList(b, l + 1);
-    exit_section_(b, m, ORDER_BY_CLAUSE, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -4691,14 +4695,15 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean SelectClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SelectClause")) return false;
     if (!nextTokenIs(b, SELECT)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SELECT_CLAUSE, null);
     r = consumeToken(b, SELECT);
-    r = r && SelectClause_1(b, l + 1);
-    r = r && SelectClause_2(b, l + 1);
-    r = r && SelectClause_3(b, l + 1);
-    exit_section_(b, m, SELECT_CLAUSE, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, SelectClause_1(b, l + 1));
+    r = p && report_error_(b, SelectClause_2(b, l + 1)) && r;
+    r = p && SelectClause_3(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // MUL| SelectExpressionList
@@ -4944,13 +4949,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean SetClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SetClause")) return false;
     if (!nextTokenIs(b, SET)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SET_CLAUSE, null);
     r = consumeToken(b, SET);
-    r = r && SetAssignmentClause(b, l + 1);
-    r = r && SetClause_2(b, l + 1);
-    exit_section_(b, m, SET_CLAUSE, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, SetAssignmentClause(b, l + 1));
+    r = p && SetClause_2(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // (COMMA SetAssignmentClause)*
@@ -5164,7 +5170,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !(BOOLEAN_LITERAL|QUOTED_STRING_LITERAL|DECIMAL_INTEGER_LITERAL|HEX_INTEGER_LITERAL|OCTAL_INTEGER_LITERAL|BINARY_INTEGER_LITERAL|NULL_LITERAL|int|string|float|boolean|blob|any|json|xml|xmlns|map|table|function|stream|'('|'}'|';'|typedesc|future|await|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|transaction|if|identifier)
+  // !(BOOLEAN_LITERAL|QUOTED_STRING_LITERAL|DECIMAL_INTEGER_LITERAL|HEX_INTEGER_LITERAL|OCTAL_INTEGER_LITERAL|BINARY_INTEGER_LITERAL|NULL_LITERAL|int|string|float|boolean|blob|any|json|xml|xmlns|map|table|function|stream|'('|'}'|';'|typedesc|future|await|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|transaction|if|forever|identifier)
   static boolean StatementRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementRecover")) return false;
     boolean r;
@@ -5174,7 +5180,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // BOOLEAN_LITERAL|QUOTED_STRING_LITERAL|DECIMAL_INTEGER_LITERAL|HEX_INTEGER_LITERAL|OCTAL_INTEGER_LITERAL|BINARY_INTEGER_LITERAL|NULL_LITERAL|int|string|float|boolean|blob|any|json|xml|xmlns|map|table|function|stream|'('|'}'|';'|typedesc|future|await|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|transaction|if|identifier
+  // BOOLEAN_LITERAL|QUOTED_STRING_LITERAL|DECIMAL_INTEGER_LITERAL|HEX_INTEGER_LITERAL|OCTAL_INTEGER_LITERAL|BINARY_INTEGER_LITERAL|NULL_LITERAL|int|string|float|boolean|blob|any|json|xml|xmlns|map|table|function|stream|'('|'}'|';'|typedesc|future|await|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|transaction|if|forever|identifier
   private static boolean StatementRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StatementRecover_0")) return false;
     boolean r;
@@ -5220,6 +5226,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, LOCK);
     if (!r) r = consumeToken(b, TRANSACTION);
     if (!r) r = consumeToken(b, IF);
+    if (!r) r = consumeToken(b, FOREVER);
     if (!r) r = consumeToken(b, IDENTIFIER);
     exit_section_(b, m, null, r);
     return r;
@@ -5263,14 +5270,15 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean StreamingAction(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StreamingAction")) return false;
     if (!nextTokenIs(b, EQUAL_GT)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, EQUAL_GT, LEFT_PARENTHESIS);
-    r = r && StreamingAction_2(b, l + 1);
-    r = r && consumeToken(b, RIGHT_PARENTHESIS);
-    r = r && CallableUnitBody(b, l + 1);
-    exit_section_(b, m, STREAMING_ACTION, r);
-    return r;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, STREAMING_ACTION, null);
+    r = consumeTokens(b, 1, EQUAL_GT, LEFT_PARENTHESIS);
+    p = r; // pin = 1
+    r = r && report_error_(b, StreamingAction_2(b, l + 1));
+    r = p && report_error_(b, consumeToken(b, RIGHT_PARENTHESIS)) && r;
+    r = p && CallableUnitBody(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // FormalParameterList?
@@ -5342,16 +5350,17 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean StreamingQueryStatement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StreamingQueryStatement")) return false;
     if (!nextTokenIs(b, FROM)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, STREAMING_QUERY_STATEMENT, null);
     r = consumeToken(b, FROM);
-    r = r && StreamingQueryStatement_1(b, l + 1);
-    r = r && StreamingQueryStatement_2(b, l + 1);
-    r = r && StreamingQueryStatement_3(b, l + 1);
-    r = r && StreamingQueryStatement_4(b, l + 1);
-    r = r && StreamingAction(b, l + 1);
-    exit_section_(b, m, STREAMING_QUERY_STATEMENT, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, StreamingQueryStatement_1(b, l + 1));
+    r = p && report_error_(b, StreamingQueryStatement_2(b, l + 1)) && r;
+    r = p && report_error_(b, StreamingQueryStatement_3(b, l + 1)) && r;
+    r = p && report_error_(b, StreamingQueryStatement_4(b, l + 1)) && r;
+    r = p && StreamingAction(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // StreamingInput (JoinStreamingInput)? | PatternClause
@@ -5566,15 +5575,16 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean TableQuery(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TableQuery")) return false;
     if (!nextTokenIs(b, FROM)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, TABLE_QUERY, null);
     r = consumeToken(b, FROM);
-    r = r && StreamingInput(b, l + 1);
-    r = r && TableQuery_2(b, l + 1);
-    r = r && TableQuery_3(b, l + 1);
-    r = r && TableQuery_4(b, l + 1);
-    exit_section_(b, m, TABLE_QUERY, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, StreamingInput(b, l + 1));
+    r = p && report_error_(b, TableQuery_2(b, l + 1)) && r;
+    r = p && report_error_(b, TableQuery_3(b, l + 1)) && r;
+    r = p && TableQuery_4(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // JoinStreamingInput?
@@ -6271,12 +6281,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean WhereClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "WhereClause")) return false;
     if (!nextTokenIs(b, WHERE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, WHERE_CLAUSE, null);
     r = consumeToken(b, WHERE);
+    p = r; // pin = 1
     r = r && Expression(b, l + 1, -1);
-    exit_section_(b, m, WHERE_CLAUSE, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -6313,12 +6324,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean WindowClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "WindowClause")) return false;
     if (!nextTokenIs(b, WINDOW)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, WINDOW_CLAUSE, null);
     r = consumeToken(b, WINDOW);
+    p = r; // pin = 1
     r = r && FunctionInvocation(b, l + 1);
-    exit_section_(b, m, WINDOW_CLAUSE, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -6326,12 +6338,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean WithinClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "WithinClause")) return false;
     if (!nextTokenIs(b, WITHIN)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, WITHIN_CLAUSE, null);
     r = consumeToken(b, WITHIN);
+    p = r; // pin = 1
     r = r && Expression(b, l + 1, -1);
-    exit_section_(b, m, WITHIN_CLAUSE, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
