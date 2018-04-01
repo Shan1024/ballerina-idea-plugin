@@ -85,10 +85,11 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                                 && rawLookup2 != BallerinaTypes.BOOLEAN_LITERAL
                                 // Example for below condition - {dataSourceClassName:"org.hsqldb.jdbc.JDBCDataSource",
                                 // datasourceProperties:propertiesMap}
-                                && !(rawLookup == BallerinaTypes.COMMA && rawLookup2 == BallerinaTypes.COLON)
+                                // Messes up - authorization-test.bal
+                                /*&& !(rawLookup == BallerinaTypes.COMMA && rawLookup2 == BallerinaTypes.COLON)*/
                                 // Example for below condition - worker w {a:b();}
                                 && !(rawLookup == BallerinaTypes.LEFT_BRACE && rawLookup2 == BallerinaTypes.COMMA)
-                                || (rawLookup == BallerinaTypes.LEFT_BRACE && rawLookup2 == BallerinaTypes.IDENTIFIER)
+                                /*|| (rawLookup == BallerinaTypes.LEFT_BRACE && rawLookup2 == BallerinaTypes.IDENTIFIER)*/
                                 ) {
                             return true;
                         } else {
