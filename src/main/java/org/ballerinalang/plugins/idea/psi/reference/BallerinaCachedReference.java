@@ -41,8 +41,9 @@ public abstract class BallerinaCachedReference<T extends PsiElement> extends Psi
     @Nullable
     @Override
     public final PsiElement resolve() {
+//        return resolveInner();
         return myElement.isValid()
-                ? ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, false)
+                ? ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, true)
                 : null;
     }
 

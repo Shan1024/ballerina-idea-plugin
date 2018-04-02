@@ -243,4 +243,9 @@ public class BallerinaReferenceCompletionProvider extends CompletionContributor 
             return true;
         }
     }
+
+    @Override
+    public boolean invokeAutoPopup(@NotNull PsiElement position, char typeChar) {
+        return typeChar == ':' || typeChar == '@';
+    }
 }

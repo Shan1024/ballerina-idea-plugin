@@ -2197,8 +2197,8 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!nextTokenIs(b, FOREVER)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, FOREVER_STATEMENT, null);
-    r = consumeTokens(b, 1, FOREVER, LEFT_BRACE);
-    p = r; // pin = 1
+    r = consumeTokens(b, 2, FOREVER, LEFT_BRACE);
+    p = r; // pin = 2
     r = r && report_error_(b, ForeverStatementBody(b, l + 1));
     r = p && consumeToken(b, RIGHT_BRACE) && r;
     exit_section_(b, l, m, r, p, null);
@@ -5114,6 +5114,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
 
   /* ********************************************************** */
   // WhileStatement
+  //     |   ForeverStatement
   //     |   NextStatement
   //     |   ForeachStatement
   //     |   matchStatement
@@ -5135,13 +5136,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   //     |   CompoundAssignmentStatement
   //     |   PostIncrementStatement
   //     |   VariableDefinitionStatement
-  // //    |   ForeverStatement
   //     |   StreamingQueryStatement
   public static boolean Statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Statement")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, STATEMENT, "<statement>");
     r = WhileStatement(b, l + 1);
+    if (!r) r = ForeverStatement(b, l + 1);
     if (!r) r = NextStatement(b, l + 1);
     if (!r) r = ForeachStatement(b, l + 1);
     if (!r) r = matchStatement(b, l + 1);

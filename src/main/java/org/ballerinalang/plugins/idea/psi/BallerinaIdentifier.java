@@ -24,7 +24,8 @@ import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.util.IncorrectOperationException;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaElementFactory;
-import org.ballerinalang.plugins.idea.psi.reference.BallerinaFunctionReference;
+import org.ballerinalang.plugins.idea.psi.reference.BallerinaNameReferenceReference;
+import org.ballerinalang.plugins.idea.psi.reference.BallerinaOrgReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,8 +55,12 @@ public class BallerinaIdentifier extends LeafPsiElement implements PsiNameIdenti
     @Override
     public PsiReference getReference() {
         // Note - Don't need to return references for definitions.
-        if (getParent() instanceof BallerinaNameReference) {
-            return new BallerinaFunctionReference(this);
+        PsiElement parent = getParent();
+        if (parent instanceof BallerinaNameReference) {
+            // Todo - Need to consider the parent type?
+            return new BallerinaNameReferenceReference(this);
+        } else if (parent instanceof BallerinaOrgName) {
+            return new BallerinaOrgReference(this);
         }
         return null;
     }

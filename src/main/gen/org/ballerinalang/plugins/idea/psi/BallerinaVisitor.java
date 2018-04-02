@@ -19,6 +19,7 @@ package org.ballerinalang.plugins.idea.psi;
 
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElementVisitor;
+import org.ballerinalang.plugins.idea.psi.impl.BallerinaTopLevelDefinition;
 
 public class BallerinaVisitor extends PsiElementVisitor {
 
@@ -44,6 +45,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
 
   public void visitAnnotationDefinition(@NotNull BallerinaAnnotationDefinition o) {
     visitNamedElement(o);
+    // visitTopLevelDefinition(o);
   }
 
   public void visitAnonStructTypeName(@NotNull BallerinaAnonStructTypeName o) {
@@ -184,6 +186,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
 
   public void visitConstantDefinition(@NotNull BallerinaConstantDefinition o) {
     visitNamedElement(o);
+    // visitTopLevelDefinition(o);
   }
 
   public void visitContent(@NotNull BallerinaContent o) {
@@ -216,6 +219,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
 
   public void visitEndpointDefinition(@NotNull BallerinaEndpointDefinition o) {
     visitNamedElement(o);
+    // visitTopLevelDefinition(o);
   }
 
   public void visitEndpointInitlization(@NotNull BallerinaEndpointInitlization o) {
@@ -232,6 +236,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
 
   public void visitEnumDefinition(@NotNull BallerinaEnumDefinition o) {
     visitNamedElement(o);
+    // visitTopLevelDefinition(o);
   }
 
   public void visitEnumerator(@NotNull BallerinaEnumerator o) {
@@ -296,6 +301,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
 
   public void visitFunctionDefinition(@NotNull BallerinaFunctionDefinition o) {
     visitNamedElement(o);
+    // visitTopLevelDefinition(o);
   }
 
   public void visitFunctionInvocation(@NotNull BallerinaFunctionInvocation o) {
@@ -316,10 +322,12 @@ public class BallerinaVisitor extends PsiElementVisitor {
 
   public void visitGlobalEndpointDefinition(@NotNull BallerinaGlobalEndpointDefinition o) {
     visitNamedElement(o);
+    // visitTopLevelDefinition(o);
   }
 
   public void visitGlobalVariableDefinition(@NotNull BallerinaGlobalVariableDefinition o) {
     visitNamedElement(o);
+    // visitTopLevelDefinition(o);
   }
 
   public void visitGroupByClause(@NotNull BallerinaGroupByClause o) {
@@ -725,6 +733,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
 
   public void visitStructDefinition(@NotNull BallerinaStructDefinition o) {
     visitNamedElement(o);
+    // visitTopLevelDefinition(o);
   }
 
   public void visitTableQuery(@NotNull BallerinaTableQuery o) {
@@ -777,6 +786,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
 
   public void visitTransformerDefinition(@NotNull BallerinaTransformerDefinition o) {
     visitNamedElement(o);
+    // visitTopLevelDefinition(o);
   }
 
   public void visitTriggerWorker(@NotNull BallerinaTriggerWorker o) {
@@ -885,6 +895,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
 
   public void visitWorkerDefinition(@NotNull BallerinaWorkerDefinition o) {
     visitNamedElement(o);
+    // visitTopLevelDefinition(o);
   }
 
   public void visitWorkerInteractionStatement(@NotNull BallerinaWorkerInteractionStatement o) {

@@ -23,16 +23,24 @@ import com.intellij.openapi.util.Iconable;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.impl.ElementBase;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.SearchScope;
 import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.ui.RowIcon;
 import com.intellij.usageView.UsageViewUtil;
 import com.intellij.util.IncorrectOperationException;
+import com.intellij.util.PlatformIcons;
+import org.ballerinalang.plugins.idea.BallerinaIcons;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompositeElement;
+import org.ballerinalang.plugins.idea.psi.BallerinaConstantDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
+import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaNamedElement;
+import org.ballerinalang.plugins.idea.psi.BallerinaStructDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypes;
 import org.ballerinalang.plugins.idea.stubs.BallerinaNamedStub;
@@ -141,11 +149,9 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
 
     @Override
     public ItemPresentation getPresentation() {
+        // Todo - Update presentation
         String text = UsageViewUtil.createNodeText(this);
         if (text != null) {
-            //            boolean vendoringEnabled = GoVendoringUtil.isVendoringEnabled(ModuleUtilCore
-            // .findModuleForPsiElement
-            //                    (getContainingFile()));
             return new ItemPresentation() {
                 @Nullable
                 @Override
@@ -153,7 +159,7 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
                     return getName();
                 }
 
-                @Nullable
+                @NotNull
                 @Override
                 public String getLocationString() {
                     BallerinaFile file = getContainingFile();
@@ -178,25 +184,32 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
     @Nullable
     @Override
     public Icon getIcon(int flags) {
+        // Todo - Add more icons
         Icon icon = null;
-        //        if (this instanceof GoMethodDeclaration) icon = GoIcons.METHOD;
-        //        else if (this instanceof GoFunctionDeclaration) icon = GoIcons.FUNCTION;
-        //        else if (this instanceof GoTypeSpec) icon = GoIcons.TYPE;
-        //        else if (this instanceof GoVarDefinition) icon = GoIcons.VARIABLE;
-        //        else if (this instanceof GoConstDefinition) icon = GoIcons.CONSTANT;
-        //        else if (this instanceof GoFieldDefinition) icon = GoIcons.FIELD;
-        //        else if (this instanceof GoMethodSpec) icon = GoIcons.METHOD;
-        //        else if (this instanceof GoAnonymousFieldDefinition) icon = GoIcons.FIELD;
-        //        else if (this instanceof GoParamDefinition) icon = GoIcons.PARAMETER;
-        //        else if (this instanceof GoLabelDefinition) icon = GoIcons.LABEL;
-        //        if (icon != null) {
-        //            if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {
-        //                RowIcon rowIcon = ElementBase.createLayeredIcon(this, icon, flags);
-        //                rowIcon.setIcon(isPublic() ? PlatformIcons.PUBLIC_ICON : PlatformIcons.PRIVATE_ICON, 1);
-        //                return rowIcon;
-        //            }
-        //            return icon;
-        //        }
+        if (this instanceof BallerinaFunctionDefinition) {
+            icon = BallerinaIcons.FUNCTION;
+        } else if (this instanceof BallerinaStructDefinition) {
+            icon = BallerinaIcons.STRUCT;
+        } else if (this instanceof BallerinaConstantDefinition) {
+            icon = BallerinaIcons.CONSTANT;
+        } else if (this instanceof BallerinaGlobalVariableDefinition) {
+            icon = BallerinaIcons.GLOBAL_VARIABLE;
+        }
+        //                else if (this instanceof GoVarDefinition) icon = GoIcons.VARIABLE;
+        //                else if (this instanceof GoConstDefinition) icon = GoIcons.CONSTANT;
+        //                else if (this instanceof GoFieldDefinition) icon = GoIcons.FIELD;
+        //                else if (this instanceof GoMethodSpec) icon = GoIcons.METHOD;
+        //                else if (this instanceof GoAnonymousFieldDefinition) icon = GoIcons.FIELD;
+        //                else if (this instanceof GoParamDefinition) icon = GoIcons.PARAMETER;
+        //                else if (this instanceof GoLabelDefinition) icon = GoIcons.LABEL;
+        if (icon != null) {
+            if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {
+                RowIcon rowIcon = ElementBase.createLayeredIcon(this, icon, flags);
+                rowIcon.setIcon(isPublic() ? PlatformIcons.PUBLIC_ICON : PlatformIcons.PRIVATE_ICON, 1);
+                return rowIcon;
+            }
+            return icon;
+        }
         return super.getIcon(flags);
     }
 

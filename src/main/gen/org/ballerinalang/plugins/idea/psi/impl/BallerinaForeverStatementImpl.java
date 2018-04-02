@@ -48,9 +48,9 @@ public class BallerinaForeverStatementImpl extends BallerinaCompositeElementImpl
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getLeftBrace() {
-    return findChildByType(LEFT_BRACE);
+    return notNullChild(findChildByType(LEFT_BRACE));
   }
 
   @Override

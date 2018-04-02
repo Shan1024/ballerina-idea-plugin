@@ -20,10 +20,11 @@ package org.ballerinalang.plugins.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import org.ballerinalang.plugins.idea.psi.impl.BallerinaTopLevelDefinition;
 import com.intellij.psi.StubBasedPsiElement;
 import org.ballerinalang.plugins.idea.stubs.BallerinaConstantDefinitionStub;
 
-public interface BallerinaConstantDefinition extends BallerinaNamedElement, StubBasedPsiElement<BallerinaConstantDefinitionStub> {
+public interface BallerinaConstantDefinition extends BallerinaNamedElement, BallerinaTopLevelDefinition, StubBasedPsiElement<BallerinaConstantDefinitionStub> {
 
   @Nullable
   BallerinaExpression getExpression();

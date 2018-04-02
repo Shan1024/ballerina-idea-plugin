@@ -79,6 +79,12 @@ public class BallerinaStatementImpl extends BallerinaCompositeElementImpl implem
 
   @Override
   @Nullable
+  public BallerinaForeverStatement getForeverStatement() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaForeverStatement.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaForkJoinStatement getForkJoinStatement() {
     return PsiTreeUtil.getChildOfType(this, BallerinaForkJoinStatement.class);
   }

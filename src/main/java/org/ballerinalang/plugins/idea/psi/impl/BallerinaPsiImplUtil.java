@@ -133,7 +133,7 @@ public class BallerinaPsiImplUtil {
     //    public static PsiReference getReference(@NotNull BallerinaNameReference ballerinaNameReference) {
     //        // Todo
     //        if (ballerinaNameReference.getParent() instanceof BallerinaFunctionInvocation) {
-    //            return new BallerinaFunctionReference(ballerinaNameReference.getIdentifier());
+    //            return new BallerinaNameReferenceReference(ballerinaNameReference.getIdentifier());
     //        }
     //        return new BallerinaReference(ballerinaNameReference);
     //    }

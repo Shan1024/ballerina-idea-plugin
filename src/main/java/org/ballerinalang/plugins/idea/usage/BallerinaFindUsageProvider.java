@@ -21,9 +21,13 @@ import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
+import org.ballerinalang.plugins.idea.psi.BallerinaConstantDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
+import org.ballerinalang.plugins.idea.psi.BallerinaOrgName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaStructDefinition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -116,8 +120,15 @@ public class BallerinaFindUsageProvider implements FindUsagesProvider {
             }
         } else if (parent instanceof BallerinaPackageReference) {
             return "Package";
+        } else if (parent instanceof BallerinaOrgName) {
+            return "Organization";
+        } else if (parent instanceof BallerinaConstantDefinition) {
+            return "Constant";
+        } else if (parent instanceof BallerinaGlobalVariableDefinition) {
+            return "Global Variable";
+        } else if (parent instanceof BallerinaStructDefinition) {
+            return "Struct";
         }
-
         return "";
     }
 
@@ -130,7 +141,6 @@ public class BallerinaFindUsageProvider implements FindUsagesProvider {
     @NotNull
     @Override
     public String getNodeText(@NotNull PsiElement element, boolean useFullName) {
-        String text = element.getText();
-        return text;
+        return element.getText();
     }
 }

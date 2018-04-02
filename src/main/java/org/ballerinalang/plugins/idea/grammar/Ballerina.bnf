@@ -122,12 +122,14 @@
     extends("(Simple|Array|Nullable|Union|Group|Tuple|Annotated|Object)TypeName|BinaryAndExpression") = TypeName
 
     // Each named definition which can be renamed should implement this interface.
-    implements("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+    implements("(Function|Struct|GlobalVariable|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+    // This is to identify top level elements in a file.
+    implements("(Function|Struct|GlobalVariable|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaTopLevelDefinition"
     // Each named definition should extend this class.
-    extends("(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
+    extends("(Function|Struct|GlobalVariable|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
 
     // Each stubbed element should have this element type factory.
-    elementTypeFactory("PackageDeclaration|(Function|Struct|GlobalVariable|Connector|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.stubs.factory.BallerinaElementTypeFactory.stubFactory"
+    elementTypeFactory("PackageDeclaration|(Function|Struct|GlobalVariable|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.stubs.factory.BallerinaElementTypeFactory.stubFactory"
 
     // Each stub which is not a named definition should extend this class.
     extends("PackageDeclaration") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaStubbedElementImpl<?>"
