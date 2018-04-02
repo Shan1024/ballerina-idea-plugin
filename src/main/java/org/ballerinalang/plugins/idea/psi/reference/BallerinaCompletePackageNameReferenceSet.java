@@ -33,6 +33,7 @@ import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import com.intellij.util.containers.ContainerUtil;
+import org.ballerinalang.plugins.idea.sdk.BallerinaSdkUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -44,13 +45,15 @@ public class BallerinaCompletePackageNameReferenceSet extends FileReferenceSet {
 
     public BallerinaCompletePackageNameReferenceSet(String str, @NotNull PsiElement element, int startInElement,
                                                     PsiReferenceProvider provider, boolean caseSensitive,
-                                                    boolean endingSlashNotAllowed, @Nullable FileType[] suitableFileTypes) {
+                                                    boolean endingSlashNotAllowed, @Nullable FileType[]
+                                                            suitableFileTypes) {
         super(str, element, startInElement, provider, caseSensitive, endingSlashNotAllowed, suitableFileTypes);
     }
 
     public BallerinaCompletePackageNameReferenceSet(String str, @NotNull PsiElement element, int startInElement,
                                                     PsiReferenceProvider provider, boolean caseSensitive,
-                                                    boolean endingSlashNotAllowed, @Nullable FileType[] suitableFileTypes,
+                                                    boolean endingSlashNotAllowed, @Nullable FileType[]
+                                                            suitableFileTypes,
                                                     boolean init) {
         super(str, element, startInElement, provider, caseSensitive, endingSlashNotAllowed, suitableFileTypes, init);
     }
@@ -60,7 +63,8 @@ public class BallerinaCompletePackageNameReferenceSet extends FileReferenceSet {
         super(str, element, startInElement, provider, isCaseSensitive);
     }
 
-    public BallerinaCompletePackageNameReferenceSet(@NotNull String str, @NotNull PsiElement element, int startInElement,
+    public BallerinaCompletePackageNameReferenceSet(@NotNull String str, @NotNull PsiElement element, int
+            startInElement,
                                                     PsiReferenceProvider provider, boolean isCaseSensitive,
                                                     boolean endingSlashNotAllowed) {
         super(str, element, startInElement, provider, isCaseSensitive, endingSlashNotAllowed);
@@ -70,9 +74,9 @@ public class BallerinaCompletePackageNameReferenceSet extends FileReferenceSet {
         super(element);
     }
 
-//    public String getSeparatorString() {
-//        return ".";
-//    }
+    //    public String getSeparatorString() {
+    //        return ".";
+    //    }
 
     @NotNull
     @Override
@@ -89,22 +93,27 @@ public class BallerinaCompletePackageNameReferenceSet extends FileReferenceSet {
         Module module = ModuleUtilCore.findModuleForPsiElement(file);
         Project project = file.getProject();
 
+        // Todo - Consider org name
+        // Add source roots in SDK.
+        LinkedHashSet<VirtualFile> sourceRoots = BallerinaSdkUtil.getSourcesPathsToLookup(project, module);
+        if (module != null) {
+            VirtualFile moduleFile = module.getModuleFile();
+            if (moduleFile != null) {
+                sourceRoots.add(moduleFile.getParent());
+            }
+        }
 
-        LinkedHashSet<VirtualFile> sourceRoots = new LinkedHashSet<>();
-        sourceRoots.add(module.getModuleFile().getParent());
-        // Todo - Add sdk and external
-        //BallerinaSdkUtil.getSourcesPathsToLookup(project, module);
-        // Todo - Consider org name.
         return ContainerUtil.mapNotNull(sourceRoots, psiManager::findDirectory);
     }
 
     @Override
     protected Condition<PsiFileSystemItem> getReferenceCompletionFilter() {
-        //        if (!isRelativeImport()) {
-        // Note - This will disable suggestions since it will contain files as well.
-        return Conditions.alwaysFalse();
-        //        }
-        //        return super.getReferenceCompletionFilter();
+        return psiFileSystemItem -> psiFileSystemItem.isDirectory() && !psiFileSystemItem.getName().startsWith(".");
+        //        //        if (!isRelativeImport()) {
+        //        // Note - This will disable suggestions since it will contain files as well.
+        //        return Conditions.alwaysFalse();
+        //        //        }
+        //        //        return super.getReferenceCompletionFilter();
     }
 
     public boolean absoluteUrlNeedsStartSlash() {

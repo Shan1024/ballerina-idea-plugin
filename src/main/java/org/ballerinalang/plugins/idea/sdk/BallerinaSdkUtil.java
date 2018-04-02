@@ -171,11 +171,11 @@ public class BallerinaSdkUtil {
 
     public static LinkedHashSet<VirtualFile> getSourcesPathsToLookup(@NotNull Project project, @Nullable Module
             module) {
-        LinkedHashSet<VirtualFile> sdkAndGoPath = newLinkedHashSet();
-        ContainerUtil.addIfNotNull(sdkAndGoPath, getSdkSrcDir(project, module));
+        LinkedHashSet<VirtualFile> sdkAndBallerinaPath = newLinkedHashSet();
+        ContainerUtil.addIfNotNull(sdkAndBallerinaPath, getSdkSrcDir(project, module));
         // Todo  - add Ballerina Path
-        //        ContainerUtil.addAllNotNull(sdkAndGoPath, getBallerinaPathSources(project, module));
-        return sdkAndGoPath;
+        //        ContainerUtil.addAllNotNull(sdkAndBallerinaPath, getBallerinaPathSources(project, module));
+        return sdkAndBallerinaPath;
     }
 
     @NotNull

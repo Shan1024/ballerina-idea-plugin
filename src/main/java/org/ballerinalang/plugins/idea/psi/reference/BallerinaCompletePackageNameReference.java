@@ -137,20 +137,21 @@ public class BallerinaCompletePackageNameReference extends FileReference {
     @Override
     public Object[] getVariants() {
 
-        LinkedList<LookupElement> results = new LinkedList<>();
-
-        Collection<PsiFileSystemItem> contexts = getContexts();
-
-        for (PsiFileSystemItem context : contexts) {
-            PsiElement[] children = context.getChildren();
-            for (PsiElement child : children) {
-                if (!(child instanceof PsiDirectory) || ((PsiDirectory) child).getName().matches(PACKAGE_VERSION_REGEX)) {
-                    continue;
-                }
-                results.add(BallerinaCompletionUtil.createPackageLookupElement((PsiDirectory) child));
-            }
-        }
-
-        return results.toArray(new LookupElement[results.size()]);
+       return super.getVariants();
+//        LinkedList<LookupElement> results = new LinkedList<>();
+//
+//        Collection<PsiFileSystemItem> contexts = getContexts();
+//
+//        for (PsiFileSystemItem context : contexts) {
+//            PsiElement[] children = context.getChildren();
+//            for (PsiElement child : children) {
+//                if (!(child instanceof PsiDirectory) || ((PsiDirectory) child).getName().matches(PACKAGE_VERSION_REGEX)) {
+//                    continue;
+//                }
+//                results.add(BallerinaCompletionUtil.createPackageLookupElement((PsiDirectory) child));
+//            }
+//        }
+//
+//        return results.toArray(new LookupElement[results.size()]);
     }
 }
