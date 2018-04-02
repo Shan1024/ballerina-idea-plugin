@@ -34,6 +34,7 @@ public class BallerinaConstants {
     public static final String MAIN = "main";
     public static final String PATH = "PATH";
     public static final String MODULE_TYPE_ID = "BALLERINA_MODULE";
+    public static final String BALLERINA_ORG_NAME = "ballerina";
 
     @NonNls
     public static final String BALLERINA_EXECUTABLE_NAME = "ballerina";

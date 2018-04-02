@@ -22,7 +22,6 @@ import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
-import com.intellij.openapi.util.Conditions;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiElement;
@@ -32,7 +31,11 @@ import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
+import org.ballerinalang.plugins.idea.BallerinaConstants;
+import org.ballerinalang.plugins.idea.psi.BallerinaImportDeclaration;
+import org.ballerinalang.plugins.idea.psi.BallerinaOrgName;
 import org.ballerinalang.plugins.idea.sdk.BallerinaSdkUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -93,16 +96,27 @@ public class BallerinaCompletePackageNameReferenceSet extends FileReferenceSet {
         Module module = ModuleUtilCore.findModuleForPsiElement(file);
         Project project = file.getProject();
 
-        // Todo - Consider org name
-        // Add source roots in SDK.
-        LinkedHashSet<VirtualFile> sourceRoots = BallerinaSdkUtil.getSourcesPathsToLookup(project, module);
-        if (module != null) {
-            VirtualFile moduleFile = module.getModuleFile();
-            if (moduleFile != null) {
-                sourceRoots.add(moduleFile.getParent());
+        LinkedHashSet<VirtualFile> sourceRoots = new LinkedHashSet<>();
+        PsiElement element = getElement();
+        BallerinaImportDeclaration ballerinaImportDeclaration = PsiTreeUtil.getParentOfType(element,
+                BallerinaImportDeclaration.class);
+        if (ballerinaImportDeclaration != null) {
+            BallerinaOrgName ballerinaOrgName = PsiTreeUtil.getChildOfType(ballerinaImportDeclaration,
+                    BallerinaOrgName.class);
+            if (ballerinaOrgName == null) {
+                if (module != null) {
+                    VirtualFile moduleFile = module.getModuleFile();
+                    if (moduleFile != null) {
+                        sourceRoots.add(moduleFile.getParent());
+                    }
+                }
+            } else if (BallerinaConstants.BALLERINA_ORG_NAME.equals(ballerinaOrgName.getText())) {
+                // Add source roots in SDK.
+                sourceRoots.addAll(BallerinaSdkUtil.getSourcesPathsToLookup(project, module));
+            } else {
+                // Todo - Add Ballerina user repository.
             }
         }
-
         return ContainerUtil.mapNotNull(sourceRoots, psiManager::findDirectory);
     }
 
