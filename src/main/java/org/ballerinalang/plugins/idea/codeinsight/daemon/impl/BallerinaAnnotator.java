@@ -31,6 +31,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypes;
+import org.ballerinalang.plugins.idea.psi.BallerinaXmlItem;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -54,10 +55,12 @@ public class BallerinaAnnotator implements Annotator {
                     Annotation annotation = holder.createInfoAnnotation(element, null);
                     annotation.setTextAttributes(BallerinaSyntaxHighlightingColors.ANNOTATION);
                 }
-            } else if (elementType == BallerinaTypes.STRING_TEMPLATE_LITERAL_START) {
+            } else if (elementType == BallerinaTypes.STRING_TEMPLATE_LITERAL_START
+                    || elementType == BallerinaTypes.XML_LITERAL_START) {
                 annotateKeyword(element, holder);
-                annotateStringTemplateStart(element, holder);
-            } else if (elementType == BallerinaTypes.STRING_TEMPLATE_LITERAL_END) {
+                annotateTemplateStart(element, holder);
+            } else if (elementType == BallerinaTypes.STRING_TEMPLATE_LITERAL_END
+                    || elementType == BallerinaTypes.XML_LITERAL_END) {
                 annotateText(element, holder);
             } else if (elementType == BallerinaTypes.STRING_TEMPLATE_TEXT) {
                 annotateText(element, holder);
@@ -122,6 +125,9 @@ public class BallerinaAnnotator implements Annotator {
         } else if (element instanceof BallerinaCompletePackageName) {
             Annotation annotation = holder.createInfoAnnotation(element, null);
             annotation.setTextAttributes(BallerinaSyntaxHighlightingColors.PACKAGE);
+        } else if (element instanceof BallerinaXmlItem) {
+            Annotation annotation = holder.createInfoAnnotation(element, null);
+            annotation.setTextAttributes(BallerinaSyntaxHighlightingColors.STRING);
         }
 
         //        if (element instanceof AnnotationReferenceNode) {
@@ -161,7 +167,7 @@ public class BallerinaAnnotator implements Annotator {
     }
 
 
-    private void annotateStringTemplateStart(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
+    private void annotateTemplateStart(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
         TextRange textRange = element.getTextRange();
         TextRange newTextRange = new TextRange(textRange.getEndOffset() - 1, textRange.getEndOffset());
         Annotation annotation = holder.createInfoAnnotation(newTextRange, null);
