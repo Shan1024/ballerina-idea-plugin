@@ -39,4 +39,7 @@ public class BallerinaSyntaxHighlightingColors {
             DefaultLanguageHighlighterColors.METADATA);
     public static final TextAttributesKey PACKAGE = createTextAttributesKey("BALLERINA_PACKAGE",
             DefaultLanguageHighlighterColors.FUNCTION_DECLARATION);
+    public static final TextAttributesKey TEMPLATE_LANGUAGE_COLOR = createTextAttributesKey
+            ("BALLERINA_TEMPLATE_LANGUAGE_COLOR", DefaultLanguageHighlighterColors.INSTANCE_METHOD);
+
 }
