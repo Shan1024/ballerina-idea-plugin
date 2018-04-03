@@ -133,6 +133,12 @@ public class BallerinaStatementImpl extends BallerinaCompositeElementImpl implem
 
   @Override
   @Nullable
+  public BallerinaTableLiteralExpression getTableLiteralExpression() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaTableLiteralExpression.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaThrowStatement getThrowStatement() {
     return PsiTreeUtil.getChildOfType(this, BallerinaThrowStatement.class);
   }

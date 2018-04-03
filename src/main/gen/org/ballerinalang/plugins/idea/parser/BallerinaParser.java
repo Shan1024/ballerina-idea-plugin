@@ -495,6 +495,15 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == STRUCT_DEFINITION) {
       r = StructDefinition(b, 0);
     }
+    else if (t == TABLE_INITIALIZATION) {
+      r = TableInitialization(b, 0);
+    }
+    else if (t == TABLE_LITERAL) {
+      r = TableLiteral(b, 0);
+    }
+    else if (t == TABLE_LITERAL_EXPRESSION) {
+      r = TableLiteralExpression(b, 0);
+    }
     else if (t == TABLE_QUERY) {
       r = TableQuery(b, 0);
     }
@@ -5173,6 +5182,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   //     |   PostIncrementStatement
   //     |   VariableDefinitionStatement
   //     |   StreamingQueryStatement
+  //     |   TableLiteralExpression
   public static boolean Statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Statement")) return false;
     boolean r;
@@ -5201,6 +5211,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = PostIncrementStatement(b, l + 1);
     if (!r) r = VariableDefinitionStatement(b, l + 1);
     if (!r) r = StreamingQueryStatement(b, l + 1);
+    if (!r) r = TableLiteralExpression(b, l + 1);
     exit_section_(b, l, m, r, false, StatementRecover_parser_);
     return r;
   }
@@ -5604,6 +5615,43 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "StructDefinition_0")) return false;
     consumeToken(b, PUBLIC);
     return true;
+  }
+
+  /* ********************************************************** */
+  // RecordLiteral
+  public static boolean TableInitialization(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TableInitialization")) return false;
+    if (!nextTokenIs(b, LEFT_BRACE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = RecordLiteral(b, l + 1);
+    exit_section_(b, m, TABLE_INITIALIZATION, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // table TableInitialization
+  public static boolean TableLiteral(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TableLiteral")) return false;
+    if (!nextTokenIs(b, TABLE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, TABLE);
+    r = r && TableInitialization(b, l + 1);
+    exit_section_(b, m, TABLE_LITERAL, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // TableLiteral
+  public static boolean TableLiteralExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TableLiteralExpression")) return false;
+    if (!nextTokenIs(b, TABLE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = TableLiteral(b, l + 1);
+    exit_section_(b, m, TABLE_LITERAL_EXPRESSION, r);
+    return r;
   }
 
   /* ********************************************************** */

@@ -226,6 +226,9 @@ public interface BallerinaTypes {
   IElementType STRING_TEMPLATE_LITERAL_EXPRESSION = new BallerinaCompositeElementType("STRING_TEMPLATE_LITERAL_EXPRESSION");
   IElementType STRUCT_BODY = new BallerinaCompositeElementType("STRUCT_BODY");
   IElementType STRUCT_DEFINITION = BallerinaElementTypeFactory.stubFactory("STRUCT_DEFINITION");
+  IElementType TABLE_INITIALIZATION = new BallerinaCompositeElementType("TABLE_INITIALIZATION");
+  IElementType TABLE_LITERAL = new BallerinaCompositeElementType("TABLE_LITERAL");
+  IElementType TABLE_LITERAL_EXPRESSION = new BallerinaCompositeElementType("TABLE_LITERAL_EXPRESSION");
   IElementType TABLE_QUERY = new BallerinaCompositeElementType("TABLE_QUERY");
   IElementType TABLE_QUERY_EXPRESSION = new BallerinaCompositeElementType("TABLE_QUERY_EXPRESSION");
   IElementType TABLE_TYPE_NAME = new BallerinaCompositeElementType("TABLE_TYPE_NAME");
@@ -1105,6 +1108,15 @@ public interface BallerinaTypes {
       }
       else if (type == STRUCT_DEFINITION) {
         return new BallerinaStructDefinitionImpl(node);
+      }
+      else if (type == TABLE_INITIALIZATION) {
+        return new BallerinaTableInitializationImpl(node);
+      }
+      else if (type == TABLE_LITERAL) {
+        return new BallerinaTableLiteralImpl(node);
+      }
+      else if (type == TABLE_LITERAL_EXPRESSION) {
+        return new BallerinaTableLiteralExpressionImpl(node);
       }
       else if (type == TABLE_QUERY) {
         return new BallerinaTableQueryImpl(node);

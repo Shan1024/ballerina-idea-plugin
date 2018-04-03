@@ -756,6 +756,18 @@ public class BallerinaVisitor extends PsiElementVisitor {
     // visitTopLevelDefinition(o);
   }
 
+  public void visitTableInitialization(@NotNull BallerinaTableInitialization o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitTableLiteral(@NotNull BallerinaTableLiteral o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitTableLiteralExpression(@NotNull BallerinaTableLiteralExpression o) {
+    visitCompositeElement(o);
+  }
+
   public void visitTableQuery(@NotNull BallerinaTableQuery o) {
     visitCompositeElement(o);
   }
