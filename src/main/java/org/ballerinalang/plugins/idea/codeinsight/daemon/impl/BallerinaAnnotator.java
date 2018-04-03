@@ -64,7 +64,13 @@ public class BallerinaAnnotator implements Annotator {
                 annotateText(element, holder);
             } else if (elementType == BallerinaTypes.STRING_TEMPLATE_TEXT) {
                 annotateText(element, holder);
-            } else if (elementType == BallerinaTypes.STRING_TEMPLATE_EXPRESSION_START) {
+            } else if (elementType == BallerinaTypes.STRING_TEMPLATE_EXPRESSION_START
+                    || elementType == BallerinaTypes.XML_TEMPLATE_TEXT
+                    || elementType == BallerinaTypes.XML_TAG_EXPRESSION_START
+                    || elementType == BallerinaTypes.XML_SINGLE_QUOTED_TEMPLATE_STRING
+                    || elementType == BallerinaTypes.XML_DOUBLE_QUOTED_TEMPLATE_STRING
+                    || elementType == BallerinaTypes.XML_PI_TEMPLATE_TEXT
+                    || elementType == BallerinaTypes.XML_COMMENT_TEMPLATE_TEXT) {
                 annotateExpressionTemplateStart(element, holder);
             } else if (elementType == BallerinaTypes.EXPRESSION_END) {
                 annotateStringLiteralTemplateEnd(element, holder);
