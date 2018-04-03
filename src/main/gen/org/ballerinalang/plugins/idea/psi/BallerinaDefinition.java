@@ -51,9 +51,6 @@ public interface BallerinaDefinition extends BallerinaCompositeElement {
   BallerinaStructDefinition getStructDefinition();
 
   @Nullable
-  BallerinaTransformerDefinition getTransformerDefinition();
-
-  @Nullable
   BallerinaTypeDefinition getTypeDefinition();
 
   @Nullable

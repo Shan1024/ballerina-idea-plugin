@@ -21,24 +21,18 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaObjectFieldDefinition extends BallerinaCompositeElement {
+public interface BallerinaMatchExpressionPatternClause extends BallerinaCompositeElement {
 
-  @Nullable
-  BallerinaSimpleLiteral getSimpleLiteral();
+  @NotNull
+  BallerinaExpression getExpression();
 
   @NotNull
   BallerinaTypeName getTypeName();
 
-  @Nullable
-  PsiElement getAssign();
-
-  @Nullable
-  PsiElement getComma();
-
-  @Nullable
-  PsiElement getSemicolon();
-
   @NotNull
+  PsiElement getEqualGt();
+
+  @Nullable
   PsiElement getIdentifier();
 
 }

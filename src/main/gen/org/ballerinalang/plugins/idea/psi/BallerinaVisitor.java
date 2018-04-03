@@ -164,6 +164,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitCheckedExpression(@NotNull BallerinaCheckedExpression o) {
+    visitExpression(o);
+  }
+
   public void visitCloseTag(@NotNull BallerinaCloseTag o) {
     visitCompositeElement(o);
   }
@@ -214,6 +218,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitEmptyTag(@NotNull BallerinaEmptyTag o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitEmptyTupleLiteral(@NotNull BallerinaEmptyTupleLiteral o) {
     visitCompositeElement(o);
   }
 
@@ -414,6 +422,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
+  public void visitLambdaReturnParameter(@NotNull BallerinaLambdaReturnParameter o) {
+    visitCompositeElement(o);
+  }
+
   public void visitLockStatement(@NotNull BallerinaLockStatement o) {
     visitCompositeElement(o);
   }
@@ -423,6 +435,14 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitMapTypeName(@NotNull BallerinaMapTypeName o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitMatchExprExpression(@NotNull BallerinaMatchExprExpression o) {
+    visitExpression(o);
+  }
+
+  public void visitMatchExpressionPatternClause(@NotNull BallerinaMatchExpressionPatternClause o) {
     visitCompositeElement(o);
   }
 
@@ -1003,6 +1023,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitFailStatement(@NotNull BallerinaFailStatement o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitMatchExpression(@NotNull BallerinaMatchExpression o) {
     visitCompositeElement(o);
   }
 

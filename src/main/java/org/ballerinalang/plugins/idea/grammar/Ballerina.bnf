@@ -114,7 +114,7 @@
 
     extends("(FunctionInvocation|SimpleVariable|MapArrayVariable|FieldVariable|XmlAttribVariable|Invocation|AwaitExpression)Reference") = VariableReference
 
-    extends("((Simple|Array|Record|Xml|StringTemplate)Literal|(ValueType|BuiltInReferenceType)Type|VariableReference|LambdaFunction|TypeInit|Type(Casting|Conversion|Access)|BracedOrTuple|Await|TableQuery)Expression") = Expression
+    extends("((Simple|Array|Record|Xml|StringTemplate)Literal|(ValueType|BuiltInReferenceType)Type|VariableReference|LambdaFunction|TypeInit|Type(Casting|Conversion|Access)|BracedOrTuple|Await|TableQuery|MatchExpr|Checked)Expression") = Expression
     extends("(Unary|Binary|Ternary)Expression") = Expression
 
     extends("Binary(Pow|DivMulMod|AddSub|Compare|Equal|And|Or)Expression") = BinaryExpression
@@ -193,7 +193,6 @@ Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachme
                | FunctionDefinition
                | EnumDefinition
                | AnnotationDefinition
-               | TransformerDefinition
                | ConstantDefinition
                | GlobalEndpointDefinition
                ) {
@@ -229,7 +228,7 @@ FunctionDefinition ::= FunctionWithReceiver | FunctionWithoutReceiver {
 private FunctionWithReceiver ::= (public)? (native)? function (LT Parameter GT)? CallableUnitSignature (CallableUnitBody | SEMICOLON) {pin=3}
 private FunctionWithoutReceiver ::= (public)? (native)? function identifier DOUBLE_COLON CallableUnitSignature CallableUnitBody {pin=3}
 
-LambdaFunction ::= function LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS ReturnParameter? CallableUnitBody {pin=1}
+LambdaFunction ::= function LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS EQUAL_GT LambdaReturnParameter? CallableUnitBody {pin=1}
 
 // Todo - cache and add Signature owner?
 CallableUnitSignature ::= identifier LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS ReturnParameter? {pin=1}
@@ -260,7 +259,7 @@ ObjectInitializerParameterList ::= LEFT_PARENTHESIS ObjectParameterList? RIGHT_P
 ObjectFunctions ::= (AnnotationAttachment* documentationAttachment? deprecatedAttachment? ObjectFunctionDefinition)+
 
 // TODO merge with fieldDefinition later
-ObjectFieldDefinition ::= TypeName identifier (COLON SimpleLiteral)? (COMMA | SEMICOLON)
+ObjectFieldDefinition ::= TypeName identifier (ASSIGN SimpleLiteral)? (COMMA | SEMICOLON)
 
 // TODO try to merge with formalParameterList later
 ObjectParameterList ::= (ObjectDefaultableParameter | ObjectParameter) (COMMA (ObjectDefaultableParameter | ObjectParameter))* (COMMA RestParameter)? | RestParameter
@@ -270,7 +269,7 @@ ObjectParameterList ::= (ObjectDefaultableParameter | ObjectParameter) (COMMA (O
 ObjectParameter ::= AnnotationAttachment* (identifier | TypeName identifier)
 
 // TODO try to merge with defaultable Parameter later
-ObjectDefaultableParameter ::= ObjectParameter COLON Expression
+ObjectDefaultableParameter ::= ObjectParameter ASSIGN Expression
 
 // TODO merge with functionDefinition later
 ObjectFunctionDefinition ::= (public)? (native)? function ObjectCallableUnitSignature (CallableUnitBody | SEMICOLON)
@@ -303,6 +302,7 @@ GlobalVariableDefinition ::= (public)? TypeName identifier ((ASSIGN | SAFE_ASSIG
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaGlobalVariableDefinitionStub"
 }
 
+// Todo - Remove
 TransformerDefinition ::= (public)? transformer LT ParameterList GT (identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS)? CallableUnitBody {
     pin=2
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaTransformerDefinitionStub"
@@ -310,7 +310,7 @@ TransformerDefinition ::= (public)? transformer LT ParameterList GT (identifier 
 
 // Todo - Need to update the service?
 // Note - "parameter" is treated differently here because there is a parser rule named "parameter" as well.
-AttachmentPoint ::= service | resource | function | struct | enum | endpoint | const | TYPE_PARAMETER | annotation | transformer {
+AttachmentPoint ::= service | resource | function | struct | enum | endpoint | const | TYPE_PARAMETER | annotation {
     /*recoverWhile=AttachmentPointRecover*/
 }
 
@@ -358,12 +358,13 @@ SimpleTypeName ::= NULL_LITERAL
                    | TypeDescTypeName
                    | ValueTypeName
                    | ReferenceTypeName
+                   | EmptyTupleLiteral
 AnyTypeName ::= any
 TypeDescTypeName ::= typedesc
 
 //AnnotatedTypeName ::= AnnotationAttachment+ SimpleTypeName
 ArrayTypeName ::= TypeName (LEFT_BRACKET RIGHT_BRACKET)+
-NullableTypeName ::= TypeName PIPE NULL_LITERAL
+NullableTypeName ::= TypeName QUESTION_MARK
 UnionTypeName ::= TypeName (PIPE TypeName)+
 GroupTypeName ::= LEFT_PARENTHESIS TypeName RIGHT_PARENTHESIS
 TupleTypeName ::= LEFT_PARENTHESIS TypeName (COMMA TypeName)* RIGHT_PARENTHESIS
@@ -494,8 +495,8 @@ matchStatementBody ::= LEFT_BRACE matchPatternClause+ RIGHT_BRACE
 
 // Todo - Add fake rule
 matchPatternClause ::= namedPattern | unnamedPattern
-unnamedPattern ::= TypeName EQUAL_GT (LEFT_BRACE NonEmptyBlock RIGHT_BRACE | Statement) {pin=2}
-namedPattern ::= TypeName identifier EQUAL_GT (LEFT_BRACE NonEmptyBlock RIGHT_BRACE | Statement) {pin=3}
+unnamedPattern ::= TypeName EQUAL_GT (LEFT_BRACE Block RIGHT_BRACE | Statement) {pin=2}
+namedPattern ::= TypeName identifier EQUAL_GT (LEFT_BRACE Block RIGHT_BRACE | Statement) {pin=3}
 
 ForeachStatement ::= foreach LEFT_PARENTHESIS? VariableReferenceList in (Expression | IntRangeExpression) RIGHT_PARENTHESIS? LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
@@ -538,7 +539,7 @@ FinallyClause ::= finally LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
 ThrowStatement ::= throw Expression SEMICOLON {pin=1}
 
-ReturnStatement ::= return ExpressionList? SEMICOLON {pin=1}
+ReturnStatement ::= return Expression? SEMICOLON {pin=1}
 
 WorkerInteractionStatement ::= TriggerWorker | WorkerReply
 
@@ -650,13 +651,15 @@ Expression
     |   BinaryAndExpression
     |   BinaryOrExpression
     |   TableQueryExpression
+    |   MatchExprExpression
+    |   CheckedExpression
     |   AwaitExpression {
     recoverWhile=ExpressionRecover
 }
 
 TableQueryExpression ::= TableQuery
 
-private ExpressionRecover ::= !(NULL_LITERAL|int|string|float|boolean|blob|any|map|table|function|stream|'}'|';'|var |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|if|forever)
+private ExpressionRecover ::= !(NULL_LITERAL|int|string|float|boolean|blob|any|map|table|function|stream|'}'|';'|var |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|but|if|forever|check)
 
 fake BinaryExpression ::= Expression {
   methods=[left="Expression[0]" right="Expression[1]" getOperator]
@@ -686,6 +689,13 @@ BinaryAndExpression ::= Expression AND Expression
 BinaryOrExpression ::= Expression OR Expression
 TernaryExpression ::= Expression QUESTION_MARK Expression COLON Expression {pin=2}
 AwaitExpression ::= await Expression
+MatchExprExpression ::= Expression matchExpression
+CheckedExpression ::= check Expression
+
+matchExpression ::= but LEFT_BRACE MatchExpressionPatternClause (COMMA MatchExpressionPatternClause)* RIGHT_BRACE
+
+MatchExpressionPatternClause ::= TypeName identifier? EQUAL_GT Expression
+
 //reusable productions
 
 NameReference ::= <<isPackageExpected>> PackageReference identifier | identifier {
@@ -703,6 +713,8 @@ PackageReference ::= identifier COLON {
 
 ReturnParameter ::= returns ReturnType {pin=1}
 ReturnType ::= AnnotationAttachment* TypeName
+
+LambdaReturnParameter ::= AnnotationAttachment* TypeName
 
 ParameterTypeNameList ::= parameterTypeName (COMMA parameterTypeName)* {pin=1 /*recoverWhile=RecoverParameter*/}
 
@@ -733,10 +745,13 @@ SimpleLiteral ::= (ADD|SUB)? IntegerLiteral
                   | (ADD|SUB)? FLOATING_POINT_LITERAL
                   | QUOTED_STRING_LITERAL
                   | BOOLEAN_LITERAL
+                  | EmptyTupleLiteral
                   | NULL_LITERAL
 
 // §3.10.1 Integer Literals
 IntegerLiteral ::= DECIMAL_INTEGER_LITERAL | HEX_INTEGER_LITERAL | OCTAL_INTEGER_LITERAL | BINARY_INTEGER_LITERAL
+
+EmptyTupleLiteral ::= LEFT_PARENTHESIS RIGHT_PARENTHESIS
 
 NamedArgs ::= identifier ASSIGN Expression {pin=2}
 

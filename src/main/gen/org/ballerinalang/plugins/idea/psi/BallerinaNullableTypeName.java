@@ -27,9 +27,6 @@ public interface BallerinaNullableTypeName extends BallerinaTypeName {
   BallerinaTypeName getTypeName();
 
   @NotNull
-  PsiElement getNullLiteral();
-
-  @NotNull
-  PsiElement getPipe();
+  PsiElement getQuestionMark();
 
 }

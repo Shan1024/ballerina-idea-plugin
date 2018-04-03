@@ -59,6 +59,7 @@ public interface BallerinaTypes {
   IElementType CALLABLE_UNIT_SIGNATURE = new BallerinaCompositeElementType("CALLABLE_UNIT_SIGNATURE");
   IElementType CATCH_CLAUSE = new BallerinaCompositeElementType("CATCH_CLAUSE");
   IElementType CATCH_CLAUSES = new BallerinaCompositeElementType("CATCH_CLAUSES");
+  IElementType CHECKED_EXPRESSION = new BallerinaCompositeElementType("CHECKED_EXPRESSION");
   IElementType CLOSE_TAG = new BallerinaCompositeElementType("CLOSE_TAG");
   IElementType COMMENT = new BallerinaCompositeElementType("COMMENT");
   IElementType COMPLETE_PACKAGE_NAME = new BallerinaCompositeElementType("COMPLETE_PACKAGE_NAME");
@@ -82,6 +83,7 @@ public interface BallerinaTypes {
   IElementType ELSE_CLAUSE = new BallerinaCompositeElementType("ELSE_CLAUSE");
   IElementType ELSE_IF_CLAUSE = new BallerinaCompositeElementType("ELSE_IF_CLAUSE");
   IElementType EMPTY_TAG = new BallerinaCompositeElementType("EMPTY_TAG");
+  IElementType EMPTY_TUPLE_LITERAL = new BallerinaCompositeElementType("EMPTY_TUPLE_LITERAL");
   IElementType ENDPOINT_DEFINITION = BallerinaElementTypeFactory.stubFactory("ENDPOINT_DEFINITION");
   IElementType ENDPOINT_INITLIZATION = new BallerinaCompositeElementType("ENDPOINT_INITLIZATION");
   IElementType ENDPOINT_PARAMETER = new BallerinaCompositeElementType("ENDPOINT_PARAMETER");
@@ -132,9 +134,13 @@ public interface BallerinaTypes {
   IElementType JSON_TYPE_NAME = new BallerinaCompositeElementType("JSON_TYPE_NAME");
   IElementType LAMBDA_FUNCTION = new BallerinaCompositeElementType("LAMBDA_FUNCTION");
   IElementType LAMBDA_FUNCTION_EXPRESSION = new BallerinaCompositeElementType("LAMBDA_FUNCTION_EXPRESSION");
+  IElementType LAMBDA_RETURN_PARAMETER = new BallerinaCompositeElementType("LAMBDA_RETURN_PARAMETER");
   IElementType LOCK_STATEMENT = new BallerinaCompositeElementType("LOCK_STATEMENT");
   IElementType MAP_ARRAY_VARIABLE_REFERENCE = new BallerinaCompositeElementType("MAP_ARRAY_VARIABLE_REFERENCE");
   IElementType MAP_TYPE_NAME = new BallerinaCompositeElementType("MAP_TYPE_NAME");
+  IElementType MATCH_EXPRESSION = new BallerinaCompositeElementType("MATCH_EXPRESSION");
+  IElementType MATCH_EXPRESSION_PATTERN_CLAUSE = new BallerinaCompositeElementType("MATCH_EXPRESSION_PATTERN_CLAUSE");
+  IElementType MATCH_EXPR_EXPRESSION = new BallerinaCompositeElementType("MATCH_EXPR_EXPRESSION");
   IElementType MATCH_PATTERN_CLAUSE = new BallerinaCompositeElementType("MATCH_PATTERN_CLAUSE");
   IElementType MATCH_STATEMENT = new BallerinaCompositeElementType("MATCH_STATEMENT");
   IElementType MATCH_STATEMENT_BODY = new BallerinaCompositeElementType("MATCH_STATEMENT_BODY");
@@ -298,9 +304,11 @@ public interface BallerinaTypes {
   IElementType BOOLEAN = new BallerinaTokenType("boolean");
   IElementType BOOLEAN_LITERAL = new BallerinaTokenType("BOOLEAN_LITERAL");
   IElementType BREAK = new BallerinaTokenType("break");
+  IElementType BUT = new BallerinaTokenType("but");
   IElementType BY = new BallerinaTokenType("by");
   IElementType CATCH = new BallerinaTokenType("catch");
   IElementType CDATA = new BallerinaTokenType("cdata");
+  IElementType CHECK = new BallerinaTokenType("check");
   IElementType COLON = new BallerinaTokenType(":");
   IElementType COMMA = new BallerinaTokenType(",");
   IElementType COMPOUND_ADD = new BallerinaTokenType("+=");
@@ -597,6 +605,9 @@ public interface BallerinaTypes {
       else if (type == CATCH_CLAUSES) {
         return new BallerinaCatchClausesImpl(node);
       }
+      else if (type == CHECKED_EXPRESSION) {
+        return new BallerinaCheckedExpressionImpl(node);
+      }
       else if (type == CLOSE_TAG) {
         return new BallerinaCloseTagImpl(node);
       }
@@ -665,6 +676,9 @@ public interface BallerinaTypes {
       }
       else if (type == EMPTY_TAG) {
         return new BallerinaEmptyTagImpl(node);
+      }
+      else if (type == EMPTY_TUPLE_LITERAL) {
+        return new BallerinaEmptyTupleLiteralImpl(node);
       }
       else if (type == ENDPOINT_DEFINITION) {
         return new BallerinaEndpointDefinitionImpl(node);
@@ -816,6 +830,9 @@ public interface BallerinaTypes {
       else if (type == LAMBDA_FUNCTION_EXPRESSION) {
         return new BallerinaLambdaFunctionExpressionImpl(node);
       }
+      else if (type == LAMBDA_RETURN_PARAMETER) {
+        return new BallerinaLambdaReturnParameterImpl(node);
+      }
       else if (type == LOCK_STATEMENT) {
         return new BallerinaLockStatementImpl(node);
       }
@@ -824,6 +841,15 @@ public interface BallerinaTypes {
       }
       else if (type == MAP_TYPE_NAME) {
         return new BallerinaMapTypeNameImpl(node);
+      }
+      else if (type == MATCH_EXPRESSION) {
+        return new BallerinaMatchExpressionImpl(node);
+      }
+      else if (type == MATCH_EXPRESSION_PATTERN_CLAUSE) {
+        return new BallerinaMatchExpressionPatternClauseImpl(node);
+      }
+      else if (type == MATCH_EXPR_EXPRESSION) {
+        return new BallerinaMatchExprExpressionImpl(node);
       }
       else if (type == MATCH_PATTERN_CLAUSE) {
         return new BallerinaMatchPatternClauseImpl(node);

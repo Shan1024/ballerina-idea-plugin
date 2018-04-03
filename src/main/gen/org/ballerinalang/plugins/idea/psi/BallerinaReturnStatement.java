@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaReturnStatement extends BallerinaCompositeElement {
 
   @Nullable
-  BallerinaExpressionList getExpressionList();
+  BallerinaExpression getExpression();
 
   @Nullable
   PsiElement getSemicolon();

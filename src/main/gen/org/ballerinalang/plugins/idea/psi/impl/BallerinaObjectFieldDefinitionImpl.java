@@ -55,8 +55,8 @@ public class BallerinaObjectFieldDefinitionImpl extends BallerinaCompositeElemen
 
   @Override
   @Nullable
-  public PsiElement getColon() {
-    return findChildByType(COLON);
+  public PsiElement getAssign() {
+    return findChildByType(ASSIGN);
   }
 
   @Override

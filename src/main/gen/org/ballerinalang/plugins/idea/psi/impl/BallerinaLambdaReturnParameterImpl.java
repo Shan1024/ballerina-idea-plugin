@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaReturnStatementImpl extends BallerinaCompositeElementImpl implements BallerinaReturnStatement {
+public class BallerinaLambdaReturnParameterImpl extends BallerinaCompositeElementImpl implements BallerinaLambdaReturnParameter {
 
-  public BallerinaReturnStatementImpl(ASTNode node) {
+  public BallerinaLambdaReturnParameterImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitReturnStatement(this);
+    visitor.visitLambdaReturnParameter(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -42,21 +42,15 @@ public class BallerinaReturnStatementImpl extends BallerinaCompositeElementImpl 
   }
 
   @Override
-  @Nullable
-  public BallerinaExpression getExpression() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaExpression.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getSemicolon() {
-    return findChildByType(SEMICOLON);
+  @NotNull
+  public List<BallerinaAnnotationAttachment> getAnnotationAttachmentList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaAnnotationAttachment.class);
   }
 
   @Override
   @NotNull
-  public PsiElement getReturn() {
-    return notNullChild(findChildByType(RETURN));
+  public BallerinaTypeName getTypeName() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class));
   }
 
 }

@@ -55,8 +55,8 @@ public class BallerinaObjectDefaultableParameterImpl extends BallerinaCompositeE
 
   @Override
   @NotNull
-  public PsiElement getColon() {
-    return notNullChild(findChildByType(COLON));
+  public PsiElement getAssign() {
+    return notNullChild(findChildByType(ASSIGN));
   }
 
 }

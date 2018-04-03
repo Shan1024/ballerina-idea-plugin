@@ -49,14 +49,8 @@ public class BallerinaNullableTypeNameImpl extends BallerinaTypeNameImpl impleme
 
   @Override
   @NotNull
-  public PsiElement getNullLiteral() {
-    return notNullChild(findChildByType(NULL_LITERAL));
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getPipe() {
-    return notNullChild(findChildByType(PIPE));
+  public PsiElement getQuestionMark() {
+    return notNullChild(findChildByType(QUESTION_MARK));
   }
 
 }

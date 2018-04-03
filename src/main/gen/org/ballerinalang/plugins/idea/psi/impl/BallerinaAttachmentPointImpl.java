@@ -95,10 +95,4 @@ public class BallerinaAttachmentPointImpl extends BallerinaCompositeElementImpl 
     return findChildByType(STRUCT);
   }
 
-  @Override
-  @Nullable
-  public PsiElement getTransformer() {
-    return findChildByType(TRANSFORMER);
-  }
-
 }

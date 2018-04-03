@@ -49,6 +49,12 @@ public class BallerinaSimpleTypeNameImpl extends BallerinaTypeNameImpl implement
 
   @Override
   @Nullable
+  public BallerinaEmptyTupleLiteral getEmptyTupleLiteral() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaEmptyTupleLiteral.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaReferenceTypeName getReferenceTypeName() {
     return PsiTreeUtil.getChildOfType(this, BallerinaReferenceTypeName.class);
   }

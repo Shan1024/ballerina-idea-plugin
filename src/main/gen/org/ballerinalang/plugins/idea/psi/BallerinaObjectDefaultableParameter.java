@@ -30,6 +30,6 @@ public interface BallerinaObjectDefaultableParameter extends BallerinaCompositeE
   BallerinaObjectParameter getObjectParameter();
 
   @NotNull
-  PsiElement getColon();
+  PsiElement getAssign();
 
 }

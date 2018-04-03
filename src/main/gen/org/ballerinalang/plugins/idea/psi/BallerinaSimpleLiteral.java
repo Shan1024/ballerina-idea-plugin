@@ -24,6 +24,9 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaSimpleLiteral extends BallerinaCompositeElement {
 
   @Nullable
+  BallerinaEmptyTupleLiteral getEmptyTupleLiteral();
+
+  @Nullable
   BallerinaIntegerLiteral getIntegerLiteral();
 
   @Nullable

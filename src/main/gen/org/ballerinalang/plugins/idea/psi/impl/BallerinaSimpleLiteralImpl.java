@@ -43,6 +43,12 @@ public class BallerinaSimpleLiteralImpl extends BallerinaCompositeElementImpl im
 
   @Override
   @Nullable
+  public BallerinaEmptyTupleLiteral getEmptyTupleLiteral() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaEmptyTupleLiteral.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaIntegerLiteral getIntegerLiteral() {
     return PsiTreeUtil.getChildOfType(this, BallerinaIntegerLiteral.class);
   }

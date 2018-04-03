@@ -97,12 +97,6 @@ public class BallerinaDefinitionImpl extends BallerinaCompositeElementImpl imple
 
   @Override
   @Nullable
-  public BallerinaTransformerDefinition getTransformerDefinition() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaTransformerDefinition.class);
-  }
-
-  @Override
-  @Nullable
   public BallerinaTypeDefinition getTypeDefinition() {
     return PsiTreeUtil.getChildOfType(this, BallerinaTypeDefinition.class);
   }

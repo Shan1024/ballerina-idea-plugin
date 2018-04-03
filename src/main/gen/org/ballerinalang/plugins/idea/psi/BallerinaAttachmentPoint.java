@@ -50,7 +50,4 @@ public interface BallerinaAttachmentPoint extends BallerinaCompositeElement {
   @Nullable
   PsiElement getStruct();
 
-  @Nullable
-  PsiElement getTransformer();
-
 }

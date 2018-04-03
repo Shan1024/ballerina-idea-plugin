@@ -348,6 +348,7 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "blob"                                      { return BLOB; }
     "boolean"                                   { return BOOLEAN; }
     "break"                                     { return BREAK; }
+    "but"                                       { return BUT; }
 
     "catch"                                     { return CATCH; }
     "const"                                     { return CONST; }

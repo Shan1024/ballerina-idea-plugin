@@ -30,7 +30,10 @@ public interface BallerinaLambdaFunction extends BallerinaCompositeElement {
   BallerinaFormalParameterList getFormalParameterList();
 
   @Nullable
-  BallerinaReturnParameter getReturnParameter();
+  BallerinaLambdaReturnParameter getLambdaReturnParameter();
+
+  @Nullable
+  PsiElement getEqualGt();
 
   @Nullable
   PsiElement getLeftParenthesis();
