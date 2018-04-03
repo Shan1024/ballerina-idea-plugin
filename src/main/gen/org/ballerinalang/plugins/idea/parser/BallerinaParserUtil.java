@@ -100,12 +100,17 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                             return true;
                         } else {
                             LighterASTNode latestDoneMarker = builder.getLatestDoneMarker();
-                            // sql:ConnectionProperties properties3 = {dataSourceClassName:"org.hsqldb.jdbc
-                            // .JDBCDataSource", datasourceProperties:propertiesMap};
                             if (rawLookup == BallerinaTypes.COMMA && rawLookup2 == BallerinaTypes.COLON) {
-                                if (latestDoneMarker != null
-                                        && latestDoneMarker.getTokenType() == BallerinaTypes.SIMPLE_TYPE_NAME) {
-                                    return true;
+                                if (latestDoneMarker != null) {
+                                    if (latestDoneMarker.getTokenType() == BallerinaTypes.SIMPLE_TYPE_NAME) {
+                                        // sql:ConnectionProperties properties3 = {dataSourceClassName:"org.hsqldb.jdbc
+                                        // .JDBCDataSource", datasourceProperties:propertiesMap};
+                                        return true;
+                                    } else if (latestDoneMarker.getTokenType() ==
+                                            BallerinaTypes.VARIABLE_REFERENCE_EXPRESSION) {
+                                        // return (variable:a, variable:b, variable:c, variable:d);
+                                        return true;
+                                    }
                                 }
                             } else if (rawLookup == BallerinaTypes.COMMA && rawLookup2 == BallerinaTypes.DOT) {
                                 // EmployeeSalary s = {id:e.id, salary:e.salary};
