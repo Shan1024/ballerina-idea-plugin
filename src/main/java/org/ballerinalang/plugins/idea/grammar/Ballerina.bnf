@@ -119,7 +119,7 @@
 
     extends("Binary(Pow|DivMulMod|AddSub|Compare|Equal|And|Or)Expression") = BinaryExpression
 
-    extends("(Simple|Array|Nullable|Union|Group|Tuple|Annotated|Object)TypeName|BinaryAndExpression") = TypeName
+    extends("(Simple|Array|Nullable|Union|Group|Tuple|Annotated|Object|Record)TypeName|BinaryAndExpression") = TypeName
 
     // Each named definition which can be renamed should implement this interface.
     implements("(Function|Struct|GlobalVariable|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
@@ -199,7 +199,7 @@ Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachme
     recoverWhile=TopLevelDefinitionRecover
 }
 
-private TopLevelDefinitionRecover ::= !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|struct|service|function|enum|annotation|transformer|const|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|stream|identifier)
+private TopLevelDefinitionRecover ::= !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|struct|service|function|enum|annotation|transformer|const|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|stream|identifier|'{')
 
 ServiceDefinition ::= service (LT NameReference GT) identifier ServiceEndpointAttachments?  ServiceBody {pin=1}
 ServiceEndpointAttachments ::= bind (NameReference (COMMA NameReference)* | RecordLiteral) {pin=1}
@@ -259,7 +259,7 @@ ObjectInitializerParameterList ::= LEFT_PARENTHESIS ObjectParameterList? RIGHT_P
 ObjectFunctions ::= (AnnotationAttachment* documentationAttachment? deprecatedAttachment? ObjectFunctionDefinition)+
 
 // TODO merge with fieldDefinition later
-ObjectFieldDefinition ::= TypeName identifier (ASSIGN SimpleLiteral)? (COMMA | SEMICOLON)
+ObjectFieldDefinition ::= TypeName identifier (ASSIGN Expression)? (COMMA | SEMICOLON)
 
 // TODO try to merge with formalParameterList later
 ObjectParameterList ::= (ObjectDefaultableParameter | ObjectParameter) (COMMA (ObjectDefaultableParameter | ObjectParameter))* (COMMA RestParameter)? | RestParameter
@@ -352,6 +352,7 @@ TypeName ::= TupleTypeName
              | SimpleTypeName
 //             | AnnotatedTypeName
              | NullableTypeName
+             | RecordTypeName
 
 SimpleTypeName ::= NULL_LITERAL
                    | AnyTypeName
@@ -369,6 +370,9 @@ UnionTypeName ::= TypeName (PIPE TypeName)+
 GroupTypeName ::= LEFT_PARENTHESIS TypeName RIGHT_PARENTHESIS
 TupleTypeName ::= LEFT_PARENTHESIS TypeName (COMMA TypeName)* RIGHT_PARENTHESIS
 ObjectTypeName ::= object LEFT_BRACE ObjectBody RIGHT_BRACE
+RecordTypeName ::= LEFT_BRACE FieldDefinitionList RIGHT_BRACE
+
+FieldDefinitionList ::= ObjectFieldDefinition*
 
 BuiltInTypeName ::= AnyTypeName
                     | SimpleTypeName (LEFT_BRACKET RIGHT_BRACKET)+
@@ -465,7 +469,7 @@ RecordKeyValue ::= RecordKey COLON Expression {pin=1}
 
 RecordKey ::= Expression | identifier
 
-TableLiteral ::= table TableInitialization
+TableLiteral ::= table TableInitialization {pin=1}
 
 TableInitialization ::= RecordLiteral
 

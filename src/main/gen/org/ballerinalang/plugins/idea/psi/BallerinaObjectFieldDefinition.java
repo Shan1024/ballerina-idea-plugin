@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaObjectFieldDefinition extends BallerinaCompositeElement {
 
   @Nullable
-  BallerinaSimpleLiteral getSimpleLiteral();
+  BallerinaExpression getExpression();
 
   @NotNull
   BallerinaTypeName getTypeName();

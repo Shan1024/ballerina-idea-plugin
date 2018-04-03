@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaObjectFieldDefinitionImpl extends BallerinaCompositeElementImpl implements BallerinaObjectFieldDefinition {
+public class BallerinaRecordTypeNameImpl extends BallerinaTypeNameImpl implements BallerinaRecordTypeName {
 
-  public BallerinaObjectFieldDefinitionImpl(ASTNode node) {
+  public BallerinaRecordTypeNameImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitObjectFieldDefinition(this);
+    visitor.visitRecordTypeName(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -42,39 +42,21 @@ public class BallerinaObjectFieldDefinitionImpl extends BallerinaCompositeElemen
   }
 
   @Override
-  @Nullable
-  public BallerinaExpression getExpression() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaExpression.class);
+  @NotNull
+  public BallerinaFieldDefinitionList getFieldDefinitionList() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaFieldDefinitionList.class));
   }
 
   @Override
   @NotNull
-  public BallerinaTypeName getTypeName() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class));
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getAssign() {
-    return findChildByType(ASSIGN);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getComma() {
-    return findChildByType(COMMA);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getSemicolon() {
-    return findChildByType(SEMICOLON);
+  public PsiElement getLeftBrace() {
+    return notNullChild(findChildByType(LEFT_BRACE));
   }
 
   @Override
   @NotNull
-  public PsiElement getIdentifier() {
-    return notNullChild(findChildByType(IDENTIFIER));
+  public PsiElement getRightBrace() {
+    return notNullChild(findChildByType(RIGHT_BRACE));
   }
 
 }

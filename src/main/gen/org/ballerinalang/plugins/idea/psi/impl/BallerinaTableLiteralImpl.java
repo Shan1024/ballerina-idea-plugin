@@ -42,9 +42,9 @@ public class BallerinaTableLiteralImpl extends BallerinaCompositeElementImpl imp
   }
 
   @Override
-  @NotNull
+  @Nullable
   public BallerinaTableInitialization getTableInitialization() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaTableInitialization.class));
+    return PsiTreeUtil.getChildOfType(this, BallerinaTableInitialization.class);
   }
 
   @Override

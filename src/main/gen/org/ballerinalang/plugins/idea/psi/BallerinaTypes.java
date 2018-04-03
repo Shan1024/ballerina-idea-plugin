@@ -97,6 +97,7 @@ public interface BallerinaTypes {
   IElementType FAIL_STATEMENT = new BallerinaCompositeElementType("FAIL_STATEMENT");
   IElementType FIELD = BallerinaElementTypeFactory.stubFactory("FIELD");
   IElementType FIELD_DEFINITION = BallerinaElementTypeFactory.stubFactory("FIELD_DEFINITION");
+  IElementType FIELD_DEFINITION_LIST = new BallerinaCompositeElementType("FIELD_DEFINITION_LIST");
   IElementType FIELD_VARIABLE_REFERENCE = new BallerinaCompositeElementType("FIELD_VARIABLE_REFERENCE");
   IElementType FINALLY_CLAUSE = new BallerinaCompositeElementType("FINALLY_CLAUSE");
   IElementType FOREACH_STATEMENT = new BallerinaCompositeElementType("FOREACH_STATEMENT");
@@ -191,6 +192,7 @@ public interface BallerinaTypes {
   IElementType RECORD_LITERAL = new BallerinaCompositeElementType("RECORD_LITERAL");
   IElementType RECORD_LITERAL_BODY = new BallerinaCompositeElementType("RECORD_LITERAL_BODY");
   IElementType RECORD_LITERAL_EXPRESSION = new BallerinaCompositeElementType("RECORD_LITERAL_EXPRESSION");
+  IElementType RECORD_TYPE_NAME = new BallerinaCompositeElementType("RECORD_TYPE_NAME");
   IElementType REFERENCE_TYPE_NAME = new BallerinaCompositeElementType("REFERENCE_TYPE_NAME");
   IElementType RESERVED_WORD = new BallerinaCompositeElementType("RESERVED_WORD");
   IElementType RESOURCE_DEFINITION = new BallerinaCompositeElementType("RESOURCE_DEFINITION");
@@ -722,6 +724,9 @@ public interface BallerinaTypes {
       else if (type == FIELD_DEFINITION) {
         return new BallerinaFieldDefinitionImpl(node);
       }
+      else if (type == FIELD_DEFINITION_LIST) {
+        return new BallerinaFieldDefinitionListImpl(node);
+      }
       else if (type == FIELD_VARIABLE_REFERENCE) {
         return new BallerinaFieldVariableReferenceImpl(node);
       }
@@ -1003,6 +1008,9 @@ public interface BallerinaTypes {
       }
       else if (type == RECORD_LITERAL_EXPRESSION) {
         return new BallerinaRecordLiteralExpressionImpl(node);
+      }
+      else if (type == RECORD_TYPE_NAME) {
+        return new BallerinaRecordTypeNameImpl(node);
       }
       else if (type == REFERENCE_TYPE_NAME) {
         return new BallerinaReferenceTypeNameImpl(node);

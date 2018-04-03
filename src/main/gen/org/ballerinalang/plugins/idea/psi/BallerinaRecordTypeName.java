@@ -21,12 +21,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaTableLiteral extends BallerinaCompositeElement {
-
-  @Nullable
-  BallerinaTableInitialization getTableInitialization();
+public interface BallerinaRecordTypeName extends BallerinaTypeName {
 
   @NotNull
-  PsiElement getTable();
+  BallerinaFieldDefinitionList getFieldDefinitionList();
+
+  @NotNull
+  PsiElement getLeftBrace();
+
+  @NotNull
+  PsiElement getRightBrace();
 
 }

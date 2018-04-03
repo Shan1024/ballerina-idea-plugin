@@ -177,6 +177,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == FIELD_DEFINITION) {
       r = FieldDefinition(b, 0);
     }
+    else if (t == FIELD_DEFINITION_LIST) {
+      r = FieldDefinitionList(b, 0);
+    }
     else if (t == FINALLY_CLAUSE) {
       r = FinallyClause(b, 0);
     }
@@ -719,10 +722,11 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   public static final TokenSet[] EXTENDS_SETS_ = new TokenSet[] {
-    create_token_set_(ARRAY_TYPE_NAME, GROUP_TYPE_NAME, NULLABLE_TYPE_NAME, OBJECT_TYPE_NAME,
-      SIMPLE_TYPE_NAME, TUPLE_TYPE_NAME, TYPE_NAME, UNION_TYPE_NAME),
     create_token_set_(AWAIT_EXPRESSION_REFERENCE, FIELD_VARIABLE_REFERENCE, FUNCTION_INVOCATION_REFERENCE, INVOCATION_REFERENCE,
       MAP_ARRAY_VARIABLE_REFERENCE, SIMPLE_VARIABLE_REFERENCE, VARIABLE_REFERENCE, XML_ATTRIB_VARIABLE_REFERENCE),
+    create_token_set_(ARRAY_TYPE_NAME, GROUP_TYPE_NAME, NULLABLE_TYPE_NAME, OBJECT_TYPE_NAME,
+      RECORD_TYPE_NAME, SIMPLE_TYPE_NAME, TUPLE_TYPE_NAME, TYPE_NAME,
+      UNION_TYPE_NAME),
     create_token_set_(ARRAY_LITERAL_EXPRESSION, AWAIT_EXPRESSION, BINARY_ADD_SUB_EXPRESSION, BINARY_AND_EXPRESSION,
       BINARY_COMPARE_EXPRESSION, BINARY_DIV_MUL_MOD_EXPRESSION, BINARY_EQUAL_EXPRESSION, BINARY_OR_EXPRESSION,
       BINARY_POW_EXPRESSION, BRACED_OR_TUPLE_EXPRESSION, BUILT_IN_REFERENCE_TYPE_TYPE_EXPRESSION, CHECKED_EXPRESSION,
@@ -2161,6 +2165,21 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // ObjectFieldDefinition*
+  public static boolean FieldDefinitionList(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "FieldDefinitionList")) return false;
+    Marker m = enter_section_(b, l, _NONE_, FIELD_DEFINITION_LIST, "<field definition list>");
+    int c = current_position_(b);
+    while (true) {
+      if (!ObjectFieldDefinition(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "FieldDefinitionList", c)) break;
+      c = current_position_(b);
+    }
+    exit_section_(b, l, m, true, false, null);
+    return true;
+  }
+
+  /* ********************************************************** */
   // finally LEFT_BRACE Block RIGHT_BRACE
   public static boolean FinallyClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FinallyClause")) return false;
@@ -3466,7 +3485,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // TypeName identifier (ASSIGN SimpleLiteral)? (COMMA | SEMICOLON)
+  // TypeName identifier (ASSIGN Expression)? (COMMA | SEMICOLON)
   public static boolean ObjectFieldDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ObjectFieldDefinition")) return false;
     boolean r;
@@ -3479,20 +3498,20 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (ASSIGN SimpleLiteral)?
+  // (ASSIGN Expression)?
   private static boolean ObjectFieldDefinition_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ObjectFieldDefinition_2")) return false;
     ObjectFieldDefinition_2_0(b, l + 1);
     return true;
   }
 
-  // ASSIGN SimpleLiteral
+  // ASSIGN Expression
   private static boolean ObjectFieldDefinition_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ObjectFieldDefinition_2_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, ASSIGN);
-    r = r && SimpleLiteral(b, l + 1);
+    r = r && Expression(b, l + 1, -1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -5634,12 +5653,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean TableLiteral(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TableLiteral")) return false;
     if (!nextTokenIs(b, TABLE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, TABLE_LITERAL, null);
     r = consumeToken(b, TABLE);
+    p = r; // pin = 1
     r = r && TableInitialization(b, l + 1);
-    exit_section_(b, m, TABLE_LITERAL, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -5789,7 +5809,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|struct|service|function|enum|annotation|transformer|const|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|stream|identifier)
+  // !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|struct|service|function|enum|annotation|transformer|const|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|stream|identifier|'{')
   static boolean TopLevelDefinitionRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopLevelDefinitionRecover")) return false;
     boolean r;
@@ -5799,7 +5819,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|struct|service|function|enum|annotation|transformer|const|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|stream|identifier
+  // DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|struct|service|function|enum|annotation|transformer|const|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|stream|identifier|'{'
   private static boolean TopLevelDefinitionRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopLevelDefinitionRecover_0")) return false;
     boolean r;
@@ -5831,6 +5851,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = consumeToken(b, ANY);
     if (!r) r = consumeToken(b, STREAM);
     if (!r) r = consumeToken(b, IDENTIFIER);
+    if (!r) r = consumeToken(b, LEFT_BRACE);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -8078,6 +8099,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // 4: ATOM(ObjectTypeName)
   // 5: ATOM(SimpleTypeName)
   // 6: POSTFIX(NullableTypeName)
+  // 7: ATOM(RecordTypeName)
   public static boolean TypeName(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "TypeName")) return false;
     addVariant(b, "<type name>");
@@ -8087,6 +8109,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = GroupTypeName(b, l + 1);
     if (!r) r = ObjectTypeName(b, l + 1);
     if (!r) r = SimpleTypeName(b, l + 1);
+    if (!r) r = RecordTypeName(b, l + 1);
     p = r;
     r = r && TypeName_0(b, l + 1, g);
     exit_section_(b, l, m, null, r, p, null);
@@ -8227,6 +8250,19 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = ReferenceTypeName(b, l + 1);
     if (!r) r = EmptyTupleLiteral(b, l + 1);
     exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
+  // LEFT_BRACE FieldDefinitionList RIGHT_BRACE
+  public static boolean RecordTypeName(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "RecordTypeName")) return false;
+    if (!nextTokenIsSmart(b, LEFT_BRACE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, LEFT_BRACE);
+    r = r && FieldDefinitionList(b, l + 1);
+    r = r && consumeToken(b, RIGHT_BRACE);
+    exit_section_(b, m, RECORD_TYPE_NAME, r);
     return r;
   }
 

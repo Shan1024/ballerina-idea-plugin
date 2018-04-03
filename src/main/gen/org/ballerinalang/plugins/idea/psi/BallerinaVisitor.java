@@ -271,6 +271,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitNamedElement(o);
   }
 
+  public void visitFieldDefinitionList(@NotNull BallerinaFieldDefinitionList o) {
+    visitCompositeElement(o);
+  }
+
   public void visitFieldVariableReference(@NotNull BallerinaFieldVariableReference o) {
     visitVariableReference(o);
   }
@@ -625,6 +629,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
 
   public void visitRecordLiteralExpression(@NotNull BallerinaRecordLiteralExpression o) {
     visitExpression(o);
+  }
+
+  public void visitRecordTypeName(@NotNull BallerinaRecordTypeName o) {
+    visitTypeName(o);
   }
 
   public void visitReferenceTypeName(@NotNull BallerinaReferenceTypeName o) {
