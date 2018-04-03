@@ -42,9 +42,9 @@ public class BallerinaLambdaFunctionImpl extends BallerinaCompositeElementImpl i
   }
 
   @Override
-  @Nullable
+  @NotNull
   public BallerinaCallableUnitBody getCallableUnitBody() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaCallableUnitBody.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaCallableUnitBody.class));
   }
 
   @Override
@@ -60,27 +60,21 @@ public class BallerinaLambdaFunctionImpl extends BallerinaCompositeElementImpl i
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getEqualGt() {
-    return findChildByType(EQUAL_GT);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getLeftParenthesis() {
-    return findChildByType(LEFT_PARENTHESIS);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getRightParenthesis() {
-    return findChildByType(RIGHT_PARENTHESIS);
+    return notNullChild(findChildByType(EQUAL_GT));
   }
 
   @Override
   @NotNull
-  public PsiElement getFunction() {
-    return notNullChild(findChildByType(FUNCTION));
+  public PsiElement getLeftParenthesis() {
+    return notNullChild(findChildByType(LEFT_PARENTHESIS));
+  }
+
+  @Override
+  @NotNull
+  public PsiElement getRightParenthesis() {
+    return notNullChild(findChildByType(RIGHT_PARENTHESIS));
   }
 
 }

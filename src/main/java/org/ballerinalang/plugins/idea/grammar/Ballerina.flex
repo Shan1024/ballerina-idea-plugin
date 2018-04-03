@@ -351,6 +351,7 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "but"                                       { return BUT; }
 
     "catch"                                     { return CATCH; }
+    "check"                                     { return CHECK; }
     "const"                                     { return CONST; }
 
     "documentation"                             { return DOCUMENTATION; }

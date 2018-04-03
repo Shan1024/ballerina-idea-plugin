@@ -48,6 +48,12 @@ public class BallerinaServiceEndpointAttachmentsImpl extends BallerinaCompositeE
   }
 
   @Override
+  @Nullable
+  public BallerinaRecordLiteral getRecordLiteral() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaRecordLiteral.class);
+  }
+
+  @Override
   @NotNull
   public PsiElement getBind() {
     return notNullChild(findChildByType(BIND));

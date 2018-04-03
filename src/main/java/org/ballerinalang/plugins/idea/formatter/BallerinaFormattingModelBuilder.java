@@ -45,12 +45,14 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ASYNC;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.AWAIT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BIND;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BREAK;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BUT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CALLABLE_UNIT_BODY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CALLABLE_UNIT_SIGNATURE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CATCH;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CATCH_CLAUSE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CATCH_CLAUSES;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CHECK;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COLON;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMMA;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMPLETE_PACKAGE_NAME;
@@ -120,6 +122,8 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LT_EQUAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MAP;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MATCH;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MATCH_EXPRESSION;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MATCH_EXPRESSION_PATTERN_CLAUSE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MINUTE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MOD;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MONTH;
@@ -149,6 +153,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PIPE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.POW;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PRIVATE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PUBLIC;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RANGE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RARROW;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RECORD_KEY_VALUE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RECORD_LITERAL;
@@ -267,7 +272,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(CATCH).spaceIf(true)
                 .around(FINALLY).spaceIf(true)
                 .around(THROW).spaceIf(true)
-                .around(RETURN).spaceIf(true)
+                //                .around(RETURN).spaceIf(false)
                 .around(TRANSACTION).spaceIf(true)
                 .around(ABORT).spaceIf(false)
                 .around(FAIL).spaceIf(true)
@@ -283,6 +288,8 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(UNTAINT).spaceIf(true) // Todo
                 .around(ASYNC).spaceIf(true)
                 .around(AWAIT).spaceIf(true)
+                .around(CHECK).spaceIf(true)
+                .around(BUT).spaceIf(true)
 
                 // Streaming keywords
                 .around(FROM).spaceIf(true)
@@ -419,12 +426,17 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
 
                 .before(INDEX).spaceIf(false)
 
+                .before(MATCH_EXPRESSION).spaceIf(true)
+                .around(MATCH_EXPRESSION_PATTERN_CLAUSE).spaceIf(true)
+
+                .between(RETURN, SEMICOLON).spaceIf(false)
+                .after(RETURN).spaceIf(true)
+                .around(RANGE).spaceIf(false)
+
                 // Streaming
                 .before(WHERE_CLAUSE).spaceIf(true)
                 .before(WINDOW_CLAUSE).spaceIf(true)
                 .around(INT_RANGE_EXPRESSION).spaceIf(true)
-
-
 
                 // Operators
                 .around(ASSIGN).spaceIf(true)

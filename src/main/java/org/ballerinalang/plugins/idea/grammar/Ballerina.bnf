@@ -202,7 +202,7 @@ Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachme
 private TopLevelDefinitionRecover ::= !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|struct|service|function|enum|annotation|transformer|const|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|stream|identifier)
 
 ServiceDefinition ::= service (LT NameReference GT) identifier ServiceEndpointAttachments?  ServiceBody {pin=1}
-ServiceEndpointAttachments ::= bind NameReference (COMMA NameReference)* {pin=1}
+ServiceEndpointAttachments ::= bind (NameReference (COMMA NameReference)* | RecordLiteral) {pin=1}
 ServiceBody ::= LEFT_BRACE (/*ResourceDefinition+ | EndpointDefinition+ ResourceDefinition* |*/ EndpointDefinition* VariableDefinitionStatementInService* ResourceDefinition*) RIGHT_BRACE /*{pin=1}*/
 
 VariableDefinitionStatementInService ::= /*<<isNotAResourceDefinition>> VariableDefinitionStatement*/TypeName identifier ((ASSIGN | SAFE_ASSIGNMENT) (ActionInvocation | Expression))? SEMICOLON
@@ -222,13 +222,13 @@ NonEmptyBlock ::= Statement+ {elementType=Block}
 //private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
 
 // Todo - Need getIdentifier?
-FunctionDefinition ::= FunctionWithReceiver | FunctionWithoutReceiver {
-    pin=1 methods=[/*getIdentifier*/ getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFunctionDefinitionStub"
+FunctionDefinition ::= (public)? (native)? function (FunctionWithoutReceiver | FunctionWithReceiver) {
+    pin=3 methods=[/*getIdentifier*/ getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFunctionDefinitionStub"
 }
-private FunctionWithReceiver ::= (public)? (native)? function (LT Parameter GT)? CallableUnitSignature (CallableUnitBody | SEMICOLON) {pin=3}
-private FunctionWithoutReceiver ::= (public)? (native)? function identifier DOUBLE_COLON CallableUnitSignature CallableUnitBody {pin=3}
+private FunctionWithReceiver ::=  (LT Parameter GT)? CallableUnitSignature (CallableUnitBody | SEMICOLON)
+private FunctionWithoutReceiver ::= identifier DOUBLE_COLON CallableUnitSignature CallableUnitBody
 
-LambdaFunction ::= function LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS EQUAL_GT LambdaReturnParameter? CallableUnitBody {pin=1}
+LambdaFunction ::= LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS EQUAL_GT LambdaReturnParameter? CallableUnitBody /*{pin=1}*/
 
 // Todo - cache and add Signature owner?
 CallableUnitSignature ::= identifier LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS ReturnParameter? {pin=1}
@@ -480,7 +480,7 @@ PostIncrementStatement ::= VariableReference PostArithmeticOperator SEMICOLON
 
 PostArithmeticOperator ::= INCREMENT | DECREMENT
 
-VariableReferenceList ::= VariableReference (COMMA VariableReference)*
+VariableReferenceList ::= VariableReference (COMMA VariableReference)* //{pin(".*")=1}
 
 IfElseStatement ::= IfClause ElseIfClause* ElseClause? /*{pin=1}*/
 
@@ -498,9 +498,11 @@ matchPatternClause ::= namedPattern | unnamedPattern
 unnamedPattern ::= TypeName EQUAL_GT (LEFT_BRACE Block RIGHT_BRACE | Statement) {pin=2}
 namedPattern ::= TypeName identifier EQUAL_GT (LEFT_BRACE Block RIGHT_BRACE | Statement) {pin=3}
 
-ForeachStatement ::= foreach LEFT_PARENTHESIS? VariableReferenceList in (Expression | IntRangeExpression) RIGHT_PARENTHESIS? LEFT_BRACE Block RIGHT_BRACE {pin=1}
+ForeachStatement ::= foreach LEFT_PARENTHESIS? VariableReferenceList in (IntRangeExpression | Expression) RIGHT_PARENTHESIS? LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
-IntRangeExpression ::= Expression RANGE Expression | (LEFT_BRACKET|LEFT_PARENTHESIS) Expression RANGE Expression (RIGHT_BRACKET|RIGHT_PARENTHESIS)
+IntRangeExpression ::= openRange | closedRange
+private openRange ::= Expression RANGE Expression {pin=2}
+private closedRange ::= (LEFT_BRACKET|LEFT_PARENTHESIS) Expression RANGE Expression (RIGHT_BRACKET|RIGHT_PARENTHESIS) {pin=3}
 
 // Todo - pin 1?
 WhileStatement ::= while LEFT_PARENTHESIS Expression RIGHT_PARENTHESIS WhileStatementBody
@@ -692,7 +694,7 @@ AwaitExpression ::= await Expression
 MatchExprExpression ::= Expression matchExpression
 CheckedExpression ::= check Expression
 
-matchExpression ::= but LEFT_BRACE MatchExpressionPatternClause (COMMA MatchExpressionPatternClause)* RIGHT_BRACE
+matchExpression ::= but LEFT_BRACE MatchExpressionPatternClause (COMMA MatchExpressionPatternClause)* RIGHT_BRACE {pin=1}
 
 MatchExpressionPatternClause ::= TypeName identifier? EQUAL_GT Expression
 

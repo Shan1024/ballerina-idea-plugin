@@ -26,10 +26,10 @@ public interface BallerinaMatchExpression extends BallerinaCompositeElement {
   @NotNull
   List<BallerinaMatchExpressionPatternClause> getMatchExpressionPatternClauseList();
 
-  @NotNull
+  @Nullable
   PsiElement getLeftBrace();
 
-  @NotNull
+  @Nullable
   PsiElement getRightBrace();
 
   @NotNull

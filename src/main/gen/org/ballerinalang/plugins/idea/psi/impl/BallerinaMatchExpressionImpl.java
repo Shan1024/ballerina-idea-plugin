@@ -48,15 +48,15 @@ public class BallerinaMatchExpressionImpl extends BallerinaCompositeElementImpl 
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getLeftBrace() {
-    return notNullChild(findChildByType(LEFT_BRACE));
+    return findChildByType(LEFT_BRACE);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getRightBrace() {
-    return notNullChild(findChildByType(RIGHT_BRACE));
+    return findChildByType(RIGHT_BRACE);
   }
 
   @Override

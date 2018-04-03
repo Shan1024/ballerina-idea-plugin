@@ -164,6 +164,7 @@ public class BallerinaBlock extends AbstractBlock {
                 || parentElementType == BallerinaTypes.TRY_CATCH_STATEMENT
                 || parentElementType == BallerinaTypes.CATCH_CLAUSE
                 || parentElementType == BallerinaTypes.FINALLY_CLAUSE
+                || parentElementType == BallerinaTypes.STRUCT_BODY
         )) {
             return Indent.getNormalIndent();
         } else if (parentElementType == BallerinaTypes.CALLABLE_UNIT_SIGNATURE) {
@@ -198,6 +199,8 @@ public class BallerinaBlock extends AbstractBlock {
         } else if (childElementType == BallerinaTypes.TIMEOUT_CLAUSE_BODY) {
             return Indent.getNormalIndent();
         } else if (childElementType == BallerinaTypes.MATCH_STATEMENT_BODY) {
+            return Indent.getNormalIndent();
+        } else if (childElementType == BallerinaTypes.MATCH_EXPRESSION_PATTERN_CLAUSE) {
             return Indent.getNormalIndent();
         } else if (childElementType == BallerinaTypes.EXPRESSION_LIST &&
                 parentElementType == BallerinaTypes.ARRAY_LITERAL) {
@@ -248,6 +251,8 @@ public class BallerinaBlock extends AbstractBlock {
             childIndent = Indent.getNormalIndent();
         } else if (myNode.getElementType() == BallerinaTypes.MATCH_STATEMENT_BODY) {
             childIndent = Indent.getNormalIndent();
+        } else if (myNode.getElementType() == BallerinaTypes.MATCH_EXPRESSION) {
+            childIndent = Indent.getNormalIndent();
         } else if (myNode.getElementType() == BallerinaTypes.NAMED_PATTERN) {
             childIndent = Indent.getNormalIndent();
         } else if (myNode.getElementType() == BallerinaTypes.UNNAMED_PATTERN) {
@@ -280,7 +285,7 @@ public class BallerinaBlock extends AbstractBlock {
             childIndent = Indent.getNormalIndent();
         } else if (myNode.getElementType() == BallerinaTypes.PRIVATE_OBJECT_FIELDS) {
             childIndent = Indent.getNormalIndent();
-        }else if (myNode.getElementType() == BallerinaTypes.FOREVER_STATEMENT) {
+        } else if (myNode.getElementType() == BallerinaTypes.FOREVER_STATEMENT) {
             childIndent = Indent.getNormalIndent();
         }
         return new ChildAttributes(childIndent, null);

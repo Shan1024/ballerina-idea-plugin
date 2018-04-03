@@ -26,6 +26,9 @@ public interface BallerinaServiceEndpointAttachments extends BallerinaCompositeE
   @NotNull
   List<BallerinaNameReference> getNameReferenceList();
 
+  @Nullable
+  BallerinaRecordLiteral getRecordLiteral();
+
   @NotNull
   PsiElement getBind();
 
