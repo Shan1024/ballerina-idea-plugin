@@ -504,9 +504,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == TABLE_LITERAL) {
       r = TableLiteral(b, 0);
     }
-    else if (t == TABLE_LITERAL_EXPRESSION) {
-      r = TableLiteralExpression(b, 0);
-    }
     else if (t == TABLE_QUERY) {
       r = TableQuery(b, 0);
     }
@@ -731,9 +728,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
       BINARY_COMPARE_EXPRESSION, BINARY_DIV_MUL_MOD_EXPRESSION, BINARY_EQUAL_EXPRESSION, BINARY_OR_EXPRESSION,
       BINARY_POW_EXPRESSION, BRACED_OR_TUPLE_EXPRESSION, BUILT_IN_REFERENCE_TYPE_TYPE_EXPRESSION, CHECKED_EXPRESSION,
       EXPRESSION, LAMBDA_FUNCTION_EXPRESSION, MATCH_EXPR_EXPRESSION, RECORD_LITERAL_EXPRESSION,
-      SIMPLE_LITERAL_EXPRESSION, STRING_TEMPLATE_LITERAL_EXPRESSION, TABLE_QUERY_EXPRESSION, TERNARY_EXPRESSION,
-      TYPE_ACCESS_EXPRESSION, TYPE_CONVERSION_EXPRESSION, TYPE_INIT_EXPRESSION, UNARY_EXPRESSION,
-      VALUE_TYPE_TYPE_EXPRESSION, VARIABLE_REFERENCE_EXPRESSION, XML_LITERAL_EXPRESSION),
+      SIMPLE_LITERAL_EXPRESSION, STRING_TEMPLATE_LITERAL_EXPRESSION, TABLE_LITERAL_EXPRESSION, TABLE_QUERY_EXPRESSION,
+      TERNARY_EXPRESSION, TYPE_ACCESS_EXPRESSION, TYPE_CONVERSION_EXPRESSION, TYPE_INIT_EXPRESSION,
+      UNARY_EXPRESSION, VALUE_TYPE_TYPE_EXPRESSION, VARIABLE_REFERENCE_EXPRESSION, XML_LITERAL_EXPRESSION),
   };
 
   /* ********************************************************** */
@@ -5201,7 +5198,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   //     |   PostIncrementStatement
   //     |   VariableDefinitionStatement
   //     |   StreamingQueryStatement
-  //     |   TableLiteralExpression
   public static boolean Statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Statement")) return false;
     boolean r;
@@ -5230,7 +5226,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = PostIncrementStatement(b, l + 1);
     if (!r) r = VariableDefinitionStatement(b, l + 1);
     if (!r) r = StreamingQueryStatement(b, l + 1);
-    if (!r) r = TableLiteralExpression(b, l + 1);
     exit_section_(b, l, m, r, false, StatementRecover_parser_);
     return r;
   }
@@ -5660,18 +5655,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     r = r && TableInitialization(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
-  }
-
-  /* ********************************************************** */
-  // TableLiteral
-  public static boolean TableLiteralExpression(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "TableLiteralExpression")) return false;
-    if (!nextTokenIs(b, TABLE)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = TableLiteral(b, l + 1);
-    exit_section_(b, m, TABLE_LITERAL_EXPRESSION, r);
-    return r;
   }
 
   /* ********************************************************** */
@@ -7666,29 +7649,30 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // 0: ATOM(SimpleLiteralExpression)
   // 1: ATOM(StringTemplateLiteralExpression)
   // 2: ATOM(XmlLiteralExpression)
-  // 3: ATOM(RecordLiteralExpression)
-  // 4: ATOM(BracedOrTupleExpression)
-  // 5: BINARY(TernaryExpression)
-  // 6: ATOM(ArrayLiteralExpression)
-  // 7: ATOM(ValueTypeTypeExpression)
-  // 8: ATOM(BuiltInReferenceTypeTypeExpression)
-  // 9: ATOM(VariableReferenceExpression)
-  // 10: ATOM(LambdaFunctionExpression)
-  // 11: ATOM(TypeInitExpression)
-  // 12: ATOM(TypeConversionExpression)
-  // 13: ATOM(UnaryExpression)
-  // 14: ATOM(TypeAccessExpression)
-  // 15: BINARY(BinaryPowExpression)
-  // 16: BINARY(BinaryDivMulModExpression)
-  // 17: BINARY(BinaryAddSubExpression)
-  // 18: BINARY(BinaryCompareExpression)
-  // 19: BINARY(BinaryEqualExpression)
-  // 20: BINARY(BinaryAndExpression)
-  // 21: BINARY(BinaryOrExpression)
-  // 22: ATOM(TableQueryExpression)
-  // 23: POSTFIX(MatchExprExpression)
-  // 24: PREFIX(CheckedExpression)
-  // 25: PREFIX(AwaitExpression)
+  // 3: ATOM(TableLiteralExpression)
+  // 4: ATOM(RecordLiteralExpression)
+  // 5: ATOM(BracedOrTupleExpression)
+  // 6: BINARY(TernaryExpression)
+  // 7: ATOM(ArrayLiteralExpression)
+  // 8: ATOM(ValueTypeTypeExpression)
+  // 9: ATOM(BuiltInReferenceTypeTypeExpression)
+  // 10: ATOM(VariableReferenceExpression)
+  // 11: ATOM(LambdaFunctionExpression)
+  // 12: ATOM(TypeInitExpression)
+  // 13: ATOM(TypeConversionExpression)
+  // 14: ATOM(UnaryExpression)
+  // 15: ATOM(TypeAccessExpression)
+  // 16: BINARY(BinaryPowExpression)
+  // 17: BINARY(BinaryDivMulModExpression)
+  // 18: BINARY(BinaryAddSubExpression)
+  // 19: BINARY(BinaryCompareExpression)
+  // 20: BINARY(BinaryEqualExpression)
+  // 21: BINARY(BinaryAndExpression)
+  // 22: BINARY(BinaryOrExpression)
+  // 23: ATOM(TableQueryExpression)
+  // 24: POSTFIX(MatchExprExpression)
+  // 25: PREFIX(CheckedExpression)
+  // 26: PREFIX(AwaitExpression)
   public static boolean Expression(PsiBuilder b, int l, int g) {
     if (!recursion_guard_(b, l, "Expression")) return false;
     addVariant(b, "<expression>");
@@ -7697,6 +7681,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     r = SimpleLiteralExpression(b, l + 1);
     if (!r) r = StringTemplateLiteralExpression(b, l + 1);
     if (!r) r = XmlLiteralExpression(b, l + 1);
+    if (!r) r = TableLiteralExpression(b, l + 1);
     if (!r) r = RecordLiteralExpression(b, l + 1);
     if (!r) r = BracedOrTupleExpression(b, l + 1);
     if (!r) r = ArrayLiteralExpression(b, l + 1);
@@ -7722,40 +7707,40 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     boolean r = true;
     while (true) {
       Marker m = enter_section_(b, l, _LEFT_, null);
-      if (g < 5 && consumeTokenSmart(b, QUESTION_MARK)) {
-        r = report_error_(b, Expression(b, l, 5));
+      if (g < 6 && consumeTokenSmart(b, QUESTION_MARK)) {
+        r = report_error_(b, Expression(b, l, 6));
         r = TernaryExpression_1(b, l + 1) && r;
         exit_section_(b, l, m, TERNARY_EXPRESSION, r, true, null);
       }
-      else if (g < 15 && consumeTokenSmart(b, POW)) {
-        r = Expression(b, l, 15);
+      else if (g < 16 && consumeTokenSmart(b, POW)) {
+        r = Expression(b, l, 16);
         exit_section_(b, l, m, BINARY_POW_EXPRESSION, r, true, null);
       }
-      else if (g < 16 && BinaryDivMulModExpression_0(b, l + 1)) {
-        r = Expression(b, l, 16);
+      else if (g < 17 && BinaryDivMulModExpression_0(b, l + 1)) {
+        r = Expression(b, l, 17);
         exit_section_(b, l, m, BINARY_DIV_MUL_MOD_EXPRESSION, r, true, null);
       }
-      else if (g < 17 && BinaryAddSubExpression_0(b, l + 1)) {
-        r = Expression(b, l, 17);
+      else if (g < 18 && BinaryAddSubExpression_0(b, l + 1)) {
+        r = Expression(b, l, 18);
         exit_section_(b, l, m, BINARY_ADD_SUB_EXPRESSION, r, true, null);
       }
-      else if (g < 18 && BinaryCompareExpression_0(b, l + 1)) {
-        r = Expression(b, l, 18);
+      else if (g < 19 && BinaryCompareExpression_0(b, l + 1)) {
+        r = Expression(b, l, 19);
         exit_section_(b, l, m, BINARY_COMPARE_EXPRESSION, r, true, null);
       }
-      else if (g < 19 && BinaryEqualExpression_0(b, l + 1)) {
-        r = Expression(b, l, 19);
+      else if (g < 20 && BinaryEqualExpression_0(b, l + 1)) {
+        r = Expression(b, l, 20);
         exit_section_(b, l, m, BINARY_EQUAL_EXPRESSION, r, true, null);
       }
-      else if (g < 20 && consumeTokenSmart(b, AND)) {
-        r = Expression(b, l, 20);
+      else if (g < 21 && consumeTokenSmart(b, AND)) {
+        r = Expression(b, l, 21);
         exit_section_(b, l, m, BINARY_AND_EXPRESSION, r, true, null);
       }
-      else if (g < 21 && consumeTokenSmart(b, OR)) {
-        r = Expression(b, l, 21);
+      else if (g < 22 && consumeTokenSmart(b, OR)) {
+        r = Expression(b, l, 22);
         exit_section_(b, l, m, BINARY_OR_EXPRESSION, r, true, null);
       }
-      else if (g < 23 && matchExpression(b, l + 1)) {
+      else if (g < 24 && matchExpression(b, l + 1)) {
         r = true;
         exit_section_(b, l, m, MATCH_EXPR_EXPRESSION, r, true, null);
       }
@@ -7796,6 +7781,17 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = XmlLiteral(b, l + 1);
     exit_section_(b, m, XML_LITERAL_EXPRESSION, r);
+    return r;
+  }
+
+  // TableLiteral
+  public static boolean TableLiteralExpression(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TableLiteralExpression")) return false;
+    if (!nextTokenIsSmart(b, TABLE)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = TableLiteral(b, l + 1);
+    exit_section_(b, m, TABLE_LITERAL_EXPRESSION, r);
     return r;
   }
 
@@ -8072,7 +8068,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeTokenSmart(b, CHECK);
     p = r;
-    r = p && Expression(b, l, 24);
+    r = p && Expression(b, l, 25);
     exit_section_(b, l, m, CHECKED_EXPRESSION, r, p, null);
     return r || p;
   }

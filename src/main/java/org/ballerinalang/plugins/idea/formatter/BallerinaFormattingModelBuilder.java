@@ -184,6 +184,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SOME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.STREAM;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.STRUCT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SUB;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TABLE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.THROW;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TIMEOUT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TRANSACTION;
@@ -404,6 +405,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .between(JSON, LT).spaceIf(false)
                 .between(MAP, LT).spaceIf(false)
                 .between(STREAM, LT).spaceIf(false)
+                .between(TABLE, LT).spaceIf(false)
 
                 .between(PIPE, NULL_LITERAL).spaceIf(false)
                 .around(NULLABLE_TYPE_NAME).spaceIf(false)

@@ -114,7 +114,7 @@
 
     extends("(FunctionInvocation|SimpleVariable|MapArrayVariable|FieldVariable|XmlAttribVariable|Invocation|AwaitExpression)Reference") = VariableReference
 
-    extends("((Simple|Array|Record|Xml|StringTemplate)Literal|(ValueType|BuiltInReferenceType)Type|VariableReference|LambdaFunction|TypeInit|Type(Casting|Conversion|Access)|BracedOrTuple|Await|TableQuery|MatchExpr|Checked)Expression") = Expression
+    extends("((Simple|Array|Record|Xml|StringTemplate)Literal|(ValueType|BuiltInReferenceType)Type|VariableReference|LambdaFunction|TypeInit|Type(Casting|Conversion|Access)|BracedOrTuple|Await|TableQuery|MatchExpr|Checked|TableLiteral)Expression") = Expression
     extends("(Unary|Binary|Ternary)Expression") = Expression
 
     extends("Binary(Pow|DivMulMod|AddSub|Compare|Equal|And|Or)Expression") = BinaryExpression
@@ -444,7 +444,6 @@ Statement ::=
     |   PostIncrementStatement
     |   VariableDefinitionStatement
     |   StreamingQueryStatement
-    |   TableLiteralExpression
 {recoverWhile = StatementRecover}
 
 // Todo - Add more tokens
@@ -454,7 +453,6 @@ private StatementRecover ::= !(BOOLEAN_LITERAL|QUOTED_STRING_LITERAL|DECIMAL_INT
 
 //private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
 
-TableLiteralExpression ::= TableLiteral
 VariableDefinitionStatement ::= TypeName identifier ((ASSIGN | SAFE_ASSIGNMENT) (ActionInvocation | Expression))? SEMICOLON {
     pin(".*")=1
 // Note - Resource definition cannot be identified correctly with this pin.
@@ -643,6 +641,7 @@ Expression
         SimpleLiteralExpression
     |   StringTemplateLiteralExpression
     |   XmlLiteralExpression
+    |   TableLiteralExpression
     |   RecordLiteralExpression
     |   BracedOrTupleExpression
     |   TernaryExpression {/*pin=1 */ /*recoverWhile=ExpressionRecover*/}
@@ -670,6 +669,8 @@ Expression
 }
 
 TableQueryExpression ::= TableQuery
+
+TableLiteralExpression ::= TableLiteral
 
 private ExpressionRecover ::= !(NULL_LITERAL|int|string|float|boolean|blob|any|map|table|function|stream|'}'|';'|var |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|but|if|forever|check)
 

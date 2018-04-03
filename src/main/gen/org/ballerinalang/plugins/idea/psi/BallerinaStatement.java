@@ -69,9 +69,6 @@ public interface BallerinaStatement extends BallerinaCompositeElement {
   BallerinaStreamingQueryStatement getStreamingQueryStatement();
 
   @Nullable
-  BallerinaTableLiteralExpression getTableLiteralExpression();
-
-  @Nullable
   BallerinaThrowStatement getThrowStatement();
 
   @Nullable

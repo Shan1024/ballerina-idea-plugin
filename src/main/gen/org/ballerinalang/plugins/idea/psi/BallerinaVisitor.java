@@ -773,7 +773,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitTableLiteralExpression(@NotNull BallerinaTableLiteralExpression o) {
-    visitCompositeElement(o);
+    visitExpression(o);
   }
 
   public void visitTableQuery(@NotNull BallerinaTableQuery o) {
