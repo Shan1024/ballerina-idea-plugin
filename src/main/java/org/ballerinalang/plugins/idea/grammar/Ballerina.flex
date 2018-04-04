@@ -239,10 +239,10 @@ CDATA = "<![CDATA[" .*? "]]>"
 DTD = "<!" ([^-].|.[^-]).*? ">"
 ENTITY_REF = "&" {XML_QNAME} ";"
 CHAR_REF = "&#" {DIGIT}+ ';' | "&#x" {HEX_DIGITS}+ ";"
-XML_WS = ' '|'\t'|'\r'? '\n'
-XML_TAG_OPEN = "<"
+XML_WS = " " | \t | \r? \n
 XML_TAG_OPEN_SLASH = "</"
-XML_TAG_SPECIAL_OPEN = "<?" /*({XML_QNAME} {QNAME_SEPARATOR})? {XML_QNAME} {XML_WS}*/ // Todo - Fix
+XML_TAG_SPECIAL_OPEN = "<?" ({XML_QNAME} {QNAME_SEPARATOR})? {XML_QNAME} {XML_WS} // Todo - Fix
+XML_TAG_OPEN = "<"
 XML_LITERAL_END = "`"
 XML_TEMPLATE_TEXT = {XML_TEXT_SEQUENCE}? {EXPRESSION_START}
 XML_TEXT_SEQUENCE = {XML_BRACES_SEQUENCE}? ({XML_TEXT_CHAR} {XML_BRACES_SEQUENCE}?)+ | {XML_BRACES_SEQUENCE} ({XML_TEXT_CHAR} {XML_BRACES_SEQUENCE}?)*
@@ -252,10 +252,10 @@ XML_BRACES_SEQUENCE = (\{})+ | (}\{) | (\{})* \{ | } (\{})*
 
 // XML_TAG
 XML_TAG_CLOSE = ">"
-XML_TAG_SPECIAL_CLOSE = "?>"
+XML_TAG_SPECIAL_CLOSE = \?>
 XML_TAG_SLASH_CLOSE = "/>"
 SLASH = "/"
-QNAME_SEPARATOR = ":"
+QNAME_SEPARATOR = :
 EQUALS = "="
 DOUBLE_QUOTE = "\""
 SINGLE_QUOTE = "'"
@@ -281,11 +281,11 @@ XMLSingleQuotedStringChar = [^<'{}\\] | {XML_ESCAPED_SEQUENCE}
 // XML_PI
 XML_PI_END = {XML_TAG_SPECIAL_CLOSE}
 XML_PI_TEXT = {XML_PI_TEXT_FRAGMENT} {XML_PI_END}
-XML_PI_TEMPLATE_TEXT = {XML_PI_TEXT_FRAGMENT} {XML_ESCAPED_SEQUENCE}
+XML_PI_TEMPLATE_TEXT = {XML_PI_TEXT_FRAGMENT} {EXPRESSION_START}
 XML_PI_TEXT_FRAGMENT = {XML_PI_ALLOWED_SEQUENCE}? ({XML_PI_CHAR} {XML_PI_ALLOWED_SEQUENCE}?)*
 XML_PI_CHAR = [^{}?>] | {XML_ESCAPED_SEQUENCE}
 XML_PI_ALLOWED_SEQUENCE = {XML_BRACES_SEQUENCE} | {XML_PI_SPECIAL_SEQUENCE} | ({XML_BRACES_SEQUENCE} {XML_PI_SPECIAL_SEQUENCE})+ {XML_BRACES_SEQUENCE}? | ({XML_PI_SPECIAL_SEQUENCE} {XML_BRACES_SEQUENCE})+ {XML_PI_SPECIAL_SEQUENCE}?
-XML_PI_SPECIAL_SEQUENCE = ">"+ | ">"* \?+
+XML_PI_SPECIAL_SEQUENCE = ">"+ | ">"* "?"+
 
 // XML_COMMENT
 XML_COMMENT_END = "-->"
@@ -572,8 +572,8 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     {XML_COMMENT_START}                         { yybegin(XML_COMMENT_MODE); return XML_COMMENT_START; }
     {CDATA}                                     { return CDATA; }
     {DTD}                                       { } // Todo - Need to return a value?
-    {ENTITY_REF}                                { /*return ENTITY_REF;*/ }
-    {CHAR_REF}                                  { /*return CHAR_REF;*/ }
+    {ENTITY_REF}                                { /*return ENTITY_REF;*/ } // Do not need
+    {CHAR_REF}                                  { /*return CHAR_REF;*/ } // Do not need
     {XML_TAG_SPECIAL_OPEN}                      { yybegin(XML_PI_MODE); return XML_TAG_SPECIAL_OPEN; }
     {XML_TAG_OPEN_SLASH}                        { yybegin(XML_TAG_MODE); return XML_TAG_OPEN_SLASH; }
     {XML_TAG_OPEN}                              { yybegin(XML_TAG_MODE); return XML_TAG_OPEN; }
@@ -585,9 +585,9 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
 
 <XML_TAG_MODE>{
     {XML_TAG_CLOSE}                             { yybegin(XML_MODE); return XML_TAG_CLOSE; }
-    {XML_TAG_SPECIAL_CLOSE}                     { /*yybegin(XML_MODE); return XML_TAG_SPECIAL_CLOSE;*/ }
+    {XML_TAG_SPECIAL_CLOSE}                     { /*yybegin(XML_MODE); return XML_TAG_SPECIAL_CLOSE;*/ } // Do not need
     {XML_TAG_SLASH_CLOSE}                       { yybegin(XML_MODE); return XML_TAG_SLASH_CLOSE; }
-    {SLASH}                                     { /*return SLASH;*/ }
+    {SLASH}                                     { /*return SLASH;*/ } // Do not need
     {QNAME_SEPARATOR}                           { return QNAME_SEPARATOR; }
     {EQUALS}                                    { return EQUALS; }
     {DOUBLE_QUOTE}                              { yybegin(DOUBLE_QUOTED_XML_STRING_MODE); return DOUBLE_QUOTE; }

@@ -774,11 +774,11 @@ RestArgs ::= ELLIPSIS Expression {pin=1}
 
 XmlLiteral ::= XML_LITERAL_START XmlItem XML_LITERAL_END {pin=1}
 
-XmlItem ::= Element | ProcIns | Comment | XmlText | cdata
+XmlItem ::= ProcIns | Comment | Element | XmlText | cdata
 
-Content ::= XmlText? ((Element | cdata | ProcIns | Comment) XmlText?)*
+Content ::= XmlText? ((ProcIns | Comment | Element | cdata) XmlText?)*
 
-Comment ::= XML_COMMENT_START (XML_COMMENT_TEMPLATE_TEXT Expression EXPRESSION_END)* XML_COMMENT_TEXT
+Comment ::= XML_COMMENT_START (XML_COMMENT_TEMPLATE_TEXT Expression EXPRESSION_END)* XML_COMMENT_TEXT {pin=1}
 
 Element ::= StartTag Content CloseTag | EmptyTag
 
@@ -788,7 +788,7 @@ CloseTag ::= XML_TAG_OPEN_SLASH XmlQualifiedName XML_TAG_CLOSE {pin=1}
 
 EmptyTag ::= XML_TAG_OPEN XmlQualifiedName Attribute* XML_TAG_SLASH_CLOSE {pin=1}
 
-ProcIns ::= XML_TAG_SPECIAL_OPEN (XML_PI_TEMPLATE_TEXT Expression EXPRESSION_END)* XML_PI_TEXT
+ProcIns ::= XML_TAG_SPECIAL_OPEN (XML_PI_TEMPLATE_TEXT Expression EXPRESSION_END)* XML_PI_TEXT {pin=1}
 
 Attribute ::= XmlQualifiedName EQUALS XmlQuotedString;
 

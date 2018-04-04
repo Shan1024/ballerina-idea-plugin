@@ -1408,13 +1408,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean Comment(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Comment")) return false;
     if (!nextTokenIs(b, XML_COMMENT_START)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, COMMENT, null);
     r = consumeToken(b, XML_COMMENT_START);
-    r = r && Comment_1(b, l + 1);
-    r = r && consumeToken(b, XML_COMMENT_TEXT);
-    exit_section_(b, m, COMMENT, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, Comment_1(b, l + 1));
+    r = p && consumeToken(b, XML_COMMENT_TEXT) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // (XML_COMMENT_TEMPLATE_TEXT Expression EXPRESSION_END)*
@@ -1601,7 +1602,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // XmlText? ((Element | cdata | ProcIns | Comment) XmlText?)*
+  // XmlText? ((ProcIns | Comment | Element | cdata) XmlText?)*
   public static boolean Content(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Content")) return false;
     boolean r;
@@ -1619,7 +1620,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // ((Element | cdata | ProcIns | Comment) XmlText?)*
+  // ((ProcIns | Comment | Element | cdata) XmlText?)*
   private static boolean Content_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Content_1")) return false;
     int c = current_position_(b);
@@ -1631,7 +1632,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (Element | cdata | ProcIns | Comment) XmlText?
+  // (ProcIns | Comment | Element | cdata) XmlText?
   private static boolean Content_1_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Content_1_0")) return false;
     boolean r;
@@ -1642,15 +1643,15 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // Element | cdata | ProcIns | Comment
+  // ProcIns | Comment | Element | cdata
   private static boolean Content_1_0_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Content_1_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = Element(b, l + 1);
-    if (!r) r = consumeToken(b, CDATA);
-    if (!r) r = ProcIns(b, l + 1);
+    r = ProcIns(b, l + 1);
     if (!r) r = Comment(b, l + 1);
+    if (!r) r = Element(b, l + 1);
+    if (!r) r = consumeToken(b, CDATA);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -4391,13 +4392,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean ProcIns(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ProcIns")) return false;
     if (!nextTokenIs(b, XML_TAG_SPECIAL_OPEN)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, PROC_INS, null);
     r = consumeToken(b, XML_TAG_SPECIAL_OPEN);
-    r = r && ProcIns_1(b, l + 1);
-    r = r && consumeToken(b, XML_PI_TEXT);
-    exit_section_(b, m, PROC_INS, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, ProcIns_1(b, l + 1));
+    r = p && consumeToken(b, XML_PI_TEXT) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // (XML_PI_TEMPLATE_TEXT Expression EXPRESSION_END)*
@@ -6567,14 +6569,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // Element | ProcIns | Comment | XmlText | cdata
+  // ProcIns | Comment | Element | XmlText | cdata
   public static boolean XmlItem(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "XmlItem")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, XML_ITEM, "<xml item>");
-    r = Element(b, l + 1);
-    if (!r) r = ProcIns(b, l + 1);
+    r = ProcIns(b, l + 1);
     if (!r) r = Comment(b, l + 1);
+    if (!r) r = Element(b, l + 1);
     if (!r) r = XmlText(b, l + 1);
     if (!r) r = consumeToken(b, CDATA);
     exit_section_(b, l, m, r, false, null);

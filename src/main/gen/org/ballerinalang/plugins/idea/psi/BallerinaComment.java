@@ -29,7 +29,7 @@ public interface BallerinaComment extends BallerinaCompositeElement {
   @NotNull
   PsiElement getXmlCommentStart();
 
-  @NotNull
+  @Nullable
   PsiElement getXmlCommentText();
 
 }
