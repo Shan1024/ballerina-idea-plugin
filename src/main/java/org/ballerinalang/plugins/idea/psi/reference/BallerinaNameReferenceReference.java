@@ -17,6 +17,8 @@
 
 package org.ballerinalang.plugins.idea.psi.reference;
 
+import com.intellij.codeInsight.completion.InsertHandler;
+import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
@@ -28,21 +30,21 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.stubs.StubIndex;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
-import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
-import org.ballerinalang.plugins.idea.psi.BallerinaConstantDefinition;
+import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
+import org.ballerinalang.plugins.idea.completion.inserthandlers.ParenthesisInsertHandler;
+import org.ballerinalang.plugins.idea.psi.BallerinaExpressionStmt;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
-import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaStructDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaVariableDefinitionStatement;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaTopLevelDefinition;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaFunctionIndex;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.sql.Struct;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -98,7 +100,7 @@ import java.util.Set;
 //        return new Object[0];
 //    }
 //}
-
+// Note - Name is not a typo :)
 public class BallerinaNameReferenceReference extends BallerinaCachedReference<BallerinaIdentifier> {
 
     static int count = 0;
@@ -327,7 +329,7 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
 
             System.out.println("Processed: " + count + " in " + (end - start) + " ms");
 
-            return elements.toArray(new BallerinaTopLevelDefinition[elements.size()]);
+            return getLookups(elements);
 
         }
 
@@ -363,37 +365,69 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
     private PsiElement getMatchingElement(@NotNull Collection<BallerinaTopLevelDefinition>
                                                   elements) {
         for (BallerinaTopLevelDefinition element : elements) {
-            if (element instanceof BallerinaFunctionDefinition) {
-                BallerinaCallableUnitSignature callableUnitSignature = ((BallerinaFunctionDefinition) element)
-                        .getCallableUnitSignature();
-                if (callableUnitSignature != null) {
-                    PsiElement identifier = callableUnitSignature.getIdentifier();
-                    if (isMatching(identifier)) {
-                        return identifier;
-                    }
-                }
-            } else if (element instanceof BallerinaConstantDefinition) {
-                PsiElement identifier = ((BallerinaConstantDefinition) element).getIdentifier();
-                if (isMatching(identifier)) {
-                    return identifier;
-                }
-            } else if (element instanceof BallerinaGlobalVariableDefinition) {
-                PsiElement identifier = ((BallerinaGlobalVariableDefinition) element).getIdentifier();
-                if (isMatching(identifier)) {
-                    return identifier;
-                }
-            } else if (element instanceof BallerinaStructDefinition) {
-                PsiElement identifier = ((BallerinaStructDefinition) element).getIdentifier();
-                if (isMatching(identifier)) {
-                    return identifier;
-                }
+            //            if (element instanceof BallerinaFunctionDefinition) {
+            //                BallerinaCallableUnitSignature callableUnitSignature = ((BallerinaFunctionDefinition) element)
+            //                        .getCallableUnitSignature();
+            //                if (callableUnitSignature != null) {
+            //                    PsiElement identifier = callableUnitSignature.getIdentifier();
+            //                    if (isAMatch(identifier)) {
+            //                        return identifier;
+            //                    }
+            //                }
+            //            }
+            PsiElement identifier = element.getIdentifier();
+
+            if (isAMatch(identifier)) {
+                return identifier;
             }
-            // Todo - Add more definitions
+            //            else if (element instanceof BallerinaConstantDefinition) {
+            //                PsiElement identifier = ((BallerinaTopLevelDefinition) element).getIdentifier();
+            //
+            //                if (isAMatch(identifier)) {
+            //                    return identifier;
+            //                }
+            //            } else if (element instanceof BallerinaGlobalVariableDefinition) {
+            //                PsiElement identifier = ((BallerinaGlobalVariableDefinition) element).getIdentifier();
+            //                if (isAMatch(identifier)) {
+            //                    return identifier;
+            //                }
+            //            } else if (element instanceof BallerinaStructDefinition) {
+            //                PsiElement identifier = ((BallerinaStructDefinition) element).getIdentifier();
+            //                if (isAMatch(identifier)) {
+            //                    return identifier;
+            //                }
+            //            }
+
         }
         return null;
     }
 
-    private boolean isMatching(PsiElement identifier) {
-        return myElement.getText().equals(identifier.getText());
+    private LookupElement[] getLookups(@NotNull Collection<BallerinaTopLevelDefinition> elements) {
+        List<LookupElement> results = new LinkedList<>();
+        for (BallerinaTopLevelDefinition element : elements) {
+            // Note - Identifier can be null in incomplete codes.
+            PsiElement identifier = element.getIdentifier();
+            if (identifier == null) {
+                continue;
+            }
+            // Todo - Refactor code
+            if (element instanceof BallerinaFunctionDefinition) {
+                // Todo - Add insert handler
+                // We need to check whether the current element is a variable definition element. If so, we need to
+                // update the insert handler.
+                BallerinaExpressionStmt ballerinaExpressionStmt =
+                        PsiTreeUtil.getParentOfType(myElement, BallerinaExpressionStmt.class);
+                InsertHandler<LookupElement> insertHandler =
+                        ballerinaExpressionStmt != null ? ParenthesisInsertHandler.INSTANCE : null;
+                results.add(BallerinaCompletionUtils.createFunctionLookupElement(identifier, insertHandler));
+            } else if (element instanceof BallerinaStructDefinition) {
+                results.add(BallerinaCompletionUtils.createStructLookupElement(identifier));
+            }
+        }
+        return results.toArray(new LookupElement[results.size()]);
+    }
+
+    private boolean isAMatch(@Nullable PsiElement identifier) {
+        return identifier != null && myElement.getText().equals(identifier.getText());
     }
 }

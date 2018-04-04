@@ -21,12 +21,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaAnnotatedTypeName extends BallerinaTypeName {
+public interface BallerinaAttachedObject extends BallerinaCompositeElement {
 
   @NotNull
-  List<BallerinaAnnotationAttachment> getAnnotationAttachmentList();
-
-  @Nullable
-  BallerinaSimpleTypeName getSimpleTypeName();
+  PsiElement getIdentifier();
 
 }

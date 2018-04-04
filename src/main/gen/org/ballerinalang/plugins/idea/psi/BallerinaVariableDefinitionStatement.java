@@ -43,7 +43,7 @@ public interface BallerinaVariableDefinitionStatement extends BallerinaNamedElem
   @Nullable
   PsiElement getSemicolon();
 
-  @Nullable
+  @NotNull
   PsiElement getIdentifier();
 
 }

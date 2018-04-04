@@ -220,15 +220,15 @@ public class BallerinaReferenceCompletionProvider extends CompletionContributor 
             if (accept(element)) {
                 List<BallerinaDefinition> definitions = ((BallerinaFile) element).getDefinitions();
                 for (BallerinaDefinition definition : definitions) {
-                    PsiElement firstChild = definition.getFirstChild();
-                    if (firstChild instanceof BallerinaFunctionDefinition) {
-                        BallerinaFunctionDefinition child = (BallerinaFunctionDefinition) firstChild;
-                        PsiElement identifier = child.getIdentifier();
-                        if (identifier != null) {
-                            myResult.addElement(BallerinaCompletionUtil.createFunctionLookupElement(child));
-                            count++;
-                        }
-                    }
+//                    PsiElement firstChild = definition.getFirstChild();
+//                    if (firstChild instanceof BallerinaFunctionDefinition) {
+//                        BallerinaFunctionDefinition child = (BallerinaFunctionDefinition) firstChild;
+//                        PsiElement identifier = child.getIdentifier();
+//                        if (identifier != null) {
+//                            myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(child,null));
+//                            count++;
+//                        }
+//                    }
                 }
             }
             return true;

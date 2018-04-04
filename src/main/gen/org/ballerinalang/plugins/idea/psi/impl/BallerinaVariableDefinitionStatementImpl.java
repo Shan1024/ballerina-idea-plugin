@@ -84,9 +84,9 @@ public class BallerinaVariableDefinitionStatementImpl extends BallerinaNamedElem
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
+    return notNullChild(findChildByType(IDENTIFIER));
   }
 
 }

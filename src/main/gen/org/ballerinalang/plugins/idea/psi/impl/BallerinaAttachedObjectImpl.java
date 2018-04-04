@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaExpressionStmtImpl extends BallerinaCompositeElementImpl implements BallerinaExpressionStmt {
+public class BallerinaAttachedObjectImpl extends BallerinaCompositeElementImpl implements BallerinaAttachedObject {
 
-  public BallerinaExpressionStmtImpl(ASTNode node) {
+  public BallerinaAttachedObjectImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitExpressionStmt(this);
+    visitor.visitAttachedObject(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -42,21 +42,9 @@ public class BallerinaExpressionStmtImpl extends BallerinaCompositeElementImpl i
   }
 
   @Override
-  @Nullable
-  public BallerinaActionInvocation getActionInvocation() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaActionInvocation.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaVariableReference getVariableReference() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaVariableReference.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getSemicolon() {
-    return findChildByType(SEMICOLON);
+  @NotNull
+  public PsiElement getIdentifier() {
+    return notNullChild(findChildByType(IDENTIFIER));
   }
 
 }

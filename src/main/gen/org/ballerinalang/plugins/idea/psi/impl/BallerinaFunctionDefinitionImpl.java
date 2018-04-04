@@ -49,6 +49,12 @@ public class BallerinaFunctionDefinitionImpl extends BallerinaNamedElementImpl<B
 
   @Override
   @Nullable
+  public BallerinaAttachedObject getAttachedObject() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaAttachedObject.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaCallableUnitBody getCallableUnitBody() {
     return PsiTreeUtil.getChildOfType(this, BallerinaCallableUnitBody.class);
   }
@@ -97,12 +103,6 @@ public class BallerinaFunctionDefinitionImpl extends BallerinaNamedElementImpl<B
 
   @Override
   @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getNative() {
     return findChildByType(NATIVE);
   }
@@ -111,6 +111,11 @@ public class BallerinaFunctionDefinitionImpl extends BallerinaNamedElementImpl<B
   @Nullable
   public PsiElement getPublic() {
     return findChildByType(PUBLIC);
+  }
+
+  @Nullable
+  public PsiElement getIdentifier() {
+    return BallerinaPsiImplUtil.getIdentifier(this);
   }
 
   @Nullable

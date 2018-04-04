@@ -36,6 +36,7 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
 import org.ballerinalang.plugins.idea.psi.BallerinaAlias;
+import org.ballerinalang.plugins.idea.psi.BallerinaAttachedObject;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompositeElement;
@@ -107,6 +108,10 @@ public class BallerinaPsiImplUtil {
 
     @Nullable
     public static PsiElement getIdentifier(BallerinaFunctionDefinition ballerinaFunctionDefinition) {
+        BallerinaAttachedObject attachedObject = ballerinaFunctionDefinition.getAttachedObject();
+        if (attachedObject != null) {
+            return attachedObject.getIdentifier();
+        }
         BallerinaCallableUnitSignature callableUnitSignature = ballerinaFunctionDefinition.getCallableUnitSignature();
         return callableUnitSignature != null ? callableUnitSignature.getIdentifier() : null;
     }
@@ -117,11 +122,11 @@ public class BallerinaPsiImplUtil {
         return endpointDeclaration.getIdentifier();
     }
 
-//    @Nullable
-//    public static PsiElement getIdentifier(BallerinaActionDefinition ballerinaActionDefinition) {
-//        BallerinaCallableUnitSignature callableUnitSignature = ballerinaActionDefinition.getCallableUnitSignature();
-//        return callableUnitSignature != null ? callableUnitSignature.getIdentifier() : null;
-//    }
+    //    @Nullable
+    //    public static PsiElement getIdentifier(BallerinaActionDefinition ballerinaActionDefinition) {
+    //        BallerinaCallableUnitSignature callableUnitSignature = ballerinaActionDefinition.getCallableUnitSignature();
+    //        return callableUnitSignature != null ? callableUnitSignature.getIdentifier() : null;
+    //    }
 
     @Nullable
     public static String getName(BallerinaFunctionDefinition ballerinaFunctionDefinition) {

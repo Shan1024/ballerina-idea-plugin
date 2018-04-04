@@ -223,10 +223,12 @@ NonEmptyBlock ::= Statement+ {elementType=Block}
 
 // Todo - Need getIdentifier?
 FunctionDefinition ::= (public)? (native)? function (FunctionWithoutReceiver | FunctionWithReceiver) {
-    pin=3 methods=[/*getIdentifier*/ getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFunctionDefinitionStub"
+    pin=3 methods=[getIdentifier getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFunctionDefinitionStub"
 }
 private FunctionWithReceiver ::=  (LT Parameter GT)? CallableUnitSignature (CallableUnitBody | SEMICOLON)
-private FunctionWithoutReceiver ::= identifier DOUBLE_COLON CallableUnitSignature CallableUnitBody
+private FunctionWithoutReceiver ::= AttachedObject DOUBLE_COLON CallableUnitSignature CallableUnitBody
+
+AttachedObject ::= identifier
 
 LambdaFunction ::= LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS EQUAL_GT LambdaReturnParameter? CallableUnitBody /*{pin=1}*/
 
@@ -437,12 +439,12 @@ Statement ::=
     |   TryCatchStatement
     |   ForkJoinStatement
     |   ExpressionStmt
+    |   VariableDefinitionStatement
     |   WorkerInteractionStatement
     |   AssignmentStatement
     |   tupleDestructuringStatement
     |   CompoundAssignmentStatement
     |   PostIncrementStatement
-    |   VariableDefinitionStatement
     |   StreamingQueryStatement
 {recoverWhile = StatementRecover}
 
@@ -453,11 +455,13 @@ private StatementRecover ::= !(BOOLEAN_LITERAL|QUOTED_STRING_LITERAL|DECIMAL_INT
 
 //private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
 
-VariableDefinitionStatement ::= TypeName identifier ((ASSIGN | SAFE_ASSIGNMENT) (ActionInvocation | Expression))? SEMICOLON {
-    pin(".*")=1
+VariableDefinitionStatement ::= TypeName identifier VariableAssignment? SEMICOLON {
+    pin=2
 // Note - Resource definition cannot be identified correctly with this pin.
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaVariableDefinitionStatementStub"
 }
+
+private VariableAssignment ::= (ASSIGN | SAFE_ASSIGNMENT) (ActionInvocation | Expression) {pin=1}
 
 RecordLiteral ::= LEFT_BRACE RecordLiteralBody? RIGHT_BRACE {pin(".*")=1}
 
@@ -605,7 +609,7 @@ ExpressionList ::= Expression (COMMA Expression)* {
 }
 //private ExpressionListRecover ::= !(RIGHT_PARENTHESIS | SEMICOLON)
 
-ExpressionStmt ::= (ActionInvocation | VariableReference) SEMICOLON /*{pin=1}*/
+ExpressionStmt ::= (ActionInvocation | VariableReference) SEMICOLON {pin=1}
 
 TransactionStatement ::= TransactionClause OnretryClause?
 

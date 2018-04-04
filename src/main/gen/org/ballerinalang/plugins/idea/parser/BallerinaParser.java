@@ -72,6 +72,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == ASSIGNMENT_STATEMENT) {
       r = AssignmentStatement(b, 0);
     }
+    else if (t == ATTACHED_OBJECT) {
+      r = AttachedObject(b, 0);
+    }
     else if (t == ATTACHMENT_POINT) {
       r = AttachmentPoint(b, 0);
     }
@@ -1006,6 +1009,18 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     r = ActionInvocation(b, l + 1);
     if (!r) r = Expression(b, l + 1, -1);
     exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // identifier
+  public static boolean AttachedObject(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "AttachedObject")) return false;
+    if (!nextTokenIs(b, IDENTIFIER)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, IDENTIFIER);
+    exit_section_(b, m, ATTACHED_OBJECT, r);
     return r;
   }
 
@@ -2086,12 +2101,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // (ActionInvocation | VariableReference) SEMICOLON
   public static boolean ExpressionStmt(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ExpressionStmt")) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, EXPRESSION_STMT, "<expression stmt>");
     r = ExpressionStmt_0(b, l + 1);
+    p = r; // pin = 1
     r = r && consumeToken(b, SEMICOLON);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // ActionInvocation | VariableReference
@@ -2564,13 +2580,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // identifier DOUBLE_COLON CallableUnitSignature CallableUnitBody
+  // AttachedObject DOUBLE_COLON CallableUnitSignature CallableUnitBody
   static boolean FunctionWithoutReceiver(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionWithoutReceiver")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, IDENTIFIER, DOUBLE_COLON);
+    r = AttachedObject(b, l + 1);
+    r = r && consumeToken(b, DOUBLE_COLON);
     r = r && CallableUnitSignature(b, l + 1);
     r = r && CallableUnitBody(b, l + 1);
     exit_section_(b, m, null, r);
@@ -5193,12 +5210,12 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   //     |   TryCatchStatement
   //     |   ForkJoinStatement
   //     |   ExpressionStmt
+  //     |   VariableDefinitionStatement
   //     |   WorkerInteractionStatement
   //     |   AssignmentStatement
   //     |   tupleDestructuringStatement
   //     |   CompoundAssignmentStatement
   //     |   PostIncrementStatement
-  //     |   VariableDefinitionStatement
   //     |   StreamingQueryStatement
   public static boolean Statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Statement")) return false;
@@ -5221,12 +5238,12 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = TryCatchStatement(b, l + 1);
     if (!r) r = ForkJoinStatement(b, l + 1);
     if (!r) r = ExpressionStmt(b, l + 1);
+    if (!r) r = VariableDefinitionStatement(b, l + 1);
     if (!r) r = WorkerInteractionStatement(b, l + 1);
     if (!r) r = AssignmentStatement(b, l + 1);
     if (!r) r = tupleDestructuringStatement(b, l + 1);
     if (!r) r = CompoundAssignmentStatement(b, l + 1);
     if (!r) r = PostIncrementStatement(b, l + 1);
-    if (!r) r = VariableDefinitionStatement(b, l + 1);
     if (!r) r = StreamingQueryStatement(b, l + 1);
     exit_section_(b, l, m, r, false, StatementRecover_parser_);
     return r;
@@ -6222,42 +6239,22 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // TypeName identifier ((ASSIGN | SAFE_ASSIGNMENT) (ActionInvocation | Expression))? SEMICOLON
-  public static boolean VariableDefinitionStatement(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "VariableDefinitionStatement")) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, VARIABLE_DEFINITION_STATEMENT, "<variable definition statement>");
-    r = TypeName(b, l + 1, -1);
-    p = r; // pin = 1
-    r = r && report_error_(b, consumeToken(b, IDENTIFIER));
-    r = p && report_error_(b, VariableDefinitionStatement_2(b, l + 1)) && r;
-    r = p && consumeToken(b, SEMICOLON) && r;
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  // ((ASSIGN | SAFE_ASSIGNMENT) (ActionInvocation | Expression))?
-  private static boolean VariableDefinitionStatement_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "VariableDefinitionStatement_2")) return false;
-    VariableDefinitionStatement_2_0(b, l + 1);
-    return true;
-  }
-
   // (ASSIGN | SAFE_ASSIGNMENT) (ActionInvocation | Expression)
-  private static boolean VariableDefinitionStatement_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "VariableDefinitionStatement_2_0")) return false;
+  static boolean VariableAssignment(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "VariableAssignment")) return false;
+    if (!nextTokenIs(b, "", ASSIGN, SAFE_ASSIGNMENT)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
-    r = VariableDefinitionStatement_2_0_0(b, l + 1);
+    r = VariableAssignment_0(b, l + 1);
     p = r; // pin = 1
-    r = r && VariableDefinitionStatement_2_0_1(b, l + 1);
+    r = r && VariableAssignment_1(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
 
   // ASSIGN | SAFE_ASSIGNMENT
-  private static boolean VariableDefinitionStatement_2_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "VariableDefinitionStatement_2_0_0")) return false;
+  private static boolean VariableAssignment_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "VariableAssignment_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, ASSIGN);
@@ -6267,14 +6264,36 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   // ActionInvocation | Expression
-  private static boolean VariableDefinitionStatement_2_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "VariableDefinitionStatement_2_0_1")) return false;
+  private static boolean VariableAssignment_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "VariableAssignment_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = ActionInvocation(b, l + 1);
     if (!r) r = Expression(b, l + 1, -1);
     exit_section_(b, m, null, r);
     return r;
+  }
+
+  /* ********************************************************** */
+  // TypeName identifier VariableAssignment? SEMICOLON
+  public static boolean VariableDefinitionStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "VariableDefinitionStatement")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, VARIABLE_DEFINITION_STATEMENT, "<variable definition statement>");
+    r = TypeName(b, l + 1, -1);
+    r = r && consumeToken(b, IDENTIFIER);
+    p = r; // pin = 2
+    r = r && report_error_(b, VariableDefinitionStatement_2(b, l + 1));
+    r = p && consumeToken(b, SEMICOLON) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // VariableAssignment?
+  private static boolean VariableDefinitionStatement_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "VariableDefinitionStatement_2")) return false;
+    VariableAssignment(b, l + 1);
+    return true;
   }
 
   /* ********************************************************** */

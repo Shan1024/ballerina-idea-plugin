@@ -18,7 +18,10 @@
 package org.ballerinalang.plugins.idea.psi.impl;
 
 import com.intellij.psi.PsiElement;
+import org.jetbrains.annotations.Nullable;
 
-public interface BallerinaTopLevelDefinition  extends PsiElement{
+public interface BallerinaTopLevelDefinition extends PsiElement {
 
+    @Nullable
+    PsiElement getIdentifier();
 }

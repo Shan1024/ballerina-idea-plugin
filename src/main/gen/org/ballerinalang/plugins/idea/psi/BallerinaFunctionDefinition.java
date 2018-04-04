@@ -27,6 +27,9 @@ import org.ballerinalang.plugins.idea.stubs.BallerinaFunctionDefinitionStub;
 public interface BallerinaFunctionDefinition extends BallerinaNamedElement, BallerinaTopLevelDefinition, StubBasedPsiElement<BallerinaFunctionDefinitionStub> {
 
   @Nullable
+  BallerinaAttachedObject getAttachedObject();
+
+  @Nullable
   BallerinaCallableUnitBody getCallableUnitBody();
 
   @Nullable
@@ -51,13 +54,13 @@ public interface BallerinaFunctionDefinition extends BallerinaNamedElement, Ball
   PsiElement getFunction();
 
   @Nullable
-  PsiElement getIdentifier();
-
-  @Nullable
   PsiElement getNative();
 
   @Nullable
   PsiElement getPublic();
+
+  @Nullable
+  PsiElement getIdentifier();
 
   @Nullable
   String getName();
