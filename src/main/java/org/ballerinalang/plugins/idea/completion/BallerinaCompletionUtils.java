@@ -27,6 +27,7 @@ import com.intellij.codeInsight.template.TemplateManager;
 import com.intellij.codeInsight.template.impl.TemplateSettings;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorModificationUtil;
+import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import org.ballerinalang.plugins.idea.BallerinaIcons;
@@ -476,7 +477,8 @@ public class BallerinaCompletionUtils {
     //    @NotNull
     //    public static LookupElement createImportedPackageLookupElement(@NotNull PsiDirectory directory,
     //                                                                   @NotNull String name,
-    //                                                                   @Nullable InsertHandler<LookupElement> handler) {
+    //                                                                   @Nullable InsertHandler<LookupElement>
+    // handler) {
     //        LookupElementBuilder builder = createPackageLookupElement(directory, name).withInsertHandler(handler);
     //        return PrioritizedLookupElement.withPriority(builder, PACKAGE_PRIORITY);
     //    }
@@ -484,7 +486,8 @@ public class BallerinaCompletionUtils {
     //    @NotNull
     //    public static LookupElement createUnimportedPackageLookupElement(@NotNull PsiDirectory directory,
     //                                                                     @NotNull String name,
-    //                                                                     @Nullable InsertHandler<LookupElement> handler) {
+    //                                                                     @Nullable InsertHandler<LookupElement>
+    // handler) {
     //        LookupElementBuilder builder = createPackageLookupElement(directory, name).withInsertHandler(handler);
     //        return PrioritizedLookupElement.withPriority(builder, UNIMPORTED_PACKAGE_PRIORITY);
     //    }
@@ -498,7 +501,8 @@ public class BallerinaCompletionUtils {
     //    }
     //
     //    @NotNull
-    //    public static List<LookupElement> createAnnotationLookupElements(@NotNull List<IdentifierPSINode> annotations) {
+    //    public static List<LookupElement> createAnnotationLookupElements(@NotNull List<IdentifierPSINode>
+    // annotations) {
     //        List<LookupElement> lookupElements = new LinkedList<>();
     //        for (IdentifierPSINode annotation : annotations) {
     //            if (annotation == null) {
@@ -511,12 +515,14 @@ public class BallerinaCompletionUtils {
     //    }
 
     @NotNull
-    public static LookupElement createFunctionLookupElement(@NotNull PsiElement identifier,
+    public static LookupElement createFunctionLookupElement(@NotNull BallerinaTopLevelDefinition definition,
                                                             @Nullable InsertHandler<LookupElement> insertHandler) {
-        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(identifier.getText(), identifier)
-                .withTypeText("Function").withIcon(BallerinaIcons.FUNCTION).bold()
+        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(definition.getIdentifier()
+                .getText(), definition)
+                .withTypeText("Function").withIcon(definition.getIcon(Iconable.ICON_FLAG_VISIBILITY)).bold()
                 // Todo - Add tail text
-                //                .withTailText(BallerinaDocumentationProvider.getParametersAndReturnTypes(element.getParent()))
+                //                .withTailText(BallerinaDocumentationProvider.getParametersAndReturnTypes(element
+                // .getParent()))
                 .withInsertHandler(insertHandler);
         return PrioritizedLookupElement.withPriority(builder, FUNCTION_PRIORITY);
     }
@@ -528,7 +534,8 @@ public class BallerinaCompletionUtils {
     //            if (function == null) {
     //                continue;
     //            }
-    //            LookupElement lookupElement = createFunctionLookupElement(function, ParenthesisInsertHandler.INSTANCE);
+    //            LookupElement lookupElement = createFunctionLookupElement(function, ParenthesisInsertHandler
+    // .INSTANCE);
     //            lookupElements.add(lookupElement);
     //        }
     //        return lookupElements;
@@ -576,7 +583,8 @@ public class BallerinaCompletionUtils {
     //
     //    @NotNull
     //    private static LookupElement createConnectorLookupElement(@NotNull IdentifierPSINode element,
-    //                                                              @Nullable InsertHandler<LookupElement> insertHandler) {
+    //                                                              @Nullable InsertHandler<LookupElement>
+    // insertHandler) {
     //        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(element.getText(), element)
     //                .withTypeText("Connector").withIcon(BallerinaIcons.CONNECTOR).bold()
     //                .withTailText(BallerinaDocumentationProvider.getParameterString(element.getParent(), true))
@@ -620,13 +628,14 @@ public class BallerinaCompletionUtils {
     //        return lookupElements;
     //    }
     //
-        @NotNull
-        public static LookupElement createStructLookupElement(@NotNull PsiElement identifier) {
-            LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(identifier.getText(), identifier)
-                    .withTypeText("Struct").withIcon(BallerinaIcons.STRUCT)
-                    .withInsertHandler(AddSpaceInsertHandler.INSTANCE);
-            return PrioritizedLookupElement.withPriority(builder, STRUCT_PRIORITY);
-        }
+    @NotNull
+    public static LookupElement createStructLookupElement(@NotNull PsiElement identifier) {
+        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(identifier.getText(), identifier)
+                .withTypeText("Struct")/*.withIcon(BallerinaIcons.STRUCT)*/
+                .withInsertHandler(AddSpaceInsertHandler.INSTANCE);
+        return PrioritizedLookupElement.withPriority(builder, STRUCT_PRIORITY);
+    }
+
     //
     //    @NotNull
     //    public static List<LookupElement> createStructLookupElements(@NotNull List<IdentifierPSINode> structs) {
@@ -651,7 +660,8 @@ public class BallerinaCompletionUtils {
     //
     //    @NotNull
     //    public static List<LookupElement> createEnumLookupElements(@NotNull List<IdentifierPSINode> enums,
-    //                                                               @Nullable InsertHandler<LookupElement> insertHandler) {
+    //                                                               @Nullable InsertHandler<LookupElement>
+    // insertHandler) {
     //        List<LookupElement> lookupElements = new LinkedList<>();
     //        for (IdentifierPSINode anEnum : enums) {
     //            if (anEnum == null) {
@@ -722,15 +732,16 @@ public class BallerinaCompletionUtils {
     //        return lookupElements;
     //    }
     //
-        @NotNull
-        public static LookupElement createGlobalVariableLookupElement(@NotNull PsiElement identifier) {
-            LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(identifier.getText(), identifier)
-                    .withTypeText("Variable").withIcon(BallerinaIcons.GLOBAL_VARIABLE);
-            return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
-        }
+    @NotNull
+    public static LookupElement createGlobalVariableLookupElement(@NotNull PsiElement identifier) {
+        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(identifier.getText(), identifier)
+                .withTypeText("Variable").withIcon(BallerinaIcons.GLOBAL_VARIABLE);
+        return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
+    }
     //
     //    @NotNull
-    //    public static List<LookupElement> createGlobalVariableLookupElements(@NotNull List<IdentifierPSINode> variables) {
+    //    public static List<LookupElement> createGlobalVariableLookupElements(@NotNull List<IdentifierPSINode>
+    // variables) {
     //        List<LookupElement> lookupElements = new LinkedList<>();
     //        for (IdentifierPSINode variable : variables) {
     //            if (variable == null) {
@@ -791,7 +802,8 @@ public class BallerinaCompletionUtils {
     //    }
     //
     //    @NotNull
-    //    public static List<LookupElement> createTransformerLookupElements(@NotNull List<IdentifierPSINode> transformers) {
+    //    public static List<LookupElement> createTransformerLookupElements(@NotNull List<IdentifierPSINode>
+    // transformers) {
     //        List<LookupElement> lookupElements = new LinkedList<>();
     //        for (IdentifierPSINode transformer : transformers) {
     //            if (transformer == null) {
@@ -811,11 +823,13 @@ public class BallerinaCompletionUtils {
     //    }
     //
     //    @NotNull
-    //    public static List<LookupElement> createEnumFieldLookupElements(@NotNull Collection<EnumFieldNode> enumFieldNodes,
+    //    public static List<LookupElement> createEnumFieldLookupElements(@NotNull Collection<EnumFieldNode>
+    // enumFieldNodes,
     //                                                                    @NotNull IdentifierPSINode definitionName) {
     //        List<LookupElement> lookupElements = new LinkedList<>();
     //        for (EnumFieldNode fieldDefinitionNode : enumFieldNodes) {
-    //            IdentifierPSINode fieldName = PsiTreeUtil.getChildOfType(fieldDefinitionNode, IdentifierPSINode.class);
+    //            IdentifierPSINode fieldName = PsiTreeUtil.getChildOfType(fieldDefinitionNode, IdentifierPSINode
+    // .class);
     //            if (fieldName == null) {
     //                continue;
     //            }
@@ -865,10 +879,12 @@ public class BallerinaCompletionUtils {
     //    public static List<LookupElement> createFieldLookupElements(@NotNull Collection<FieldDefinitionNode>
     //                                                                        fieldDefinitionNodes,
     //                                                                @NotNull IdentifierPSINode definitionName,
-    //                                                                @Nullable InsertHandler<LookupElement> insertHandler) {
+    //                                                                @Nullable InsertHandler<LookupElement>
+    // insertHandler) {
     //        List<LookupElement> lookupElements = new LinkedList<>();
     //        for (FieldDefinitionNode fieldDefinitionNode : fieldDefinitionNodes) {
-    //            IdentifierPSINode fieldName = PsiTreeUtil.getChildOfType(fieldDefinitionNode, IdentifierPSINode.class);
+    //            IdentifierPSINode fieldName = PsiTreeUtil.getChildOfType(fieldDefinitionNode, IdentifierPSINode
+    // .class);
     //            TypeNameNode fieldType = PsiTreeUtil.getChildOfType(fieldDefinitionNode, TypeNameNode.class);
     //            if (fieldName == null || fieldType == null) {
     //                continue;
@@ -883,10 +899,12 @@ public class BallerinaCompletionUtils {
     //    @NotNull
     //    public static List<LookupElement> createFieldLookupElements(@NotNull Collection<FieldDefinitionNode>
     //                                                                        fieldDefinitionNodes,
-    //                                                                @Nullable InsertHandler<LookupElement> insertHandler) {
+    //                                                                @Nullable InsertHandler<LookupElement>
+    // insertHandler) {
     //        List<LookupElement> lookupElements = new LinkedList<>();
     //        for (FieldDefinitionNode fieldDefinitionNode : fieldDefinitionNodes) {
-    //            IdentifierPSINode fieldName = PsiTreeUtil.getChildOfType(fieldDefinitionNode, IdentifierPSINode.class);
+    //            IdentifierPSINode fieldName = PsiTreeUtil.getChildOfType(fieldDefinitionNode, IdentifierPSINode
+    // .class);
     //            TypeNameNode fieldType = PsiTreeUtil.getChildOfType(fieldDefinitionNode, TypeNameNode.class);
     //            if (fieldName == null || fieldType == null) {
     //                continue;
@@ -900,7 +918,8 @@ public class BallerinaCompletionUtils {
     //
     //    @NotNull
     //    private static LookupElement createWorkerLookupElement(@NotNull IdentifierPSINode workerName) {
-    //        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(workerName.getText(), workerName)
+    //        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(workerName.getText(),
+    // workerName)
     //                .withTypeText("Worker").withIcon(BallerinaIcons.WORKER);
     //        return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
     //    }
@@ -910,7 +929,8 @@ public class BallerinaCompletionUtils {
     //                                                                         workerDeclarationNodes) {
     //        List<LookupElement> lookupElements = new LinkedList<>();
     //        for (WorkerDeclarationNode workerDeclarationNode : workerDeclarationNodes) {
-    //            IdentifierPSINode workerName = PsiTreeUtil.getChildOfType(workerDeclarationNode, IdentifierPSINode.class);
+    //            IdentifierPSINode workerName = PsiTreeUtil.getChildOfType(workerDeclarationNode, IdentifierPSINode
+    // .class);
     //            if (workerName == null) {
     //                continue;
     //            }

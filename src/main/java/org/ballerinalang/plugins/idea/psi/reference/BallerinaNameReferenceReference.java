@@ -418,7 +418,7 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
                         PsiTreeUtil.getParentOfType(myElement, BallerinaExpressionStmt.class);
                 InsertHandler<LookupElement> insertHandler =
                         ballerinaExpressionStmt != null ? ParenthesisInsertHandler.INSTANCE : null;
-                results.add(BallerinaCompletionUtils.createFunctionLookupElement(identifier, insertHandler));
+                results.add(BallerinaCompletionUtils.createFunctionLookupElement(element, insertHandler));
             } else if (element instanceof BallerinaGlobalVariableDefinition) {
                 results.add(BallerinaCompletionUtils.createGlobalVariableLookupElement(identifier));
             }

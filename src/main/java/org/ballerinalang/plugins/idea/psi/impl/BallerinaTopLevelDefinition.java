@@ -20,7 +20,13 @@ package org.ballerinalang.plugins.idea.psi.impl;
 import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
+
 public interface BallerinaTopLevelDefinition extends PsiElement {
+
+    @Nullable
+    @Override
+    public Icon getIcon(int flags);
 
     @Nullable
     PsiElement getIdentifier();
