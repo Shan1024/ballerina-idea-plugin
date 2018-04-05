@@ -187,11 +187,11 @@ Alias ::= as identifier {
 // Note - Global variable definition should be the first definition since it can contain identifier as type.
 Definition ::= AnnotationAttachment? documentationAttachment? deprecatedAttachment?
                ( TypeDefinition
-               | GlobalVariableDefinition
                | ServiceDefinition
                | FunctionDefinition
                | AnnotationDefinition
                | GlobalEndpointDefinition
+               | GlobalVariableDefinition
                ) {
     recoverWhile=TopLevelDefinitionRecover
 }
@@ -222,8 +222,8 @@ NonEmptyBlock ::= Statement+ {elementType=Block}
 FunctionDefinition ::= (public)? (native)? function (FunctionWithoutReceiver | FunctionWithReceiver) {
     pin=3 methods=[getIdentifier getName] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFunctionDefinitionStub"
 }
-private FunctionWithReceiver ::=  (LT Parameter GT)? CallableUnitSignature (CallableUnitBody | SEMICOLON)
-private FunctionWithoutReceiver ::= AttachedObject DOUBLE_COLON CallableUnitSignature CallableUnitBody
+private FunctionWithReceiver ::=  (LT Parameter GT)? CallableUnitSignature (CallableUnitBody | SEMICOLON) {pin=2}
+private FunctionWithoutReceiver ::= AttachedObject DOUBLE_COLON CallableUnitSignature CallableUnitBody {pin=2}
 
 AttachedObject ::= identifier
 

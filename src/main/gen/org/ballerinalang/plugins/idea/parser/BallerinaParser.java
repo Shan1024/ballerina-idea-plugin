@@ -1591,11 +1591,11 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   /* ********************************************************** */
   // AnnotationAttachment? documentationAttachment? deprecatedAttachment?
   //                ( TypeDefinition
-  //                | GlobalVariableDefinition
   //                | ServiceDefinition
   //                | FunctionDefinition
   //                | AnnotationDefinition
   //                | GlobalEndpointDefinition
+  //                | GlobalVariableDefinition
   //                )
   public static boolean Definition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Definition")) return false;
@@ -1631,21 +1631,21 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   // TypeDefinition
-  //                | GlobalVariableDefinition
   //                | ServiceDefinition
   //                | FunctionDefinition
   //                | AnnotationDefinition
   //                | GlobalEndpointDefinition
+  //                | GlobalVariableDefinition
   private static boolean Definition_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Definition_3")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = TypeDefinition(b, l + 1);
-    if (!r) r = GlobalVariableDefinition(b, l + 1);
     if (!r) r = ServiceDefinition(b, l + 1);
     if (!r) r = FunctionDefinition(b, l + 1);
     if (!r) r = AnnotationDefinition(b, l + 1);
     if (!r) r = GlobalEndpointDefinition(b, l + 1);
+    if (!r) r = GlobalVariableDefinition(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -2342,13 +2342,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   static boolean FunctionWithReceiver(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionWithReceiver")) return false;
     if (!nextTokenIs(b, "", LT, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
     r = FunctionWithReceiver_0(b, l + 1);
     r = r && CallableUnitSignature(b, l + 1);
+    p = r; // pin = 2
     r = r && FunctionWithReceiver_2(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // (LT Parameter GT)?
@@ -2386,14 +2387,15 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   static boolean FunctionWithoutReceiver(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "FunctionWithoutReceiver")) return false;
     if (!nextTokenIs(b, IDENTIFIER)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
     r = AttachedObject(b, l + 1);
     r = r && consumeToken(b, DOUBLE_COLON);
-    r = r && CallableUnitSignature(b, l + 1);
-    r = r && CallableUnitBody(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
+    p = r; // pin = 2
+    r = r && report_error_(b, CallableUnitSignature(b, l + 1));
+    r = p && CallableUnitBody(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
