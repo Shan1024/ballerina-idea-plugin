@@ -59,7 +59,10 @@
         <indexPatternBuilder implementation="org.ballerinalang.plugins.idea.BallerinaIndexPatternBuilder"/>
 
         <completion.contributor language="Ballerina"
-                                implementationClass="org.ballerinalang.plugins.idea.completion.BallerinaReferenceCompletionProvider"/>
+                                implementationClass="org.ballerinalang.plugins.idea.completion.BallerinaReferenceCompletionContributor"/>
+
+        <completion.contributor language="Ballerina"
+                                implementationClass="org.ballerinalang.plugins.idea.completion.BallerinaCompletionContributor"/>
 
         <lang.findUsagesProvider language="Ballerina"
                                  implementationClass="org.ballerinalang.plugins.idea.usage.BallerinaFindUsageProvider"/>

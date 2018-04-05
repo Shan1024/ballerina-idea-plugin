@@ -37,6 +37,6 @@ public interface BallerinaNameReference extends BallerinaNamedElement, Ballerina
   @Nullable
   BallerinaTypeName resolveType();
 
-  boolean isReferenceToLocalPackage();
+  boolean isInLocalPackage();
 
 }

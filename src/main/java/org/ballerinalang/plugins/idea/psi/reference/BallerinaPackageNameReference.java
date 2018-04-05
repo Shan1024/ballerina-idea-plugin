@@ -55,7 +55,7 @@ public class BallerinaPackageNameReference extends BallerinaCachedReference<Ball
         //
         //        Collection<BallerinaFunctionDefinition> elements;
         //
-        //        if (nameReference.isReferenceToLocalPackage()) {
+        //        if (nameReference.isInLocalPackage()) {
         //
         //            PsiFile originalFile = myElement.getContainingFile().getOriginalFile();
         //            PsiDirectory parent = originalFile.getParent();
