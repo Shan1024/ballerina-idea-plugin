@@ -149,21 +149,22 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
         if (nameReference.isInLocalPackage()) {
 
             PsiFile originalFile = myElement.getContainingFile().getOriginalFile();
-//            PsiDirectory directory = originalFile.getParent();
-//            if (directory == null) {
-//                return null;
-//            }
-//            List<VirtualFile> virtualFiles = Arrays.asList(directory.getVirtualFile().getChildren());
+            //            PsiDirectory directory = originalFile.getParent();
+            //            if (directory == null) {
+            //                return null;
+            //            }
+            //            List<VirtualFile> virtualFiles = Arrays.asList(directory.getVirtualFile().getChildren());
 
-//            GlobalSearchScope scope = GlobalSearchScope.filesScope(project, virtualFiles);
+            //            GlobalSearchScope scope = GlobalSearchScope.filesScope(project, virtualFiles);
             //            elements = StubIndex.getTopLevelElements(BallerinaFunctionIndex.KEY, myElement.getText(),
             // project,
             // scope,
             //                    BallerinaFunctionDefinition.class);
             PsiDirectory directory = getPackageDirectory(originalFile);
             if (directory != null) {
-//                Collection<BallerinaTopLevelDefinition> elements = getTopLevelElements(directory, true);
-                return findInTopLevelElements(directory,true);
+                //                Collection<BallerinaTopLevelDefinition> elements = getTopLevelElements(directory,
+                // true);
+                return findInTopLevelElements(directory, true);
             }
 
         } else {
@@ -193,10 +194,10 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
             // scope,
             //                    BallerinaFunctionDefinition.class);
 
-//            Collection<BallerinaTopLevelDefinition> elements = getTopLevelElements(),
-//                    true);
+            //            Collection<BallerinaTopLevelDefinition> elements = getTopLevelElements(),
+            //                    true);
 
-            return findInTopLevelElements((PsiDirectory) directory,true);
+            return findInTopLevelElements((PsiDirectory) directory, true);
 
 
         }
@@ -426,10 +427,11 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
 
         for (PsiDirectory directory : directories) {
 
-            return findInTopLevelElements(directory, false);
+            PsiElement element = findInTopLevelElements(directory, false);
+            if (element != null) {
+                return element;
+            }
         }
-
-
         return null;
     }
 
