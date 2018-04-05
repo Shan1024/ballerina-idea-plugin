@@ -42,9 +42,9 @@ public class BallerinaLambdaFunctionImpl extends BallerinaCompositeElementImpl i
   }
 
   @Override
-  @NotNull
+  @Nullable
   public BallerinaCallableUnitBody getCallableUnitBody() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaCallableUnitBody.class));
+    return PsiTreeUtil.getChildOfType(this, BallerinaCallableUnitBody.class);
   }
 
   @Override

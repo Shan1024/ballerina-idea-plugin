@@ -29,7 +29,7 @@ public interface BallerinaTriggerWorker extends BallerinaCompositeElement {
   @NotNull
   PsiElement getRarrow();
 
-  @Nullable
+  @NotNull
   PsiElement getSemicolon();
 
   @Nullable

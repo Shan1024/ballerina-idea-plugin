@@ -95,10 +95,4 @@ public class BallerinaDefinitionImpl extends BallerinaCompositeElementImpl imple
     return PsiTreeUtil.getChildOfType(this, BallerinaDocumentationAttachment.class);
   }
 
-  @Override
-  @Nullable
-  public PsiElement getEnumDefinition() {
-    return findChildByType(ENUMDEFINITION);
-  }
-
 }

@@ -54,21 +54,21 @@ public class BallerinaAssignmentStatementImpl extends BallerinaCompositeElementI
   }
 
   @Override
-  @NotNull
+  @Nullable
   public BallerinaVariableReference getVariableReference() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaVariableReference.class));
+    return PsiTreeUtil.getChildOfType(this, BallerinaVariableReference.class);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getAssign() {
-    return notNullChild(findChildByType(ASSIGN));
+    return findChildByType(ASSIGN);
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getSemicolon() {
-    return notNullChild(findChildByType(SEMICOLON));
+    return findChildByType(SEMICOLON);
   }
 
   @Override

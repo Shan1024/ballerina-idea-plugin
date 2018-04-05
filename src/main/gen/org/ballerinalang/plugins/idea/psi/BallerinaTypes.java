@@ -340,7 +340,6 @@ public interface BallerinaTypes {
   IElementType ELSE = new BallerinaTokenType("else");
   IElementType ENDPOINT = new BallerinaTokenType("endpoint");
   IElementType ENUM = new BallerinaTokenType("enum");
-  IElementType ENUMDEFINITION = new BallerinaTokenType("EnumDefinition");
   IElementType EQUAL = new BallerinaTokenType("==");
   IElementType EQUALS = new BallerinaTokenType("EQUALS");
   IElementType EQUAL_GT = new BallerinaTokenType("=>");

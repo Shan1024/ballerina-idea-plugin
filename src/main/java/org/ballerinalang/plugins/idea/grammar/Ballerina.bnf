@@ -190,14 +190,13 @@ Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachme
                | GlobalVariableDefinition
                | ServiceDefinition
                | FunctionDefinition
-               | EnumDefinition
                | AnnotationDefinition
                | GlobalEndpointDefinition
                ) {
     recoverWhile=TopLevelDefinitionRecover
 }
 
-private TopLevelDefinitionRecover ::= !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|service|function|enum|annotation|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|stream|identifier|'{')
+private TopLevelDefinitionRecover ::= !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|service|function|enum|annotation|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|stream|object|identifier|'{')
 
 ServiceDefinition ::= service (LT NameReference GT) identifier ServiceEndpointAttachments?  ServiceBody {pin=1}
 ServiceEndpointAttachments ::= bind (NameReference (COMMA NameReference)* | RecordLiteral) {pin=1}
@@ -228,7 +227,7 @@ private FunctionWithoutReceiver ::= AttachedObject DOUBLE_COLON CallableUnitSign
 
 AttachedObject ::= identifier
 
-LambdaFunction ::= LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS EQUAL_GT LambdaReturnParameter? CallableUnitBody /*{pin=1}*/
+LambdaFunction ::= LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS EQUAL_GT LambdaReturnParameter? CallableUnitBody {pin=4}
 
 // Todo - cache and add Signature owner?
 CallableUnitSignature ::= identifier LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS ReturnParameter? {pin=1}
@@ -253,7 +252,7 @@ ObjectInitializerParameterList ::= LEFT_PARENTHESIS ObjectParameterList? RIGHT_P
 ObjectFunctions ::= (AnnotationAttachment* documentationAttachment? deprecatedAttachment? ObjectFunctionDefinition)+
 
 // TODO merge with fieldDefinition later
-fieldDefinition ::= TypeName identifier (ASSIGN Expression)? (COMMA | SEMICOLON)
+fieldDefinition ::= AnnotationAttachment* TypeName identifier (ASSIGN Expression)? (COMMA | SEMICOLON)
 
 // TODO try to merge with formalParameterList later
 ObjectParameterList ::= (ObjectDefaultableParameter | ObjectParameter) (COMMA (ObjectDefaultableParameter | ObjectParameter))* (COMMA RestParameter)? | RestParameter
@@ -407,11 +406,11 @@ Statement ::=
     |   IfElseStatement
     |   TryCatchStatement
     |   ForkJoinStatement
-    |   ExpressionStmt
-    |   VariableDefinitionStatement
+    |   tupleDestructuringStatement
     |   WorkerInteractionStatement
     |   AssignmentStatement
-    |   tupleDestructuringStatement
+    |   VariableDefinitionStatement
+    |   ExpressionStmt
     |   CompoundAssignmentStatement
     |   PostIncrementStatement
     |   StreamingQueryStatement
@@ -420,7 +419,7 @@ Statement ::=
 // Todo - Add more tokens
 // Note - Literals are added for worker interactions - 10 -> w2;
 // NULL_LITERAL is added for match pattern -  null => return "error";
-private StatementRecover ::= !(BOOLEAN_LITERAL|QUOTED_STRING_LITERAL|DECIMAL_INTEGER_LITERAL|HEX_INTEGER_LITERAL|OCTAL_INTEGER_LITERAL|BINARY_INTEGER_LITERAL|NULL_LITERAL|int|string|float|boolean|blob|any|json|xml|xmlns|map|table|function|stream|'('|'}'|';'|typedesc|future|await|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|transaction|if|forever|identifier)
+private StatementRecover ::= !(BOOLEAN_LITERAL|QUOTED_STRING_LITERAL|DECIMAL_INTEGER_LITERAL|HEX_INTEGER_LITERAL|OCTAL_INTEGER_LITERAL|BINARY_INTEGER_LITERAL|NULL_LITERAL|int|string|float|boolean|blob|any|json|xml|xmlns|map|table|function|stream|'('|'}'|';'|typedesc|future|await|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|transaction|if|forever|object|identifier)
 
 //private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
 
@@ -448,7 +447,10 @@ ArrayLiteral ::= LEFT_BRACKET ExpressionList? RIGHT_BRACKET
 
 TypeInitExpr ::= new UserDefineTypeName LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS | new (LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS)? {pin=1}
 
-AssignmentStatement ::= (var)? VariableReference ASSIGN (ActionInvocation | Expression) SEMICOLON /*{pin=2}*/
+AssignmentStatement ::= withVar | withoutVar
+
+private withVar ::= var VariableReference ASSIGN (ActionInvocation | Expression) SEMICOLON {pin=1}
+private withoutVar ::= VariableReference ASSIGN (ActionInvocation | Expression) SEMICOLON
 
 tupleDestructuringStatement ::= var? LEFT_PARENTHESIS VariableReferenceList RIGHT_PARENTHESIS ASSIGN (ActionInvocation | Expression) SEMICOLON
                                 | LEFT_PARENTHESIS ParameterList RIGHT_PARENTHESIS ASSIGN (ActionInvocation | Expression) SEMICOLON
@@ -527,7 +529,8 @@ ReturnStatement ::= return Expression? SEMICOLON {pin=1}
 WorkerInteractionStatement ::= TriggerWorker | WorkerReply
 
 // below left identifier is of type TYPE_MESSAGE and the right identifier is of type WORKER
-TriggerWorker ::=  ExpressionList RARROW (fork | identifier) SEMICOLON {pin=2}
+// Note - Cannot pin rarrow since it will mess up action invocation in statementexpr - client -> invoke1(a, a);
+TriggerWorker ::=  ExpressionList RARROW (fork | identifier) SEMICOLON /*{pin=2}*/
 
 // below left identifier is of type WORKER and the right identifier is of type message
 WorkerReply ::= ExpressionList LARROW identifier SEMICOLON {pin=2}
@@ -570,7 +573,7 @@ InvocationArgList ::= InvocationArg (COMMA InvocationArg)* {pin(".*")=1}
 InvocationArg ::= NamedArgs | RestArgs | Expression
 
 // Todo - Update the recovery rule
-ActionInvocation ::= async? NameReference RARROW FunctionInvocation {pin=3 /*recoverWhile=StatementRecover*/}
+ActionInvocation ::= async? NameReference RARROW FunctionInvocation {/*pin=3 recoverWhile=StatementRecover*/}
 
 ExpressionList ::= Expression (COMMA Expression)* {
     pin(".*")=1
@@ -611,7 +614,8 @@ NamespaceDeclaration ::= xmlns QUOTED_STRING_LITERAL (as identifier)? SEMICOLON 
 
 Expression
     ::=
-        SimpleLiteralExpression
+        LambdaFunctionExpression
+    |   SimpleLiteralExpression
     |   StringTemplateLiteralExpression
     |   XmlLiteralExpression
     |   TableLiteralExpression
@@ -622,7 +626,6 @@ Expression
     |   ValueTypeTypeExpression
     |   BuiltInReferenceTypeTypeExpression
     |   VariableReferenceExpression
-    |   LambdaFunctionExpression
     |   TypeInitExpression
     |   TypeConversionExpression
     |   UnaryExpression // Unary > Type access - if (typeof temp_int)
@@ -645,7 +648,7 @@ TableQueryExpression ::= TableQuery
 
 TableLiteralExpression ::= TableLiteral
 
-private ExpressionRecover ::= !(NULL_LITERAL|int|string|float|boolean|blob|any|map|table|function|stream|'}'|';'|var |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|but|if|forever|check)
+private ExpressionRecover ::= !(NULL_LITERAL|int|string|float|boolean|blob|any|map|table|function|stream|'}'|';'|var |while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|xmlns|transaction|but|if|forever|object|check)
 
 fake BinaryExpression ::= Expression {
   methods=[left="Expression[0]" right="Expression[1]" getOperator]

@@ -50,7 +50,4 @@ public interface BallerinaDefinition extends BallerinaCompositeElement {
   @Nullable
   BallerinaDocumentationAttachment getDocumentationAttachment();
 
-  @Nullable
-  PsiElement getEnumDefinition();
-
 }

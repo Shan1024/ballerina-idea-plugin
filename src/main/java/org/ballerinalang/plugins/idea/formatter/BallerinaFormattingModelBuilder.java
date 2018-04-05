@@ -78,6 +78,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EXPIRED;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EXPRESSION_LIST;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FAIL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FIELD;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FIELD_DEFINITION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FINALLY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FIRST;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FLOATING_POINT_LITERAL;
@@ -135,6 +136,8 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NOT_EQUAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NULLABLE_TYPE_NAME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NULL_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OBJECT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OBJECT_BODY;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OBJECT_INITIALIZER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ON;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONABORT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONCOMMIT;
@@ -428,6 +431,12 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .between(RETURN, SEMICOLON).spaceIf(false)
                 .after(RETURN).spaceIf(true)
                 .around(RANGE).spaceIf(false)
+
+                .around(OBJECT_BODY).spaceIf(true)
+                .around(FIELD_DEFINITION).spaceIf(true)
+                .around(OBJECT_INITIALIZER).spaceIf(true)
+
+                .around(ANNOTATION_ATTACHMENT).spaceIf(true)
 
                 // Streaming
                 .before(WHERE_CLAUSE).spaceIf(true)

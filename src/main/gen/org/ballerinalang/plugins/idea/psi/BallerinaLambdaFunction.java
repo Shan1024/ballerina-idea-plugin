@@ -23,7 +23,7 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaLambdaFunction extends BallerinaCompositeElement {
 
-  @NotNull
+  @Nullable
   BallerinaCallableUnitBody getCallableUnitBody();
 
   @Nullable
