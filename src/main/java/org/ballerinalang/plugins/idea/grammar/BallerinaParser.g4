@@ -11,7 +11,7 @@ options {
 compilationUnit
     :   packageDeclaration?
         (importDeclaration | namespaceDeclaration)*
-        (annotationAttachment* documentationAttachment? deprecatedAttachment? definition)*
+        (annotationAttachment? documentationAttachment? deprecatedAttachment? definition)*
         EOF
     ;
 

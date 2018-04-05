@@ -185,7 +185,7 @@ Alias ::= as identifier {
 }
 
 // Note - Global variable definition should be the first definition since it can contain identifier as type.
-Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment?
+Definition ::= AnnotationAttachment? documentationAttachment? deprecatedAttachment?
                ( TypeDefinition
                | GlobalVariableDefinition
                | ServiceDefinition

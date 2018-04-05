@@ -42,9 +42,9 @@ public class BallerinaDefinitionImpl extends BallerinaCompositeElementImpl imple
   }
 
   @Override
-  @NotNull
-  public List<BallerinaAnnotationAttachment> getAnnotationAttachmentList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaAnnotationAttachment.class);
+  @Nullable
+  public BallerinaAnnotationAttachment getAnnotationAttachment() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaAnnotationAttachment.class);
   }
 
   @Override

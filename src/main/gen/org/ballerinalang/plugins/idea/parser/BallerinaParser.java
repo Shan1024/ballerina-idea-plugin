@@ -1589,7 +1589,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // AnnotationAttachment* documentationAttachment? deprecatedAttachment?
+  // AnnotationAttachment? documentationAttachment? deprecatedAttachment?
   //                ( TypeDefinition
   //                | GlobalVariableDefinition
   //                | ServiceDefinition
@@ -1609,15 +1609,10 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // AnnotationAttachment*
+  // AnnotationAttachment?
   private static boolean Definition_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Definition_0")) return false;
-    int c = current_position_(b);
-    while (true) {
-      if (!AnnotationAttachment(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "Definition_0", c)) break;
-      c = current_position_(b);
-    }
+    AnnotationAttachment(b, l + 1);
     return true;
   }
 
