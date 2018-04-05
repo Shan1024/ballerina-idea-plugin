@@ -122,14 +122,14 @@
     extends("(Simple|Array|Nullable|Union|Group|Tuple|Annotated|Object|Record)TypeName|BinaryAndExpression") = TypeName
 
     // Each named definition which can be renamed should implement this interface.
-    implements("(Function|Struct|GlobalVariable|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+    implements("(Function|Struct|GlobalVariable|Enum|Annotation|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
     // This is to identify top level elements in a file.
-    implements("(Function|Struct|GlobalVariable|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaTopLevelDefinition"
+    implements("(Function|Struct|GlobalVariable|Enum|Annotation|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaTopLevelDefinition"
     // Each named definition should extend this class.
-    extends("(Function|Struct|GlobalVariable|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
+    extends("(Function|Struct|GlobalVariable|Enum|Annotation|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
 
     // Each stubbed element should have this element type factory.
-    elementTypeFactory("PackageDeclaration|(Function|Struct|GlobalVariable|Enum|Annotation|Transformer|Constant|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.stubs.factory.BallerinaElementTypeFactory.stubFactory"
+    elementTypeFactory("PackageDeclaration|(Function|Struct|GlobalVariable|Enum|Annotation|(.*Endpoint)|Action|Worker)Definition") = "org.ballerinalang.plugins.idea.stubs.factory.BallerinaElementTypeFactory.stubFactory"
 
     // Each stub which is not a named definition should extend this class.
     extends("PackageDeclaration") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaStubbedElementImpl<?>"
@@ -137,11 +137,11 @@
     // "|NamespaceDeclaration|ParameterList|ParameterTypeNameList|CallableUnitSignature|ParameterTypeNameList|ReturnParameters"
     // Todo - Add CatchClause, TriggerWorker, WorkerReply?
     // Each named element (which can be renamed) should implement this interface.
-    implements("Package(Name|Version)|OrgName|Alias|(Name|Package)Reference|Enumerator|VariableDefinitionStatement|Field(Definition)?|NamespaceDeclaration") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
+    implements("Package(Name|Version)|OrgName|Alias|(Name|Package)Reference|Enumerator|VariableDefinitionStatement|NamespaceDeclaration") = "org.ballerinalang.plugins.idea.psi.BallerinaNamedElement"
     // Each named element should extend this class.
-    extends("Package(Name|Version)|OrgName|Alias|(Name|Package)Reference|Enumerator|VariableDefinitionStatement|Field(Definition)?|NamespaceDeclaration") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
+    extends("Package(Name|Version)|OrgName|Alias|(Name|Package)Reference|Enumerator|VariableDefinitionStatement|NamespaceDeclaration") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
     // Each stubbed element should have this element type factory.
-    elementTypeFactory("Package(Name|Version)|OrgName|Alias|(Name|Package)Reference|Enumerator|VariableDefinitionStatement|Field(Definition)?|NamespaceDeclaration") = "org.ballerinalang.plugins.idea.stubs.factory.BallerinaElementTypeFactory.stubFactory"
+    elementTypeFactory("Package(Name|Version)|OrgName|Alias|(Name|Package)Reference|Enumerator|VariableDefinitionStatement|NamespaceDeclaration") = "org.ballerinalang.plugins.idea.stubs.factory.BallerinaElementTypeFactory.stubFactory"
 
     implements("NameReference") = "org.ballerinalang.plugins.idea.psi.BallerinaReferenceExpressionBase"
 
@@ -187,19 +187,17 @@ Alias ::= as identifier {
 // Note - Global variable definition should be the first definition since it can contain identifier as type.
 Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment?
                ( TypeDefinition
-               | StructDefinition
                | GlobalVariableDefinition
                | ServiceDefinition
                | FunctionDefinition
                | EnumDefinition
                | AnnotationDefinition
-               | ConstantDefinition
                | GlobalEndpointDefinition
                ) {
     recoverWhile=TopLevelDefinitionRecover
 }
 
-private TopLevelDefinitionRecover ::= !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|struct|service|function|enum|annotation|transformer|const|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|stream|identifier|'{')
+private TopLevelDefinitionRecover ::= !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|service|function|enum|annotation|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|stream|identifier|'{')
 
 ServiceDefinition ::= service (LT NameReference GT) identifier ServiceEndpointAttachments?  ServiceBody {pin=1}
 ServiceEndpointAttachments ::= bind (NameReference (COMMA NameReference)* | RecordLiteral) {pin=1}
@@ -219,7 +217,7 @@ BlockWithEndpointAndWorker ::= EndpointDefinition* WorkerDefinition+ {elementTyp
 NonEmptyBlock ::= Statement+ {elementType=Block}
 //private StatementRecover ::= !(int | string | '}' | '=')
 
-//private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
+//private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /* switch | var | next |try |*/ int )
 
 // Todo - Need getIdentifier?
 FunctionDefinition ::= (public)? (native)? function (FunctionWithoutReceiver | FunctionWithReceiver) {
@@ -235,24 +233,18 @@ LambdaFunction ::= LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS EQUAL
 // Todo - cache and add Signature owner?
 CallableUnitSignature ::= identifier LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS ReturnParameter? {pin=1}
 
-StructDefinition ::= (public)? struct identifier StructBody {
+TypeDefinition ::= (public)? type (identifier | finiteType) TypeName {
     pin=2
     methods=[getName]
-    stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaStructDefinitionStub"
+    // Todo - Rename and enable
+//    stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaStructDefinitionStub"
 }
-
-StructBody ::= LEFT_BRACE FieldDefinition* PrivateStructBody? RIGHT_BRACE
-
-// Todo - Cache
-PrivateStructBody ::= private COLON FieldDefinition* {pin=1}
-
-TypeDefinition ::= (public)? type identifier TypeName {pin=2}
 
 ObjectBody ::= PublicObjectFields? PrivateObjectFields? ObjectInitializer? ObjectFunctions?
 
-PublicObjectFields ::= public LEFT_BRACE ObjectFieldDefinition* RIGHT_BRACE {pin=1}
+PublicObjectFields ::= public LEFT_BRACE fieldDefinition* RIGHT_BRACE {pin=1}
 
-PrivateObjectFields ::= private LEFT_BRACE ObjectFieldDefinition* RIGHT_BRACE {pin=1}
+PrivateObjectFields ::= private LEFT_BRACE fieldDefinition* RIGHT_BRACE {pin=1}
 
 ObjectInitializer ::= AnnotationAttachment* documentationAttachment? (public)? (native)? new ObjectInitializerParameterList CallableUnitBody {pin=5}
 
@@ -261,7 +253,7 @@ ObjectInitializerParameterList ::= LEFT_PARENTHESIS ObjectParameterList? RIGHT_P
 ObjectFunctions ::= (AnnotationAttachment* documentationAttachment? deprecatedAttachment? ObjectFunctionDefinition)+
 
 // TODO merge with fieldDefinition later
-ObjectFieldDefinition ::= TypeName identifier (ASSIGN Expression)? (COMMA | SEMICOLON)
+fieldDefinition ::= TypeName identifier (ASSIGN Expression)? (COMMA | SEMICOLON)
 
 // TODO try to merge with formalParameterList later
 ObjectParameterList ::= (ObjectDefaultableParameter | ObjectParameter) (COMMA (ObjectDefaultableParameter | ObjectParameter))* (COMMA RestParameter)? | RestParameter
@@ -288,39 +280,15 @@ AnnotationDefinition ::= (public)? annotation (LT AttachmentPoint (COMMA Attachm
 
 //private AttachmentPointsRecover ::= !(GT | Identifier | SEMICOLON)
 
-EnumDefinition ::= (public)? enum identifier EnumBody {
-    pin=2
-    stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaEnumDefinitionStub"
-}
-
-EnumBody ::= LEFT_BRACE Enumerator (COMMA Enumerator)* RIGHT_BRACE
-
-Enumerator ::= identifier {
-    stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaEnumeratorStub"
-}
-
-GlobalVariableDefinition ::= (public)? TypeName identifier ((ASSIGN | SAFE_ASSIGNMENT) Expression)? SEMICOLON {
+GlobalVariableDefinition ::= (public)? TypeName identifier (ASSIGN  Expression)? SEMICOLON {
     pin=2
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaGlobalVariableDefinitionStub"
 }
 
-// Todo - Remove
-TransformerDefinition ::= (public)? transformer LT ParameterList GT (identifier LEFT_PARENTHESIS ParameterList? RIGHT_PARENTHESIS)? CallableUnitBody {
-    pin=2
-    stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaTransformerDefinitionStub"
-}
-
 // Todo - Need to update the service?
 // Note - "parameter" is treated differently here because there is a parser rule named "parameter" as well.
-AttachmentPoint ::= service | resource | function | struct | enum | endpoint | const | TYPE_PARAMETER | annotation {
+AttachmentPoint ::= service | resource | function | object | type | endpoint | TYPE_PARAMETER | annotation {
     /*recoverWhile=AttachmentPointRecover*/
-}
-
-//private AttachmentPointRecover ::= !(COMMA | GT)
-
-ConstantDefinition ::= (public)? const ValueTypeName identifier (ASSIGN | SAFE_ASSIGNMENT) Expression SEMICOLON {
-    pin=2
-    stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaConstantDefinitionStub"
 }
 
 // Todo - Rename as declaration
@@ -344,6 +312,10 @@ EndpointDefinition ::= AnnotationAttachment* endpoint EndpointType identifier En
 EndpointType ::= NameReference
 
 EndpointInitlization ::= RecordLiteral | ASSIGN VariableReference
+
+finiteType ::= finiteTypeUnit (PIPE finiteTypeUnit)*
+
+finiteTypeUnit ::= SimpleLiteral | TypeName
 
 //todo
 TypeName ::= TupleTypeName
@@ -374,7 +346,7 @@ TupleTypeName ::= LEFT_PARENTHESIS TypeName (COMMA TypeName)* RIGHT_PARENTHESIS
 ObjectTypeName ::= object LEFT_BRACE ObjectBody RIGHT_BRACE
 RecordTypeName ::= LEFT_BRACE FieldDefinitionList RIGHT_BRACE
 
-FieldDefinitionList ::= ObjectFieldDefinition*
+FieldDefinitionList ::= fieldDefinition*
 
 BuiltInTypeName ::= AnyTypeName
                     | SimpleTypeName (LEFT_BRACKET RIGHT_BRACKET)+
@@ -384,11 +356,8 @@ BuiltInTypeName ::= AnyTypeName
 
 ReferenceTypeName ::= BuiltInReferenceTypeName
                       | UserDefineTypeName
-                      | AnonStructTypeName
 
 UserDefineTypeName ::= NameReference
-
-AnonStructTypeName ::= struct StructBody {pin=1}
 
 ValueTypeName ::=   boolean | int | float | string | blob
 
@@ -453,7 +422,7 @@ Statement ::=
 // NULL_LITERAL is added for match pattern -  null => return "error";
 private StatementRecover ::= !(BOOLEAN_LITERAL|QUOTED_STRING_LITERAL|DECIMAL_INTEGER_LITERAL|HEX_INTEGER_LITERAL|OCTAL_INTEGER_LITERAL|BINARY_INTEGER_LITERAL|NULL_LITERAL|int|string|float|boolean|blob|any|json|xml|xmlns|map|table|function|stream|'('|'}'|';'|typedesc|future|await|var|while|match|foreach|next|break|fork|try|throw|return|abort|fail|lock|transaction|if|forever|identifier)
 
-//private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
+//private StatementRecover ::= !(/*'!' | '&' | '(' | '*' | '+' | '-' |*/ ';' /*| '<-' | '^' | 'type' |*/ /*'{' | '|' |*/ '|=' | '||' | '}' | /*break | case | char | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex |*/ identifier | /* if | interface | map | oct | return | select |*/ string  | /*struct | switch | var | next |try |*/ int )
 
 VariableDefinitionStatement ::= TypeName identifier VariableAssignment? SEMICOLON {
     pin=2
@@ -461,7 +430,7 @@ VariableDefinitionStatement ::= TypeName identifier VariableAssignment? SEMICOLO
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaVariableDefinitionStatementStub"
 }
 
-private VariableAssignment ::= (ASSIGN | SAFE_ASSIGNMENT) (ActionInvocation | Expression) {pin=1}
+private VariableAssignment ::= ASSIGN (ActionInvocation | Expression) {pin=1}
 
 RecordLiteral ::= LEFT_BRACE RecordLiteralBody? RIGHT_BRACE {pin(".*")=1}
 
@@ -479,7 +448,7 @@ ArrayLiteral ::= LEFT_BRACKET ExpressionList? RIGHT_BRACKET
 
 TypeInitExpr ::= new UserDefineTypeName LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS | new (LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS)? {pin=1}
 
-AssignmentStatement ::= (var)? VariableReference (ASSIGN | SAFE_ASSIGNMENT) (ActionInvocation | Expression) SEMICOLON /*{pin=2}*/
+AssignmentStatement ::= (var)? VariableReference ASSIGN (ActionInvocation | Expression) SEMICOLON /*{pin=2}*/
 
 tupleDestructuringStatement ::= var? LEFT_PARENTHESIS VariableReferenceList RIGHT_PARENTHESIS ASSIGN (ActionInvocation | Expression) SEMICOLON
                                 | LEFT_PARENTHESIS ParameterList RIGHT_PARENTHESIS ASSIGN (ActionInvocation | Expression) SEMICOLON
@@ -581,9 +550,9 @@ FunctionInvocationReference ::= (async)? FunctionInvocation
 SimpleVariableReference ::=  NameReference
 AwaitExpressionReference ::= AwaitExpression
 
-Field ::= DOT (identifier | MUL) {
+Field ::= (DOT | NOT) (identifier | MUL) {
     /*pin=1*/
-    stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFieldStub"
+//    stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFieldStub"
 }
 
 Index ::= LEFT_BRACKET Expression RIGHT_BRACKET /*{pin=1}*/
@@ -682,7 +651,7 @@ fake BinaryExpression ::= Expression {
   methods=[left="Expression[0]" right="Expression[1]" getOperator]
 }
 
-//private ExpressionRecover ::=  !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | const | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var )
+//private ExpressionRecover ::=  !('!' | '!=' | '%' | '%=' | '&&' | '&' | '&=' | '&^' | '&^=' | '(' | ')' | '*' | '*=' | '+' | '++' | '+=' | ',' | '-' | '--' | '-=' | '...' | '/' | '/=' | ':' | ';' | '<' | '<-' | '<<' | '<<=' | '<=' | '<NL>' | '=' | '==' | '>' | '>=' | '>>' | '>>=' | '[' | ']' | '^' | '^=' | 'type' | '{' | '|' | '|=' | '||' | '}' | break | case | chan | char | continue | decimali | default | defer | else | fallthrough | float | floati | for | func | go | goto | hex | identifier | if | int | interface | map | oct | return | select | string | raw_string | struct | switch | var )
 SimpleLiteralExpression ::= SimpleLiteral
 ArrayLiteralExpression ::= ArrayLiteral
 RecordLiteralExpression ::= RecordLiteral
@@ -751,12 +720,6 @@ DefaultableParameter ::= Parameter ASSIGN Expression
 RestParameter ::= AnnotationAttachment* TypeName ELLIPSIS identifier
 
 FormalParameterList ::= (DefaultableParameter | Parameter) (COMMA (DefaultableParameter | Parameter))* (COMMA RestParameter)? | RestParameter
-
-// Todo - cache
-FieldDefinition ::= TypeName identifier (ASSIGN Expression)? SEMICOLON {
-    pin=1
-    stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaFieldDefinitionStub"
-}
 
 SimpleLiteral ::= (ADD|SUB)? IntegerLiteral
                   | (ADD|SUB)? FLOATING_POINT_LITERAL

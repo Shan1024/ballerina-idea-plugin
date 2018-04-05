@@ -36,9 +36,6 @@ public interface BallerinaGlobalVariableDefinition extends BallerinaNamedElement
   PsiElement getAssign();
 
   @Nullable
-  PsiElement getSafeAssignment();
-
-  @Nullable
   PsiElement getSemicolon();
 
   @Nullable

@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaPublicObjectFields extends BallerinaCompositeElement {
 
   @NotNull
-  List<BallerinaObjectFieldDefinition> getObjectFieldDefinitionList();
+  List<BallerinaFieldDefinition> getFieldDefinitionList();
 
   @Nullable
   PsiElement getLeftBrace();

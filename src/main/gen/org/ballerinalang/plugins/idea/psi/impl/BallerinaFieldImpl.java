@@ -24,15 +24,9 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
-import org.ballerinalang.plugins.idea.stubs.BallerinaFieldStub;
 import org.ballerinalang.plugins.idea.psi.*;
-import com.intellij.psi.stubs.IStubElementType;
 
-public class BallerinaFieldImpl extends BallerinaNamedElementImpl<BallerinaFieldStub> implements BallerinaField {
-
-  public BallerinaFieldImpl(BallerinaFieldStub stub, IStubElementType type) {
-    super(stub, type);
-  }
+public class BallerinaFieldImpl extends BallerinaCompositeElementImpl implements BallerinaField {
 
   public BallerinaFieldImpl(ASTNode node) {
     super(node);
@@ -48,15 +42,21 @@ public class BallerinaFieldImpl extends BallerinaNamedElementImpl<BallerinaField
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getDot() {
-    return notNullChild(findChildByType(DOT));
+    return findChildByType(DOT);
   }
 
   @Override
   @Nullable
   public PsiElement getMul() {
     return findChildByType(MUL);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getNot() {
+    return findChildByType(NOT);
   }
 
   @Override

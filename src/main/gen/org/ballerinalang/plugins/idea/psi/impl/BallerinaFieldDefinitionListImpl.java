@@ -43,8 +43,8 @@ public class BallerinaFieldDefinitionListImpl extends BallerinaCompositeElementI
 
   @Override
   @NotNull
-  public List<BallerinaObjectFieldDefinition> getObjectFieldDefinitionList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaObjectFieldDefinition.class);
+  public List<BallerinaFieldDefinition> getFieldDefinitionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaFieldDefinition.class);
   }
 
 }

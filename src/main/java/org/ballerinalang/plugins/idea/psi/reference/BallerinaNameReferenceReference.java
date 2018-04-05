@@ -35,11 +35,10 @@ import org.ballerinalang.plugins.idea.completion.inserthandlers.ParenthesisInser
 import org.ballerinalang.plugins.idea.psi.BallerinaExpressionStmt;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
-import org.ballerinalang.plugins.idea.psi.BallerinaStructDefinition;
-import org.ballerinalang.plugins.idea.psi.BallerinaVariableDefinitionStatement;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaTopLevelDefinition;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaFunctionIndex;
 import org.jetbrains.annotations.NotNull;
@@ -420,8 +419,8 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
                 InsertHandler<LookupElement> insertHandler =
                         ballerinaExpressionStmt != null ? ParenthesisInsertHandler.INSTANCE : null;
                 results.add(BallerinaCompletionUtils.createFunctionLookupElement(identifier, insertHandler));
-            } else if (element instanceof BallerinaStructDefinition) {
-                results.add(BallerinaCompletionUtils.createStructLookupElement(identifier));
+            } else if (element instanceof BallerinaGlobalVariableDefinition) {
+                results.add(BallerinaCompletionUtils.createGlobalVariableLookupElement(identifier));
             }
         }
         return results.toArray(new LookupElement[results.size()]);

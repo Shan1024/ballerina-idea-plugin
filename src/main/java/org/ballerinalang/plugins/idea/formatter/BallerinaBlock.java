@@ -146,7 +146,7 @@ public class BallerinaBlock extends AbstractBlock {
         } else if (childElementType == BallerinaTypes.LINE_COMMENT
                 && (parentElementType == BallerinaTypes.CALLABLE_UNIT_BODY
                 || parentElementType == BallerinaTypes.IF_CLAUSE || parentElementType == BallerinaTypes.ELSE_IF_CLAUSE
-                || parentElementType == BallerinaTypes.ELSE_CLAUSE || parentElementType == BallerinaTypes.ENUM_BODY
+                || parentElementType == BallerinaTypes.ELSE_CLAUSE
                 || parentElementType == BallerinaTypes.WORKER_BODY
                 || parentElementType == BallerinaTypes.FORK_JOIN_STATEMENT
                 || parentElementType == BallerinaTypes.JOIN_CLAUSE_BODY
@@ -164,7 +164,7 @@ public class BallerinaBlock extends AbstractBlock {
                 || parentElementType == BallerinaTypes.TRY_CATCH_STATEMENT
                 || parentElementType == BallerinaTypes.CATCH_CLAUSE
                 || parentElementType == BallerinaTypes.FINALLY_CLAUSE
-                || parentElementType == BallerinaTypes.STRUCT_BODY
+
         )) {
             return Indent.getNormalIndent();
         } else if (parentElementType == BallerinaTypes.CALLABLE_UNIT_SIGNATURE) {
@@ -185,13 +185,11 @@ public class BallerinaBlock extends AbstractBlock {
                 || childElementType == BallerinaTypes.VARIABLE_DEFINITION_STATEMENT
                 || childElementType == BallerinaTypes.RESOURCE_DEFINITION)) {
             return Indent.getNormalIndent();
-        } else if (parentElementType == BallerinaTypes.STRUCT_BODY
-                && childElementType == BallerinaTypes.FIELD_DEFINITION) {
-            return Indent.getNormalIndent();
+//        } else if (parentElementType == BallerinaTypes.STRUCT_BODY
+//                && childElementType == BallerinaTypes.FIELD_DEFINITION) {
+//            return Indent.getNormalIndent();
         } else if (childElementType == BallerinaTypes.INVOCATION_ARG_LIST) {
             return Indent.getIndent(Indent.Type.NORMAL, true, true);
-        } else if (childElementType == BallerinaTypes.ENUMERATOR) {
-            return Indent.getNormalIndent();
         } else if (childElementType == BallerinaTypes.FORK_STATEMENT_BODY) {
             return Indent.getNormalIndent();
         } else if (childElementType == BallerinaTypes.JOIN_CLAUSE_BODY) {
@@ -206,8 +204,6 @@ public class BallerinaBlock extends AbstractBlock {
                 parentElementType == BallerinaTypes.ARRAY_LITERAL) {
             return Indent.getNormalIndent();
         } else if (childElementType == BallerinaTypes.OBJECT_BODY) {
-            return Indent.getNormalIndent();
-        } else if (childElementType == BallerinaTypes.OBJECT_FIELD_DEFINITION) {
             return Indent.getNormalIndent();
         } else if (childElementType == BallerinaTypes.FOREVER_STATEMENT_BODY) {
             return Indent.getNormalIndent();
@@ -234,10 +230,6 @@ public class BallerinaBlock extends AbstractBlock {
         } else if (myNode.getElementType() == BallerinaTypes.RECORD_LITERAL) {
             childIndent = Indent.getNormalIndent();
         } else if (myNode.getElementType() == BallerinaTypes.RECORD_LITERAL_BODY) {
-            childIndent = Indent.getNormalIndent();
-        } else if (myNode.getElementType() == BallerinaTypes.STRUCT_BODY) {
-            childIndent = Indent.getNormalIndent();
-        } else if (myNode.getElementType() == BallerinaTypes.ENUM_BODY) {
             childIndent = Indent.getNormalIndent();
         } else if (myNode.getElementType() == BallerinaTypes.WORKER_BODY) {
             childIndent = Indent.getNormalIndent();

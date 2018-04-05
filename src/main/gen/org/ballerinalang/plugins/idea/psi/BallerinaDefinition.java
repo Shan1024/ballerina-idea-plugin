@@ -30,12 +30,6 @@ public interface BallerinaDefinition extends BallerinaCompositeElement {
   BallerinaAnnotationDefinition getAnnotationDefinition();
 
   @Nullable
-  BallerinaConstantDefinition getConstantDefinition();
-
-  @Nullable
-  BallerinaEnumDefinition getEnumDefinition();
-
-  @Nullable
   BallerinaFunctionDefinition getFunctionDefinition();
 
   @Nullable
@@ -48,9 +42,6 @@ public interface BallerinaDefinition extends BallerinaCompositeElement {
   BallerinaServiceDefinition getServiceDefinition();
 
   @Nullable
-  BallerinaStructDefinition getStructDefinition();
-
-  @Nullable
   BallerinaTypeDefinition getTypeDefinition();
 
   @Nullable
@@ -58,5 +49,8 @@ public interface BallerinaDefinition extends BallerinaCompositeElement {
 
   @Nullable
   BallerinaDocumentationAttachment getDocumentationAttachment();
+
+  @Nullable
+  PsiElement getEnumDefinition();
 
 }

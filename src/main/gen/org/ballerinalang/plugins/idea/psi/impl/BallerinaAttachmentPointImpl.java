@@ -55,26 +55,20 @@ public class BallerinaAttachmentPointImpl extends BallerinaCompositeElementImpl 
 
   @Override
   @Nullable
-  public PsiElement getConst() {
-    return findChildByType(CONST);
-  }
-
-  @Override
-  @Nullable
   public PsiElement getEndpoint() {
     return findChildByType(ENDPOINT);
   }
 
   @Override
   @Nullable
-  public PsiElement getEnum() {
-    return findChildByType(ENUM);
+  public PsiElement getFunction() {
+    return findChildByType(FUNCTION);
   }
 
   @Override
   @Nullable
-  public PsiElement getFunction() {
-    return findChildByType(FUNCTION);
+  public PsiElement getObject() {
+    return findChildByType(OBJECT);
   }
 
   @Override
@@ -91,8 +85,8 @@ public class BallerinaAttachmentPointImpl extends BallerinaCompositeElementImpl 
 
   @Override
   @Nullable
-  public PsiElement getStruct() {
-    return findChildByType(STRUCT);
+  public PsiElement getType() {
+    return findChildByType(TYPE);
   }
 
 }

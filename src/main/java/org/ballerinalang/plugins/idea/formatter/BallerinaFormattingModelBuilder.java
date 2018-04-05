@@ -57,7 +57,6 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COLON;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMMA;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMPLETE_PACKAGE_NAME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMPOUND_OPERATOR;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CONST;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CURRENT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DAY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DECIMAL_INTEGER_LITERAL;
@@ -182,13 +181,11 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SIMPLE_VARIABLE_
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SNAPSHOT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SOME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.STREAM;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.STRUCT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SUB;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TABLE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.THROW;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TIMEOUT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TRANSACTION;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TRANSFORMER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TRY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TUPLE_TYPE_NAME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TYPEOF;
@@ -239,13 +236,10 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 //                .around(SERVICE).spaceIf(true)
                 .around(RESOURCE).spaceIf(true)
                 //                .around(FUNCTION).spaceIf(true)
-                .around(STRUCT).spaceIf(true)
                 .around(OBJECT).spaceIf(true)
                 .around(ANNOTATION).spaceIf(true)
                 .around(ENUM).spaceIf(true)
                 // .around(PARAMETER).spaceIf(true) // Todo
-                .around(CONST).spaceIf(true)
-                .around(TRANSFORMER).spaceIf(true)
                 .around(WORKER).spaceIf(true)
                 .around(ENDPOINT).spaceIf(true)
                 .around(BIND).spaceIf(true)

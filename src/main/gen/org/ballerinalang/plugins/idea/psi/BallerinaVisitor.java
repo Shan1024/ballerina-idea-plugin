@@ -48,10 +48,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
     // visitTopLevelDefinition(o);
   }
 
-  public void visitAnonStructTypeName(@NotNull BallerinaAnonStructTypeName o) {
-    visitCompositeElement(o);
-  }
-
   public void visitAnyIdentifierName(@NotNull BallerinaAnyIdentifierName o) {
     visitCompositeElement(o);
   }
@@ -192,11 +188,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitConstantDefinition(@NotNull BallerinaConstantDefinition o) {
-    visitNamedElement(o);
-    // visitTopLevelDefinition(o);
-  }
-
   public void visitContent(@NotNull BallerinaContent o) {
     visitCompositeElement(o);
   }
@@ -242,19 +233,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitEnumBody(@NotNull BallerinaEnumBody o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitEnumDefinition(@NotNull BallerinaEnumDefinition o) {
-    visitNamedElement(o);
-    // visitTopLevelDefinition(o);
-  }
-
-  public void visitEnumerator(@NotNull BallerinaEnumerator o) {
-    visitNamedElement(o);
-  }
-
   public void visitExpression(@NotNull BallerinaExpression o) {
     visitCompositeElement(o);
   }
@@ -268,11 +246,7 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitField(@NotNull BallerinaField o) {
-    visitNamedElement(o);
-  }
-
-  public void visitFieldDefinition(@NotNull BallerinaFieldDefinition o) {
-    visitNamedElement(o);
+    visitCompositeElement(o);
   }
 
   public void visitFieldDefinitionList(@NotNull BallerinaFieldDefinitionList o) {
@@ -491,10 +465,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitObjectFieldDefinition(@NotNull BallerinaObjectFieldDefinition o) {
-    visitCompositeElement(o);
-  }
-
   public void visitObjectFunctionDefinition(@NotNull BallerinaObjectFunctionDefinition o) {
     visitCompositeElement(o);
   }
@@ -600,10 +570,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitPrivateObjectFields(@NotNull BallerinaPrivateObjectFields o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitPrivateStructBody(@NotNull BallerinaPrivateStructBody o) {
     visitCompositeElement(o);
   }
 
@@ -759,15 +725,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
-  public void visitStructBody(@NotNull BallerinaStructBody o) {
-    visitCompositeElement(o);
-  }
-
-  public void visitStructDefinition(@NotNull BallerinaStructDefinition o) {
-    visitNamedElement(o);
-    // visitTopLevelDefinition(o);
-  }
-
   public void visitTableInitialization(@NotNull BallerinaTableInitialization o) {
     visitCompositeElement(o);
   }
@@ -826,11 +783,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
 
   public void visitTransactionStatement(@NotNull BallerinaTransactionStatement o) {
     visitCompositeElement(o);
-  }
-
-  public void visitTransformerDefinition(@NotNull BallerinaTransformerDefinition o) {
-    visitNamedElement(o);
-    // visitTopLevelDefinition(o);
   }
 
   public void visitTriggerWorker(@NotNull BallerinaTriggerWorker o) {
@@ -1047,6 +999,18 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitFailStatement(@NotNull BallerinaFailStatement o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitFieldDefinition(@NotNull BallerinaFieldDefinition o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitFiniteType(@NotNull BallerinaFiniteType o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitFiniteTypeUnit(@NotNull BallerinaFiniteTypeUnit o) {
     visitCompositeElement(o);
   }
 

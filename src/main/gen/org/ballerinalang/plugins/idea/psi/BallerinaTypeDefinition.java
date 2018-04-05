@@ -27,6 +27,9 @@ public interface BallerinaTypeDefinition extends BallerinaCompositeElement {
   BallerinaTypeName getTypeName();
 
   @Nullable
+  BallerinaFiniteType getFiniteType();
+
+  @Nullable
   PsiElement getIdentifier();
 
   @Nullable
@@ -34,5 +37,9 @@ public interface BallerinaTypeDefinition extends BallerinaCompositeElement {
 
   @NotNull
   PsiElement getType();
+
+  //WARNING: getName(...) is skipped
+  //matching getName(BallerinaTypeDefinition, ...)
+  //methods are not found in BallerinaPsiImplUtil
 
 }

@@ -722,12 +722,12 @@ public class BallerinaCompletionUtils {
     //        return lookupElements;
     //    }
     //
-    //    @NotNull
-    //    public static LookupElement createGlobalVariableLookupElement(@NotNull PsiElement element) {
-    //        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(element.getText(), element)
-    //                .withTypeText("Variable").withIcon(BallerinaIcons.GLOBAL_VARIABLE);
-    //        return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
-    //    }
+        @NotNull
+        public static LookupElement createGlobalVariableLookupElement(@NotNull PsiElement identifier) {
+            LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(identifier.getText(), identifier)
+                    .withTypeText("Variable").withIcon(BallerinaIcons.GLOBAL_VARIABLE);
+            return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
+        }
     //
     //    @NotNull
     //    public static List<LookupElement> createGlobalVariableLookupElements(@NotNull List<IdentifierPSINode> variables) {

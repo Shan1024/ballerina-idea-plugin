@@ -30,16 +30,13 @@ public interface BallerinaAttachmentPoint extends BallerinaCompositeElement {
   PsiElement getAnnotation();
 
   @Nullable
-  PsiElement getConst();
-
-  @Nullable
   PsiElement getEndpoint();
 
   @Nullable
-  PsiElement getEnum();
+  PsiElement getFunction();
 
   @Nullable
-  PsiElement getFunction();
+  PsiElement getObject();
 
   @Nullable
   PsiElement getResource();
@@ -48,6 +45,6 @@ public interface BallerinaAttachmentPoint extends BallerinaCompositeElement {
   PsiElement getService();
 
   @Nullable
-  PsiElement getStruct();
+  PsiElement getType();
 
 }

@@ -20,10 +20,8 @@ package org.ballerinalang.plugins.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.StubBasedPsiElement;
-import org.ballerinalang.plugins.idea.stubs.BallerinaFieldDefinitionStub;
 
-public interface BallerinaFieldDefinition extends BallerinaNamedElement, StubBasedPsiElement<BallerinaFieldDefinitionStub> {
+public interface BallerinaFieldDefinition extends BallerinaCompositeElement {
 
   @Nullable
   BallerinaExpression getExpression();
@@ -35,9 +33,12 @@ public interface BallerinaFieldDefinition extends BallerinaNamedElement, StubBas
   PsiElement getAssign();
 
   @Nullable
-  PsiElement getSemicolon();
+  PsiElement getComma();
 
   @Nullable
+  PsiElement getSemicolon();
+
+  @NotNull
   PsiElement getIdentifier();
 
 }

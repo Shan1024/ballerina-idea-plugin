@@ -376,14 +376,12 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
 
     "catch"                                     { return CATCH; }
     "check"                                     { return CHECK; }
-    "const"                                     { return CONST; }
 
     "documentation"                             { return DOCUMENTATION; }
     "deprecated"                                { return DEPRECATED; }
 
     "else"                                      { return ELSE; }
     "endpoint"                                  { return ENDPOINT; }
-    "enum"                                      { return ENUM; }
 
     "fail"                                      { return FAIL; }
     "finally"                                   { return FINALLY; }
@@ -430,12 +428,10 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "some"                                      { return SOME; }
     "stream"                                    { return STREAM; }
     "string"                                    { return STRING; }
-    "struct"                                    { return STRUCT; }
 
     "table"                                     { return TABLE; }
     "timeout"                                   { return TIMEOUT; }
     "transaction"                               { return TRANSACTION; }
-    "transformer"                               { return TRANSFORMER; }
     "try"                                       { return TRY; }
     "type"                                      { return TYPE; }
     "typedesc"                                  { return TYPEDESC; }
@@ -498,8 +494,6 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "-="                                        { return COMPOUND_SUB; }
     "*="                                        { return COMPOUND_MUL; }
     "/="                                        { return COMPOUND_DIV; }
-
-    "=?"                                        { return SAFE_ASSIGNMENT; }
 
     "++"                                        { return INCREMENT; }
     "--"                                        { return DECREMENT; }

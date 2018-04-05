@@ -49,6 +49,12 @@ public class BallerinaTypeDefinitionImpl extends BallerinaCompositeElementImpl i
 
   @Override
   @Nullable
+  public BallerinaFiniteType getFiniteType() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaFiniteType.class);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getIdentifier() {
     return findChildByType(IDENTIFIER);
   }

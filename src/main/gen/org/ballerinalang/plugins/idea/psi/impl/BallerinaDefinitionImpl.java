@@ -55,18 +55,6 @@ public class BallerinaDefinitionImpl extends BallerinaCompositeElementImpl imple
 
   @Override
   @Nullable
-  public BallerinaConstantDefinition getConstantDefinition() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaConstantDefinition.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaEnumDefinition getEnumDefinition() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaEnumDefinition.class);
-  }
-
-  @Override
-  @Nullable
   public BallerinaFunctionDefinition getFunctionDefinition() {
     return PsiTreeUtil.getChildOfType(this, BallerinaFunctionDefinition.class);
   }
@@ -91,12 +79,6 @@ public class BallerinaDefinitionImpl extends BallerinaCompositeElementImpl imple
 
   @Override
   @Nullable
-  public BallerinaStructDefinition getStructDefinition() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaStructDefinition.class);
-  }
-
-  @Override
-  @Nullable
   public BallerinaTypeDefinition getTypeDefinition() {
     return PsiTreeUtil.getChildOfType(this, BallerinaTypeDefinition.class);
   }
@@ -111,6 +93,12 @@ public class BallerinaDefinitionImpl extends BallerinaCompositeElementImpl imple
   @Nullable
   public BallerinaDocumentationAttachment getDocumentationAttachment() {
     return PsiTreeUtil.getChildOfType(this, BallerinaDocumentationAttachment.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getEnumDefinition() {
+    return findChildByType(ENUMDEFINITION);
   }
 
 }

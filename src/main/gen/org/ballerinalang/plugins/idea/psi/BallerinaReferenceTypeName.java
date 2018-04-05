@@ -24,9 +24,6 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaReferenceTypeName extends BallerinaCompositeElement {
 
   @Nullable
-  BallerinaAnonStructTypeName getAnonStructTypeName();
-
-  @Nullable
   BallerinaBuiltInReferenceTypeName getBuiltInReferenceTypeName();
 
   @Nullable

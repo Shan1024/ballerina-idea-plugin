@@ -21,12 +21,7 @@ import com.intellij.psi.stubs.IStubElementType;
 import com.intellij.util.containers.HashMap;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaAliasStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaAnnotationDefinitionStubElementType;
-import org.ballerinalang.plugins.idea.stubs.types.BallerinaConstantDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaEndpointDefinitionStubElementType;
-import org.ballerinalang.plugins.idea.stubs.types.BallerinaEnumDefinitionStubElementType;
-import org.ballerinalang.plugins.idea.stubs.types.BallerinaEnumeratorStubElementType;
-import org.ballerinalang.plugins.idea.stubs.types.BallerinaFieldDefinitionStubElementType;
-import org.ballerinalang.plugins.idea.stubs.types.BallerinaFieldStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaFunctionDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalEndpointDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalVariableDefinitionStubElementType;
@@ -37,8 +32,6 @@ import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageDeclarationStu
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageNameStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageReferenceStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageVersionStubElementType;
-import org.ballerinalang.plugins.idea.stubs.types.BallerinaStructDefinitionStubElementType;
-import org.ballerinalang.plugins.idea.stubs.types.BallerinaTransformerDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaVariableDefinitionStatementStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaWorkerDefinitionStubElementType;
 import org.jetbrains.annotations.NotNull;
@@ -72,18 +65,18 @@ public class BallerinaElementTypeFactory {
                 return BallerinaPackageDeclarationStubElementType.INSTANCE;
             case "FUNCTION_DEFINITION":
                 return new BallerinaFunctionDefinitionStubElementType(name);
-            case "STRUCT_DEFINITION":
-                return new BallerinaStructDefinitionStubElementType(name);
+            //            case "STRUCT_DEFINITION":
+            //                return new BallerinaStructDefinitionStubElementType(name);
             case "GLOBAL_VARIABLE_DEFINITION":
                 return new BallerinaGlobalVariableDefinitionStubElementType(name);
-            case "ENUM_DEFINITION":
-                return new BallerinaEnumDefinitionStubElementType(name);
+            //            case "ENUM_DEFINITION":
+            //                return new BallerinaEnumDefinitionStubElementType(name);
             case "ANNOTATION_DEFINITION":
                 return new BallerinaAnnotationDefinitionStubElementType(name);
-            case "TRANSFORMER_DEFINITION":
-                return new BallerinaTransformerDefinitionStubElementType(name);
-            case "CONSTANT_DEFINITION":
-                return new BallerinaConstantDefinitionStubElementType(name);
+            //            case "TRANSFORMER_DEFINITION":
+            //                return new BallerinaTransformerDefinitionStubElementType(name);
+            //            case "CONSTANT_DEFINITION":
+            //                return new BallerinaConstantDefinitionStubElementType(name);
             case "GLOBAL_ENDPOINT_DEFINITION":
                 return new BallerinaGlobalEndpointDefinitionStubElementType(name);
             case "ENDPOINT_DEFINITION":
@@ -98,20 +91,20 @@ public class BallerinaElementTypeFactory {
                 return new BallerinaPackageVersionStubElementType(name);
             case "ALIAS":
                 return new BallerinaAliasStubElementType(name);
-            case "ENUMERATOR":
-                return new BallerinaEnumeratorStubElementType(name);
+            //            case "ENUMERATOR":
+            //                return new BallerinaEnumeratorStubElementType(name);
             case "VARIABLE_DEFINITION_STATEMENT":
                 return new BallerinaVariableDefinitionStatementStubElementType(name);
             //            case "PARAMETER":
             //                return new BallerinaParameterStubElementType(name);
-            case "FIELD_DEFINITION":
-                return new BallerinaFieldDefinitionStubElementType(name);
+            //            case "FIELD_DEFINITION":
+            //                return new BallerinaFieldDefinitionStubElementType(name);
             case "NAME_REFERENCE":
                 return new BallerinaNameReferenceStubElementType(name);
             case "PACKAGE_REFERENCE":
                 return new BallerinaPackageReferenceStubElementType(name);
-            case "FIELD":
-                return new BallerinaFieldStubElementType(name);
+            //            case "FIELD":
+            //                return new BallerinaFieldStubElementType(name);
             case "NAMESPACE_DECLARATION":
                 return new BallerinaNamespaceDeclarationStubElementType(name);
         }

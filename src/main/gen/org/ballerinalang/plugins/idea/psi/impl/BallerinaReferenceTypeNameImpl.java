@@ -43,12 +43,6 @@ public class BallerinaReferenceTypeNameImpl extends BallerinaCompositeElementImp
 
   @Override
   @Nullable
-  public BallerinaAnonStructTypeName getAnonStructTypeName() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaAnonStructTypeName.class);
-  }
-
-  @Override
-  @Nullable
   public BallerinaBuiltInReferenceTypeName getBuiltInReferenceTypeName() {
     return PsiTreeUtil.getChildOfType(this, BallerinaBuiltInReferenceTypeName.class);
   }

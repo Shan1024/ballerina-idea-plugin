@@ -35,12 +35,10 @@ import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.PlatformIcons;
 import org.ballerinalang.plugins.idea.BallerinaIcons;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompositeElement;
-import org.ballerinalang.plugins.idea.psi.BallerinaConstantDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaNamedElement;
-import org.ballerinalang.plugins.idea.psi.BallerinaStructDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypes;
 import org.ballerinalang.plugins.idea.stubs.BallerinaNamedStub;
@@ -48,7 +46,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.Icon;
+import javax.swing.*;
 
 public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>> extends BallerinaStubbedElementImpl<T>
         implements BallerinaCompositeElement, BallerinaNamedElement {
@@ -188,10 +186,6 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
         Icon icon = null;
         if (this instanceof BallerinaFunctionDefinition) {
             icon = BallerinaIcons.FUNCTION;
-        } else if (this instanceof BallerinaStructDefinition) {
-            icon = BallerinaIcons.STRUCT;
-        } else if (this instanceof BallerinaConstantDefinition) {
-            icon = BallerinaIcons.CONSTANT;
         } else if (this instanceof BallerinaGlobalVariableDefinition) {
             icon = BallerinaIcons.GLOBAL_VARIABLE;
         }

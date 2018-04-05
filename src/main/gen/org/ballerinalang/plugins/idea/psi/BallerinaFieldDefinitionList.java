@@ -24,6 +24,6 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaFieldDefinitionList extends BallerinaCompositeElement {
 
   @NotNull
-  List<BallerinaObjectFieldDefinition> getObjectFieldDefinitionList();
+  List<BallerinaFieldDefinition> getFieldDefinitionList();
 
 }

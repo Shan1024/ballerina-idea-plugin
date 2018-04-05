@@ -24,22 +24,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
-import org.ballerinalang.plugins.idea.stubs.BallerinaEnumDefinitionStub;
 import org.ballerinalang.plugins.idea.psi.*;
-import com.intellij.psi.stubs.IStubElementType;
 
-public class BallerinaEnumDefinitionImpl extends BallerinaNamedElementImpl<BallerinaEnumDefinitionStub> implements BallerinaEnumDefinition {
+public class BallerinaFiniteTypeImpl extends BallerinaCompositeElementImpl implements BallerinaFiniteType {
 
-  public BallerinaEnumDefinitionImpl(BallerinaEnumDefinitionStub stub, IStubElementType type) {
-    super(stub, type);
-  }
-
-  public BallerinaEnumDefinitionImpl(ASTNode node) {
+  public BallerinaFiniteTypeImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitEnumDefinition(this);
+    visitor.visitFiniteType(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -48,27 +42,9 @@ public class BallerinaEnumDefinitionImpl extends BallerinaNamedElementImpl<Balle
   }
 
   @Override
-  @Nullable
-  public BallerinaEnumBody getEnumBody() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaEnumBody.class);
-  }
-
-  @Override
   @NotNull
-  public PsiElement getEnum() {
-    return notNullChild(findChildByType(ENUM));
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getPublic() {
-    return findChildByType(PUBLIC);
+  public List<BallerinaFiniteTypeUnit> getFiniteTypeUnitList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaFiniteTypeUnit.class);
   }
 
 }

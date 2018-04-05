@@ -60,15 +60,9 @@ public class BallerinaAssignmentStatementImpl extends BallerinaCompositeElementI
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getAssign() {
-    return findChildByType(ASSIGN);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getSafeAssignment() {
-    return findChildByType(SAFE_ASSIGNMENT);
+    return notNullChild(findChildByType(ASSIGN));
   }
 
   @Override
