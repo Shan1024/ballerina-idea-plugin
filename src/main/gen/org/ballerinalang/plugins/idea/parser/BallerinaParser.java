@@ -4940,8 +4940,8 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   //     |   AssignmentStatement
   //     |   VariableDefinitionStatement
   //     |   CompoundAssignmentStatement
-  //     |   ExpressionStmt
   //     |   PostIncrementStatement
+  //     |   ExpressionStmt
   //     |   StreamingQueryStatement
   public static boolean Statement(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Statement")) return false;
@@ -4968,8 +4968,8 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = AssignmentStatement(b, l + 1);
     if (!r) r = VariableDefinitionStatement(b, l + 1);
     if (!r) r = CompoundAssignmentStatement(b, l + 1);
-    if (!r) r = ExpressionStmt(b, l + 1);
     if (!r) r = PostIncrementStatement(b, l + 1);
+    if (!r) r = ExpressionStmt(b, l + 1);
     if (!r) r = StreamingQueryStatement(b, l + 1);
     exit_section_(b, l, m, r, false, StatementRecover_parser_);
     return r;

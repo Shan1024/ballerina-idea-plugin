@@ -410,9 +410,9 @@ Statement ::=
     |   WorkerInteractionStatement
     |   AssignmentStatement
     |   VariableDefinitionStatement
-    |   ExpressionStmt
     |   CompoundAssignmentStatement
     |   PostIncrementStatement
+    |   ExpressionStmt
     |   StreamingQueryStatement
 {recoverWhile = StatementRecover}
 
