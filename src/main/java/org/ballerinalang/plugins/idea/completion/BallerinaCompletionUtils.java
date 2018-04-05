@@ -527,6 +527,27 @@ public class BallerinaCompletionUtils {
         return PrioritizedLookupElement.withPriority(builder, FUNCTION_PRIORITY);
     }
 
+    @NotNull
+    public static LookupElement createGlobalVariableLookupElement(@NotNull BallerinaTopLevelDefinition definition) {
+        LookupElementBuilder builder =
+                LookupElementBuilder.createWithSmartPointer(definition.getIdentifier().getText(), definition)
+                        .withTypeText("Variable").withIcon(definition.getIcon(Iconable.ICON_FLAG_VISIBILITY));
+        return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
+    }
+
+    @NotNull
+    public static LookupElement createTypeLookupElement(@NotNull BallerinaTopLevelDefinition definition,
+                                                        @Nullable InsertHandler<LookupElement> insertHandler) {
+        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(definition.getIdentifier()
+                .getText(), definition)
+                .withTypeText("Type").withIcon(definition.getIcon(Iconable.ICON_FLAG_VISIBILITY)).bold()
+                // Todo - Add tail text
+                //                .withTailText(BallerinaDocumentationProvider.getParametersAndReturnTypes(element
+                // .getParent()))
+                .withInsertHandler(insertHandler);
+        return PrioritizedLookupElement.withPriority(builder, FUNCTION_PRIORITY);
+    }
+
     //    @NotNull
     //    public static List<LookupElement> createFunctionLookupElements(@NotNull List<IdentifierPSINode> functions) {
     //        List<LookupElement> lookupElements = new LinkedList<>();
@@ -732,12 +753,7 @@ public class BallerinaCompletionUtils {
     //        return lookupElements;
     //    }
     //
-    @NotNull
-    public static LookupElement createGlobalVariableLookupElement(@NotNull PsiElement identifier) {
-        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(identifier.getText(), identifier)
-                .withTypeText("Variable").withIcon(BallerinaIcons.GLOBAL_VARIABLE);
-        return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
-    }
+
     //
     //    @NotNull
     //    public static List<LookupElement> createGlobalVariableLookupElements(@NotNull List<IdentifierPSINode>

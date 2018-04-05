@@ -245,7 +245,7 @@ public interface BallerinaTypes {
   IElementType TUPLE_TYPE_NAME = new BallerinaCompositeElementType("TUPLE_TYPE_NAME");
   IElementType TYPE_ACCESS_EXPRESSION = new BallerinaCompositeElementType("TYPE_ACCESS_EXPRESSION");
   IElementType TYPE_CONVERSION_EXPRESSION = new BallerinaCompositeElementType("TYPE_CONVERSION_EXPRESSION");
-  IElementType TYPE_DEFINITION = new BallerinaCompositeElementType("TYPE_DEFINITION");
+  IElementType TYPE_DEFINITION = BallerinaElementTypeFactory.stubFactory("TYPE_DEFINITION");
   IElementType TYPE_DESC_TYPE_NAME = new BallerinaCompositeElementType("TYPE_DESC_TYPE_NAME");
   IElementType TYPE_INIT_EXPR = new BallerinaCompositeElementType("TYPE_INIT_EXPR");
   IElementType TYPE_INIT_EXPRESSION = new BallerinaCompositeElementType("TYPE_INIT_EXPRESSION");

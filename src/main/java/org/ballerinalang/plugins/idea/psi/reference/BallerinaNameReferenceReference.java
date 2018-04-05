@@ -39,6 +39,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaTopLevelDefinition;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaFunctionIndex;
 import org.jetbrains.annotations.NotNull;
@@ -365,7 +366,8 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
                                                   elements) {
         for (BallerinaTopLevelDefinition element : elements) {
             //            if (element instanceof BallerinaFunctionDefinition) {
-            //                BallerinaCallableUnitSignature callableUnitSignature = ((BallerinaFunctionDefinition) element)
+            //                BallerinaCallableUnitSignature callableUnitSignature = ((BallerinaFunctionDefinition)
+            // element)
             //                        .getCallableUnitSignature();
             //                if (callableUnitSignature != null) {
             //                    PsiElement identifier = callableUnitSignature.getIdentifier();
@@ -414,13 +416,16 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
                 // Todo - Add insert handler
                 // We need to check whether the current element is a variable definition element. If so, we need to
                 // update the insert handler.
-                BallerinaExpressionStmt ballerinaExpressionStmt =
-                        PsiTreeUtil.getParentOfType(myElement, BallerinaExpressionStmt.class);
-                InsertHandler<LookupElement> insertHandler =
-                        ballerinaExpressionStmt != null ? ParenthesisInsertHandler.INSTANCE : null;
-                results.add(BallerinaCompletionUtils.createFunctionLookupElement(element, insertHandler));
+                //                BallerinaExpressionStmt ballerinaExpressionStmt =
+                //                        PsiTreeUtil.getParentOfType(myElement, BallerinaExpressionStmt.class);
+                //                InsertHandler<LookupElement> insertHandler =
+                //                        ballerinaExpressionStmt != null ? ParenthesisInsertHandler.INSTANCE : null;
+                results.add(BallerinaCompletionUtils.createFunctionLookupElement(element, ParenthesisInsertHandler
+                        .INSTANCE));
             } else if (element instanceof BallerinaGlobalVariableDefinition) {
-                results.add(BallerinaCompletionUtils.createGlobalVariableLookupElement(identifier));
+                results.add(BallerinaCompletionUtils.createGlobalVariableLookupElement(element));
+            }else if (element instanceof BallerinaTypeDefinition) {
+                results.add(BallerinaCompletionUtils.createTypeLookupElement(element,null));
             }
         }
         return results.toArray(new LookupElement[results.size()]);

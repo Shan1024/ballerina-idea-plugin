@@ -20,14 +20,20 @@ package org.ballerinalang.plugins.idea.psi;
 import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
+import org.ballerinalang.plugins.idea.psi.impl.BallerinaTopLevelDefinition;
+import com.intellij.psi.StubBasedPsiElement;
+import org.ballerinalang.plugins.idea.stubs.BallerinaTypeDefinitionStub;
 
-public interface BallerinaTypeDefinition extends BallerinaCompositeElement {
+public interface BallerinaTypeDefinition extends BallerinaNamedElement, BallerinaTopLevelDefinition, StubBasedPsiElement<BallerinaTypeDefinitionStub> {
 
   @Nullable
   BallerinaTypeName getTypeName();
 
   @Nullable
   BallerinaFiniteType getFiniteType();
+
+  @Nullable
+  PsiElement getSemicolon();
 
   @Nullable
   PsiElement getIdentifier();

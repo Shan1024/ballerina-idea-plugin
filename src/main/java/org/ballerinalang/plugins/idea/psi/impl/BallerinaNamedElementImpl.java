@@ -39,6 +39,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaNamedElement;
+import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypes;
 import org.ballerinalang.plugins.idea.stubs.BallerinaNamedStub;
@@ -187,15 +188,10 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
         if (this instanceof BallerinaFunctionDefinition) {
             icon = BallerinaIcons.FUNCTION;
         } else if (this instanceof BallerinaGlobalVariableDefinition) {
-            icon = BallerinaIcons.GLOBAL_VARIABLE;
+            icon = BallerinaIcons.VARIABLE;
+        } else if (this instanceof BallerinaTypeDefinition) {
+            icon = BallerinaIcons.TYPE;
         }
-        //                else if (this instanceof GoVarDefinition) icon = GoIcons.VARIABLE;
-        //                else if (this instanceof GoConstDefinition) icon = GoIcons.CONSTANT;
-        //                else if (this instanceof GoFieldDefinition) icon = GoIcons.FIELD;
-        //                else if (this instanceof GoMethodSpec) icon = GoIcons.METHOD;
-        //                else if (this instanceof GoAnonymousFieldDefinition) icon = GoIcons.FIELD;
-        //                else if (this instanceof GoParamDefinition) icon = GoIcons.PARAMETER;
-        //                else if (this instanceof GoLabelDefinition) icon = GoIcons.LABEL;
         if (icon != null) {
             if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {
                 RowIcon rowIcon = ElementBase.createLayeredIcon(this, icon, flags);

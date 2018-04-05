@@ -5722,7 +5722,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (public)? type (identifier | finiteType) TypeName
+  // (public)? type (identifier | finiteType SEMICOLON) TypeName
   public static boolean TypeDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeDefinition")) return false;
     if (!nextTokenIs(b, "<type definition>", PUBLIC, TYPE)) return false;
@@ -5744,13 +5744,24 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // identifier | finiteType
+  // identifier | finiteType SEMICOLON
   private static boolean TypeDefinition_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TypeDefinition_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, IDENTIFIER);
-    if (!r) r = finiteType(b, l + 1);
+    if (!r) r = TypeDefinition_2_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // finiteType SEMICOLON
+  private static boolean TypeDefinition_2_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TypeDefinition_2_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = finiteType(b, l + 1);
+    r = r && consumeToken(b, SEMICOLON);
     exit_section_(b, m, null, r);
     return r;
   }

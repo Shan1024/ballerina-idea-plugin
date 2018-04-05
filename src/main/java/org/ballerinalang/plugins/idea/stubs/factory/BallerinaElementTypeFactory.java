@@ -32,6 +32,7 @@ import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageDeclarationStu
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageNameStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageReferenceStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageVersionStubElementType;
+import org.ballerinalang.plugins.idea.stubs.types.BallerinaTypeDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaVariableDefinitionStatementStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaWorkerDefinitionStubElementType;
 import org.jetbrains.annotations.NotNull;
@@ -65,6 +66,8 @@ public class BallerinaElementTypeFactory {
                 return BallerinaPackageDeclarationStubElementType.INSTANCE;
             case "FUNCTION_DEFINITION":
                 return new BallerinaFunctionDefinitionStubElementType(name);
+            case "TYPE_DEFINITION":
+                return new BallerinaTypeDefinitionStubElementType(name);
             //            case "STRUCT_DEFINITION":
             //                return new BallerinaStructDefinitionStubElementType(name);
             case "GLOBAL_VARIABLE_DEFINITION":

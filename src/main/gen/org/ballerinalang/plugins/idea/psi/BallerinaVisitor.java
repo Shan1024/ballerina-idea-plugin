@@ -806,7 +806,8 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitTypeDefinition(@NotNull BallerinaTypeDefinition o) {
-    visitCompositeElement(o);
+    visitNamedElement(o);
+    // visitTopLevelDefinition(o);
   }
 
   public void visitTypeDescTypeName(@NotNull BallerinaTypeDescTypeName o) {

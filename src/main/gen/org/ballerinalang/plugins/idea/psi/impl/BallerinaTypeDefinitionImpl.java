@@ -24,9 +24,15 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
+import org.ballerinalang.plugins.idea.stubs.BallerinaTypeDefinitionStub;
 import org.ballerinalang.plugins.idea.psi.*;
+import com.intellij.psi.stubs.IStubElementType;
 
-public class BallerinaTypeDefinitionImpl extends BallerinaCompositeElementImpl implements BallerinaTypeDefinition {
+public class BallerinaTypeDefinitionImpl extends BallerinaNamedElementImpl<BallerinaTypeDefinitionStub> implements BallerinaTypeDefinition {
+
+  public BallerinaTypeDefinitionImpl(BallerinaTypeDefinitionStub stub, IStubElementType type) {
+    super(stub, type);
+  }
 
   public BallerinaTypeDefinitionImpl(ASTNode node) {
     super(node);
@@ -51,6 +57,12 @@ public class BallerinaTypeDefinitionImpl extends BallerinaCompositeElementImpl i
   @Nullable
   public BallerinaFiniteType getFiniteType() {
     return PsiTreeUtil.getChildOfType(this, BallerinaFiniteType.class);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getSemicolon() {
+    return findChildByType(SEMICOLON);
   }
 
   @Override
