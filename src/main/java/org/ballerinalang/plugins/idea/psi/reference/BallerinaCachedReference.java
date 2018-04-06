@@ -41,7 +41,7 @@ public abstract class BallerinaCachedReference<T extends PsiElement> extends Psi
     @Nullable
     @Override
     public final PsiElement resolve() {
-//        return resolveInner();
+        //        return resolveInner();
         return myElement.isValid()
                 ? ResolveCache.getInstance(myElement.getProject()).resolveWithCaching(this, MY_RESOLVER, false, true)
                 : null;
@@ -55,17 +55,17 @@ public abstract class BallerinaCachedReference<T extends PsiElement> extends Psi
         return myElement;
     }
 
-//    @Override
-//    public boolean isReferenceTo(PsiElement element) {
-//        //    return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
-//        return false;
-//    }
+    //    @Override
+    //    public boolean isReferenceTo(PsiElement element) {
+    //        //    return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
+    //        return false;
+    //    }
 
-//    @NotNull
-//    @Override
-//    public Object[] getVariants() {
-//        return ArrayUtil.EMPTY_OBJECT_ARRAY;
-//    }
+    //    @NotNull
+    //    @Override
+    //    public Object[] getVariants() {
+    //        return ArrayUtil.EMPTY_OBJECT_ARRAY;
+    //    }
 
     @Override
     public boolean equals(Object o) {

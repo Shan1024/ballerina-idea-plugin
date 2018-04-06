@@ -92,6 +92,7 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
     @NotNull
     @Override
     public Object[] getVariants() {
+        long start = System.currentTimeMillis();
         BallerinaNameReference nameReference = PsiTreeUtil.getParentOfType(myElement, BallerinaNameReference.class);
         if (nameReference == null) {
             return new Object[0];
@@ -101,6 +102,8 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
             PsiDirectory directory = getPackageDirectory(originalFile);
             if (directory != null) {
                 Collection<BallerinaTopLevelDefinition> elements = getTopLevelElements(directory, true);
+                long end = System.currentTimeMillis();
+                System.out.println("Time: " + (end - start));
                 return getLookups(elements);
             }
         } else {
@@ -123,6 +126,8 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
 
             PsiDirectory directory = (PsiDirectory) psiDirectory;
             Collection<BallerinaTopLevelDefinition> elements = getTopLevelElements(directory, true);
+            long end = System.currentTimeMillis();
+            System.out.println("Time: " + (end - start));
             return getLookups(elements);
         }
         return new Object[0];
@@ -202,6 +207,7 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
                 results.add(BallerinaCompletionUtils.createTypeLookupElement(element, null));
             }
         }
+        System.out.println("Elements: " + results.size());
         return results.toArray(new LookupElement[results.size()]);
     }
 

@@ -29,7 +29,6 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorModificationUtil;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
 import org.ballerinalang.plugins.idea.BallerinaIcons;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaTopLevelDefinition;
 import org.jetbrains.annotations.NotNull;
@@ -47,14 +46,14 @@ public class BallerinaCompletionUtils {
     private static final int FUNCTION_PRIORITY = VARIABLE_PRIORITY - 1;
     private static final int VALUE_TYPES_PRIORITY = VARIABLE_PRIORITY - 1;
     private static final int REFERENCE_TYPES_PRIORITY = VARIABLE_PRIORITY - 1;
+    private static final int TYPE_PRIORITY = VARIABLE_PRIORITY - 1;
     private static final int PACKAGE_PRIORITY = VALUE_TYPES_PRIORITY - 1;
     private static final int UNIMPORTED_PACKAGE_PRIORITY = PACKAGE_PRIORITY - 1;
-    private static final int STRUCT_PRIORITY = VALUE_TYPES_PRIORITY - 1;
     private static final int CONNECTOR_PRIORITY = VALUE_TYPES_PRIORITY - 1;
     private static final int ACTION_PRIORITY = VALUE_TYPES_PRIORITY - 1;
     private static final int ANNOTATION_PRIORITY = VALUE_TYPES_PRIORITY - 1;
     private static final int ENUM_PRIORITY = VALUE_TYPES_PRIORITY - 1;
-    private static final int KEYWORDS_PRIORITY = VALUE_TYPES_PRIORITY - 2;
+    public static final int KEYWORDS_PRIORITY = VALUE_TYPES_PRIORITY - 2;
 
     // File level keywords
     private static final LookupElementBuilder PUBLIC;
@@ -214,7 +213,7 @@ public class BallerinaCompletionUtils {
      * @return {@link LookupElementBuilder} which will be used to create the lookup element.
      */
     @NotNull
-    private static LookupElementBuilder createKeywordLookupElement(@NotNull String name) {
+    public static LookupElementBuilder createKeywordLookupElement(@NotNull String name) {
         return createKeywordLookupElement(name, " ");
     }
 
@@ -545,7 +544,7 @@ public class BallerinaCompletionUtils {
                 //                .withTailText(BallerinaDocumentationProvider.getParametersAndReturnTypes(element
                 // .getParent()))
                 .withInsertHandler(insertHandler);
-        return PrioritizedLookupElement.withPriority(builder, FUNCTION_PRIORITY);
+        return PrioritizedLookupElement.withPriority(builder, TYPE_PRIORITY);
     }
 
     //    @NotNull
@@ -649,14 +648,15 @@ public class BallerinaCompletionUtils {
     //        return lookupElements;
     //    }
     //
-    @NotNull
-    public static LookupElement createStructLookupElement(@NotNull PsiElement identifier) {
-        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(identifier.getText(), identifier)
-                .withTypeText("Struct")/*.withIcon(BallerinaIcons.STRUCT)*/
-                .withInsertHandler(AddSpaceInsertHandler.INSTANCE);
-        return PrioritizedLookupElement.withPriority(builder, STRUCT_PRIORITY);
-    }
-
+    //    @NotNull
+    //    public static LookupElement createStructLookupElement(@NotNull PsiElement identifier) {
+    //        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(identifier.getText(),
+    // identifier)
+    //                .withTypeText("Struct")/*.withIcon(BallerinaIcons.STRUCT)*/
+    //                .withInsertHandler(AddSpaceInsertHandler.INSTANCE);
+    //        return PrioritizedLookupElement.withPriority(builder, TYPE_PRIORITY);
+    //    }
+    //
     //
     //    @NotNull
     //    public static List<LookupElement> createStructLookupElements(@NotNull List<IdentifierPSINode> structs) {
@@ -753,7 +753,7 @@ public class BallerinaCompletionUtils {
     //        return lookupElements;
     //    }
     //
-
+    //
     //
     //    @NotNull
     //    public static List<LookupElement> createGlobalVariableLookupElements(@NotNull List<IdentifierPSINode>

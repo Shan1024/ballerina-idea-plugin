@@ -120,76 +120,76 @@ public class BallerinaReferenceCompletionContributor extends CompletionContribut
 
     @Override
     public void fillCompletionVariants(@NotNull CompletionParameters parameters, @NotNull CompletionResultSet result) {
-        Project project = parameters.getOriginalFile().getProject();
-
-        Collection<BallerinaFile> ballerinaPackage = StubIndex.getElements(BallerinaPackageIndex.KEY,
-                "samples.parser", project, GlobalSearchScope.allScope(project), BallerinaFile.class);
-
-        Collection<BallerinaFunctionDefinition> ballerinaFunction = StubIndex.getElements(BallerinaFunctionIndex
-                .KEY, "test", project, GlobalSearchScope.allScope(project), BallerinaFunctionDefinition.class);
-
-//        Collection<BallerinaStructDefinition> ballerinaStruct = StubIndex.getElements(BallerinaStructIndex.KEY, "test",
-//                project, GlobalSearchScope.allScope(project), BallerinaStructDefinition.class);
-
-        Collection<BallerinaGlobalVariableDefinition> ballerinaGlobalVariable =
-                StubIndex.getElements(BallerinaGlobalVariableIndex.KEY, "test", project, GlobalSearchScope.allScope
-                        (project), BallerinaGlobalVariableDefinition.class);
-
-        //        Collection<BallerinaConnectorDefinition> ballerinaConnector = StubIndex.getElements
-        // (BallerinaConnectorIndex.KEY,
-        //                "test", project, GlobalSearchScope.allScope(project), BallerinaConnectorDefinition.class);
-
-        Collection<String> allPackages = StubIndex.getInstance().getAllKeys(BallerinaPackageIndex.KEY, project);
-        Collection<String> allFunctions = StubIndex.getInstance().getAllKeys(BallerinaFunctionIndex.KEY, project);
-//        Collection<String> allStructs = StubIndex.getInstance().getAllKeys(BallerinaStructIndex.KEY, project);
-        Collection<String> allGlobalVariables = StubIndex.getInstance().getAllKeys(BallerinaGlobalVariableIndex.KEY,
-                project);
-        //        Collection<String> allConnectors = StubIndex.getInstance().getAllKeys(BallerinaConnectorIndex.KEY,
-        // project);
-//        Collection<String> allEnums = StubIndex.getInstance().getAllKeys(BallerinaEnumIndex.KEY, project);
-        Collection<String> allAnnotations = StubIndex.getInstance().getAllKeys(BallerinaAnnotationIndex.KEY, project);
-//        Collection<String> allTransformers = StubIndex.getInstance().getAllKeys(BallerinaTransformerIndex.KEY, project);
-//        Collection<String> allConstants = StubIndex.getInstance().getAllKeys(BallerinaConstantIndex.KEY, project);
-        Collection<String> allGlobalEndpoints = StubIndex.getInstance().getAllKeys(BallerinaGlobalEndpointIndex.KEY,
-                project);
-        Collection<String> allEndpoints = StubIndex.getInstance().getAllKeys(BallerinaEndpointIndex.KEY, project);
-        //        Collection<String> allActions = StubIndex.getInstance().getAllKeys(BallerinaActionIndex.KEY, project);
-        Collection<String> allWorkers = StubIndex.getInstance().getAllKeys(BallerinaWorkerIndex.KEY, project);
-        Collection<String> allNamespaces = StubIndex.getInstance().getAllKeys(BallerinaNamespaceIndex.KEY, project);
-
-        //        long start = System.currentTimeMillis();
-        //
-        //        Collection<BallerinaStructDefinition> ballerinaStructDefinitions = StubIndex.getElements
-        // (BallerinaStructIndex
-        //                .KEY, "user2", project, GlobalSearchScope.allScope(project), BallerinaStructDefinition.class);
-        //        /*.forEach(def -> System.out.println(def.getIdentifier().getText()));*/
-        //
-        //        //        ballerinaStructDefinitions.forEach(def -> def.isPublic());
-        //
-        //        long end = System.currentTimeMillis();
-        //
-        //        System.out.println("Found " + ballerinaStructDefinitions.size() + " in " + (end - start) + " ms");
-        //        System.out.println("....");
-
-        long start = System.currentTimeMillis();
-
-        count = 0;
-        PsiElement position = parameters.getPosition();
-        ResolveState state = createContextOnElement(position);
-        MyBallerinaScopeProcessor myBallerinaScopeProcessor = new MyBallerinaScopeProcessor(result);
-
-        PsiFile containingFile = position.getContainingFile().getOriginalFile();
-
-        PsiDirectory parent = containingFile.getParent();
-
-        if (parent != null) {
-            PsiElement[] children = parent.getChildren();
-            for (PsiElement child : children) {
-                myBallerinaScopeProcessor.execute(child, state);
-            }
-        }
-        long end = System.currentTimeMillis();
-        System.out.println("Found " + count + " in " + (end - start) + " ms");
+//        Project project = parameters.getOriginalFile().getProject();
+//
+//        Collection<BallerinaFile> ballerinaPackage = StubIndex.getElements(BallerinaPackageIndex.KEY,
+//                "samples.parser", project, GlobalSearchScope.allScope(project), BallerinaFile.class);
+//
+//        Collection<BallerinaFunctionDefinition> ballerinaFunction = StubIndex.getElements(BallerinaFunctionIndex
+//                .KEY, "test", project, GlobalSearchScope.allScope(project), BallerinaFunctionDefinition.class);
+//
+////        Collection<BallerinaStructDefinition> ballerinaStruct = StubIndex.getElements(BallerinaStructIndex.KEY, "test",
+////                project, GlobalSearchScope.allScope(project), BallerinaStructDefinition.class);
+//
+//        Collection<BallerinaGlobalVariableDefinition> ballerinaGlobalVariable =
+//                StubIndex.getElements(BallerinaGlobalVariableIndex.KEY, "test", project, GlobalSearchScope.allScope
+//                        (project), BallerinaGlobalVariableDefinition.class);
+//
+//        //        Collection<BallerinaConnectorDefinition> ballerinaConnector = StubIndex.getElements
+//        // (BallerinaConnectorIndex.KEY,
+//        //                "test", project, GlobalSearchScope.allScope(project), BallerinaConnectorDefinition.class);
+//
+//        Collection<String> allPackages = StubIndex.getInstance().getAllKeys(BallerinaPackageIndex.KEY, project);
+//        Collection<String> allFunctions = StubIndex.getInstance().getAllKeys(BallerinaFunctionIndex.KEY, project);
+////        Collection<String> allStructs = StubIndex.getInstance().getAllKeys(BallerinaStructIndex.KEY, project);
+//        Collection<String> allGlobalVariables = StubIndex.getInstance().getAllKeys(BallerinaGlobalVariableIndex.KEY,
+//                project);
+//        //        Collection<String> allConnectors = StubIndex.getInstance().getAllKeys(BallerinaConnectorIndex.KEY,
+//        // project);
+////        Collection<String> allEnums = StubIndex.getInstance().getAllKeys(BallerinaEnumIndex.KEY, project);
+//        Collection<String> allAnnotations = StubIndex.getInstance().getAllKeys(BallerinaAnnotationIndex.KEY, project);
+////        Collection<String> allTransformers = StubIndex.getInstance().getAllKeys(BallerinaTransformerIndex.KEY, project);
+////        Collection<String> allConstants = StubIndex.getInstance().getAllKeys(BallerinaConstantIndex.KEY, project);
+//        Collection<String> allGlobalEndpoints = StubIndex.getInstance().getAllKeys(BallerinaGlobalEndpointIndex.KEY,
+//                project);
+//        Collection<String> allEndpoints = StubIndex.getInstance().getAllKeys(BallerinaEndpointIndex.KEY, project);
+//        //        Collection<String> allActions = StubIndex.getInstance().getAllKeys(BallerinaActionIndex.KEY, project);
+//        Collection<String> allWorkers = StubIndex.getInstance().getAllKeys(BallerinaWorkerIndex.KEY, project);
+//        Collection<String> allNamespaces = StubIndex.getInstance().getAllKeys(BallerinaNamespaceIndex.KEY, project);
+//
+//        //        long start = System.currentTimeMillis();
+//        //
+//        //        Collection<BallerinaStructDefinition> ballerinaStructDefinitions = StubIndex.getElements
+//        // (BallerinaStructIndex
+//        //                .KEY, "user2", project, GlobalSearchScope.allScope(project), BallerinaStructDefinition.class);
+//        //        /*.forEach(def -> System.out.println(def.getIdentifier().getText()));*/
+//        //
+//        //        //        ballerinaStructDefinitions.forEach(def -> def.isPublic());
+//        //
+//        //        long end = System.currentTimeMillis();
+//        //
+//        //        System.out.println("Found " + ballerinaStructDefinitions.size() + " in " + (end - start) + " ms");
+//        //        System.out.println("....");
+//
+//        long start = System.currentTimeMillis();
+//
+//        count = 0;
+//        PsiElement position = parameters.getPosition();
+//        ResolveState state = createContextOnElement(position);
+//        MyBallerinaScopeProcessor myBallerinaScopeProcessor = new MyBallerinaScopeProcessor(result);
+//
+//        PsiFile containingFile = position.getContainingFile().getOriginalFile();
+//
+//        PsiDirectory parent = containingFile.getParent();
+//
+//        if (parent != null) {
+//            PsiElement[] children = parent.getChildren();
+//            for (PsiElement child : children) {
+//                myBallerinaScopeProcessor.execute(child, state);
+//            }
+//        }
+//        long end = System.currentTimeMillis();
+//        System.out.println("Found " + count + " in " + (end - start) + " ms");
     }
 
     private static final Key<SmartPsiElementPointer<PsiElement>> CONTEXT = Key.create("CONTEXT");

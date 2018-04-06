@@ -21,11 +21,14 @@ import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
+import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaOrgName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -122,7 +125,12 @@ public class BallerinaFindUsageProvider implements FindUsagesProvider {
             return "Organization";
         } else if (parent instanceof BallerinaGlobalVariableDefinition) {
             return "Global Variable";
-
+        } else if (parent instanceof BallerinaGlobalEndpointDefinition) {
+            return "Global Endpoint";
+        } else if (parent instanceof BallerinaEndpointDefinition) {
+            return "Endpoint";
+        } else if (parent instanceof BallerinaTypeDefinition) {
+            return "Type";
         }
         return "";
     }

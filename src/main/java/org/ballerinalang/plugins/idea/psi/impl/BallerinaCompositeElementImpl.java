@@ -23,6 +23,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompositeElement;
+import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,6 +44,7 @@ public class BallerinaCompositeElementImpl extends ASTWrapperPsiElement implemen
         return processDeclarationsDefault(this, processor, state, lastParent, place);
     }
 
+    @Contract(pure = true)
     public static boolean processDeclarationsDefault(@NotNull BallerinaCompositeElement o,
                                                      @NotNull PsiScopeProcessor processor,
                                                      @NotNull ResolveState state,
