@@ -63,9 +63,15 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
         }
         if (nameReference.isInLocalPackage()) {
             PsiFile originalFile = myElement.getContainingFile().getOriginalFile();
+            PsiDirectory parent = originalFile.getParent();
+            if (parent != null) {
+                if (isAContentRoot(parent)) {
+                    return findInFile(originalFile);
+                }
+            }
             PsiDirectory directory = getPackageDirectory(originalFile);
             if (directory != null) {
-                return findInTopLevelElements(directory, true);
+                return findInPackage(directory, true);
             }
         } else {
             // Todo - Get files in the corresponding package.
@@ -84,7 +90,7 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
             if (directory == null || !(directory instanceof PsiDirectory)) {
                 return null;
             }
-            return findInTopLevelElements((PsiDirectory) directory, true);
+            return findInPackage((PsiDirectory) directory, true);
         }
         return null;
     }
@@ -155,7 +161,7 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
     }
 
     @Nullable
-    private PsiElement findInTopLevelElements(@NotNull PsiDirectory rootDirectory, boolean isTopLevel) {
+    private PsiElement findInPackage(@NotNull PsiDirectory rootDirectory, boolean isTopLevel) {
         // We are doing a breadth first search here.
         List<PsiDirectory> directories = new LinkedList<>();
         PsiElement[] children = rootDirectory.getChildren();
@@ -167,22 +173,31 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
                 }
                 //results.addAll(getTopLevelElements(((PsiDirectory) child), false));
             } else if (child instanceof BallerinaFile) {
-                Collection<BallerinaTopLevelDefinition> ballerinaDefinitions = PsiTreeUtil.findChildrenOfType(child,
-                        BallerinaTopLevelDefinition.class);
-                for (BallerinaTopLevelDefinition ballerinaDefinition : ballerinaDefinitions) {
-                    PsiElement identifier = ballerinaDefinition.getIdentifier();
-
-                    if (isAMatch(identifier)) {
-                        return identifier;
-                    }
+                PsiElement element = findInFile(((PsiFile) child));
+                if (element != null) {
+                    return element;
                 }
             }
         }
 
         for (PsiDirectory directory : directories) {
-            PsiElement element = findInTopLevelElements(directory, false);
+            PsiElement element = findInPackage(directory, false);
             if (element != null) {
                 return element;
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    private PsiElement findInFile(@NotNull PsiFile file) {
+        Collection<BallerinaTopLevelDefinition> ballerinaDefinitions = PsiTreeUtil.findChildrenOfType(file,
+                BallerinaTopLevelDefinition.class);
+        for (BallerinaTopLevelDefinition ballerinaDefinition : ballerinaDefinitions) {
+            PsiElement identifier = ballerinaDefinition.getIdentifier();
+
+            if (isAMatch(identifier)) {
+                return identifier;
             }
         }
         return null;
@@ -245,5 +260,15 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
             }
         }
         return null;
+    }
+
+    private boolean isAContentRoot(@NotNull PsiDirectory directory) {
+        VirtualFile[] contentRoots = ProjectRootManager.getInstance(directory.getProject()).getContentRoots();
+        for (VirtualFile contentRoot : contentRoots) {
+            if (contentRoot.equals(directory.getVirtualFile())) {
+                return true;
+            }
+        }
+        return false;
     }
 }
