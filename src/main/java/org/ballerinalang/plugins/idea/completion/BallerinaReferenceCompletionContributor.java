@@ -171,25 +171,25 @@ public class BallerinaReferenceCompletionContributor extends CompletionContribut
 //        //        System.out.println("Found " + ballerinaStructDefinitions.size() + " in " + (end - start) + " ms");
 //        //        System.out.println("....");
 //
-//        long start = System.currentTimeMillis();
-//
-//        count = 0;
-//        PsiElement position = parameters.getPosition();
-//        ResolveState state = createContextOnElement(position);
-//        MyBallerinaScopeProcessor myBallerinaScopeProcessor = new MyBallerinaScopeProcessor(result);
-//
-//        PsiFile containingFile = position.getContainingFile().getOriginalFile();
-//
-//        PsiDirectory parent = containingFile.getParent();
-//
-//        if (parent != null) {
-//            PsiElement[] children = parent.getChildren();
-//            for (PsiElement child : children) {
-//                myBallerinaScopeProcessor.execute(child, state);
-//            }
-//        }
-//        long end = System.currentTimeMillis();
-//        System.out.println("Found " + count + " in " + (end - start) + " ms");
+        long start = System.currentTimeMillis();
+
+        count = 0;
+        PsiElement position = parameters.getPosition();
+        ResolveState state = createContextOnElement(position);
+        MyBallerinaScopeProcessor myBallerinaScopeProcessor = new MyBallerinaScopeProcessor(result);
+
+        PsiFile containingFile = position.getContainingFile().getOriginalFile();
+
+        PsiDirectory parent = containingFile.getParent();
+
+        if (parent != null) {
+            PsiElement[] children = parent.getChildren();
+            for (PsiElement child : children) {
+                myBallerinaScopeProcessor.execute(child, state);
+            }
+        }
+        long end = System.currentTimeMillis();
+        System.out.println("Found " + count + " in " + (end - start) + " ms");
     }
 
     private static final Key<SmartPsiElementPointer<PsiElement>> CONTEXT = Key.create("CONTEXT");
@@ -215,15 +215,15 @@ public class BallerinaReferenceCompletionContributor extends CompletionContribut
             if (accept(element)) {
                 List<BallerinaDefinition> definitions = ((BallerinaFile) element).getDefinitions();
                 for (BallerinaDefinition definition : definitions) {
-//                    PsiElement firstChild = definition.getFirstChild();
-//                    if (firstChild instanceof BallerinaFunctionDefinition) {
-//                        BallerinaFunctionDefinition child = (BallerinaFunctionDefinition) firstChild;
-//                        PsiElement identifier = child.getIdentifier();
-//                        if (identifier != null) {
-//                            myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(child,null));
-//                            count++;
-//                        }
-//                    }
+                    PsiElement firstChild = definition.getFirstChild();
+                    if (firstChild instanceof BallerinaFunctionDefinition) {
+                        BallerinaFunctionDefinition child = (BallerinaFunctionDefinition) firstChild;
+                        PsiElement identifier = child.getIdentifier();
+                        if (identifier != null) {
+                            myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(child,null));
+                            count++;
+                        }
+                    }
                 }
             }
             return true;

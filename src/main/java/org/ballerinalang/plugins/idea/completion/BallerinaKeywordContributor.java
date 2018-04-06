@@ -13,8 +13,8 @@ import static com.intellij.patterns.PlatformPatterns.*;
 public class BallerinaKeywordContributor extends CompletionContributor implements DumbAware{
 
     public BallerinaKeywordContributor() {
-        extend(CompletionType.BASIC,importPattern(), new BallerinaKeywordCompletionProvider(BallerinaCompletionUtils
-                .KEYWORDS_PRIORITY, "import"));
+//        extend(CompletionType.BASIC,importPattern(), new BallerinaKeywordCompletionProvider(BallerinaCompletionUtils
+//                .KEYWORDS_PRIORITY, "import"));
 //        extend(CompletionType.BASIC,importPattern(), new BallerinaKeywordCompletionProvider(BallerinaCompletionUtils
 //                .KEYWORDS_PRIORITY, "if"));
     }
