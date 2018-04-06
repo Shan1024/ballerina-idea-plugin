@@ -675,6 +675,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == SINGLE_BACK_TICK_DOC_INLINE_CODE) {
       r = singleBackTickDocInlineCode(b, 0);
     }
+    else if (t == STREAMING_INPUT_ALIAS) {
+      r = streamingInputAlias(b, 0);
+    }
     else if (t == TRIPLE_BACK_TICK_DEPRECATED_INLINE_CODE) {
       r = tripleBackTickDeprecatedInlineCode(b, 0);
     }
@@ -3945,6 +3948,121 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
+  // PatternStreamingEdgeInput followed by PatternStreamingInput
+  static boolean Pattern1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Pattern1")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = PatternStreamingEdgeInput(b, l + 1);
+    r = r && consumeTokens(b, 1, FOLLOWED, BY);
+    p = r; // pin = 2
+    r = r && PatternStreamingInput(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // LEFT_PARENTHESIS PatternStreamingInput RIGHT_PARENTHESIS
+  static boolean Pattern2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Pattern2")) return false;
+    if (!nextTokenIs(b, LEFT_PARENTHESIS)) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, LEFT_PARENTHESIS);
+    r = r && PatternStreamingInput(b, l + 1);
+    r = r && consumeToken(b, RIGHT_PARENTHESIS);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // foreach PatternStreamingInput
+  static boolean Pattern3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Pattern3")) return false;
+    if (!nextTokenIs(b, FOREACH)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = consumeToken(b, FOREACH);
+    p = r; // pin = 1
+    r = r && PatternStreamingInput(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  /* ********************************************************** */
+  // NOT PatternStreamingEdgeInput (AND PatternStreamingEdgeInput | for IntegerLiteral)
+  static boolean Pattern4(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Pattern4")) return false;
+    if (!nextTokenIs(b, NOT)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = consumeToken(b, NOT);
+    p = r; // pin = 1
+    r = r && report_error_(b, PatternStreamingEdgeInput(b, l + 1));
+    r = p && Pattern4_2(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // AND PatternStreamingEdgeInput | for IntegerLiteral
+  private static boolean Pattern4_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Pattern4_2")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = Pattern4_2_0(b, l + 1);
+    if (!r) r = Pattern4_2_1(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // AND PatternStreamingEdgeInput
+  private static boolean Pattern4_2_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Pattern4_2_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, AND);
+    r = r && PatternStreamingEdgeInput(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // for IntegerLiteral
+  private static boolean Pattern4_2_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Pattern4_2_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, FOR);
+    r = r && IntegerLiteral(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
+  // PatternStreamingEdgeInput (AND | OR) PatternStreamingEdgeInput
+  static boolean Pattern5(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Pattern5")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = PatternStreamingEdgeInput(b, l + 1);
+    r = r && Pattern5_1(b, l + 1);
+    p = r; // pin = 2
+    r = r && PatternStreamingEdgeInput(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
+  // AND | OR
+  private static boolean Pattern5_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Pattern5_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeToken(b, AND);
+    if (!r) r = consumeToken(b, OR);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  /* ********************************************************** */
   // every? PatternStreamingInput WithinClause?
   public static boolean PatternClause(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PatternClause")) return false;
@@ -4017,126 +4135,23 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PatternStreamingEdgeInput followed by PatternStreamingInput
-  //     |   LEFT_PARENTHESIS PatternStreamingInput RIGHT_PARENTHESIS
-  //     |   foreach PatternStreamingInput
-  //     |   not PatternStreamingEdgeInput (and PatternStreamingEdgeInput | for IntegerLiteral)
-  //     |   PatternStreamingEdgeInput (and | or) PatternStreamingEdgeInput
+  // Pattern4
+  //     |   Pattern5
+  //     |   Pattern1
+  //     |   Pattern2
+  //     |   Pattern3
   //     |   PatternStreamingEdgeInput
   public static boolean PatternStreamingInput(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PatternStreamingInput")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, PATTERN_STREAMING_INPUT, "<pattern streaming input>");
-    r = PatternStreamingInput_0(b, l + 1);
-    if (!r) r = PatternStreamingInput_1(b, l + 1);
-    if (!r) r = PatternStreamingInput_2(b, l + 1);
-    if (!r) r = PatternStreamingInput_3(b, l + 1);
-    if (!r) r = PatternStreamingInput_4(b, l + 1);
+    r = Pattern4(b, l + 1);
+    if (!r) r = Pattern5(b, l + 1);
+    if (!r) r = Pattern1(b, l + 1);
+    if (!r) r = Pattern2(b, l + 1);
+    if (!r) r = Pattern3(b, l + 1);
     if (!r) r = PatternStreamingEdgeInput(b, l + 1);
     exit_section_(b, l, m, r, false, null);
-    return r;
-  }
-
-  // PatternStreamingEdgeInput followed by PatternStreamingInput
-  private static boolean PatternStreamingInput_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "PatternStreamingInput_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = PatternStreamingEdgeInput(b, l + 1);
-    r = r && consumeTokens(b, 0, FOLLOWED, BY);
-    r = r && PatternStreamingInput(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // LEFT_PARENTHESIS PatternStreamingInput RIGHT_PARENTHESIS
-  private static boolean PatternStreamingInput_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "PatternStreamingInput_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, LEFT_PARENTHESIS);
-    r = r && PatternStreamingInput(b, l + 1);
-    r = r && consumeToken(b, RIGHT_PARENTHESIS);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // foreach PatternStreamingInput
-  private static boolean PatternStreamingInput_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "PatternStreamingInput_2")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, FOREACH);
-    r = r && PatternStreamingInput(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // not PatternStreamingEdgeInput (and PatternStreamingEdgeInput | for IntegerLiteral)
-  private static boolean PatternStreamingInput_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "PatternStreamingInput_3")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, NOT);
-    r = r && PatternStreamingEdgeInput(b, l + 1);
-    r = r && PatternStreamingInput_3_2(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // and PatternStreamingEdgeInput | for IntegerLiteral
-  private static boolean PatternStreamingInput_3_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "PatternStreamingInput_3_2")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = PatternStreamingInput_3_2_0(b, l + 1);
-    if (!r) r = PatternStreamingInput_3_2_1(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // and PatternStreamingEdgeInput
-  private static boolean PatternStreamingInput_3_2_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "PatternStreamingInput_3_2_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, AND);
-    r = r && PatternStreamingEdgeInput(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // for IntegerLiteral
-  private static boolean PatternStreamingInput_3_2_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "PatternStreamingInput_3_2_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, FOR);
-    r = r && IntegerLiteral(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // PatternStreamingEdgeInput (and | or) PatternStreamingEdgeInput
-  private static boolean PatternStreamingInput_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "PatternStreamingInput_4")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = PatternStreamingEdgeInput(b, l + 1);
-    r = r && PatternStreamingInput_4_1(b, l + 1);
-    r = r && PatternStreamingEdgeInput(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // and | or
-  private static boolean PatternStreamingInput_4_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "PatternStreamingInput_4_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, AND);
-    if (!r) r = consumeToken(b, OR);
-    exit_section_(b, m, null, r);
     return r;
   }
 
@@ -5157,7 +5172,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // VariableReference WhereClause?  WindowClause? WhereClause? (as identifier)?
+  // VariableReference WhereClause?  WindowClause? WhereClause? (streamingInputAlias)?
   public static boolean StreamingInput(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StreamingInput")) return false;
     boolean r;
@@ -5192,19 +5207,19 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (as identifier)?
+  // (streamingInputAlias)?
   private static boolean StreamingInput_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StreamingInput_4")) return false;
     StreamingInput_4_0(b, l + 1);
     return true;
   }
 
-  // as identifier
+  // (streamingInputAlias)
   private static boolean StreamingInput_4_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StreamingInput_4_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, AS, IDENTIFIER);
+    r = streamingInputAlias(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -7236,6 +7251,19 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!recursion_guard_(b, l, "singleBackTickDocInlineCode_1")) return false;
     consumeToken(b, SINGLE_BACK_TICK_INLINE_CODE);
     return true;
+  }
+
+  /* ********************************************************** */
+  // as identifier
+  public static boolean streamingInputAlias(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "streamingInputAlias")) return false;
+    if (!nextTokenIs(b, AS)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, STREAMING_INPUT_ALIAS, null);
+    r = consumeTokens(b, 1, AS, IDENTIFIER);
+    p = r; // pin = 1
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */

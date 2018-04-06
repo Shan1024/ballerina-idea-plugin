@@ -26,20 +26,26 @@ public interface BallerinaPatternStreamingInput extends BallerinaCompositeElemen
   @Nullable
   BallerinaIntegerLiteral getIntegerLiteral();
 
-  @Nullable
-  BallerinaPatternStreamingEdgeInput getPatternStreamingEdgeInput();
+  @NotNull
+  List<BallerinaPatternStreamingEdgeInput> getPatternStreamingEdgeInputList();
 
   @Nullable
   BallerinaPatternStreamingInput getPatternStreamingInput();
 
   @Nullable
+  PsiElement getAnd();
+
+  @Nullable
   PsiElement getLeftParenthesis();
 
   @Nullable
-  PsiElement getRightParenthesis();
+  PsiElement getNot();
 
   @Nullable
-  PsiElement getAnd();
+  PsiElement getOr();
+
+  @Nullable
+  PsiElement getRightParenthesis();
 
   @Nullable
   PsiElement getBy();
@@ -52,11 +58,5 @@ public interface BallerinaPatternStreamingInput extends BallerinaCompositeElemen
 
   @Nullable
   PsiElement getForeach();
-
-  @Nullable
-  PsiElement getNot();
-
-  @Nullable
-  PsiElement getOr();
 
 }

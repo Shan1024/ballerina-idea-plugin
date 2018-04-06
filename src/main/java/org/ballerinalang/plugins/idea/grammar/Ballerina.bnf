@@ -828,19 +828,27 @@ SetClause ::= set SetAssignmentClause (COMMA SetAssignmentClause)* {pin=1}
 
 SetAssignmentClause ::= VariableReference ASSIGN Expression
 
-StreamingInput ::= VariableReference WhereClause?  WindowClause? WhereClause? (as identifier)?
+StreamingInput ::= VariableReference WhereClause?  WindowClause? WhereClause? (streamingInputAlias)?
+streamingInputAlias ::= as identifier {pin=1}
 
 JoinStreamingInput ::= (unidirectional JoinType | JoinType unidirectional | JoinType) StreamingInput on Expression
 
 OutputRateLimit ::= output (all | last | first) every (DECIMAL_INTEGER_LITERAL TimeScale | DECIMAL_INTEGER_LITERAL events)
     | output snapshot every DECIMAL_INTEGER_LITERAL TimeScale {pin=1}
 
-PatternStreamingInput ::= PatternStreamingEdgeInput followed by PatternStreamingInput
-    |   LEFT_PARENTHESIS PatternStreamingInput RIGHT_PARENTHESIS
-    |   foreach PatternStreamingInput
-    |   not PatternStreamingEdgeInput (and PatternStreamingEdgeInput | for IntegerLiteral)
-    |   PatternStreamingEdgeInput (and | or) PatternStreamingEdgeInput
+PatternStreamingInput ::=
+        Pattern4
+    |   Pattern5
+    |   Pattern1
+    |   Pattern2
+    |   Pattern3
     |   PatternStreamingEdgeInput
+
+private Pattern4 ::= NOT PatternStreamingEdgeInput (AND PatternStreamingEdgeInput | for IntegerLiteral) {pin=1}
+private Pattern5 ::= PatternStreamingEdgeInput (AND | OR) PatternStreamingEdgeInput {pin=2}
+private Pattern1 ::= PatternStreamingEdgeInput followed by PatternStreamingInput {pin=2}
+private Pattern2 ::= LEFT_PARENTHESIS PatternStreamingInput RIGHT_PARENTHESIS
+private Pattern3 ::= foreach PatternStreamingInput {pin=1}
 
 PatternStreamingEdgeInput ::= VariableReference WhereClause? IntRangeExpression? (as identifier)?
 

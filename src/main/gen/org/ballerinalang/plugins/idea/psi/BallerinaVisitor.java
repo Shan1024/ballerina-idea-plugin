@@ -1055,6 +1055,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitStreamingInputAlias(@NotNull BallerinaStreamingInputAlias o) {
+    visitCompositeElement(o);
+  }
+
   public void visitTripleBackTickDeprecatedInlineCode(@NotNull BallerinaTripleBackTickDeprecatedInlineCode o) {
     visitCompositeElement(o);
   }

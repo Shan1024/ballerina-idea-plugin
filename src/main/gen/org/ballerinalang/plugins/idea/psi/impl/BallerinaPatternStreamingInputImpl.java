@@ -48,9 +48,9 @@ public class BallerinaPatternStreamingInputImpl extends BallerinaCompositeElemen
   }
 
   @Override
-  @Nullable
-  public BallerinaPatternStreamingEdgeInput getPatternStreamingEdgeInput() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaPatternStreamingEdgeInput.class);
+  @NotNull
+  public List<BallerinaPatternStreamingEdgeInput> getPatternStreamingEdgeInputList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaPatternStreamingEdgeInput.class);
   }
 
   @Override
@@ -61,20 +61,32 @@ public class BallerinaPatternStreamingInputImpl extends BallerinaCompositeElemen
 
   @Override
   @Nullable
+  public PsiElement getAnd() {
+    return findChildByType(AND);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getLeftParenthesis() {
     return findChildByType(LEFT_PARENTHESIS);
   }
 
   @Override
   @Nullable
-  public PsiElement getRightParenthesis() {
-    return findChildByType(RIGHT_PARENTHESIS);
+  public PsiElement getNot() {
+    return findChildByType(NOT);
   }
 
   @Override
   @Nullable
-  public PsiElement getAnd() {
-    return findChildByType(AND);
+  public PsiElement getOr() {
+    return findChildByType(OR);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getRightParenthesis() {
+    return findChildByType(RIGHT_PARENTHESIS);
   }
 
   @Override
@@ -99,18 +111,6 @@ public class BallerinaPatternStreamingInputImpl extends BallerinaCompositeElemen
   @Nullable
   public PsiElement getForeach() {
     return findChildByType(FOREACH);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getNot() {
-    return findChildByType(NOT);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getOr() {
-    return findChildByType(OR);
   }
 
 }

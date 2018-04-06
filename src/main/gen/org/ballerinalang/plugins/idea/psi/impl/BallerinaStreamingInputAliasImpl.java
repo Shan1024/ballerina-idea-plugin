@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaStreamingInputImpl extends BallerinaCompositeElementImpl implements BallerinaStreamingInput {
+public class BallerinaStreamingInputAliasImpl extends BallerinaCompositeElementImpl implements BallerinaStreamingInputAlias {
 
-  public BallerinaStreamingInputImpl(ASTNode node) {
+  public BallerinaStreamingInputAliasImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitStreamingInput(this);
+    visitor.visitStreamingInputAlias(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -43,26 +43,14 @@ public class BallerinaStreamingInputImpl extends BallerinaCompositeElementImpl i
 
   @Override
   @NotNull
-  public BallerinaVariableReference getVariableReference() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaVariableReference.class));
-  }
-
-  @Override
-  @NotNull
-  public List<BallerinaWhereClause> getWhereClauseList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaWhereClause.class);
+  public PsiElement getAs() {
+    return notNullChild(findChildByType(AS));
   }
 
   @Override
   @Nullable
-  public BallerinaWindowClause getWindowClause() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaWindowClause.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaStreamingInputAlias getStreamingInputAlias() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaStreamingInputAlias.class);
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
   }
 
 }

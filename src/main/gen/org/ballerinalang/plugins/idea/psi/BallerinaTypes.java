@@ -218,6 +218,7 @@ public interface BallerinaTypes {
   IElementType STATEMENT = new BallerinaCompositeElementType("STATEMENT");
   IElementType STREAMING_ACTION = new BallerinaCompositeElementType("STREAMING_ACTION");
   IElementType STREAMING_INPUT = new BallerinaCompositeElementType("STREAMING_INPUT");
+  IElementType STREAMING_INPUT_ALIAS = new BallerinaCompositeElementType("STREAMING_INPUT_ALIAS");
   IElementType STREAMING_QUERY_STATEMENT = new BallerinaCompositeElementType("STREAMING_QUERY_STATEMENT");
   IElementType STREAM_TYPE_NAME = new BallerinaCompositeElementType("STREAM_TYPE_NAME");
   IElementType STRING_TEMPLATE_CONTENT = new BallerinaCompositeElementType("STRING_TEMPLATE_CONTENT");
@@ -288,7 +289,7 @@ public interface BallerinaTypes {
   IElementType ABORT = new BallerinaTokenType("abort");
   IElementType ADD = new BallerinaTokenType("+");
   IElementType ALL = new BallerinaTokenType("all");
-  IElementType AND = new BallerinaTokenType("and");
+  IElementType AND = new BallerinaTokenType("&&");
   IElementType ANNOTATION = new BallerinaTokenType("annotation");
   IElementType ANY = new BallerinaTokenType("any");
   IElementType AS = new BallerinaTokenType("as");
@@ -398,7 +399,7 @@ public interface BallerinaTypes {
   IElementType NATIVE = new BallerinaTokenType("native");
   IElementType NEW = new BallerinaTokenType("new");
   IElementType NEXT = new BallerinaTokenType("next");
-  IElementType NOT = new BallerinaTokenType("not");
+  IElementType NOT = new BallerinaTokenType("!");
   IElementType NOT_EQUAL = new BallerinaTokenType("!=");
   IElementType NULL_LITERAL = new BallerinaTokenType("NULL_LITERAL");
   IElementType OBJECT = new BallerinaTokenType("object");
@@ -407,7 +408,7 @@ public interface BallerinaTypes {
   IElementType ONABORT = new BallerinaTokenType("onabort");
   IElementType ONCOMMIT = new BallerinaTokenType("oncommit");
   IElementType ONRETRY = new BallerinaTokenType("onretry");
-  IElementType OR = new BallerinaTokenType("or");
+  IElementType OR = new BallerinaTokenType("||");
   IElementType ORDER = new BallerinaTokenType("order");
   IElementType OUTER = new BallerinaTokenType("outer");
   IElementType OUTPUT = new BallerinaTokenType("output");
@@ -1078,6 +1079,9 @@ public interface BallerinaTypes {
       }
       else if (type == STREAMING_INPUT) {
         return new BallerinaStreamingInputImpl(node);
+      }
+      else if (type == STREAMING_INPUT_ALIAS) {
+        return new BallerinaStreamingInputAliasImpl(node);
       }
       else if (type == STREAMING_QUERY_STATEMENT) {
         return new BallerinaStreamingQueryStatementImpl(node);
