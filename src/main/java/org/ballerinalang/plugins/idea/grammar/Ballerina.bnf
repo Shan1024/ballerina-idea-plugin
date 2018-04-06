@@ -449,7 +449,7 @@ TypeInitExpr ::= new UserDefineTypeName LEFT_PARENTHESIS InvocationArgList? RIGH
 AssignmentStatement ::= withVar | withoutVar
 
 private withVar ::= var VariableReference ASSIGN (ActionInvocation | Expression) SEMICOLON {pin=1}
-private withoutVar ::= VariableReference ASSIGN (ActionInvocation | Expression) SEMICOLON
+private withoutVar ::= VariableReference ASSIGN (ActionInvocation | Expression) SEMICOLON {pin=2}
 
 tupleDestructuringStatement ::= var? LEFT_PARENTHESIS VariableReferenceList RIGHT_PARENTHESIS ASSIGN (ActionInvocation | Expression) SEMICOLON
                                 | LEFT_PARENTHESIS ParameterList RIGHT_PARENTHESIS ASSIGN (ActionInvocation | Expression) SEMICOLON
