@@ -218,7 +218,6 @@ public interface BallerinaTypes {
   IElementType STATEMENT = new BallerinaCompositeElementType("STATEMENT");
   IElementType STREAMING_ACTION = new BallerinaCompositeElementType("STREAMING_ACTION");
   IElementType STREAMING_INPUT = new BallerinaCompositeElementType("STREAMING_INPUT");
-  IElementType STREAMING_INPUT_ALIAS = new BallerinaCompositeElementType("STREAMING_INPUT_ALIAS");
   IElementType STREAMING_QUERY_STATEMENT = new BallerinaCompositeElementType("STREAMING_QUERY_STATEMENT");
   IElementType STREAM_TYPE_NAME = new BallerinaCompositeElementType("STREAM_TYPE_NAME");
   IElementType STRING_TEMPLATE_CONTENT = new BallerinaCompositeElementType("STRING_TEMPLATE_CONTENT");
@@ -1079,9 +1078,6 @@ public interface BallerinaTypes {
       }
       else if (type == STREAMING_INPUT) {
         return new BallerinaStreamingInputImpl(node);
-      }
-      else if (type == STREAMING_INPUT_ALIAS) {
-        return new BallerinaStreamingInputAliasImpl(node);
       }
       else if (type == STREAMING_QUERY_STATEMENT) {
         return new BallerinaStreamingQueryStatementImpl(node);

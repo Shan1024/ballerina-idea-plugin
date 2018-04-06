@@ -171,4 +171,12 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
         }
         return false;
     }
+
+    public static boolean isNotInStreams(PsiBuilder builder, int level) {
+        IElementType next1Element = builder.lookAhead(2);
+        if (next1Element != null && next1Element != BallerinaTypes.WHERE) {
+            return true;
+        }
+        return false;
+    }
 }

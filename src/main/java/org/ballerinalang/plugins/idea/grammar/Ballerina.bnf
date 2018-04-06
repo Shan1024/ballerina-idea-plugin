@@ -676,7 +676,7 @@ BinaryDivMulModExpression ::= Expression (DIV | MUL | MOD) Expression
 BinaryAddSubExpression ::= Expression (ADD | SUB) Expression
 BinaryCompareExpression ::= Expression (LT_EQUAL | GT_EQUAL | GT | LT) Expression
 BinaryEqualExpression ::= Expression (EQUAL | NOT_EQUAL) Expression
-BinaryAndExpression ::= Expression AND Expression
+BinaryAndExpression ::= Expression <<isNotInStreams>> AND Expression
 BinaryOrExpression ::= Expression OR Expression
 TernaryExpression ::= Expression QUESTION_MARK Expression COLON Expression {pin=2}
 AwaitExpression ::= await Expression
@@ -828,8 +828,7 @@ SetClause ::= set SetAssignmentClause (COMMA SetAssignmentClause)* {pin=1}
 
 SetAssignmentClause ::= VariableReference ASSIGN Expression
 
-StreamingInput ::= VariableReference WhereClause?  WindowClause? WhereClause? (streamingInputAlias)?
-streamingInputAlias ::= as identifier {pin=1}
+StreamingInput ::= VariableReference WhereClause? WindowClause? WhereClause? (as identifier)? {pin(".*")=1}
 
 JoinStreamingInput ::= (unidirectional JoinType | JoinType unidirectional | JoinType) StreamingInput on Expression
 
@@ -844,13 +843,13 @@ PatternStreamingInput ::=
     |   Pattern3
     |   PatternStreamingEdgeInput
 
-private Pattern4 ::= NOT PatternStreamingEdgeInput (AND PatternStreamingEdgeInput | for IntegerLiteral) {pin=1}
+private Pattern4 ::= NOT PatternStreamingEdgeInput (AND PatternStreamingEdgeInput | for IntegerLiteral) {pin(".*")=1}
 private Pattern5 ::= PatternStreamingEdgeInput (AND | OR) PatternStreamingEdgeInput {pin=2}
 private Pattern1 ::= PatternStreamingEdgeInput followed by PatternStreamingInput {pin=2}
 private Pattern2 ::= LEFT_PARENTHESIS PatternStreamingInput RIGHT_PARENTHESIS
 private Pattern3 ::= foreach PatternStreamingInput {pin=1}
 
-PatternStreamingEdgeInput ::= VariableReference WhereClause? IntRangeExpression? (as identifier)?
+PatternStreamingEdgeInput ::= VariableReference WhereClause? IntRangeExpression? (as identifier)? {pin(".*")=1}
 
 WhereClause ::= where Expression {pin=1}
 

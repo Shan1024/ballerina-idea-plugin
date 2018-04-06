@@ -33,6 +33,9 @@ public interface BallerinaStreamingInput extends BallerinaCompositeElement {
   BallerinaWindowClause getWindowClause();
 
   @Nullable
-  BallerinaStreamingInputAlias getStreamingInputAlias();
+  PsiElement getAs();
+
+  @Nullable
+  PsiElement getIdentifier();
 
 }

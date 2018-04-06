@@ -675,9 +675,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == SINGLE_BACK_TICK_DOC_INLINE_CODE) {
       r = singleBackTickDocInlineCode(b, 0);
     }
-    else if (t == STREAMING_INPUT_ALIAS) {
-      r = streamingInputAlias(b, 0);
-    }
     else if (t == TRIPLE_BACK_TICK_DEPRECATED_INLINE_CODE) {
       r = tripleBackTickDeprecatedInlineCode(b, 0);
     }
@@ -4018,23 +4015,25 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // AND PatternStreamingEdgeInput
   private static boolean Pattern4_2_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Pattern4_2_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, AND);
+    p = r; // pin = 1
     r = r && PatternStreamingEdgeInput(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // for IntegerLiteral
   private static boolean Pattern4_2_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Pattern4_2_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, FOR);
+    p = r; // pin = 1
     r = r && IntegerLiteral(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -4093,14 +4092,15 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // VariableReference WhereClause? IntRangeExpression? (as identifier)?
   public static boolean PatternStreamingEdgeInput(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PatternStreamingEdgeInput")) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, PATTERN_STREAMING_EDGE_INPUT, "<pattern streaming edge input>");
     r = VariableReference(b, l + 1, -1);
-    r = r && PatternStreamingEdgeInput_1(b, l + 1);
-    r = r && PatternStreamingEdgeInput_2(b, l + 1);
-    r = r && PatternStreamingEdgeInput_3(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, PatternStreamingEdgeInput_1(b, l + 1));
+    r = p && report_error_(b, PatternStreamingEdgeInput_2(b, l + 1)) && r;
+    r = p && PatternStreamingEdgeInput_3(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // WhereClause?
@@ -4127,11 +4127,12 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // as identifier
   private static boolean PatternStreamingEdgeInput_3_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "PatternStreamingEdgeInput_3_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, AS, IDENTIFIER);
-    exit_section_(b, m, null, r);
-    return r;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = consumeTokens(b, 1, AS, IDENTIFIER);
+    p = r; // pin = 1
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -5172,18 +5173,19 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // VariableReference WhereClause?  WindowClause? WhereClause? (streamingInputAlias)?
+  // VariableReference WhereClause? WindowClause? WhereClause? (as identifier)?
   public static boolean StreamingInput(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StreamingInput")) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, STREAMING_INPUT, "<streaming input>");
     r = VariableReference(b, l + 1, -1);
-    r = r && StreamingInput_1(b, l + 1);
-    r = r && StreamingInput_2(b, l + 1);
-    r = r && StreamingInput_3(b, l + 1);
-    r = r && StreamingInput_4(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, StreamingInput_1(b, l + 1));
+    r = p && report_error_(b, StreamingInput_2(b, l + 1)) && r;
+    r = p && report_error_(b, StreamingInput_3(b, l + 1)) && r;
+    r = p && StreamingInput_4(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // WhereClause?
@@ -5207,21 +5209,22 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (streamingInputAlias)?
+  // (as identifier)?
   private static boolean StreamingInput_4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StreamingInput_4")) return false;
     StreamingInput_4_0(b, l + 1);
     return true;
   }
 
-  // (streamingInputAlias)
+  // as identifier
   private static boolean StreamingInput_4_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StreamingInput_4_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = streamingInputAlias(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = consumeTokens(b, 1, AS, IDENTIFIER);
+    p = r; // pin = 1
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
@@ -7254,19 +7257,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // as identifier
-  public static boolean streamingInputAlias(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "streamingInputAlias")) return false;
-    if (!nextTokenIs(b, AS)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, STREAMING_INPUT_ALIAS, null);
-    r = consumeTokens(b, 1, AS, IDENTIFIER);
-    p = r; // pin = 1
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  /* ********************************************************** */
   // TB_DEPRECATED_INLINE_CODE_START TRIPLE_BACK_TICK_INLINE_CODE? TRIPLE_BACK_TICK_INLINE_CODE_END
   public static boolean tripleBackTickDeprecatedInlineCode(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "tripleBackTickDeprecatedInlineCode")) return false;
@@ -7561,7 +7551,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
         r = Expression(b, l, 20);
         exit_section_(b, l, m, BINARY_EQUAL_EXPRESSION, r, true, null);
       }
-      else if (g < 21 && consumeTokenSmart(b, AND)) {
+      else if (g < 21 && BinaryAndExpression_0(b, l + 1)) {
         r = Expression(b, l, 21);
         exit_section_(b, l, m, BINARY_AND_EXPRESSION, r, true, null);
       }
@@ -7879,6 +7869,17 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = consumeTokenSmart(b, EQUAL);
     if (!r) r = consumeTokenSmart(b, NOT_EQUAL);
+    exit_section_(b, m, null, r);
+    return r;
+  }
+
+  // <<isNotInStreams>> AND
+  private static boolean BinaryAndExpression_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "BinaryAndExpression_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = isNotInStreams(b, l + 1);
+    r = r && consumeToken(b, AND);
     exit_section_(b, m, null, r);
     return r;
   }

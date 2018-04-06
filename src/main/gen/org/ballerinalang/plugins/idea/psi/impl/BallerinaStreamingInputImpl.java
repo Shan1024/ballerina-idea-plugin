@@ -61,8 +61,14 @@ public class BallerinaStreamingInputImpl extends BallerinaCompositeElementImpl i
 
   @Override
   @Nullable
-  public BallerinaStreamingInputAlias getStreamingInputAlias() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaStreamingInputAlias.class);
+  public PsiElement getAs() {
+    return findChildByType(AS);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
   }
 
 }
