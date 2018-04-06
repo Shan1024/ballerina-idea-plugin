@@ -70,7 +70,7 @@ public class BallerinaNameReferenceImpl extends BallerinaNamedElementImpl<Baller
   }
 
   public boolean isInLocalPackage() {
-    return BallerinaPsiImplUtil.isReferenceToLocalPackage(this);
+    return BallerinaPsiImplUtil.isInLocalPackage(this);
   }
 
 }

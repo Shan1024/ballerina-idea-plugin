@@ -81,10 +81,11 @@ public interface BallerinaTypes {
   IElementType ELEMENT = new BallerinaCompositeElementType("ELEMENT");
   IElementType ELSE_CLAUSE = new BallerinaCompositeElementType("ELSE_CLAUSE");
   IElementType ELSE_IF_CLAUSE = new BallerinaCompositeElementType("ELSE_IF_CLAUSE");
+  IElementType ELVIS_EXPRESSION = new BallerinaCompositeElementType("ELVIS_EXPRESSION");
   IElementType EMPTY_TAG = new BallerinaCompositeElementType("EMPTY_TAG");
   IElementType EMPTY_TUPLE_LITERAL = new BallerinaCompositeElementType("EMPTY_TUPLE_LITERAL");
   IElementType ENDPOINT_DEFINITION = BallerinaElementTypeFactory.stubFactory("ENDPOINT_DEFINITION");
-  IElementType ENDPOINT_INITLIZATION = new BallerinaCompositeElementType("ENDPOINT_INITLIZATION");
+  IElementType ENDPOINT_INITIALIZATION = new BallerinaCompositeElementType("ENDPOINT_INITIALIZATION");
   IElementType ENDPOINT_PARAMETER = new BallerinaCompositeElementType("ENDPOINT_PARAMETER");
   IElementType ENDPOINT_TYPE = new BallerinaCompositeElementType("ENDPOINT_TYPE");
   IElementType EXPRESSION = new BallerinaCompositeElementType("EXPRESSION");
@@ -338,6 +339,7 @@ public interface BallerinaTypes {
   IElementType DOUBLE_QUOTE_END = new BallerinaTokenType("DOUBLE_QUOTE_END");
   IElementType ELLIPSIS = new BallerinaTokenType("...");
   IElementType ELSE = new BallerinaTokenType("else");
+  IElementType ELVIS = new BallerinaTokenType("ELVIS");
   IElementType ENDPOINT = new BallerinaTokenType("endpoint");
   IElementType ENUM = new BallerinaTokenType("enum");
   IElementType EQUAL = new BallerinaTokenType("==");
@@ -666,6 +668,9 @@ public interface BallerinaTypes {
       else if (type == ELSE_IF_CLAUSE) {
         return new BallerinaElseIfClauseImpl(node);
       }
+      else if (type == ELVIS_EXPRESSION) {
+        return new BallerinaElvisExpressionImpl(node);
+      }
       else if (type == EMPTY_TAG) {
         return new BallerinaEmptyTagImpl(node);
       }
@@ -675,8 +680,8 @@ public interface BallerinaTypes {
       else if (type == ENDPOINT_DEFINITION) {
         return new BallerinaEndpointDefinitionImpl(node);
       }
-      else if (type == ENDPOINT_INITLIZATION) {
-        return new BallerinaEndpointInitlizationImpl(node);
+      else if (type == ENDPOINT_INITIALIZATION) {
+        return new BallerinaEndpointInitializationImpl(node);
       }
       else if (type == ENDPOINT_PARAMETER) {
         return new BallerinaEndpointParameterImpl(node);

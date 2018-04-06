@@ -21,21 +21,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaTriggerWorker extends BallerinaCompositeElement {
-
-  @NotNull
-  BallerinaExpression getExpression();
-
-  @NotNull
-  PsiElement getRarrow();
-
-  @NotNull
-  PsiElement getSemicolon();
+public interface BallerinaEndpointInitialization extends BallerinaCompositeElement {
 
   @Nullable
-  PsiElement getFork();
+  BallerinaRecordLiteral getRecordLiteral();
 
   @Nullable
-  PsiElement getIdentifier();
+  BallerinaVariableReference getVariableReference();
+
+  @Nullable
+  PsiElement getAssign();
 
 }

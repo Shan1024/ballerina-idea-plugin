@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaWorkerReply extends BallerinaCompositeElement {
 
   @NotNull
-  BallerinaExpressionList getExpressionList();
+  BallerinaExpression getExpression();
 
   @NotNull
   PsiElement getLarrow();

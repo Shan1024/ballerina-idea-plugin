@@ -43,8 +43,8 @@ public class BallerinaWorkerReplyImpl extends BallerinaCompositeElementImpl impl
 
   @Override
   @NotNull
-  public BallerinaExpressionList getExpressionList() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaExpressionList.class));
+  public BallerinaExpression getExpression() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaExpression.class));
   }
 
   @Override

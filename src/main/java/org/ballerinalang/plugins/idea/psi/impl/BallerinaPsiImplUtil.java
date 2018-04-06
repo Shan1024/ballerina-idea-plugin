@@ -164,7 +164,7 @@ public class BallerinaPsiImplUtil {
         return null;
     }
 
-    public static boolean isReferenceToLocalPackage(@NotNull BallerinaNameReference ballerinaNameReference) {
+    public static boolean isInLocalPackage(@NotNull BallerinaNameReference ballerinaNameReference) {
         //        PsiElement resolve = ballerinaNameReference.resolve();
         //        if (resolve instanceof GoTypeSpec) return ((GoTypeSpec) resolve).getSpecType();
         //        // hacky C resolve

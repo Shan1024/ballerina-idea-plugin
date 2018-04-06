@@ -17,43 +17,40 @@
 // This is a generated file. Not intended for manual editing.
 package org.ballerinalang.plugins.idea.psi.impl;
 
+import java.util.List;
+import org.jetbrains.annotations.*;
 import com.intellij.lang.ASTNode;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
+import com.intellij.psi.util.PsiTreeUtil;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
+import org.ballerinalang.plugins.idea.psi.*;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.scope.PsiScopeProcessor;
-import com.intellij.psi.util.PsiTreeUtil;
-import org.ballerinalang.plugins.idea.psi.BallerinaBlock;
-import org.ballerinalang.plugins.idea.psi.BallerinaStatement;
-import org.ballerinalang.plugins.idea.psi.BallerinaVisitor;
-import org.jetbrains.annotations.NotNull;
-
-import java.util.List;
 
 public class BallerinaBlockImpl extends BallerinaCompositeElementImpl implements BallerinaBlock {
 
-    public BallerinaBlockImpl(ASTNode node) {
-        super(node);
-    }
+  public BallerinaBlockImpl(ASTNode node) {
+    super(node);
+  }
 
-    public void accept(@NotNull BallerinaVisitor visitor) {
-        visitor.visitBlock(this);
-    }
+  public void accept(@NotNull BallerinaVisitor visitor) {
+    visitor.visitBlock(this);
+  }
 
-    public void accept(@NotNull PsiElementVisitor visitor) {
-        if (visitor instanceof BallerinaVisitor) accept((BallerinaVisitor) visitor);
-        else super.accept(visitor);
-    }
+  public void accept(@NotNull PsiElementVisitor visitor) {
+    if (visitor instanceof BallerinaVisitor) accept((BallerinaVisitor)visitor);
+    else super.accept(visitor);
+  }
 
-    @Override
-    @NotNull
-    public List<BallerinaStatement> getStatementList() {
-        return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaStatement.class);
-    }
+  @Override
+  @NotNull
+  public List<BallerinaStatement> getStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaStatement.class);
+  }
 
-    public boolean processDeclarations(@NotNull PsiScopeProcessor processor, @NotNull ResolveState state,
-                                       PsiElement lastParent, @NotNull PsiElement place) {
-        return BallerinaPsiImplUtil.processDeclarations(this, processor, state, lastParent, place);
-    }
+  public boolean processDeclarations(PsiScopeProcessor processor, ResolveState state, PsiElement lastParent, PsiElement place) {
+    return BallerinaPsiImplUtil.processDeclarations(this, processor, state, lastParent, place);
+  }
 
 }

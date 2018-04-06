@@ -43,6 +43,12 @@ public class BallerinaPatternStreamingInputImpl extends BallerinaCompositeElemen
 
   @Override
   @Nullable
+  public BallerinaIntegerLiteral getIntegerLiteral() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaIntegerLiteral.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaPatternStreamingEdgeInput getPatternStreamingEdgeInput() {
     return PsiTreeUtil.getChildOfType(this, BallerinaPatternStreamingEdgeInput.class);
   }
@@ -63,12 +69,6 @@ public class BallerinaPatternStreamingInputImpl extends BallerinaCompositeElemen
   @Nullable
   public PsiElement getRightParenthesis() {
     return findChildByType(RIGHT_PARENTHESIS);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getStringTemplateText() {
-    return findChildByType(STRING_TEMPLATE_TEXT);
   }
 
   @Override

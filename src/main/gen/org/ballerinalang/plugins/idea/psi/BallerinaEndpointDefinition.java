@@ -30,7 +30,7 @@ public interface BallerinaEndpointDefinition extends BallerinaNamedElement, Ball
   List<BallerinaAnnotationAttachment> getAnnotationAttachmentList();
 
   @Nullable
-  BallerinaEndpointInitlization getEndpointInitlization();
+  BallerinaEndpointInitialization getEndpointInitialization();
 
   @Nullable
   BallerinaEndpointType getEndpointType();

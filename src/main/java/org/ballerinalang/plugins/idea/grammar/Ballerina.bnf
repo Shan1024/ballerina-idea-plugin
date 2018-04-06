@@ -114,7 +114,7 @@
 
     extends("(FunctionInvocation|SimpleVariable|MapArrayVariable|FieldVariable|XmlAttribVariable|Invocation|AwaitExpression)Reference") = VariableReference
 
-    extends("((Simple|Array|Record|Xml|StringTemplate)Literal|(ValueType|BuiltInReferenceType)Type|VariableReference|LambdaFunction|TypeInit|Type(Casting|Conversion|Access)|BracedOrTuple|Await|TableQuery|MatchExpr|Checked|TableLiteral)Expression") = Expression
+    extends("((Simple|Array|Record|Xml|StringTemplate)Literal|(ValueType|BuiltInReferenceType)Type|VariableReference|LambdaFunction|TypeInit|Type(Casting|Conversion|Access)|BracedOrTuple|Await|TableQuery|MatchExpr|Checked|TableLiteral|Elvis)Expression") = Expression
     extends("(Unary|Binary|Ternary)Expression") = Expression
 
     extends("Binary(Pow|DivMulMod|AddSub|Compare|Equal|And|Or)Expression") = BinaryExpression
@@ -185,7 +185,7 @@ Alias ::= as identifier {
 }
 
 // Note - Global variable definition should be the first definition since it can contain identifier as type.
-Definition ::= AnnotationAttachment? documentationAttachment? deprecatedAttachment?
+Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment?
                ( TypeDefinition
                | ServiceDefinition
                | FunctionDefinition
@@ -232,10 +232,9 @@ LambdaFunction ::= LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS EQUAL
 // Todo - cache and add Signature owner?
 CallableUnitSignature ::= identifier LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS ReturnParameter? {pin=1}
 
-TypeDefinition ::= (public)? type (identifier | finiteType SEMICOLON) TypeName {
+TypeDefinition ::= (public)? type identifier FiniteType SEMICOLON {
     pin=2
     methods=[getName]
-    // Todo - Rename and enable
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaTypeDefinitionStub"
 }
 
@@ -252,7 +251,7 @@ ObjectInitializerParameterList ::= LEFT_PARENTHESIS ObjectParameterList? RIGHT_P
 ObjectFunctions ::= (AnnotationAttachment* documentationAttachment? deprecatedAttachment? ObjectFunctionDefinition)+
 
 // TODO merge with fieldDefinition later
-fieldDefinition ::= AnnotationAttachment* TypeName identifier (ASSIGN Expression)? (COMMA | SEMICOLON)
+fieldDefinition ::= AnnotationAttachment* TypeName identifier (ASSIGN Expression)? (COMMA | SEMICOLON) {pin=3}
 
 // TODO try to merge with formalParameterList later
 ObjectParameterList ::= (ObjectDefaultableParameter | ObjectParameter) (COMMA (ObjectDefaultableParameter | ObjectParameter))* (COMMA RestParameter)? | RestParameter
@@ -303,18 +302,18 @@ GlobalEndpointDefinition ::= public? EndpointDefinition {
     methods=[getIdentifier] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaGlobalEndpointDefinitionStub"
 }
 
-EndpointDefinition ::= AnnotationAttachment* endpoint EndpointType identifier EndpointInitlization? SEMICOLON {
+EndpointDefinition ::= AnnotationAttachment* endpoint EndpointType identifier EndpointInitialization? SEMICOLON {
     pin=2
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaEndpointDefinitionStub"
 }
 
 EndpointType ::= NameReference
 
-EndpointInitlization ::= RecordLiteral | ASSIGN VariableReference
+EndpointInitialization ::= RecordLiteral | ASSIGN VariableReference
 
-finiteType ::= finiteTypeUnit (PIPE finiteTypeUnit)*
+FiniteType ::= FiniteTypeUnit (PIPE FiniteTypeUnit)*
 
-finiteTypeUnit ::= SimpleLiteral | TypeName
+FiniteTypeUnit ::= SimpleLiteral | TypeName
 
 //todo
 TypeName ::= TupleTypeName
@@ -530,10 +529,10 @@ WorkerInteractionStatement ::= TriggerWorker | WorkerReply
 
 // below left identifier is of type TYPE_MESSAGE and the right identifier is of type WORKER
 // Note - Cannot pin rarrow since it will mess up action invocation in statementexpr - client -> invoke1(a, a);
-TriggerWorker ::=  ExpressionList RARROW (fork | identifier) SEMICOLON /*{pin=2}*/
+TriggerWorker ::=  Expression RARROW (fork | identifier) SEMICOLON /*{pin=2}*/
 
 // below left identifier is of type WORKER and the right identifier is of type message
-WorkerReply ::= ExpressionList LARROW identifier SEMICOLON {pin=2}
+WorkerReply ::= Expression LARROW identifier SEMICOLON {pin=2}
 
 // Note - Order of 'simpleVariableReference' and 'functionInvocationReference' because otherwise all function
 // invocations will match simpleVariableReference first.
@@ -640,9 +639,12 @@ Expression
     |   TableQueryExpression
     |   MatchExprExpression
     |   CheckedExpression
+    |   ElvisExpression
     |   AwaitExpression {
     recoverWhile=ExpressionRecover
 }
+
+ElvisExpression::= Expression ELVIS Expression
 
 TableQueryExpression ::= TableQuery
 
@@ -688,7 +690,7 @@ MatchExpressionPatternClause ::= TypeName identifier? EQUAL_GT Expression
 //reusable productions
 
 NameReference ::= <<isPackageExpected>> PackageReference identifier | identifier {
-    methods=[/*getReference*/ getQualifier /*resolve*/ resolveType isReferenceToLocalPackage]
+    methods=[/*getReference*/ getQualifier /*resolve*/ resolveType isInLocalPackage]
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaNameReferenceStub"
 //    extends=test
 //    elementType=test
@@ -836,7 +838,7 @@ OutputRateLimit ::= output (all | last | first) every (DECIMAL_INTEGER_LITERAL T
 PatternStreamingInput ::= PatternStreamingEdgeInput followed by PatternStreamingInput
     |   LEFT_PARENTHESIS PatternStreamingInput RIGHT_PARENTHESIS
     |   foreach PatternStreamingInput
-    |   not PatternStreamingEdgeInput (and PatternStreamingEdgeInput | for STRING_TEMPLATE_TEXT)
+    |   not PatternStreamingEdgeInput (and PatternStreamingEdgeInput | for IntegerLiteral)
     |   PatternStreamingEdgeInput (and | or) PatternStreamingEdgeInput
     |   PatternStreamingEdgeInput
 

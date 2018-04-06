@@ -27,9 +27,6 @@ import org.ballerinalang.plugins.idea.stubs.BallerinaTypeDefinitionStub;
 public interface BallerinaTypeDefinition extends BallerinaNamedElement, BallerinaTopLevelDefinition, StubBasedPsiElement<BallerinaTypeDefinitionStub> {
 
   @Nullable
-  BallerinaTypeName getTypeName();
-
-  @Nullable
   BallerinaFiniteType getFiniteType();
 
   @Nullable

@@ -49,12 +49,6 @@ public class BallerinaTypeDefinitionImpl extends BallerinaNamedElementImpl<Balle
 
   @Override
   @Nullable
-  public BallerinaTypeName getTypeName() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class);
-  }
-
-  @Override
-  @Nullable
   public BallerinaFiniteType getFiniteType() {
     return PsiTreeUtil.getChildOfType(this, BallerinaFiniteType.class);
   }

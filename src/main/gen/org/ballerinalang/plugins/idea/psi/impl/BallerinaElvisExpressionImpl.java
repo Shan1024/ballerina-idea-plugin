@@ -24,22 +24,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiElementVisitor;
 import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
-import org.ballerinalang.plugins.idea.stubs.BallerinaEndpointDefinitionStub;
 import org.ballerinalang.plugins.idea.psi.*;
-import com.intellij.psi.stubs.IStubElementType;
 
-public class BallerinaEndpointDefinitionImpl extends BallerinaNamedElementImpl<BallerinaEndpointDefinitionStub> implements BallerinaEndpointDefinition {
+public class BallerinaElvisExpressionImpl extends BallerinaExpressionImpl implements BallerinaElvisExpression {
 
-  public BallerinaEndpointDefinitionImpl(BallerinaEndpointDefinitionStub stub, IStubElementType type) {
-    super(stub, type);
-  }
-
-  public BallerinaEndpointDefinitionImpl(ASTNode node) {
+  public BallerinaElvisExpressionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitEndpointDefinition(this);
+    visitor.visitElvisExpression(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -49,38 +43,14 @@ public class BallerinaEndpointDefinitionImpl extends BallerinaNamedElementImpl<B
 
   @Override
   @NotNull
-  public List<BallerinaAnnotationAttachment> getAnnotationAttachmentList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaAnnotationAttachment.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaEndpointInitialization getEndpointInitialization() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaEndpointInitialization.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaEndpointType getEndpointType() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaEndpointType.class);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getSemicolon() {
-    return findChildByType(SEMICOLON);
+  public List<BallerinaExpression> getExpressionList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaExpression.class);
   }
 
   @Override
   @NotNull
-  public PsiElement getEndpoint() {
-    return notNullChild(findChildByType(ENDPOINT));
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
+  public PsiElement getElvis() {
+    return notNullChild(findChildByType(ELVIS));
   }
 
 }

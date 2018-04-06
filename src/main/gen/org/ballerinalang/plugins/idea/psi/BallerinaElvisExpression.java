@@ -21,15 +21,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaEndpointInitlization extends BallerinaCompositeElement {
+public interface BallerinaElvisExpression extends BallerinaExpression {
 
-  @Nullable
-  BallerinaRecordLiteral getRecordLiteral();
+  @NotNull
+  List<BallerinaExpression> getExpressionList();
 
-  @Nullable
-  BallerinaVariableReference getVariableReference();
-
-  @Nullable
-  PsiElement getAssign();
+  @NotNull
+  PsiElement getElvis();
 
 }

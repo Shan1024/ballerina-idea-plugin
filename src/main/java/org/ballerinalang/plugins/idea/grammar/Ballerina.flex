@@ -489,6 +489,7 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "..."                                       { return ELLIPSIS; }
     "|"                                         { return PIPE; }
     "=>"                                        { return EQUAL_GT; }
+    "?:"                                        { return ELVIS; }
 
     "+="                                        { return COMPOUND_ADD; }
     "-="                                        { return COMPOUND_SUB; }

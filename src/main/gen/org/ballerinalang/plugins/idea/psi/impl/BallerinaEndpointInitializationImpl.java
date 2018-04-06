@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaEndpointInitlizationImpl extends BallerinaCompositeElementImpl implements BallerinaEndpointInitlization {
+public class BallerinaEndpointInitializationImpl extends BallerinaCompositeElementImpl implements BallerinaEndpointInitialization {
 
-  public BallerinaEndpointInitlizationImpl(ASTNode node) {
+  public BallerinaEndpointInitializationImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitEndpointInitlization(this);
+    visitor.visitEndpointInitialization(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
