@@ -23,14 +23,14 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaPatternStreamingInput extends BallerinaCompositeElement {
 
-  @Nullable
-  BallerinaIntegerLiteral getIntegerLiteral();
-
   @NotNull
   List<BallerinaPatternStreamingEdgeInput> getPatternStreamingEdgeInputList();
 
   @Nullable
   BallerinaPatternStreamingInput getPatternStreamingInput();
+
+  @Nullable
+  BallerinaSimpleLiteral getSimpleLiteral();
 
   @Nullable
   PsiElement getAnd();

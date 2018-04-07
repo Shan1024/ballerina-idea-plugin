@@ -56,7 +56,9 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DAY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DECIMAL_INTEGER_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DEPRECATED;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DOCUMENTATION;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DOUBLE_COLON;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ELSE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ELVIS;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ENDPOINT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ENUM;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EVENTS;
@@ -173,7 +175,7 @@ public class BallerinaParserDefinition implements ParserDefinition {
 
     );
 
-    public static final TokenSet OPERATORS = TokenSet.create();
+    public static final TokenSet OPERATORS = TokenSet.create(DOUBLE_COLON, ELVIS);
 
     public static final TokenSet BAD_CHARACTER = TokenSet.create(TokenType.BAD_CHARACTER);
 

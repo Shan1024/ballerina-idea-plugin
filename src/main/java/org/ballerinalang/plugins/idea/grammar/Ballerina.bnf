@@ -185,20 +185,20 @@ Alias ::= as identifier {
 }
 
 // Note - Global variable definition should be the first definition since it can contain identifier as type.
-Definition ::= AnnotationAttachment* documentationAttachment? deprecatedAttachment?
+Definition ::= documentationAttachment? deprecatedAttachment? AnnotationAttachment*
                ( TypeDefinition
+               | GlobalVariableDefinition
                | ServiceDefinition
                | FunctionDefinition
                | AnnotationDefinition
                | GlobalEndpointDefinition
-               | GlobalVariableDefinition
                ) {
     recoverWhile=TopLevelDefinitionRecover
 }
 
 private TopLevelDefinitionRecover ::= !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|service|function|enum|annotation|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|stream|object|identifier|'{')
 
-ServiceDefinition ::= service (LT NameReference GT) identifier ServiceEndpointAttachments?  ServiceBody {pin=1}
+ServiceDefinition ::= service (LT NameReference GT)? identifier ServiceEndpointAttachments?  ServiceBody {pin=1}
 ServiceEndpointAttachments ::= bind (NameReference (COMMA NameReference)* | RecordLiteral) {pin=1}
 ServiceBody ::= LEFT_BRACE (/*ResourceDefinition+ | EndpointDefinition+ ResourceDefinition* |*/ EndpointDefinition* VariableDefinitionStatementInService* ResourceDefinition*) RIGHT_BRACE /*{pin=1}*/
 
@@ -341,7 +341,7 @@ NullableTypeName ::= TypeName QUESTION_MARK
 UnionTypeName ::= TypeName (PIPE TypeName)+
 GroupTypeName ::= LEFT_PARENTHESIS TypeName RIGHT_PARENTHESIS
 TupleTypeName ::= LEFT_PARENTHESIS TypeName (COMMA TypeName)* RIGHT_PARENTHESIS
-ObjectTypeName ::= object LEFT_BRACE ObjectBody RIGHT_BRACE
+ObjectTypeName ::= object LEFT_BRACE ObjectBody RIGHT_BRACE {pin=1}
 RecordTypeName ::= LEFT_BRACE FieldDefinitionList RIGHT_BRACE
 
 FieldDefinitionList ::= fieldDefinition*
@@ -620,7 +620,7 @@ Expression
     |   TableLiteralExpression
     |   RecordLiteralExpression
     |   BracedOrTupleExpression
-    |   TernaryExpression {/*pin=1 */ /*recoverWhile=ExpressionRecover*/}
+    |   TernaryExpression
     |   ArrayLiteralExpression
     |   ValueTypeTypeExpression
     |   BuiltInReferenceTypeTypeExpression
@@ -843,11 +843,11 @@ PatternStreamingInput ::=
     |   Pattern3
     |   PatternStreamingEdgeInput
 
-private Pattern4 ::= NOT PatternStreamingEdgeInput (AND PatternStreamingEdgeInput | for IntegerLiteral) {pin(".*")=1}
-private Pattern5 ::= PatternStreamingEdgeInput (AND | OR) PatternStreamingEdgeInput {pin=2}
 private Pattern1 ::= PatternStreamingEdgeInput followed by PatternStreamingInput {pin=2}
 private Pattern2 ::= LEFT_PARENTHESIS PatternStreamingInput RIGHT_PARENTHESIS
+private Pattern4 ::= NOT PatternStreamingEdgeInput (AND PatternStreamingEdgeInput | for SimpleLiteral) {pin(".*")=1}
 private Pattern3 ::= foreach PatternStreamingInput {pin=1}
+private Pattern5 ::= PatternStreamingEdgeInput (AND | OR) PatternStreamingEdgeInput {pin=2}
 
 PatternStreamingEdgeInput ::= VariableReference WhereClause? IntRangeExpression? (as identifier)? {pin(".*")=1}
 

@@ -41,6 +41,7 @@ public class BallerinaSyntaxHighlighter extends SyntaxHighlighterBase {
     static {
         fillMap(ATTRIBUTES, BallerinaParserDefinition.COMMENTS, LINE_COMMENT);
         fillMap(ATTRIBUTES, BallerinaParserDefinition.KEYWORDS, KEYWORD);
+        fillMap(ATTRIBUTES, BallerinaParserDefinition.OPERATORS, KEYWORD);
         fillMap(ATTRIBUTES, BallerinaParserDefinition.STRINGS, STRING);
         fillMap(ATTRIBUTES, BallerinaParserDefinition.NUMBERS, NUMBER);
         fillMap(ATTRIBUTES, BallerinaParserDefinition.BAD_CHARACTER, BAD_CHARACTER);

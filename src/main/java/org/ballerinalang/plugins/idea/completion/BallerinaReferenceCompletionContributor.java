@@ -25,6 +25,7 @@ import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.SmartPointerManager;
 import com.intellij.psi.SmartPsiElementPointer;
@@ -35,6 +36,8 @@ import org.ballerinalang.plugins.idea.psi.BallerinaDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
+import org.ballerinalang.plugins.idea.psi.reference.BallerinaNameReferenceReference;
+import org.ballerinalang.plugins.idea.psi.reference.BallerinaReference;
 import org.ballerinalang.plugins.idea.psi.scope.BallerinaScopeProcessor;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaAnnotationIndex;
 import org.ballerinalang.plugins.idea.stubs.index.BallerinaEndpointIndex;
@@ -175,19 +178,29 @@ public class BallerinaReferenceCompletionContributor extends CompletionContribut
 
         count = 0;
         PsiElement position = parameters.getPosition();
-        ResolveState state = createContextOnElement(position);
+
+        PsiReference reference = position.getReference();
+        if (reference==null) {
+            return;
+        }
+
+//        ResolveState state = createContextOnElement(position);
         MyBallerinaScopeProcessor myBallerinaScopeProcessor = new MyBallerinaScopeProcessor(result);
 
-        PsiFile containingFile = position.getContainingFile().getOriginalFile();
+//        PsiFile containingFile = position.getContainingFile().getOriginalFile();
+//
+//        PsiDirectory parent = containingFile.getParent();
+//
+//        if (parent != null) {
+//            PsiElement[] children = parent.getChildren();
+//            for (PsiElement child : children) {
+//                myBallerinaScopeProcessor.execute(child, state);
+//            }
+//        }
 
-        PsiDirectory parent = containingFile.getParent();
+        ((BallerinaNameReferenceReference)reference).processResolveVariants(myBallerinaScopeProcessor);
 
-        if (parent != null) {
-            PsiElement[] children = parent.getChildren();
-            for (PsiElement child : children) {
-                myBallerinaScopeProcessor.execute(child, state);
-            }
-        }
+
         long end = System.currentTimeMillis();
         System.out.println("Found " + count + " in " + (end - start) + " ms");
     }

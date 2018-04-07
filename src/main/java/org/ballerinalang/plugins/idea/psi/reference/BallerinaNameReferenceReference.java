@@ -25,6 +25,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
+import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
 import org.ballerinalang.plugins.idea.completion.inserthandlers.ParenthesisInsertHandler;
@@ -34,14 +35,18 @@ import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaReferenceExpressionBase;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaTopLevelDefinition;
+import org.ballerinalang.plugins.idea.psi.scope.BallerinaScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
+
+import static org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil.createContextOnElement;
 
 // Note - Name is not a typo :)
 public class BallerinaNameReferenceReference extends BallerinaCachedReference<BallerinaIdentifier> {
@@ -98,45 +103,57 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
     @NotNull
     @Override
     public Object[] getVariants() {
-//        long start = System.currentTimeMillis();
-//        BallerinaNameReference nameReference = PsiTreeUtil.getParentOfType(myElement, BallerinaNameReference.class);
-//        if (nameReference == null) {
-//            return new Object[0];
-//        }
-//        if (nameReference.isInLocalPackage()) {
-//            PsiFile originalFile = myElement.getContainingFile().getOriginalFile();
-//            PsiDirectory directory = getPackageDirectory(originalFile);
-//            if (directory != null) {
-//                Collection<BallerinaTopLevelDefinition> elements = getTopLevelElements(directory, true);
-//                long end = System.currentTimeMillis();
-//                System.out.println("Time: " + (end - start));
-//                return getLookups(elements);
-//            }
-//        } else {
-//            // Todo - Get files in the corresponding package.
-//            // Todo - Filter public elements? Or show a warning?
-//            // Todo - Consider package version.
-//
-//            BallerinaPackageReference packageReference = nameReference.getPackageReference();
-//            if (packageReference == null) {
-//                return new Object[0];
-//            }
-//            PsiReference reference = packageReference.getReference();
-//            if (reference == null) {
-//                return new Object[0];
-//            }
-//            PsiElement psiDirectory = reference.resolve();
-//            if (psiDirectory == null || !(psiDirectory instanceof PsiDirectory)) {
-//                return new Object[0];
-//            }
-//
-//            PsiDirectory directory = (PsiDirectory) psiDirectory;
-//            Collection<BallerinaTopLevelDefinition> elements = getTopLevelElements(directory, true);
-//            long end = System.currentTimeMillis();
-//            System.out.println("Time: " + (end - start));
-//            return getLookups(elements);
-//        }
+        //        long start = System.currentTimeMillis();
+        //        BallerinaNameReference nameReference = PsiTreeUtil.getParentOfType(myElement,
+        // BallerinaNameReference.class);
+        //        if (nameReference == null) {
+        //            return new Object[0];
+        //        }
+        //        if (nameReference.isInLocalPackage()) {
+        //            PsiFile originalFile = myElement.getContainingFile().getOriginalFile();
+        //            PsiDirectory directory = getPackageDirectory(originalFile);
+        //            if (directory != null) {
+        //                Collection<BallerinaTopLevelDefinition> elements = getTopLevelElements(directory, true);
+        //                long end = System.currentTimeMillis();
+        //                System.out.println("Time: " + (end - start));
+        //                return getLookups(elements);
+        //            }
+        //        } else {
+        //            // Todo - Get files in the corresponding package.
+        //            // Todo - Filter public elements? Or show a warning?
+        //            // Todo - Consider package version.
+        //
+        //            BallerinaPackageReference packageReference = nameReference.getPackageReference();
+        //            if (packageReference == null) {
+        //                return new Object[0];
+        //            }
+        //            PsiReference reference = packageReference.getReference();
+        //            if (reference == null) {
+        //                return new Object[0];
+        //            }
+        //            PsiElement psiDirectory = reference.resolve();
+        //            if (psiDirectory == null || !(psiDirectory instanceof PsiDirectory)) {
+        //                return new Object[0];
+        //            }
+        //
+        //            PsiDirectory directory = (PsiDirectory) psiDirectory;
+        //            Collection<BallerinaTopLevelDefinition> elements = getTopLevelElements(directory, true);
+        //            long end = System.currentTimeMillis();
+        //            System.out.println("Time: " + (end - start));
+        //            return getLookups(elements);
+        //        }
         return new Object[0];
+    }
+
+    public boolean processResolveVariants(@NotNull BallerinaScopeProcessor processor) {
+        PsiFile file = myElement.getContainingFile();
+        if (!(file instanceof BallerinaFile)) return false;
+        ResolveState state = createContextOnElement(myElement);
+        //        BallerinaReferenceExpressionBase qualifier = myElement.getQualifier();
+        return processor.execute(myElement, ResolveState.initial());
+        //        return qualifier != null
+        //                ? processQualifierExpression((BallerinaFile) file, qualifier, processor, state)
+        //                : processUnqualifiedResolve((BallerinaFile) file, processor, state);
     }
 
     // Todo - Move to utils

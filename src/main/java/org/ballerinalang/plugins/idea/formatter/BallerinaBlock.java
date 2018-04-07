@@ -206,6 +206,18 @@ public class BallerinaBlock extends AbstractBlock {
             return Indent.getNormalIndent();
         } else if (childElementType == BallerinaTypes.FOREVER_STATEMENT_BODY) {
             return Indent.getNormalIndent();
+        } else if (parentElementType == BallerinaTypes.BINARY_ADD_SUB_EXPRESSION) {
+            return Indent.getNormalIndent();
+        } else if (parentElementType == BallerinaTypes.BINARY_DIV_MUL_MOD_EXPRESSION) {
+            return Indent.getNormalIndent();
+        } else if (parentElementType == BallerinaTypes.BINARY_POW_EXPRESSION) {
+            return Indent.getNormalIndent();
+        } else if (parentElementType == BallerinaTypes.BINARY_AND_EXPRESSION) {
+            return Indent.getNormalIndent();
+        } else if (parentElementType == BallerinaTypes.BINARY_OR_EXPRESSION) {
+            return Indent.getNormalIndent();
+        } else if (parentElementType == BallerinaTypes.BINARY_COMPARE_EXPRESSION) {
+            return Indent.getNormalIndent();
         }
         return Indent.getNoneIndent();
     }

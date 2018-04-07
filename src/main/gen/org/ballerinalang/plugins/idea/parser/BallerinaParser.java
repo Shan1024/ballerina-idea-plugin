@@ -1590,13 +1590,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // AnnotationAttachment* documentationAttachment? deprecatedAttachment?
+  // documentationAttachment? deprecatedAttachment? AnnotationAttachment*
   //                ( TypeDefinition
+  //                | GlobalVariableDefinition
   //                | ServiceDefinition
   //                | FunctionDefinition
   //                | AnnotationDefinition
   //                | GlobalEndpointDefinition
-  //                | GlobalVariableDefinition
   //                )
   public static boolean Definition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Definition")) return false;
@@ -1610,48 +1610,48 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // AnnotationAttachment*
+  // documentationAttachment?
   private static boolean Definition_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Definition_0")) return false;
-    int c = current_position_(b);
-    while (true) {
-      if (!AnnotationAttachment(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "Definition_0", c)) break;
-      c = current_position_(b);
-    }
-    return true;
-  }
-
-  // documentationAttachment?
-  private static boolean Definition_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Definition_1")) return false;
     documentationAttachment(b, l + 1);
     return true;
   }
 
   // deprecatedAttachment?
-  private static boolean Definition_2(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "Definition_2")) return false;
+  private static boolean Definition_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Definition_1")) return false;
     deprecatedAttachment(b, l + 1);
     return true;
   }
 
+  // AnnotationAttachment*
+  private static boolean Definition_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Definition_2")) return false;
+    int c = current_position_(b);
+    while (true) {
+      if (!AnnotationAttachment(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "Definition_2", c)) break;
+      c = current_position_(b);
+    }
+    return true;
+  }
+
   // TypeDefinition
+  //                | GlobalVariableDefinition
   //                | ServiceDefinition
   //                | FunctionDefinition
   //                | AnnotationDefinition
   //                | GlobalEndpointDefinition
-  //                | GlobalVariableDefinition
   private static boolean Definition_3(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Definition_3")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = TypeDefinition(b, l + 1);
+    if (!r) r = GlobalVariableDefinition(b, l + 1);
     if (!r) r = ServiceDefinition(b, l + 1);
     if (!r) r = FunctionDefinition(b, l + 1);
     if (!r) r = AnnotationDefinition(b, l + 1);
     if (!r) r = GlobalEndpointDefinition(b, l + 1);
-    if (!r) r = GlobalVariableDefinition(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -3987,7 +3987,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // NOT PatternStreamingEdgeInput (AND PatternStreamingEdgeInput | for IntegerLiteral)
+  // NOT PatternStreamingEdgeInput (AND PatternStreamingEdgeInput | for SimpleLiteral)
   static boolean Pattern4(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Pattern4")) return false;
     if (!nextTokenIs(b, NOT)) return false;
@@ -4001,7 +4001,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // AND PatternStreamingEdgeInput | for IntegerLiteral
+  // AND PatternStreamingEdgeInput | for SimpleLiteral
   private static boolean Pattern4_2(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Pattern4_2")) return false;
     boolean r;
@@ -4024,14 +4024,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // for IntegerLiteral
+  // for SimpleLiteral
   private static boolean Pattern4_2_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Pattern4_2_1")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
     r = consumeToken(b, FOR);
     p = r; // pin = 1
-    r = r && IntegerLiteral(b, l + 1);
+    r = r && SimpleLiteral(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -4718,7 +4718,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // service (LT NameReference GT) identifier ServiceEndpointAttachments?  ServiceBody
+  // service (LT NameReference GT)? identifier ServiceEndpointAttachments?  ServiceBody
   public static boolean ServiceDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ServiceDefinition")) return false;
     if (!nextTokenIs(b, SERVICE)) return false;
@@ -4734,9 +4734,16 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // LT NameReference GT
+  // (LT NameReference GT)?
   private static boolean ServiceDefinition_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ServiceDefinition_1")) return false;
+    ServiceDefinition_1_0(b, l + 1);
+    return true;
+  }
+
+  // LT NameReference GT
+  private static boolean ServiceDefinition_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ServiceDefinition_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, LT);
