@@ -1198,7 +1198,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LEFT_BRACE (BlockWithEndpoint RIGHT_BRACE | BlockWithEndpointAndWorker RIGHT_BRACE)
+  // LEFT_BRACE (RIGHT_BRACE | BlockWithEndpoint RIGHT_BRACE | BlockWithEndpointAndWorker RIGHT_BRACE)
   public static boolean CallableUnitBody(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CallableUnitBody")) return false;
     if (!nextTokenIs(b, LEFT_BRACE)) return false;
@@ -1211,20 +1211,21 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r || p;
   }
 
-  // BlockWithEndpoint RIGHT_BRACE | BlockWithEndpointAndWorker RIGHT_BRACE
+  // RIGHT_BRACE | BlockWithEndpoint RIGHT_BRACE | BlockWithEndpointAndWorker RIGHT_BRACE
   private static boolean CallableUnitBody_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "CallableUnitBody_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = CallableUnitBody_1_0(b, l + 1);
+    r = consumeToken(b, RIGHT_BRACE);
     if (!r) r = CallableUnitBody_1_1(b, l + 1);
+    if (!r) r = CallableUnitBody_1_2(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // BlockWithEndpoint RIGHT_BRACE
-  private static boolean CallableUnitBody_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "CallableUnitBody_1_0")) return false;
+  private static boolean CallableUnitBody_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CallableUnitBody_1_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = BlockWithEndpoint(b, l + 1);
@@ -1234,8 +1235,8 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   // BlockWithEndpointAndWorker RIGHT_BRACE
-  private static boolean CallableUnitBody_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "CallableUnitBody_1_1")) return false;
+  private static boolean CallableUnitBody_1_2(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "CallableUnitBody_1_2")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = BlockWithEndpointAndWorker(b, l + 1);
@@ -8061,13 +8062,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean ObjectTypeName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ObjectTypeName")) return false;
     if (!nextTokenIsSmart(b, OBJECT)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokensSmart(b, 0, OBJECT, LEFT_BRACE);
-    r = r && ObjectBody(b, l + 1);
-    r = r && consumeToken(b, RIGHT_BRACE);
-    exit_section_(b, m, OBJECT_TYPE_NAME, r);
-    return r;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, OBJECT_TYPE_NAME, null);
+    r = consumeTokensSmart(b, 1, OBJECT, LEFT_BRACE);
+    p = r; // pin = 1
+    r = r && report_error_(b, ObjectBody(b, l + 1));
+    r = p && consumeToken(b, RIGHT_BRACE) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // NULL_LITERAL

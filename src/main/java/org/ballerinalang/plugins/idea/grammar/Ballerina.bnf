@@ -208,7 +208,8 @@ resourceParameterList ::= endpointParameter | ParameterList
 endpointParameter ::= endpoint identifier (COMMA ParameterList)? {pin(".*")=1}
 
 // Pin to make sure callable unit is identified correctly
-CallableUnitBody ::= LEFT_BRACE (BlockWithEndpoint RIGHT_BRACE | BlockWithEndpointAndWorker RIGHT_BRACE)  {pin=1}
+// Note - Empty body was added to fix issue in anon object function
+CallableUnitBody ::= LEFT_BRACE (RIGHT_BRACE | BlockWithEndpoint RIGHT_BRACE | BlockWithEndpointAndWorker RIGHT_BRACE)  {pin=1}
 
 Block ::= Statement* {methods=[processDeclarations]} /*{recoverWhile=StatementRecover}*/
 BlockWithEndpoint ::= EndpointDefinition* Statement* {elementType=Block}

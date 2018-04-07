@@ -11,7 +11,6 @@ public class BallerinaReferenceCompletionProvider extends CompletionProvider<Com
     @Override
     protected void addCompletions(@NotNull CompletionParameters parameters, ProcessingContext context,
                                   @NotNull CompletionResultSet result) {
-
-        System.out.println("XXXXX");
+        //        System.out.println("XXXXX");
     }
 }

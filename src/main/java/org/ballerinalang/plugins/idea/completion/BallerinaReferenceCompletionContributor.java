@@ -184,25 +184,25 @@ public class BallerinaReferenceCompletionContributor extends CompletionContribut
             return;
         }
 
-//        ResolveState state = createContextOnElement(position);
-        MyBallerinaScopeProcessor myBallerinaScopeProcessor = new MyBallerinaScopeProcessor(result);
-
-//        PsiFile containingFile = position.getContainingFile().getOriginalFile();
+////        ResolveState state = createContextOnElement(position);
+//        MyBallerinaScopeProcessor myBallerinaScopeProcessor = new MyBallerinaScopeProcessor(result);
 //
-//        PsiDirectory parent = containingFile.getParent();
+////        PsiFile containingFile = position.getContainingFile().getOriginalFile();
+////
+////        PsiDirectory parent = containingFile.getParent();
+////
+////        if (parent != null) {
+////            PsiElement[] children = parent.getChildren();
+////            for (PsiElement child : children) {
+////                myBallerinaScopeProcessor.execute(child, state);
+////            }
+////        }
 //
-//        if (parent != null) {
-//            PsiElement[] children = parent.getChildren();
-//            for (PsiElement child : children) {
-//                myBallerinaScopeProcessor.execute(child, state);
-//            }
-//        }
-
-        ((BallerinaNameReferenceReference)reference).processResolveVariants(myBallerinaScopeProcessor);
-
-
-        long end = System.currentTimeMillis();
-        System.out.println("Found " + count + " in " + (end - start) + " ms");
+//        ((BallerinaNameReferenceReference)reference).processResolveVariants(myBallerinaScopeProcessor);
+//
+//
+//        long end = System.currentTimeMillis();
+//        System.out.println("Found " + count + " in " + (end - start) + " ms");
     }
 
     private static final Key<SmartPsiElementPointer<PsiElement>> CONTEXT = Key.create("CONTEXT");

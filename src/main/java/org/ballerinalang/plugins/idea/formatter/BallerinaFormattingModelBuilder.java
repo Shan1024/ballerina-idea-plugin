@@ -265,7 +265,6 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .before(NEXT).spaceIf(true)
                 .after(NEXT).spaceIf(false)
                 .around(BREAK).spaceIf(false)
-                .around(FORK).spaceIf(true)
                 .around(JOIN).spaceIf(true)
                 .around(SOME).spaceIf(true) // Todo
                 .around(ALL).spaceIf(true) // Todo
@@ -448,6 +447,8 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .betweenInside(ADD, VARIABLE_REFERENCE_EXPRESSION, UNARY_EXPRESSION).spaceIf(false)
                 .betweenInside(SUB, VARIABLE_REFERENCE_EXPRESSION, UNARY_EXPRESSION).spaceIf(false)
 
+                .between(FORK, SEMICOLON).spaceIf(false)
+                .around(FORK).spaceIf(true)
                 // Streaming
                 .before(WHERE_CLAUSE).spaceIf(true)
                 .before(WINDOW_CLAUSE).spaceIf(true)

@@ -206,18 +206,23 @@ public class BallerinaBlock extends AbstractBlock {
             return Indent.getNormalIndent();
         } else if (childElementType == BallerinaTypes.FOREVER_STATEMENT_BODY) {
             return Indent.getNormalIndent();
-        } else if (parentElementType == BallerinaTypes.BINARY_ADD_SUB_EXPRESSION) {
-            return Indent.getNormalIndent();
-        } else if (parentElementType == BallerinaTypes.BINARY_DIV_MUL_MOD_EXPRESSION) {
-            return Indent.getNormalIndent();
-        } else if (parentElementType == BallerinaTypes.BINARY_POW_EXPRESSION) {
-            return Indent.getNormalIndent();
-        } else if (parentElementType == BallerinaTypes.BINARY_AND_EXPRESSION) {
-            return Indent.getNormalIndent();
-        } else if (parentElementType == BallerinaTypes.BINARY_OR_EXPRESSION) {
-            return Indent.getNormalIndent();
-        } else if (parentElementType == BallerinaTypes.BINARY_COMPARE_EXPRESSION) {
-            return Indent.getNormalIndent();
+        } else if (childElementType == BallerinaTypes.BINARY_ADD_SUB_EXPRESSION
+                || childElementType == BallerinaTypes.BINARY_DIV_MUL_MOD_EXPRESSION
+                || childElementType == BallerinaTypes.BINARY_POW_EXPRESSION
+                || childElementType == BallerinaTypes.BINARY_AND_EXPRESSION
+                || childElementType == BallerinaTypes.BINARY_OR_EXPRESSION
+                || childElementType == BallerinaTypes.BINARY_COMPARE_EXPRESSION
+                ) {
+            if (!(parentElementType == BallerinaTypes.BINARY_ADD_SUB_EXPRESSION
+                    || parentElementType == BallerinaTypes.BINARY_DIV_MUL_MOD_EXPRESSION
+                    || parentElementType == BallerinaTypes.BINARY_POW_EXPRESSION
+                    || parentElementType == BallerinaTypes.BINARY_AND_EXPRESSION
+                    || parentElementType == BallerinaTypes.BINARY_OR_EXPRESSION
+                    || parentElementType == BallerinaTypes.BINARY_COMPARE_EXPRESSION
+                    || parentElementType == BallerinaTypes.UNARY_EXPRESSION
+            )) {
+                return Indent.getIndent(Indent.Type.NORMAL, true, true);
+            }
         }
         return Indent.getNoneIndent();
     }

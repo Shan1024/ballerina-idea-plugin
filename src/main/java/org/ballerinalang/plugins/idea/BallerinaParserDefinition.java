@@ -61,6 +61,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ELSE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ELVIS;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ENDPOINT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ENUM;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EQUAL_GT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EVENTS;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EVERY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EXPIRED;
@@ -89,6 +90,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INNER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.INT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.JOIN;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.JSON;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LARROW;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LAST;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LEFT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LENGTHOF;
@@ -116,6 +118,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PARAMETER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PRIVATE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PUBLIC;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.QUOTED_STRING_LITERAL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RARROW;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RESOURCE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETRIES;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETURN;
@@ -175,7 +178,7 @@ public class BallerinaParserDefinition implements ParserDefinition {
 
     );
 
-    public static final TokenSet OPERATORS = TokenSet.create(DOUBLE_COLON, ELVIS);
+    public static final TokenSet OPERATORS = TokenSet.create(DOUBLE_COLON, ELVIS, EQUAL_GT, LARROW, RARROW);
 
     public static final TokenSet BAD_CHARACTER = TokenSet.create(TokenType.BAD_CHARACTER);
 

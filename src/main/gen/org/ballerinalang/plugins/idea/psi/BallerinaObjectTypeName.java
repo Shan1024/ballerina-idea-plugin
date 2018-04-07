@@ -23,13 +23,13 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaObjectTypeName extends BallerinaTypeName {
 
-  @NotNull
+  @Nullable
   BallerinaObjectBody getObjectBody();
 
-  @NotNull
+  @Nullable
   PsiElement getLeftBrace();
 
-  @NotNull
+  @Nullable
   PsiElement getRightBrace();
 
   @NotNull
