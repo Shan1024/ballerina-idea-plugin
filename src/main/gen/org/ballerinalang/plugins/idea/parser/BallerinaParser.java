@@ -3351,15 +3351,16 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // (public)? (native)? function ObjectCallableUnitSignature (CallableUnitBody | SEMICOLON)
   public static boolean ObjectFunctionDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ObjectFunctionDefinition")) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, OBJECT_FUNCTION_DEFINITION, "<object function definition>");
     r = ObjectFunctionDefinition_0(b, l + 1);
     r = r && ObjectFunctionDefinition_1(b, l + 1);
     r = r && consumeToken(b, FUNCTION);
-    r = r && ObjectCallableUnitSignature(b, l + 1);
-    r = r && ObjectFunctionDefinition_4(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+    p = r; // pin = 3
+    r = r && report_error_(b, ObjectCallableUnitSignature(b, l + 1));
+    r = p && ObjectFunctionDefinition_4(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // (public)?

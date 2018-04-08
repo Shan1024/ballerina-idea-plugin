@@ -58,8 +58,11 @@
 
         <indexPatternBuilder implementation="org.ballerinalang.plugins.idea.BallerinaIndexPatternBuilder"/>
 
+        <codeInsight.lineMarkerProvider language="Ballerina"
+                                        implementationClass="org.ballerinalang.plugins.idea.marker.BallerinaTypeFunctionMarker"/>
+
         <!--<completion.contributor language="Ballerina"-->
-                                <!--implementationClass="org.ballerinalang.plugins.idea.completion.BallerinaReferenceCompletionContributor"/>-->
+        <!--implementationClass="org.ballerinalang.plugins.idea.completion.BallerinaReferenceCompletionContributor"/>-->
         <completion.contributor language="Ballerina"
                                 implementationClass="org.ballerinalang.plugins.idea.completion.BallerinaKeywordContributor"/>
         <completion.contributor language="Ballerina"
@@ -137,7 +140,7 @@
         <runLineMarkerContributor language="Ballerina"
                                   implementationClass="org.ballerinalang.plugins.idea.runconfig.BallerinaRunLineMarkerProvider"/>
         <!--<runLineMarkerContributor language="Ballerina"-->
-                                  <!--implementationClass="org.ballerinalang.plugins.idea.runconfig.BallerinaTestLineMarkerProvider"/>-->
+        <!--implementationClass="org.ballerinalang.plugins.idea.runconfig.BallerinaTestLineMarkerProvider"/>-->
 
         <console.folding implementation="org.ballerinalang.plugins.idea.runconfig.BallerinaConsoleFolding"/>
 

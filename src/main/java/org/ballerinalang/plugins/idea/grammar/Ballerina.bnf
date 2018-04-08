@@ -265,7 +265,7 @@ ObjectParameter ::= AnnotationAttachment* (identifier | TypeName identifier)
 ObjectDefaultableParameter ::= ObjectParameter ASSIGN Expression
 
 // TODO merge with functionDefinition later
-ObjectFunctionDefinition ::= (public)? (native)? function ObjectCallableUnitSignature (CallableUnitBody | SEMICOLON)
+ObjectFunctionDefinition ::= (public)? (native)? function ObjectCallableUnitSignature (CallableUnitBody | SEMICOLON) {pin=3}
 
 //TODO merge with callableUnitSignature later
 ObjectCallableUnitSignature ::= identifier LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS ReturnParameter?

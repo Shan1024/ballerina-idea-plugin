@@ -108,10 +108,10 @@ public class BallerinaPsiImplUtil {
 
     @Nullable
     public static PsiElement getIdentifier(BallerinaFunctionDefinition ballerinaFunctionDefinition) {
-        BallerinaAttachedObject attachedObject = ballerinaFunctionDefinition.getAttachedObject();
-        if (attachedObject != null) {
-            return attachedObject.getIdentifier();
-        }
+//        BallerinaAttachedObject attachedObject = ballerinaFunctionDefinition.getAttachedObject();
+//        if (attachedObject != null) {
+//            return attachedObject.getIdentifier();
+//        }
         BallerinaCallableUnitSignature callableUnitSignature = ballerinaFunctionDefinition.getCallableUnitSignature();
         return callableUnitSignature != null ? callableUnitSignature.getIdentifier() : null;
     }

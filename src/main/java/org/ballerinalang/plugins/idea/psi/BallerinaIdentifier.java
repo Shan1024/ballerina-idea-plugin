@@ -17,6 +17,7 @@
 
 package org.ballerinalang.plugins.idea.psi;
 
+import com.intellij.psi.NavigatablePsiElement;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiNameIdentifierOwner;
 import com.intellij.psi.PsiReference;
@@ -30,7 +31,7 @@ import org.ballerinalang.plugins.idea.psi.reference.BallerinaTypeReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BallerinaIdentifier extends LeafPsiElement implements PsiNameIdentifierOwner {
+public class BallerinaIdentifier extends LeafPsiElement implements PsiNameIdentifierOwner, NavigatablePsiElement {
 
     public BallerinaIdentifier(@NotNull IElementType type, CharSequence text) {
         super(type, text);

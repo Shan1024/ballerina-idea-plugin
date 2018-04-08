@@ -36,13 +36,15 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                 PsiElement lastChild = definition.getLastChild();
                 if (lastChild instanceof BallerinaFunctionDefinition) {
                     BallerinaFunctionDefinition child = (BallerinaFunctionDefinition) lastChild;
-                    PsiElement identifier = child.getIdentifier();
-                    if (identifier != null) {
-                        if (myResult != null) {
-                            myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(child,
-                                    ParenthesisInsertHandler.INSTANCE_WITH_AUTO_POPUP));
-                        } else if (myElement.getText().equals(identifier.getText())) {
-                            add(identifier);
+                    if (child.getAttachedObject() == null) {
+                        PsiElement identifier = child.getIdentifier();
+                        if (identifier != null) {
+                            if (myResult != null) {
+                                myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(child,
+                                        ParenthesisInsertHandler.INSTANCE_WITH_AUTO_POPUP));
+                            } else if (myElement.getText().equals(identifier.getText())) {
+                                add(identifier);
+                            }
                         }
                     }
                 } else if (lastChild instanceof BallerinaGlobalVariableDefinition) {

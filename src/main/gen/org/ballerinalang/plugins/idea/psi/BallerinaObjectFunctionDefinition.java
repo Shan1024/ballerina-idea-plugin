@@ -26,7 +26,7 @@ public interface BallerinaObjectFunctionDefinition extends BallerinaCompositeEle
   @Nullable
   BallerinaCallableUnitBody getCallableUnitBody();
 
-  @NotNull
+  @Nullable
   BallerinaObjectCallableUnitSignature getObjectCallableUnitSignature();
 
   @Nullable
