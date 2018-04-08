@@ -7,6 +7,7 @@ import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaNameReferenceReference;
+import org.ballerinalang.plugins.idea.psi.reference.BallerinaTypeReference;
 import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
@@ -14,7 +15,8 @@ import static com.intellij.patterns.PlatformPatterns.psiElement;
 public class BallerinaCompletionContributor extends CompletionContributor {
 
     public BallerinaCompletionContributor() {
-        extend(CompletionType.BASIC, isBallerinaReference(), new BallerinaReferenceCompletionProvider());
+        extend(CompletionType.BASIC, isBallerinaNameReference(), new BallerinaReferenceCompletionProvider());
+        extend(CompletionType.BASIC, isBallerinaTypeReference(), new BallerinaReferenceCompletionProvider());
     }
 
     @Override
@@ -22,7 +24,11 @@ public class BallerinaCompletionContributor extends CompletionContributor {
         super.fillCompletionVariants(parameters, result);
     }
 
-    public PsiElementPattern.Capture<PsiElement> isBallerinaReference() {
+    public PsiElementPattern.Capture<PsiElement> isBallerinaNameReference() {
         return psiElement().withReference(BallerinaNameReferenceReference.class);
+    }
+
+    public PsiElementPattern.Capture<PsiElement> isBallerinaTypeReference() {
+        return psiElement().withReference(BallerinaTypeReference.class);
     }
 }

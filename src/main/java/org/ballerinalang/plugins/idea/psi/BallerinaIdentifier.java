@@ -26,6 +26,7 @@ import com.intellij.util.IncorrectOperationException;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaElementFactory;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaNameReferenceReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaOrgReference;
+import org.ballerinalang.plugins.idea.psi.reference.BallerinaTypeReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,6 +62,8 @@ public class BallerinaIdentifier extends LeafPsiElement implements PsiNameIdenti
             return new BallerinaNameReferenceReference(this);
         } else if (parent instanceof BallerinaOrgName) {
             return new BallerinaOrgReference(this);
+        } else if (parent instanceof BallerinaAttachedObject) {
+            return new BallerinaTypeReference(this);
         }
         return null;
     }

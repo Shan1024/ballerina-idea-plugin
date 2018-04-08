@@ -24,4 +24,8 @@ abstract public class BallerinaScopeProcessor extends BaseScopeProcessor {
   public boolean isCompletion() {
     return false;
   }
+
+  public int getCount(){
+    return 0;
+  }
 }

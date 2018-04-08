@@ -53,12 +53,8 @@ import java.util.List;
 // Note - Name is not a typo :)
 public class BallerinaNameReferenceReference extends BallerinaCachedReference<BallerinaIdentifier> {
 
-    private final List<String> IGNORED_DIRECTORIES = new LinkedList<>();
-
     public BallerinaNameReferenceReference(@NotNull BallerinaIdentifier element) {
         super(element);
-        IGNORED_DIRECTORIES.add("resources");
-        IGNORED_DIRECTORIES.add("tests");
     }
 
     @Nullable
@@ -171,9 +167,10 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
         BallerinaBlock ballerinaBlock = PsiTreeUtil.getParentOfType(myElement, BallerinaBlock.class);
         if (ballerinaBlock != null && processor instanceof BallerinaBlockProcessor) {
             if (!processor.execute(ballerinaBlock, ResolveState.initial())) {
+                System.out.println("Count: " + processor.getCount());
                 return false;
             }
-
+            System.out.println("Count: " + processor.getCount());
         }
 
         PsiFile file = myElement.getContainingFile().getOriginalFile();
@@ -186,10 +183,12 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
 
         // Get suggestions from current file.
         if (!processor.execute(file, ResolveState.initial())) {
+            System.out.println("Count: " + processor.getCount());
             return false;
         }
         // Recursively find definitions in the project starting from the current directory.
         recursivelyFind(processor, file.getContainingDirectory(), file);
+        System.out.println("Count: " + processor.getCount());
         //        //        return qualifier != null
         //        //                ? processQualifierExpression((BallerinaFile) file, qualifier, processor, state)
         //        //                : processUnqualifiedResolve((BallerinaFile) file, processor, state);
@@ -358,7 +357,7 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
             // Todo - Refactor code
             if (element instanceof BallerinaFunctionDefinition) {
                 results.add(BallerinaCompletionUtils.createFunctionLookupElement(element,
-                        ParenthesisInsertHandler.INSTANCE));
+                        ParenthesisInsertHandler.INSTANCE_WITH_AUTO_POPUP));
             } else if (element instanceof BallerinaGlobalVariableDefinition) {
                 results.add(BallerinaCompletionUtils.createGlobalVariableLookupElement(element));
             } else if (element instanceof BallerinaTypeDefinition) {
