@@ -15,7 +15,7 @@
  *
  */
 
-package org.ballerinalang.plugins.idea.psi.scope;
+package org.ballerinalang.plugins.idea.psi.scopeprocessors;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
@@ -30,7 +30,7 @@ import java.util.List;
 public abstract class BallerinaScopeProcessorBase extends BallerinaScopeProcessor {
 
     @NotNull
-    private final OrderedSet<BallerinaNamedElement> myResult = new OrderedSet<>();
+    private final OrderedSet<PsiElement> myResult = new OrderedSet<>();
     @NotNull
     protected final PsiElement myOrigin;
     @NotNull
@@ -41,8 +41,8 @@ public abstract class BallerinaScopeProcessorBase extends BallerinaScopeProcesso
         this(origin, origin, false);
     }
 
-    public BallerinaScopeProcessorBase(@NotNull PsiElement requestedNameElement, @NotNull PsiElement origin, boolean
-            completion) {
+    public BallerinaScopeProcessorBase(@NotNull PsiElement requestedNameElement, @NotNull PsiElement origin,
+                                       boolean completion) {
         myRequestedNameElement = requestedNameElement;
         myOrigin = origin;
         myIsCompletion = completion;
@@ -53,17 +53,17 @@ public abstract class BallerinaScopeProcessorBase extends BallerinaScopeProcesso
         return false;
     }
 
-    protected boolean add(@NotNull BallerinaNamedElement psiElement) {
+    protected boolean add(@NotNull PsiElement psiElement) {
         return !myResult.add(psiElement);
     }
 
     @Nullable
-    public BallerinaNamedElement getResult() {
+    public PsiElement getResult() {
         return ContainerUtil.getFirstItem(myResult);
     }
 
     @NotNull
-    public List<BallerinaNamedElement> getVariants() {
+    public List<PsiElement> getVariants() {
         return myResult;
     }
 

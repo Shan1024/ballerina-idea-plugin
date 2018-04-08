@@ -37,7 +37,7 @@ public class BallerinaIcons {
     public static final Icon RECURSIVE = AllIcons.Gutter.RecursiveMethod;
     public static final Icon FUNCTION = AllIcons.Nodes.Field;
     public static final Icon VARIABLE = AllIcons.Nodes.Variable;
-//    public static final Icon GLOBAL_VARIABLE = new LayeredIcon(AllIcons.Nodes.Variable, AllIcons.Nodes.StaticMark);
+    public static final Icon GLOBAL_VARIABLE = new LayeredIcon(AllIcons.Nodes.Variable, AllIcons.Nodes.StaticMark);
     public static final Icon PARAMETER = AllIcons.Nodes.Parameter;
 //    public static final Icon CONSTANT = AllIcons.Nodes.Class; // Todo - change icon
     public static final Icon NAMESPACE = AllIcons.Json.Array;

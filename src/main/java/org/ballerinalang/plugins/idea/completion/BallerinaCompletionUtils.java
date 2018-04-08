@@ -29,6 +29,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorModificationUtil;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.PsiDirectory;
+import com.intellij.psi.PsiElement;
 import org.ballerinalang.plugins.idea.BallerinaIcons;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaTopLevelDefinition;
 import org.jetbrains.annotations.NotNull;
@@ -547,6 +548,13 @@ public class BallerinaCompletionUtils {
         return PrioritizedLookupElement.withPriority(builder, TYPE_PRIORITY);
     }
 
+    @NotNull
+    public static LookupElement createVariableLookupElement(@NotNull PsiElement element) {
+        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(element.getText(), element)
+                .withTypeText("Variable").withIcon(BallerinaIcons.VARIABLE);
+        return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
+    }
+
     //    @NotNull
     //    public static List<LookupElement> createFunctionLookupElements(@NotNull List<IdentifierPSINode> functions) {
     //        List<LookupElement> lookupElements = new LinkedList<>();
@@ -693,12 +701,7 @@ public class BallerinaCompletionUtils {
     //        return lookupElements;
     //    }
     //
-    //    @NotNull
-    //    public static LookupElement createVariableLookupElement(@NotNull IdentifierPSINode element) {
-    //        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(element.getText(), element)
-    //                .withTypeText("Variable").withIcon(BallerinaIcons.VARIABLE);
-    //        return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
-    //    }
+
     //
     //    @NotNull
     //    public static List<LookupElement> createVariableLookupElements(@NotNull List<IdentifierPSINode> variables) {

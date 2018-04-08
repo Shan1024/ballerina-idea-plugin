@@ -29,24 +29,25 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
 import org.ballerinalang.plugins.idea.completion.inserthandlers.ParenthesisInsertHandler;
+import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaBlockProcessor;
+import org.ballerinalang.plugins.idea.psi.BallerinaBlock;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
-import org.ballerinalang.plugins.idea.psi.BallerinaReferenceExpressionBase;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaTopLevelDefinition;
-import org.ballerinalang.plugins.idea.psi.scope.BallerinaScopeProcessor;
+import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaScopeProcessor;
+import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaScopeProcessorBase;
+import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaTopLevelScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
-
-import static org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil.createContextOnElement;
 
 // Note - Name is not a typo :)
 public class BallerinaNameReferenceReference extends BallerinaCachedReference<BallerinaIdentifier> {
@@ -62,98 +63,145 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
     @Nullable
     @Override
     public PsiElement resolveInner() {
-        BallerinaNameReference nameReference = PsiTreeUtil.getParentOfType(myElement, BallerinaNameReference.class);
-        if (nameReference == null) {
-            return null;
-        }
-        if (nameReference.isInLocalPackage()) {
-            PsiFile originalFile = myElement.getContainingFile().getOriginalFile();
-            PsiDirectory parent = originalFile.getParent();
-            if (parent != null) {
-                if (isAContentRoot(parent)) {
-                    return findInFile(originalFile);
-                }
-            }
-            PsiDirectory directory = getPackageDirectory(originalFile);
-            if (directory != null) {
-                return findInPackage(directory, true);
-            }
-        } else {
-            // Todo - Get files in the corresponding package.
-            // Todo - Filter public elements? Or show a warning?
-            // Todo - Consider package version.
+        //        BallerinaNameReference nameReference = PsiTreeUtil.getParentOfType(myElement,
+        // BallerinaNameReference.class);
+        //        if (nameReference == null) {
+        //            return null;
+        //        }
+        //        if (nameReference.isInLocalPackage()) {
+        //            PsiFile originalFile = myElement.getContainingFile().getOriginalFile();
+        //            PsiDirectory parent = originalFile.getParent();
+        //            if (parent != null) {
+        //                if (isAContentRoot(parent)) {
+        //                    return findInFile(originalFile);
+        //                }
+        //            }
+        //            PsiDirectory directory = getPackageDirectory(originalFile);
+        //            if (directory != null) {
+        //                return findInPackage(directory, true);
+        //            }
+        //        } else {
+        //            // Todo - Get files in the corresponding package.
+        //            // Todo - Filter public elements? Or show a warning?
+        //            // Todo - Consider package version.
+        //
+        //            BallerinaPackageReference packageReference = nameReference.getPackageReference();
+        //            if (packageReference == null) {
+        //                return null;
+        //            }
+        //            PsiReference reference = packageReference.getReference();
+        //            if (reference == null) {
+        //                return null;
+        //            }
+        //            PsiElement directory = reference.resolve();
+        //            if (directory == null || !(directory instanceof PsiDirectory)) {
+        //                return null;
+        //            }
+        //            return findInPackage((PsiDirectory) directory, true);
+        //        }
 
-            BallerinaPackageReference packageReference = nameReference.getPackageReference();
-            if (packageReference == null) {
-                return null;
-            }
-            PsiReference reference = packageReference.getReference();
-            if (reference == null) {
-                return null;
-            }
-            PsiElement directory = reference.resolve();
-            if (directory == null || !(directory instanceof PsiDirectory)) {
-                return null;
-            }
-            return findInPackage((PsiDirectory) directory, true);
+        BallerinaScopeProcessorBase processor = new BallerinaBlockProcessor(null, myElement);
+        // Todo - Check return value
+        if (!processResolveVariants(processor)) {
+            return processor.getResult();
         }
-        return null;
+
+
+        processor = new BallerinaTopLevelScopeProcessor(null, myElement);
+        return processor.getResult();
     }
 
     @NotNull
     @Override
     public Object[] getVariants() {
-        long start = System.currentTimeMillis();
-        BallerinaNameReference nameReference = PsiTreeUtil.getParentOfType(myElement,
-                BallerinaNameReference.class);
-        if (nameReference == null) {
-            return new Object[0];
-        }
-        if (nameReference.isInLocalPackage()) {
-            PsiFile originalFile = myElement.getContainingFile().getOriginalFile();
-            PsiDirectory directory = getPackageDirectory(originalFile);
-            if (directory != null) {
-                Collection<BallerinaTopLevelDefinition> elements = getTopLevelElements(directory, true);
-                long end = System.currentTimeMillis();
-                System.out.println("Time: " + (end - start));
-                return getLookups(elements);
-            }
-        } else {
-            // Todo - Get files in the corresponding package.
-            // Todo - Filter public elements? Or show a warning?
-            // Todo - Consider package version.
-
-            BallerinaPackageReference packageReference = nameReference.getPackageReference();
-            if (packageReference == null) {
-                return new Object[0];
-            }
-            PsiReference reference = packageReference.getReference();
-            if (reference == null) {
-                return new Object[0];
-            }
-            PsiElement psiDirectory = reference.resolve();
-            if (psiDirectory == null || !(psiDirectory instanceof PsiDirectory)) {
-                return new Object[0];
-            }
-
-            PsiDirectory directory = (PsiDirectory) psiDirectory;
-            Collection<BallerinaTopLevelDefinition> elements = getTopLevelElements(directory, true);
-            long end = System.currentTimeMillis();
-            System.out.println("Time: " + (end - start));
-            return getLookups(elements);
-        }
+        //        long start = System.currentTimeMillis();
+        //        BallerinaNameReference nameReference = PsiTreeUtil.getParentOfType(myElement,
+        //                BallerinaNameReference.class);
+        //        if (nameReference == null) {
+        //            return new Object[0];
+        //        }
+        //        if (nameReference.isInLocalPackage()) {
+        //            PsiFile originalFile = myElement.getContainingFile().getOriginalFile();
+        //            PsiDirectory directory = getPackageDirectory(originalFile);
+        //            if (directory != null) {
+        //                Collection<BallerinaTopLevelDefinition> elements = getTopLevelElements(directory, true);
+        //                long end = System.currentTimeMillis();
+        //                System.out.println("Time: " + (end - start));
+        //                return getLookups(elements);
+        //            }
+        //        } else {
+        //            // Todo - Get files in the corresponding package.
+        //            // Todo - Filter public elements? Or show a warning?
+        //            // Todo - Consider package version.
+        //
+        //            BallerinaPackageReference packageReference = nameReference.getPackageReference();
+        //            if (packageReference == null) {
+        //                return new Object[0];
+        //            }
+        //            PsiReference reference = packageReference.getReference();
+        //            if (reference == null) {
+        //                return new Object[0];
+        //            }
+        //            PsiElement psiDirectory = reference.resolve();
+        //            if (psiDirectory == null || !(psiDirectory instanceof PsiDirectory)) {
+        //                return new Object[0];
+        //            }
+        //
+        //            PsiDirectory directory = (PsiDirectory) psiDirectory;
+        //            Collection<BallerinaTopLevelDefinition> elements = getTopLevelElements(directory, true);
+        //            long end = System.currentTimeMillis();
+        //            System.out.println("Time: " + (end - start));
+        //            return getLookups(elements);
+        //        }
         return new Object[0];
     }
 
     public boolean processResolveVariants(@NotNull BallerinaScopeProcessor processor) {
-        PsiFile file = myElement.getContainingFile();
-        if (!(file instanceof BallerinaFile)) return false;
-        ResolveState state = createContextOnElement(myElement);
+
+        BallerinaBlock ballerinaBlock = PsiTreeUtil.getParentOfType(myElement, BallerinaBlock.class);
+        if (ballerinaBlock != null && processor instanceof BallerinaBlockProcessor) {
+            if (!processor.execute(ballerinaBlock, ResolveState.initial())) {
+                return false;
+            }
+
+        }
+
+        PsiFile file = myElement.getContainingFile().getOriginalFile();
+        if (!(file instanceof BallerinaFile)) {
+            return false;
+        }
+        //        ResolveState state = createContextOnElement(myElement);
         //        BallerinaReferenceExpressionBase qualifier = myElement.getQualifier();
-        return processor.execute(myElement, ResolveState.initial());
+        if (!processor.execute(file, ResolveState.initial())) {
+            return false;
+        }
         //        return qualifier != null
         //                ? processQualifierExpression((BallerinaFile) file, qualifier, processor, state)
         //                : processUnqualifiedResolve((BallerinaFile) file, processor, state);
+
+        PsiDirectory parent = file.getParent();
+
+        if (parent == null) {
+            return true;
+        }
+        VirtualFile virtualFile = parent.getVirtualFile();
+
+        VirtualFile[] contentRoots = ProjectRootManager.getInstance(parent.getProject()).getContentRoots();
+        for (VirtualFile contentRoot : contentRoots) {
+            if (virtualFile.equals(contentRoot)) {
+                return true;
+            }
+        }
+
+        for (PsiElement psiFile : parent.getChildren()) {
+            if (!psiFile.equals(file)) {
+                if (!processor.execute(psiFile, ResolveState.initial())) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     // Todo - Move to utils

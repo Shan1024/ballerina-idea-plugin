@@ -28,7 +28,7 @@ import com.intellij.psi.ResolveState;
 import com.intellij.util.ObjectUtils;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaReferenceExpressionBase;
-import org.ballerinalang.plugins.idea.psi.scope.BallerinaScopeProcessor;
+import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;

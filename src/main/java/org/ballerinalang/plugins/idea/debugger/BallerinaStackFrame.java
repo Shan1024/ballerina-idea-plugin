@@ -123,16 +123,16 @@ public class BallerinaStackFrame extends XStackFrame {
      */
     @Override
     public void computeChildren(@NotNull XCompositeNode node) {
-        // We categorize variables according to the scope. But we get all the variables in the stack. So we need to
-        // distinguish values in each scope. In this Map, key will be the scope name. Value will be the list of
-        // variables in that scope.
+        // We categorize variables according to the scopeprocessors. But we get all the variables in the stack. So we need to
+        // distinguish values in each scopeprocessors. In this Map, key will be the scopeprocessors name. Value will be the list of
+        // variables in that scopeprocessors.
         Map<String, List<Variable>> scopeMap = new HashMap<>();
         // Iterate through each variable.
         List<Variable> variables = myFrame.getVariables();
         for (Variable variable : variables) {
-            // Get the scope.
+            // Get the scopeprocessors.
             String scopeName = variable.getScope();
-            // Check whether the scope is already available in the map.
+            // Check whether the scopeprocessors is already available in the map.
             if (scopeMap.containsKey(scopeName)) {
                 // If it is already in the map, add the variable to the corresponding list.
                 List<Variable> list = scopeMap.get(scopeName);
@@ -145,11 +145,11 @@ public class BallerinaStackFrame extends XStackFrame {
             }
         }
 
-        // Iterate through each scope in the map.
+        // Iterate through each scopeprocessors in the map.
         scopeMap.forEach((scopeName, variableList) -> {
             // Create a new XValueChildrenList to hold the XValues.
             XValueChildrenList xValueChildrenList = new XValueChildrenList();
-            // Create a new variable to represent the scope.
+            // Create a new variable to represent the scopeprocessors.
             Variable scopeVariable = new Variable();
             // Set the variable name.
             scopeVariable.setName(scopeName);

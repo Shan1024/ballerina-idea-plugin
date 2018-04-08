@@ -49,15 +49,15 @@
 //
 //    @NotNull
 //    public static Collection<BallerinaTransformerDefinition> find(@NotNull String name, @NotNull Project project,
-//                                                                  @Nullable GlobalSearchScope scope,
+//                                                                  @Nullable GlobalSearchScope scopeprocessors,
 //                                                                  @Nullable IdFilter idFilter) {
-//        return StubIndex.getElements(KEY, name, project, scope, idFilter, BallerinaTransformerDefinition.class);
+//        return StubIndex.getElements(KEY, name, project, scopeprocessors, idFilter, BallerinaTransformerDefinition.class);
 //    }
 //
-//    public static boolean process(@NotNull String name, @NotNull Project project, @Nullable GlobalSearchScope scope,
+//    public static boolean process(@NotNull String name, @NotNull Project project, @Nullable GlobalSearchScope scopeprocessors,
 //                                  @Nullable IdFilter idFilter,
 //                                  @NotNull Processor<BallerinaTransformerDefinition> processor) {
-//        return StubIndex.getInstance().processElements(KEY, name, project, scope, idFilter,
+//        return StubIndex.getInstance().processElements(KEY, name, project, scopeprocessors, idFilter,
 //                BallerinaTransformerDefinition.class, processor);
 //    }
 //}

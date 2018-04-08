@@ -188,7 +188,7 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
         if (this instanceof BallerinaFunctionDefinition) {
             icon = BallerinaIcons.FUNCTION;
         } else if (this instanceof BallerinaGlobalVariableDefinition) {
-            icon = BallerinaIcons.VARIABLE;
+            icon = BallerinaIcons.GLOBAL_VARIABLE;
         } else if (this instanceof BallerinaTypeDefinition) {
             icon = BallerinaIcons.TYPE;
         }

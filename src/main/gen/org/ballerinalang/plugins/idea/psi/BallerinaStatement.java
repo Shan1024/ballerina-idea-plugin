@@ -30,6 +30,9 @@ public interface BallerinaStatement extends BallerinaCompositeElement {
   BallerinaAssignmentStatement getAssignmentStatement();
 
   @Nullable
+  BallerinaBlock getBlock();
+
+  @Nullable
   BallerinaBreakStatement getBreakStatement();
 
   @Nullable
@@ -37,12 +40,6 @@ public interface BallerinaStatement extends BallerinaCompositeElement {
 
   @Nullable
   BallerinaExpressionStmt getExpressionStmt();
-
-  @Nullable
-  BallerinaForeachStatement getForeachStatement();
-
-  @Nullable
-  BallerinaForeverStatement getForeverStatement();
 
   @Nullable
   BallerinaForkJoinStatement getForkJoinStatement();
@@ -72,25 +69,16 @@ public interface BallerinaStatement extends BallerinaCompositeElement {
   BallerinaThrowStatement getThrowStatement();
 
   @Nullable
-  BallerinaTransactionStatement getTransactionStatement();
-
-  @Nullable
   BallerinaTryCatchStatement getTryCatchStatement();
 
   @Nullable
   BallerinaVariableDefinitionStatement getVariableDefinitionStatement();
 
   @Nullable
-  BallerinaWhileStatement getWhileStatement();
-
-  @Nullable
   BallerinaWorkerInteractionStatement getWorkerInteractionStatement();
 
   @Nullable
   BallerinaFailStatement getFailStatement();
-
-  @Nullable
-  BallerinaMatchStatement getMatchStatement();
 
   @Nullable
   BallerinaTupleDestructuringStatement getTupleDestructuringStatement();

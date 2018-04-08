@@ -30,7 +30,7 @@ import com.intellij.util.containers.OrderedSet;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaReferenceExpressionBase;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaElementFactory;
-import org.ballerinalang.plugins.idea.psi.scope.BallerinaScopeProcessor;
+import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

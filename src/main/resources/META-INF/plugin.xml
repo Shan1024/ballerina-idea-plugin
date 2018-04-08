@@ -58,8 +58,8 @@
 
         <indexPatternBuilder implementation="org.ballerinalang.plugins.idea.BallerinaIndexPatternBuilder"/>
 
-        <completion.contributor language="Ballerina"
-                                implementationClass="org.ballerinalang.plugins.idea.completion.BallerinaReferenceCompletionContributor"/>
+        <!--<completion.contributor language="Ballerina"-->
+                                <!--implementationClass="org.ballerinalang.plugins.idea.completion.BallerinaReferenceCompletionContributor"/>-->
         <completion.contributor language="Ballerina"
                                 implementationClass="org.ballerinalang.plugins.idea.completion.BallerinaKeywordContributor"/>
         <completion.contributor language="Ballerina"

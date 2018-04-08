@@ -64,15 +64,15 @@ public class BallerinaPackageNameReference extends BallerinaCachedReference<Ball
         //            }
         //            List<VirtualFile> virtualFiles = Arrays.asList(parent.getVirtualFile().getChildren());
         //
-        //            GlobalSearchScope scope = GlobalSearchScope.filesScope(project, virtualFiles);
-        //            elements = StubIndex.getElements(BallerinaFunctionIndex.KEY, myElement.getText(), project, scope,
+        //            GlobalSearchScope scopeprocessors = GlobalSearchScope.filesScope(project, virtualFiles);
+        //            elements = StubIndex.getElements(BallerinaFunctionIndex.KEY, myElement.getText(), project, scopeprocessors,
         //                    BallerinaFunctionDefinition.class);
         //        } else {
         //            // Todo - Get files in the corresponding package.
         //            // Todo - Filter public elements? Or show a warning?
         //            // Todo - Consider package version.
-        //            GlobalSearchScope scope = GlobalSearchScope.fileScope(myElement.getContainingFile());
-        //            elements = StubIndex.getElements(BallerinaFunctionIndex.KEY, myElement.getText(), project, scope,
+        //            GlobalSearchScope scopeprocessors = GlobalSearchScope.fileScope(myElement.getContainingFile());
+        //            elements = StubIndex.getElements(BallerinaFunctionIndex.KEY, myElement.getText(), project, scopeprocessors,
         //                    BallerinaFunctionDefinition.class);
         //        }
         //        BallerinaFunctionDefinition firstItem = ContainerUtil.getFirstItem(elements);
@@ -95,7 +95,7 @@ public class BallerinaPackageNameReference extends BallerinaCachedReference<Ball
     @Override
     public Object[] getVariants() {
         //        Project project = myElement.getProject();
-        //        GlobalSearchScope scope = GlobalSearchScope.fileScope(myElement.getContainingFile());
+        //        GlobalSearchScope scopeprocessors = GlobalSearchScope.fileScope(myElement.getContainingFile());
         //
         //        Collection<String> keys = StubIndex.getInstance().getAllKeys(BallerinaFunctionIndex.KEY, project);
 
