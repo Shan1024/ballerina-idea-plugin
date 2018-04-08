@@ -55,12 +55,6 @@ public class BallerinaStatementImpl extends BallerinaCompositeElementImpl implem
 
   @Override
   @Nullable
-  public BallerinaBlock getBlock() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaBlock.class);
-  }
-
-  @Override
-  @Nullable
   public BallerinaBreakStatement getBreakStatement() {
     return PsiTreeUtil.getChildOfType(this, BallerinaBreakStatement.class);
   }
@@ -75,6 +69,18 @@ public class BallerinaStatementImpl extends BallerinaCompositeElementImpl implem
   @Nullable
   public BallerinaExpressionStmt getExpressionStmt() {
     return PsiTreeUtil.getChildOfType(this, BallerinaExpressionStmt.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaForeachStatement getForeachStatement() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaForeachStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaForeverStatement getForeverStatement() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaForeverStatement.class);
   }
 
   @Override
@@ -133,6 +139,12 @@ public class BallerinaStatementImpl extends BallerinaCompositeElementImpl implem
 
   @Override
   @Nullable
+  public BallerinaTransactionStatement getTransactionStatement() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaTransactionStatement.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaTryCatchStatement getTryCatchStatement() {
     return PsiTreeUtil.getChildOfType(this, BallerinaTryCatchStatement.class);
   }
@@ -145,6 +157,12 @@ public class BallerinaStatementImpl extends BallerinaCompositeElementImpl implem
 
   @Override
   @Nullable
+  public BallerinaWhileStatement getWhileStatement() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaWhileStatement.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaWorkerInteractionStatement getWorkerInteractionStatement() {
     return PsiTreeUtil.getChildOfType(this, BallerinaWorkerInteractionStatement.class);
   }
@@ -153,6 +171,12 @@ public class BallerinaStatementImpl extends BallerinaCompositeElementImpl implem
   @Nullable
   public BallerinaFailStatement getFailStatement() {
     return PsiTreeUtil.getChildOfType(this, BallerinaFailStatement.class);
+  }
+
+  @Override
+  @Nullable
+  public BallerinaMatchStatement getMatchStatement() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaMatchStatement.class);
   }
 
   @Override

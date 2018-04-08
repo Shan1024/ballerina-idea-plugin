@@ -26,6 +26,7 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
 import org.ballerinalang.plugins.idea.completion.inserthandlers.ParenthesisInsertHandler;
@@ -101,14 +102,23 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
         //        }
 
         BallerinaScopeProcessorBase processor = new BallerinaBlockProcessor(null, myElement);
-        // Todo - Check return value
-        if (!processResolveVariants(processor)) {
-            return processor.getResult();
+
+        processResolveVariants(processor);
+        PsiElement result = processor.getResult();
+        // Todo - change to consider return value
+        if (result != null) {
+            return result;
         }
 
 
         processor = new BallerinaTopLevelScopeProcessor(null, myElement);
-        return processor.getResult();
+        processResolveVariants(processor);
+        result = processor.getResult();
+        if (result != null) {
+            return result;
+        }
+        return null;
+
     }
 
     @NotNull
@@ -170,39 +180,107 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
         if (!(file instanceof BallerinaFile)) {
             return false;
         }
+
         //        ResolveState state = createContextOnElement(myElement);
         //        BallerinaReferenceExpressionBase qualifier = myElement.getQualifier();
+
+        // Get suggestions from current file.
         if (!processor.execute(file, ResolveState.initial())) {
             return false;
         }
-        //        return qualifier != null
-        //                ? processQualifierExpression((BallerinaFile) file, qualifier, processor, state)
-        //                : processUnqualifiedResolve((BallerinaFile) file, processor, state);
+        // Recursively find definitions in the project starting from the current directory.
+        recursivelyFind(processor, file.getContainingDirectory(), file);
+        //        //        return qualifier != null
+        //        //                ? processQualifierExpression((BallerinaFile) file, qualifier, processor, state)
+        //        //                : processUnqualifiedResolve((BallerinaFile) file, processor, state);
+        //
+        //        PsiDirectory parent = file.getParent();
+        //
+        //        if (parent == null) {
+        //            return true;
+        //        }
+        //        VirtualFile virtualFile = parent.getVirtualFile();
+        //
+        //        VirtualFile[] contentRoots = ProjectRootManager.getInstance(parent.getProject()).getContentRoots();
+        //        for (VirtualFile contentRoot : contentRoots) {
+        //            if (virtualFile.equals(contentRoot)) {
+        //                return true;
+        //            }
+        //        }
+        //
+        //        for (PsiElement child : parent.getChildren()) {
+        //            if (!child.equals(file)) {
+        //                if (child instanceof PsiDirectory) {
+        //
+        //                } else {
+        //                    if (!processor.execute(child, ResolveState.initial())) {
+        //                        return false;
+        //                    }
+        //                }
+        //            }
+        //        }
 
-        PsiDirectory parent = file.getParent();
+        return true;
+    }
 
-        if (parent == null) {
-            return true;
-        }
-        VirtualFile virtualFile = parent.getVirtualFile();
 
-        VirtualFile[] contentRoots = ProjectRootManager.getInstance(parent.getProject()).getContentRoots();
-        for (VirtualFile contentRoot : contentRoots) {
-            if (virtualFile.equals(contentRoot)) {
-                return true;
+    private boolean recursivelyFind(@NotNull PsiScopeProcessor processor, @NotNull PsiDirectory root,
+                                    @Nullable PsiElement originToIgnore) {
+        // We use breadth first search kind of approach here. First process in all files in the current directory,
+        // then process all subdirectories.
+        List<PsiDirectory> directories = new LinkedList<>();
+
+        // Iterate through all elements in the current directory.
+        for (PsiElement child : root.getChildren()) {
+            // If the current child is the source of the completion, we ignore it since it is already processed.
+            if (child.equals(originToIgnore)) {
+                continue;
             }
-        }
 
-        for (PsiElement psiFile : parent.getChildren()) {
-            if (!psiFile.equals(file)) {
-                if (!processor.execute(psiFile, ResolveState.initial())) {
+            if (child instanceof PsiDirectory) {
+                // If the child is a directory, we add it to the directories list to process later.
+                directories.add(((PsiDirectory) child));
+            } else if (child instanceof BallerinaFile) {
+                // If the child is a Ballerina file, process the file.
+                if (/*!isAContentRoot(root) &&*/ !processor.execute(child, ResolveState.initial())) {
                     return false;
                 }
             }
         }
 
+        if (!isAContentRoot(root)) {
+            // Iterate though all directories and process them.
+            for (PsiDirectory directory : directories) {
+                PsiDirectory parent = directory.getParentDirectory();
+                if (parent == null) {
+                    continue;
+                }
+                PsiDirectory superParent = parent.getParent();
+                if (superParent == null) {
+                    continue;
+                }
+                if (!(isAContentRoot(superParent) && IGNORED_DIRECTORIES.contains(directory.getName()))) {
+                    recursivelyFind(processor, directory, null);
+                }
+            }
+
+            if (originToIgnore != null) {
+                PsiDirectory parent = root.getParent();
+                if (parent == null) {
+                    return true;
+                }
+                //            PsiDirectory superParent = parent.getParent();
+                //            if (superParent == null) {
+                //                return true;
+                //            }
+                if (!isAContentRoot(parent)) {
+                    return recursivelyFind(processor, parent, root);
+                }
+            }
+        }
         return true;
     }
+
 
     // Todo - Move to utils
     @NotNull
@@ -327,7 +405,10 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
         return null;
     }
 
-    private boolean isAContentRoot(@NotNull PsiDirectory directory) {
+    private boolean isAContentRoot(@Nullable PsiDirectory directory) {
+        if (directory == null) {
+            return false;
+        }
         VirtualFile[] contentRoots = ProjectRootManager.getInstance(directory.getProject()).getContentRoots();
         for (VirtualFile contentRoot : contentRoots) {
             if (contentRoot.equals(directory.getVirtualFile())) {
