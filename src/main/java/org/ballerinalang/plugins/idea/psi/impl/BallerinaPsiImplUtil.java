@@ -108,10 +108,10 @@ public class BallerinaPsiImplUtil {
 
     @Nullable
     public static PsiElement getIdentifier(BallerinaFunctionDefinition ballerinaFunctionDefinition) {
-//        BallerinaAttachedObject attachedObject = ballerinaFunctionDefinition.getAttachedObject();
-//        if (attachedObject != null) {
-//            return attachedObject.getIdentifier();
-//        }
+        //        BallerinaAttachedObject attachedObject = ballerinaFunctionDefinition.getAttachedObject();
+        //        if (attachedObject != null) {
+        //            return attachedObject.getIdentifier();
+        //        }
         BallerinaCallableUnitSignature callableUnitSignature = ballerinaFunctionDefinition.getCallableUnitSignature();
         return callableUnitSignature != null ? callableUnitSignature.getIdentifier() : null;
     }
@@ -122,9 +122,21 @@ public class BallerinaPsiImplUtil {
         return endpointDeclaration.getIdentifier();
     }
 
+    @Nullable
+    public static String getText(BallerinaGlobalEndpointDefinition ballerinaGlobalEndpointDefinition) {
+        BallerinaEndpointDefinition endpointDeclaration = ballerinaGlobalEndpointDefinition.getEndpointDefinition();
+        PsiElement identifier = endpointDeclaration.getIdentifier();
+        if (identifier != null) {
+            return identifier.getText();
+        } else {
+            return "";
+        }
+    }
+
     //    @Nullable
     //    public static PsiElement getIdentifier(BallerinaActionDefinition ballerinaActionDefinition) {
-    //        BallerinaCallableUnitSignature callableUnitSignature = ballerinaActionDefinition.getCallableUnitSignature();
+    //        BallerinaCallableUnitSignature callableUnitSignature = ballerinaActionDefinition
+    // .getCallableUnitSignature();
     //        return callableUnitSignature != null ? callableUnitSignature.getIdentifier() : null;
     //    }
 
@@ -311,5 +323,5 @@ public class BallerinaPsiImplUtil {
         return null;
     }
 
-    
+
 }

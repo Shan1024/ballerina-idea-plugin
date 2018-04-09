@@ -9,6 +9,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaAssignmentStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaBlock;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaDefaultableParameter;
+import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaEndpointParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaFormalParameterList;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
@@ -20,6 +21,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaResourceParameterList;
 import org.ballerinalang.plugins.idea.psi.BallerinaRestParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaVariableDefinitionStatement;
+import org.ballerinalang.plugins.idea.psi.BallerinaWorkerDefinition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,7 +45,36 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
     public boolean execute(@NotNull PsiElement scopeElement, @NotNull ResolveState state) {
         if (accept(scopeElement)) {
             BallerinaBlock block = (BallerinaBlock) scopeElement;
+
             while (block != null) {
+                // Check for workers in all blocks.
+                List<BallerinaWorkerDefinition> ballerinaWorkerDefinitions = PsiTreeUtil.getChildrenOfTypeAsList(block,
+                        BallerinaWorkerDefinition.class);
+                for (BallerinaWorkerDefinition ballerinaWorkerDefinition : ballerinaWorkerDefinitions) {
+                    PsiElement identifier = ballerinaWorkerDefinition.getIdentifier();
+                    if (identifier == null) {
+                        continue;
+                    }
+                    if (myResult != null) {
+                        myResult.addElement(BallerinaCompletionUtils.createWorkerLookupElement(identifier));
+                    } else if (myElement.getText().equals(identifier.getText())) {
+                        add(identifier);
+                    }
+                }
+                List<BallerinaEndpointDefinition> ballerinaEndpointDefinitions = PsiTreeUtil.getChildrenOfTypeAsList(block,
+                        BallerinaEndpointDefinition.class);
+                for (BallerinaEndpointDefinition ballerinaEndpointDefinition : ballerinaEndpointDefinitions) {
+                    PsiElement identifier = ballerinaEndpointDefinition.getIdentifier();
+                    if (identifier == null) {
+                        continue;
+                    }
+                    if (myResult != null) {
+                        myResult.addElement(BallerinaCompletionUtils.createEndpointLookupElement(identifier));
+                    } else if (myElement.getText().equals(identifier.getText())) {
+                        add(identifier);
+                    }
+                }
+
                 List<BallerinaStatement> statements = block.getStatementList();
 
                 for (BallerinaStatement statement : statements) {
@@ -70,6 +101,8 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
 
                     }
                 }
+
+
                 block = PsiTreeUtil.getParentOfType(block, BallerinaBlock.class);
             }
 
@@ -163,7 +196,7 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
             for (BallerinaParameter parameter : parameters) {
                 List<BallerinaParameterWithType> parameterWithTypeList = parameter.getParameterWithTypeList();
                 for (BallerinaParameterWithType ballerinaParameterWithType : parameterWithTypeList) {
-                     identifier = ballerinaParameterWithType.getIdentifier();
+                    identifier = ballerinaParameterWithType.getIdentifier();
                     if (myResult != null) {
                         myResult.addElement(BallerinaCompletionUtils.createParameterLookupElement(identifier));
                     } else if (myElement.getText().equals(identifier.getText())) {

@@ -64,4 +64,9 @@ public class BallerinaGlobalEndpointDefinitionImpl extends BallerinaNamedElement
     return BallerinaPsiImplUtil.getIdentifier(this);
   }
 
+  @Nullable
+  public String getText() {
+    return BallerinaPsiImplUtil.getText(this);
+  }
+
 }

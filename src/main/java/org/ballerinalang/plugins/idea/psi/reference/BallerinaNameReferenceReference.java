@@ -187,8 +187,10 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
             return false;
         }
         // Recursively find definitions in the project starting from the current directory.
-        recursivelyFind(processor, file.getContainingDirectory(), file);
-        System.out.println("Count: " + processor.getCount());
+        if (file.getContainingDirectory() != null) {
+            recursivelyFind(processor, file.getContainingDirectory(), file);
+            System.out.println("Count: " + processor.getCount());
+        }
         //        //        return qualifier != null
         //        //                ? processQualifierExpression((BallerinaFile) file, qualifier, processor, state)
         //        //                : processUnqualifiedResolve((BallerinaFile) file, processor, state);

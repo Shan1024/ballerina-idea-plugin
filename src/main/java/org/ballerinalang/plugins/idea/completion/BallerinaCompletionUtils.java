@@ -549,23 +549,45 @@ public class BallerinaCompletionUtils {
     }
 
     @NotNull
+    public static LookupElement createGlobalEndpointLookupElement(@NotNull BallerinaTopLevelDefinition definition) {
+        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(definition.getText(), definition)
+                .withTypeText("Endpoint").withIcon(definition.getIcon(Iconable.ICON_FLAG_VISIBILITY));
+        return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
+    }
+
+    @NotNull
     public static LookupElement createVariableLookupElement(@NotNull PsiElement element) {
         LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(element.getText(), element)
                 .withTypeText("Variable").withIcon(BallerinaIcons.VARIABLE);
         return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
     }
 
-        @NotNull
-        public static LookupElement createParameterLookupElement(@NotNull PsiElement element) {
-            LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(element.getText(), element)
-                    .withTypeText("Parameter").withIcon(BallerinaIcons.PARAMETER);
-            return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
-        }
+    @NotNull
+    public static LookupElement createParameterLookupElement(@NotNull PsiElement element) {
+        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(element.getText(), element)
+                .withTypeText("Parameter").withIcon(BallerinaIcons.PARAMETER);
+        return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
+    }
+
+    @NotNull
+    public static LookupElement createWorkerLookupElement(@NotNull PsiElement workerName) {
+        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(workerName.getText(), workerName)
+                .withTypeText("Worker").withIcon(BallerinaIcons.WORKER);
+        return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
+    }
+
+    @NotNull
+    public static LookupElement createEndpointLookupElement(@NotNull PsiElement element) {
+        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(element.getText(), element)
+                .withTypeText("Endpoint").withIcon(BallerinaIcons.ENDPOINT);
+        return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
+    }
 
     //    @NotNull
     //    public static List<LookupElement> createFunctionLookupElements(@NotNull List<IdentifierPSINode> functions) {
     //        List<LookupElement> lookupElements = new LinkedList<>();
     //        for (IdentifierPSINode function : functions) {
+    //            if (function == null) {
     //            if (function == null) {
     //                continue;
     //            }
@@ -937,14 +959,7 @@ public class BallerinaCompletionUtils {
     //        return lookupElements;
     //    }
     //
-    //    @NotNull
-    //    private static LookupElement createWorkerLookupElement(@NotNull IdentifierPSINode workerName) {
-    //        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(workerName.getText(),
-    // workerName)
-    //                .withTypeText("Worker").withIcon(BallerinaIcons.WORKER);
-    //        return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
-    //    }
-    //
+
     //    @NotNull
     //    public static List<LookupElement> createWorkerLookupElements(@NotNull Collection<WorkerDeclarationNode>
     //                                                                         workerDeclarationNodes) {

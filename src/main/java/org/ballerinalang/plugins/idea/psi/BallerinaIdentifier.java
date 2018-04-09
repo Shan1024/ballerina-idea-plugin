@@ -62,6 +62,10 @@ public class BallerinaIdentifier extends LeafPsiElement implements PsiNameIdenti
         if (parent instanceof BallerinaNameReference) {
             // Todo - Need to consider the parent type?
             return new BallerinaNameReferenceReference(this);
+        } else if (parent instanceof BallerinaWorkerReply) {
+            return new BallerinaNameReferenceReference(this);
+        } else if (parent instanceof BallerinaTriggerWorker) {
+            return new BallerinaNameReferenceReference(this);
         } else if (parent instanceof BallerinaOrgName) {
             return new BallerinaOrgReference(this);
         } else if (parent instanceof BallerinaAttachedObject) {

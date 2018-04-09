@@ -8,6 +8,7 @@ import org.ballerinalang.plugins.idea.completion.inserthandlers.ParenthesisInser
 import org.ballerinalang.plugins.idea.psi.BallerinaDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -41,6 +42,8 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                         if (identifier != null) {
                             if (myResult != null) {
                                 // Todo - Conside oncommit, onabort, etc and set the insert handler
+                                // Note - Child is passed here instead of identifier because it is is top level
+                                // definition.
                                 myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(child,
                                         ParenthesisInsertHandler.INSTANCE_WITH_AUTO_POPUP));
                             } else if (myElement.getText().equals(identifier.getText())) {
@@ -54,6 +57,16 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                     if (identifier != null) {
                         if (myResult != null) {
                             myResult.addElement(BallerinaCompletionUtils.createGlobalVariableLookupElement(child));
+                        } else if (myElement.getText().equals(identifier.getText())) {
+                            add(identifier);
+                        }
+                    }
+                } else if (lastChild instanceof BallerinaGlobalEndpointDefinition) {
+                    BallerinaGlobalEndpointDefinition child = (BallerinaGlobalEndpointDefinition) lastChild;
+                    PsiElement identifier = child.getIdentifier();
+                    if (identifier != null) {
+                        if (myResult != null) {
+                            myResult.addElement(BallerinaCompletionUtils.createGlobalEndpointLookupElement(child));
                         } else if (myElement.getText().equals(identifier.getText())) {
                             add(identifier);
                         }

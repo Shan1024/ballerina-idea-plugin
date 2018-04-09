@@ -37,6 +37,7 @@ import org.ballerinalang.plugins.idea.BallerinaIcons;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompositeElement;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaNamedElement;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
@@ -191,6 +192,8 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
             icon = BallerinaIcons.GLOBAL_VARIABLE;
         } else if (this instanceof BallerinaTypeDefinition) {
             icon = BallerinaIcons.TYPE;
+        } else if (this instanceof BallerinaGlobalEndpointDefinition) {
+            icon = BallerinaIcons.GLOBAL_ENDPOINT;
         }
         if (icon != null) {
             if ((flags & Iconable.ICON_FLAG_VISIBILITY) != 0) {
