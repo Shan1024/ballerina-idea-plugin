@@ -30,12 +30,6 @@ import java.util.Set;
 
 public class BallerinaTypeFunctionMarker extends LineMarkerProviderDescriptor {
 
-
-    private final Option myOverriddenOption = new Option("ballerina.overridden", "Overridden function",
-            AllIcons.Gutter.OverridenMethod);
-    private final Option myImplementedOption = new Option("ballerina.implemented", "Implemented function",
-            AllIcons.Gutter.ImplementedMethod);
-
     @Nullable
     @Override
     public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element) {
@@ -53,12 +47,6 @@ public class BallerinaTypeFunctionMarker extends LineMarkerProviderDescriptor {
             }
 
             PsiElement parent = implementation.getParent();
-            //            if (parent instanceof BallerinaObjectCallableUnitSignature) {
-            //                if (parent.getNextSibling() instanceof BallerinaCallableUnitBody) {
-            //                    continue;
-            //                }
-            //                addMarker(result, lines, element, true);
-            //            } else
             if (parent instanceof BallerinaCallableUnitSignature) {
                 BallerinaFunctionDefinition ballerinaFunctionDefinition = PsiTreeUtil.getParentOfType(parent,
                         BallerinaFunctionDefinition.class);
@@ -89,13 +77,13 @@ public class BallerinaTypeFunctionMarker extends LineMarkerProviderDescriptor {
         // Get the document manager;
         PsiDocumentManager documentManager = PsiDocumentManager.getInstance(definition.getProject());
         // Get the document.
-        Document document = documentManager.getDocument(definition.getContainingFile());
+        Document document = documentManager.getDocument(implementation.getContainingFile());
         if (document == null) {
             return;
         }
 
         // Get the offset of the current element.
-        int textOffset = definition.getTextOffset();
+        int textOffset = implementation.getTextOffset();
         // Get the line number of the current element.
         int lineNumber = document.getLineNumber(textOffset);
 
@@ -123,11 +111,8 @@ public class BallerinaTypeFunctionMarker extends LineMarkerProviderDescriptor {
                     AllIcons.Gutter.ImplementedMethod,
                     Pass.LINE_MARKERS,
                     FunctionUtil.constant("Implemented function"),
-                    (e, elt) -> {
-                        // Todo - Update navigation
-                        navigateToOverridingMethod(e, ((NavigatablePsiElement) implementation)/*, method != element
-                        .getParent()*/);
-                    }, GutterIconRenderer.Alignment.RIGHT
+                    (e, elt) -> navigateToOverridingMethod(e, ((NavigatablePsiElement) implementation)),
+                    GutterIconRenderer.Alignment.RIGHT
             );
         }
     }
@@ -140,11 +125,8 @@ public class BallerinaTypeFunctionMarker extends LineMarkerProviderDescriptor {
                     AllIcons.Gutter.ImplementingMethod,
                     Pass.LINE_MARKERS,
                     FunctionUtil.constant("Implementing function"),
-                    (e, elt) -> {
-                        // Todo - Update navigation
-                        navigateToOverridingMethod(e, ((NavigatablePsiElement) definition)/*, method != element
-                        .getParent()*/);
-                    }, GutterIconRenderer.Alignment.RIGHT
+                    (e, elt) -> navigateToOverridingMethod(e, ((NavigatablePsiElement) definition)),
+                    GutterIconRenderer.Alignment.RIGHT
             );
         }
     }
