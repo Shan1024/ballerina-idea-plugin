@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.ProcessingContext;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaNameReferenceReference;
+import org.ballerinalang.plugins.idea.psi.reference.BallerinaObjectFunctionReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaTypeReference;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaBlockProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaTopLevelScopeProcessor;
@@ -54,6 +55,11 @@ public class BallerinaReferenceCompletionProvider extends CompletionProvider<Com
             }
         } else if (reference instanceof BallerinaTypeReference) {
             BallerinaTypeReference ballerinaTypeReference = (BallerinaTypeReference) reference;
+            if (!ballerinaTypeReference.processResolveVariants(new BallerinaTypeProcessor(result, element))) {
+                return;
+            }
+        } else if (reference instanceof BallerinaObjectFunctionReference) {
+            BallerinaObjectFunctionReference ballerinaTypeReference = (BallerinaObjectFunctionReference) reference;
             if (!ballerinaTypeReference.processResolveVariants(new BallerinaTypeProcessor(result, element))) {
                 return;
             }

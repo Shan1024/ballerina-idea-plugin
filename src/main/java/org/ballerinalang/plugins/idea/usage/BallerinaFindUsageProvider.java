@@ -26,6 +26,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
+import org.ballerinalang.plugins.idea.psi.BallerinaObjectCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaOrgName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
@@ -131,6 +132,8 @@ public class BallerinaFindUsageProvider implements FindUsagesProvider {
             return "Endpoint";
         } else if (parent instanceof BallerinaTypeDefinition) {
             return "Type";
+        } else if (parent instanceof BallerinaObjectCallableUnitSignature) {
+            return "Object Function";
         }
         return "";
     }
