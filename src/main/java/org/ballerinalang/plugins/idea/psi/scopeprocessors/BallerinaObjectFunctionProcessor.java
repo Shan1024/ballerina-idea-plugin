@@ -5,8 +5,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
-import org.ballerinalang.plugins.idea.psi.BallerinaDefinition;
-import org.ballerinalang.plugins.idea.psi.BallerinaFile;
+import org.ballerinalang.plugins.idea.completion.inserthandlers.ParenthesisInsertHandler;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
@@ -14,7 +13,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.List;
 
 public class BallerinaObjectFunctionProcessor extends BallerinaScopeProcessorBase {
 
@@ -24,8 +22,9 @@ public class BallerinaObjectFunctionProcessor extends BallerinaScopeProcessorBas
     private final PsiElement myElement;
     private int count;
 
-    public BallerinaObjectFunctionProcessor(@Nullable CompletionResultSet result, @NotNull PsiElement element) {
-        super(element);
+    public BallerinaObjectFunctionProcessor(@Nullable CompletionResultSet result, @NotNull PsiElement element,
+                                            boolean isCompletion) {
+        super(element, element, isCompletion);
         myResult = result;
         myElement = element;
     }
@@ -46,7 +45,7 @@ public class BallerinaObjectFunctionProcessor extends BallerinaScopeProcessorBas
 
                 PsiElement identifier = objectCallableUnitSignature.getIdentifier();
                 if (myResult != null) {
-                    myResult.addElement(BallerinaCompletionUtils.createVariableLookupElement(identifier));
+                    myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(identifier, ParenthesisInsertHandler.INSTANCE_WITH_AUTO_POPUP));
                 } else if (myElement.getText().equals(identifier.getText())) {
                     add(identifier);
                 }

@@ -6,6 +6,7 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
+import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaNameReferenceReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaObjectFunctionReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaTypeReference;
@@ -36,5 +37,14 @@ public class BallerinaCompletionContributor extends CompletionContributor {
 
     public PsiElementPattern.Capture<PsiElement> isBallerinaObjectFunctionReference() {
         return psiElement().withReference(BallerinaObjectFunctionReference.class);
+    }
+
+    @Override
+    public boolean invokeAutoPopup(@NotNull PsiElement position, char typeChar) {
+        // To ignore auto popup when typing :: in function signature.
+        if (position.getParent() instanceof BallerinaCallableUnitSignature) {
+            return false;
+        }
+        return typeChar == ':' || typeChar == '@';
     }
 }

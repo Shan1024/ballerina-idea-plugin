@@ -10,6 +10,7 @@ import org.ballerinalang.plugins.idea.psi.reference.BallerinaNameReferenceRefere
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaObjectFunctionReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaTypeReference;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaBlockProcessor;
+import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaObjectFunctionProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaTopLevelScopeProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaTypeProcessor;
 import org.jetbrains.annotations.NotNull;
@@ -27,43 +28,18 @@ public class BallerinaReferenceCompletionProvider extends CompletionProvider<Com
             return;
         }
 
-
-        //        PsiFile containingFile = element.getContainingFile().getOriginalFile();
-        //
-        //        PsiDirectory parent = containingFile.getParent();
-        //
-        //        if (parent != null) {
-        //            PsiElement[] children = parent.getChildren();
-        //            for (PsiElement child : children) {
-        //                topLevelScopeProcessor.execute(child, state);
-        //            }
-        //        }
-
         if (reference instanceof BallerinaNameReferenceReference) {
             BallerinaNameReferenceReference nameReferenceReference = (BallerinaNameReferenceReference) reference;
-
-            //        BallerinaBlock ballerinaBlock = PsiTreeUtil.getParentOfType(element, BallerinaBlock.class);
-            //        if (ballerinaBlock != null) {
             if (!nameReferenceReference.processResolveVariants(new BallerinaBlockProcessor(result, element, true))) {
                 return;
             }
-
-            //        }
-
-            if (!nameReferenceReference.processResolveVariants(new BallerinaTopLevelScopeProcessor(result, element,
-                    true))) {
-                return;
-            }
+            nameReferenceReference.processResolveVariants(new BallerinaTopLevelScopeProcessor(result, element, true));
         } else if (reference instanceof BallerinaTypeReference) {
             BallerinaTypeReference ballerinaTypeReference = (BallerinaTypeReference) reference;
-            if (!ballerinaTypeReference.processResolveVariants(new BallerinaTypeProcessor(result, element))) {
-                return;
-            }
+            ballerinaTypeReference.processResolveVariants(new BallerinaTypeProcessor(result, element));
         } else if (reference instanceof BallerinaObjectFunctionReference) {
             BallerinaObjectFunctionReference ballerinaTypeReference = (BallerinaObjectFunctionReference) reference;
-            if (!ballerinaTypeReference.processResolveVariants(new BallerinaTypeProcessor(result, element))) {
-                return;
-            }
+            ballerinaTypeReference.processResolveVariants(new BallerinaObjectFunctionProcessor(result, element, false));
         }
     }
 }

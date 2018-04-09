@@ -23,6 +23,7 @@ import com.intellij.psi.PsiNameIdentifierOwner;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaElementFactory;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaNameReferenceReference;
@@ -71,7 +72,16 @@ public class BallerinaIdentifier extends LeafPsiElement implements PsiNameIdenti
         } else if (parent instanceof BallerinaAttachedObject) {
             return new BallerinaTypeReference(this);
         } else if (parent instanceof BallerinaCallableUnitSignature) {
-            return new BallerinaObjectFunctionReference(this);
+            BallerinaFunctionDefinition ballerinaFunctionDefinition = PsiTreeUtil.getParentOfType(parent,
+                    BallerinaFunctionDefinition.class);
+            if (ballerinaFunctionDefinition != null) {
+                BallerinaAttachedObject attachedObject = ballerinaFunctionDefinition.getAttachedObject();
+                if (attachedObject != null) {
+                    return new BallerinaObjectFunctionReference(this);
+                } else {
+                    return new BallerinaTypeReference(this);
+                }
+            }
         }
         return null;
     }

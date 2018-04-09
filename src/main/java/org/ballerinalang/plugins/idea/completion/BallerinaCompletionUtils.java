@@ -31,6 +31,7 @@ import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import org.ballerinalang.plugins.idea.BallerinaIcons;
+import org.ballerinalang.plugins.idea.psi.BallerinaObjectFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaTopLevelDefinition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -528,6 +529,18 @@ public class BallerinaCompletionUtils {
     }
 
     @NotNull
+    public static LookupElement createFunctionLookupElement(@NotNull PsiElement identifier,
+                                                            @Nullable InsertHandler<LookupElement> insertHandler) {
+        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(identifier.getText(), identifier)
+                .withTypeText("Function").withIcon(BallerinaIcons.FUNCTION).bold()
+                // Todo - Add tail text
+                //                .withTailText(BallerinaDocumentationProvider.getParametersAndReturnTypes(element
+                // .getParent()))
+                .withInsertHandler(insertHandler);
+        return PrioritizedLookupElement.withPriority(builder, FUNCTION_PRIORITY);
+    }
+
+    @NotNull
     public static LookupElement createGlobalVariableLookupElement(@NotNull BallerinaTopLevelDefinition definition) {
         LookupElementBuilder builder =
                 LookupElementBuilder.createWithSmartPointer(definition.getIdentifier().getText(), definition)
@@ -584,11 +597,12 @@ public class BallerinaCompletionUtils {
 
     @NotNull
     public static LookupElementBuilder createFieldLookupElement(@NotNull PsiElement fieldName,
-                                                                 @NotNull PsiElement ownerName,
-                                                                 @NotNull String type,
-                                                                 boolean isPublic) {
+                                                                @NotNull PsiElement ownerName,
+                                                                @NotNull String type,
+                                                                boolean isPublic) {
         LookupElementBuilder lookupElementBuilder = LookupElementBuilder.createWithSmartPointer(fieldName.getText(),
-                fieldName).withTypeText(type).withTailText(" -> " + ownerName.getText(), true);;
+                fieldName).withTypeText(type).withTailText(" -> " + ownerName.getText(), true);
+        ;
         if (isPublic) {
             lookupElementBuilder = lookupElementBuilder.withIcon(BallerinaIcons.PUBLIC_FIELD);
         } else {

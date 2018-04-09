@@ -39,7 +39,7 @@ public class BallerinaObjectFunctionReference extends BallerinaCachedReference<B
     @Nullable
     @Override
     public PsiElement resolveInner() {
-        BallerinaScopeProcessorBase processor = new BallerinaObjectFunctionProcessor(null, myElement);
+        BallerinaScopeProcessorBase processor = new BallerinaObjectFunctionProcessor(null, myElement, false);
         processResolveVariants(processor);
         PsiElement result = processor.getResult();
         // Todo - change to consider return value
@@ -67,7 +67,6 @@ public class BallerinaObjectFunctionReference extends BallerinaCachedReference<B
         //        }
 
 
-
         BallerinaFunctionDefinition ballerinaFunctionDefinition = PsiTreeUtil.getParentOfType(myElement,
                 BallerinaFunctionDefinition.class);
 
@@ -88,14 +87,14 @@ public class BallerinaObjectFunctionReference extends BallerinaCachedReference<B
         }
 
         PsiElement resolvedElement = reference.resolve();
-        if(resolvedElement==null){
+        if (resolvedElement == null) {
             return true;
         }
 
-//        PsiFile file = myElement.getContainingFile().getOriginalFile();
-//        if (!(file instanceof BallerinaFile)) {
-//            return false;
-//        }
+        //        PsiFile file = myElement.getContainingFile().getOriginalFile();
+        //        if (!(file instanceof BallerinaFile)) {
+        //            return false;
+        //        }
 
         // Get suggestions from current file.
         if (!processor.execute(resolvedElement.getParent(), ResolveState.initial())) {
@@ -103,7 +102,7 @@ public class BallerinaObjectFunctionReference extends BallerinaCachedReference<B
             return false;
         }
         // Recursively find definitions in the project starting from the current directory.
-//        recursivelyFind(processor, resolvedElement.getContainingDirectory(), resolvedElement);
+        //        recursivelyFind(processor, resolvedElement.getContainingDirectory(), resolvedElement);
         System.out.println("Count: " + processor.getCount());
         return true;
     }
