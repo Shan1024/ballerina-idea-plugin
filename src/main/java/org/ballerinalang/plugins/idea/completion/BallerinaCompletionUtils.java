@@ -540,9 +540,9 @@ public class BallerinaCompletionUtils {
         LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(definition.getIdentifier()
                 .getText(), definition)
                 .withTypeText("Type").withIcon(definition.getIcon(Iconable.ICON_FLAG_VISIBILITY)).bold();
-                // Todo - Add tail text
-                //                .withTailText(BallerinaDocumentationProvider.getParametersAndReturnTypes(element
-                // .getParent()));
+        // Todo - Add tail text
+        //                .withTailText(BallerinaDocumentationProvider.getParametersAndReturnTypes(element
+        // .getParent()));
         return PrioritizedLookupElement.withPriority(builder, TYPE_PRIORITY);
     }
 
@@ -580,6 +580,21 @@ public class BallerinaCompletionUtils {
         LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(element.getText(), element)
                 .withTypeText("Endpoint").withIcon(BallerinaIcons.ENDPOINT);
         return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
+    }
+
+    @NotNull
+    public static LookupElementBuilder createFieldLookupElement(@NotNull PsiElement fieldName,
+                                                                 @NotNull PsiElement ownerName,
+                                                                 @NotNull String type,
+                                                                 boolean isPublic) {
+        LookupElementBuilder lookupElementBuilder = LookupElementBuilder.createWithSmartPointer(fieldName.getText(),
+                fieldName).withTypeText(type).withTailText(" -> " + ownerName.getText(), true);;
+        if (isPublic) {
+            lookupElementBuilder = lookupElementBuilder.withIcon(BallerinaIcons.PUBLIC_FIELD);
+        } else {
+            lookupElementBuilder = lookupElementBuilder.withIcon(BallerinaIcons.PRIVATE_FIELD);
+        }
+        return lookupElementBuilder;
     }
 
     //    @NotNull
@@ -857,12 +872,7 @@ public class BallerinaCompletionUtils {
     //        return lookupElements;
     //    }
     //
-    //    @NotNull
-    //    private static LookupElementBuilder createEnumFieldLookupElement(@NotNull IdentifierPSINode fieldName,
-    //                                                                     @NotNull IdentifierPSINode ownerName) {
-    //        return LookupElementBuilder.createWithSmartPointer(fieldName.getText(), fieldName)
-    //                .withTypeText(ownerName.getText()).withIcon(BallerinaIcons.FIELD);
-    //    }
+
     //
     //    @NotNull
     //    public static List<LookupElement> createEnumFieldLookupElements(@NotNull Collection<EnumFieldNode>

@@ -22,6 +22,7 @@ import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaFieldDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
@@ -30,8 +31,11 @@ import org.ballerinalang.plugins.idea.psi.BallerinaObjectCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaOrgName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaParameterWithType;
+import org.ballerinalang.plugins.idea.psi.BallerinaPrivateObjectFields;
+import org.ballerinalang.plugins.idea.psi.BallerinaPublicObjectFields;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaWorkerDefinition;
+import org.ballerinalang.plugins.idea.psi.reference.BallerinaObjectFunctionReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -61,8 +65,8 @@ public class BallerinaFindUsageProvider implements FindUsagesProvider {
     @Override
     public String getType(@NotNull PsiElement element) {
         PsiElement parent = element.getParent();
+        PsiElement superParent = parent.getParent();
         if (parent instanceof BallerinaCallableUnitSignature) {
-            PsiElement superParent = parent.getParent();
             if (superParent instanceof BallerinaFunctionDefinition) {
                 return "Function";
             }
@@ -73,7 +77,7 @@ public class BallerinaFindUsageProvider implements FindUsagesProvider {
         } else if (parent instanceof BallerinaGlobalVariableDefinition) {
             return "Global Variable";
         } else if (parent instanceof BallerinaEndpointDefinition) {
-            if (parent.getParent() instanceof BallerinaGlobalEndpointDefinition) {
+            if (superParent instanceof BallerinaGlobalEndpointDefinition) {
                 return "Global Endpoint";
             } else {
                 return "Endpoint";
@@ -86,6 +90,12 @@ public class BallerinaFindUsageProvider implements FindUsagesProvider {
             return "Parameter";
         } else if (parent instanceof BallerinaWorkerDefinition) {
             return "Worker";
+        } else if (parent instanceof BallerinaFieldDefinition) {
+            if (superParent instanceof BallerinaPublicObjectFields) {
+                return "Public Field";
+            } else if (superParent instanceof BallerinaPrivateObjectFields) {
+                return "Private Field";
+            }
         }
         return "";
     }

@@ -19,7 +19,9 @@ package org.ballerinalang.plugins.idea;
 
 import com.intellij.icons.AllIcons;
 import com.intellij.openapi.util.IconLoader;
+import com.intellij.psi.impl.ElementBase;
 import com.intellij.ui.LayeredIcon;
+import com.intellij.ui.RowIcon;
 import com.intellij.util.PlatformIcons;
 import org.jetbrains.annotations.NotNull;
 
@@ -46,7 +48,6 @@ public class BallerinaIcons {
     public static final Icon SERVICE = AllIcons.Nodes.Static;
     public static final Icon RESOURCE = AllIcons.General.HideRight;
     //    public static final Icon STRUCT = AllIcons.Json.Object;
-    public static final Icon FIELD = AllIcons.Nodes.Advice;
     public static final Icon ANNOTATION = AllIcons.Nodes.Annotationtype;
     public static final Icon WORKER = AllIcons.Nodes.Rw_access;
     //    public static final Icon ENUM = AllIcons.Nodes.Enum;
@@ -54,6 +55,10 @@ public class BallerinaIcons {
     public static final Icon ENDPOINT = AllIcons.Ide.UpDown;
     public static final Icon GLOBAL_ENDPOINT = new LayeredIcon(ENDPOINT, AllIcons.Nodes.StaticMark);
     public static final Icon TYPE = AllIcons.Nodes.Artifact;
+
+    public static final Icon PUBLIC_FIELD = createPublicFieldIcon(AllIcons.Nodes.Advice);
+    public static final Icon PRIVATE_FIELD = createPrivateFieldIcon(AllIcons.Nodes.Advice);
+
 
     private BallerinaIcons() {
 
@@ -69,6 +74,20 @@ public class BallerinaIcons {
         };
         icon.setIcon(base, 0);
         icon.setIcon(mark, 1, 0, base.getIconWidth() / 2);
+        return icon;
+    }
+
+    private static RowIcon createPublicFieldIcon(@NotNull Icon base) {
+        RowIcon icon = new RowIcon(2);
+        icon.setIcon(base, 0);
+        icon.setIcon(PlatformIcons.PUBLIC_ICON, 1);
+        return icon;
+    }
+
+    private static RowIcon createPrivateFieldIcon(@NotNull Icon base) {
+        RowIcon icon = new RowIcon(2);
+        icon.setIcon(base, 0);
+        icon.setIcon(PlatformIcons.PRIVATE_ICON, 1);
         return icon;
     }
 }
