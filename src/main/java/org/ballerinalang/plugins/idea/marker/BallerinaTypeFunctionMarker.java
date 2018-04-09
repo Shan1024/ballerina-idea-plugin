@@ -12,14 +12,14 @@ import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.psi.NavigatablePsiElement;
 import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.FunctionUtil;
 import com.intellij.util.containers.ContainerUtil;
-import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitBody;
+import org.ballerinalang.plugins.idea.psi.BallerinaAttachedObject;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
-import org.ballerinalang.plugins.idea.psi.BallerinaObjectCallableUnitSignature;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,44 +46,56 @@ public class BallerinaTypeFunctionMarker extends LineMarkerProviderDescriptor {
     public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {
         // This is used to prevent adding multiple line markers to the same line.
         Set<Integer> lines = ContainerUtil.newHashSet();
-        for (PsiElement element : elements) {
+        for (PsiElement implementation : elements) {
 
-            if (!(element instanceof BallerinaIdentifier)) {
+            if (!(implementation instanceof BallerinaIdentifier)) {
                 continue;
             }
 
-            PsiElement parent = element.getParent();
-            if (parent instanceof BallerinaObjectCallableUnitSignature) {
-                if (parent.getNextSibling() instanceof BallerinaCallableUnitBody) {
-                    continue;
-                }
-                addMarker(result, lines, element, true);
-            } else if (parent instanceof BallerinaCallableUnitSignature) {
+            PsiElement parent = implementation.getParent();
+            //            if (parent instanceof BallerinaObjectCallableUnitSignature) {
+            //                if (parent.getNextSibling() instanceof BallerinaCallableUnitBody) {
+            //                    continue;
+            //                }
+            //                addMarker(result, lines, element, true);
+            //            } else
+            if (parent instanceof BallerinaCallableUnitSignature) {
                 BallerinaFunctionDefinition ballerinaFunctionDefinition = PsiTreeUtil.getParentOfType(parent,
                         BallerinaFunctionDefinition.class);
                 if (ballerinaFunctionDefinition == null) {
                     continue;
                 }
-                if (ballerinaFunctionDefinition.getAttachedObject() == null) {
+                BallerinaAttachedObject attachedObject = ballerinaFunctionDefinition.getAttachedObject();
+                if (attachedObject == null) {
                     continue;
                 }
-                addMarker(result, lines, element, false);
+
+                PsiReference reference = implementation.getReference();
+                if (reference == null) {
+                    continue;
+                }
+                PsiElement definition = reference.resolve();
+                if (definition == null) {
+                    continue;
+                }
+                addMarker(result, lines, definition, implementation);
+
             }
         }
     }
 
-    private void addMarker(@NotNull Collection<LineMarkerInfo> result, Set<Integer> lines, PsiElement element,
-                           boolean isOverridden) {
+    private void addMarker(@NotNull Collection<LineMarkerInfo> result, @NotNull Set<Integer> lines,
+                           @NotNull PsiElement definition, @NotNull PsiElement implementation) {
         // Get the document manager;
-        PsiDocumentManager documentManager = PsiDocumentManager.getInstance(element.getProject());
+        PsiDocumentManager documentManager = PsiDocumentManager.getInstance(definition.getProject());
         // Get the document.
-        Document document = documentManager.getDocument(element.getContainingFile());
+        Document document = documentManager.getDocument(definition.getContainingFile());
         if (document == null) {
             return;
         }
 
         // Get the offset of the current element.
-        int textOffset = element.getTextOffset();
+        int textOffset = definition.getTextOffset();
         // Get the line number of the current element.
         int lineNumber = document.getLineNumber(textOffset);
 
@@ -91,11 +103,9 @@ public class BallerinaTypeFunctionMarker extends LineMarkerProviderDescriptor {
             // Add the number to the set.
             lines.add(lineNumber);
             // Return a new line marker.
-            if (isOverridden) {
-                result.add(new BallerinaImplementedFunctionMarkerInfo(element));
-            } else {
-                result.add(new BallerinaImplementingFunctionMarkerInfo(element));
-            }
+
+            result.add(new BallerinaImplementedFunctionMarkerInfo(definition, implementation));
+            result.add(new BallerinaImplementingFunctionMarkerInfo(implementation, definition));
         }
     }
 
@@ -106,15 +116,16 @@ public class BallerinaTypeFunctionMarker extends LineMarkerProviderDescriptor {
     }
 
     private static class BallerinaImplementedFunctionMarkerInfo extends LineMarkerInfo<PsiElement> {
-        private BallerinaImplementedFunctionMarkerInfo(@NotNull PsiElement methodCall) {
-            super(methodCall,
-                    methodCall.getTextRange(),
+        private BallerinaImplementedFunctionMarkerInfo(@NotNull PsiElement definition,
+                                                       @NotNull PsiElement implementation) {
+            super(definition,
+                    definition.getTextRange(),
                     AllIcons.Gutter.ImplementedMethod,
                     Pass.LINE_MARKERS,
                     FunctionUtil.constant("Implemented function"),
                     (e, elt) -> {
                         // Todo - Update navigation
-                        navigateToOverridingMethod(e, ((NavigatablePsiElement) methodCall)/*, method != element
+                        navigateToOverridingMethod(e, ((NavigatablePsiElement) implementation)/*, method != element
                         .getParent()*/);
                     }, GutterIconRenderer.Alignment.RIGHT
             );
@@ -122,15 +133,16 @@ public class BallerinaTypeFunctionMarker extends LineMarkerProviderDescriptor {
     }
 
     private static class BallerinaImplementingFunctionMarkerInfo extends LineMarkerInfo<PsiElement> {
-        private BallerinaImplementingFunctionMarkerInfo(@NotNull PsiElement methodCall) {
-            super(methodCall,
-                    methodCall.getTextRange(),
+        private BallerinaImplementingFunctionMarkerInfo(@NotNull PsiElement implementation,
+                                                        @NotNull PsiElement definition) {
+            super(implementation,
+                    implementation.getTextRange(),
                     AllIcons.Gutter.ImplementingMethod,
                     Pass.LINE_MARKERS,
                     FunctionUtil.constant("Implementing function"),
                     (e, elt) -> {
                         // Todo - Update navigation
-                        navigateToOverridingMethod(e, ((NavigatablePsiElement) methodCall)/*, method != element
+                        navigateToOverridingMethod(e, ((NavigatablePsiElement) definition)/*, method != element
                         .getParent()*/);
                     }, GutterIconRenderer.Alignment.RIGHT
             );
