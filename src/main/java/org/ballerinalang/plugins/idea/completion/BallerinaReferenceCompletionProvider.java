@@ -44,13 +44,14 @@ public class BallerinaReferenceCompletionProvider extends CompletionProvider<Com
 
             //        BallerinaBlock ballerinaBlock = PsiTreeUtil.getParentOfType(element, BallerinaBlock.class);
             //        if (ballerinaBlock != null) {
-            if (!nameReferenceReference.processResolveVariants(new BallerinaBlockProcessor(result, element))) {
+            if (!nameReferenceReference.processResolveVariants(new BallerinaBlockProcessor(result, element, true))) {
                 return;
             }
 
             //        }
 
-            if (!nameReferenceReference.processResolveVariants(new BallerinaTopLevelScopeProcessor(result, element))) {
+            if (!nameReferenceReference.processResolveVariants(new BallerinaTopLevelScopeProcessor(result, element,
+                    true))) {
                 return;
             }
         } else if (reference instanceof BallerinaTypeReference) {

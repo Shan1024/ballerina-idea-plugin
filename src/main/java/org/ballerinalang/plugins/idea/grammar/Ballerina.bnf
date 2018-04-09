@@ -300,7 +300,7 @@ WorkerBody ::= LEFT_BRACE Block RIGHT_BRACE
 
 GlobalEndpointDefinition ::= public? EndpointDefinition {
     pin=2
-    methods=[getIdentifier getText] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaGlobalEndpointDefinitionStub"
+    methods=[getIdentifier] stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaGlobalEndpointDefinitionStub"
 }
 
 EndpointDefinition ::= AnnotationAttachment* endpoint EndpointType identifier EndpointInitialization? SEMICOLON {

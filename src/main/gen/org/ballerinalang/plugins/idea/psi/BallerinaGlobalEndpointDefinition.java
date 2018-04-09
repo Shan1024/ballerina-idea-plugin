@@ -35,7 +35,4 @@ public interface BallerinaGlobalEndpointDefinition extends BallerinaNamedElement
   @Nullable
   PsiElement getIdentifier();
 
-  @Nullable
-  String getText();
-
 }

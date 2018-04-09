@@ -97,7 +97,7 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
         //            return findInPackage((PsiDirectory) directory, true);
         //        }
 
-        BallerinaScopeProcessorBase processor = new BallerinaBlockProcessor(null, myElement);
+        BallerinaScopeProcessorBase processor = new BallerinaBlockProcessor(null, myElement, false);
 
         processResolveVariants(processor);
         PsiElement result = processor.getResult();
@@ -107,7 +107,7 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
         }
 
 
-        processor = new BallerinaTopLevelScopeProcessor(null, myElement);
+        processor = new BallerinaTopLevelScopeProcessor(null, myElement, false);
         processResolveVariants(processor);
         result = processor.getResult();
         if (result != null) {
@@ -363,7 +363,7 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
             } else if (element instanceof BallerinaGlobalVariableDefinition) {
                 results.add(BallerinaCompletionUtils.createGlobalVariableLookupElement(element));
             } else if (element instanceof BallerinaTypeDefinition) {
-                results.add(BallerinaCompletionUtils.createTypeLookupElement(element, null));
+                results.add(BallerinaCompletionUtils.createTypeLookupElement(element));
             }
         }
         System.out.println("Elements: " + results.size());

@@ -34,11 +34,15 @@ public abstract class BallerinaScopeProcessorBase extends BallerinaScopeProcesso
     @NotNull
     protected final PsiElement myOrigin;
     @NotNull
-    private final PsiElement myRequestedNameElement;
+    private final PsiElement myRequestedNameElement; // Todo - Remove
     protected final boolean myIsCompletion;
 
     public BallerinaScopeProcessorBase(@NotNull PsiElement origin) {
         this(origin, origin, false);
+    }
+
+    public BallerinaScopeProcessorBase(@NotNull PsiElement origin, boolean completion) {
+        this(origin, origin, completion);
     }
 
     public BallerinaScopeProcessorBase(@NotNull PsiElement requestedNameElement, @NotNull PsiElement origin,

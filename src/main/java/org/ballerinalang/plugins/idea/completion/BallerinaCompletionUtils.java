@@ -536,21 +536,20 @@ public class BallerinaCompletionUtils {
     }
 
     @NotNull
-    public static LookupElement createTypeLookupElement(@NotNull BallerinaTopLevelDefinition definition,
-                                                        @Nullable InsertHandler<LookupElement> insertHandler) {
+    public static LookupElement createTypeLookupElement(@NotNull BallerinaTopLevelDefinition definition) {
         LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(definition.getIdentifier()
                 .getText(), definition)
-                .withTypeText("Type").withIcon(definition.getIcon(Iconable.ICON_FLAG_VISIBILITY)).bold()
+                .withTypeText("Type").withIcon(definition.getIcon(Iconable.ICON_FLAG_VISIBILITY)).bold();
                 // Todo - Add tail text
                 //                .withTailText(BallerinaDocumentationProvider.getParametersAndReturnTypes(element
-                // .getParent()))
-                .withInsertHandler(insertHandler);
+                // .getParent()));
         return PrioritizedLookupElement.withPriority(builder, TYPE_PRIORITY);
     }
 
     @NotNull
     public static LookupElement createGlobalEndpointLookupElement(@NotNull BallerinaTopLevelDefinition definition) {
-        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(definition.getText(), definition)
+        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(definition.getIdentifier().getText(),
+                definition)
                 .withTypeText("Endpoint").withIcon(definition.getIcon(Iconable.ICON_FLAG_VISIBILITY));
         return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
     }

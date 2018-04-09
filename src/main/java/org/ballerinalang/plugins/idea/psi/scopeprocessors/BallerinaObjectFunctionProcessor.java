@@ -63,7 +63,7 @@ public class BallerinaObjectFunctionProcessor extends BallerinaScopeProcessorBas
 
     @Override
     public boolean isCompletion() {
-        return true;
+        return myIsCompletion;
     }
 
     @Override

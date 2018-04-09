@@ -37,7 +37,7 @@ public class BallerinaTypeProcessor extends BallerinaScopeProcessorBase {
                     PsiElement identifier = child.getIdentifier();
                     if (identifier != null) {
                         if (myResult != null) {
-                            myResult.addElement(BallerinaCompletionUtils.createTypeLookupElement(child, null));
+                            myResult.addElement(BallerinaCompletionUtils.createTypeLookupElement(child));
                         } else if (myElement.getText().equals(identifier.getText())) {
                             add(identifier);
                         }
@@ -55,7 +55,7 @@ public class BallerinaTypeProcessor extends BallerinaScopeProcessorBase {
 
     @Override
     public boolean isCompletion() {
-        return true;
+        return myIsCompletion;
     }
 
     @Override

@@ -10,6 +10,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -23,8 +24,9 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
     private final PsiElement myElement;
     private int count;
 
-    public BallerinaTopLevelScopeProcessor(@Nullable CompletionResultSet result, @NotNull PsiElement element) {
-        super(element);
+    public BallerinaTopLevelScopeProcessor(@Nullable CompletionResultSet result, @NotNull PsiElement element,
+                                           boolean isCompletion) {
+        super(element, isCompletion);
         myResult = result;
         myElement = element;
     }
@@ -71,6 +73,19 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                             add(identifier);
                         }
                     }
+                } else if (lastChild instanceof BallerinaTypeDefinition) {
+                    BallerinaTypeDefinition child = (BallerinaTypeDefinition) lastChild;
+                    PsiElement identifier = child.getIdentifier();
+                    if (identifier != null) {
+                        if (myResult != null) {
+                            myResult.addElement(BallerinaCompletionUtils.createTypeLookupElement(child));
+                        } else if (myElement.getText().equals(identifier.getText())) {
+                            add(identifier);
+                        }
+                    }
+                }
+                if (!isCompletion() && getResult() != null) {
+                    return false;
                 }
                 count++;
             }
@@ -84,7 +99,7 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
 
     @Override
     public boolean isCompletion() {
-        return true;
+        return myIsCompletion;
     }
 
     @Override

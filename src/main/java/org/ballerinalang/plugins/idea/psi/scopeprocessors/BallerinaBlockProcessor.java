@@ -35,8 +35,9 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
     private final PsiElement myElement;
     private int count;
 
-    public BallerinaBlockProcessor(@Nullable CompletionResultSet result, @NotNull PsiElement element) {
-        super(element);
+    public BallerinaBlockProcessor(@Nullable CompletionResultSet result, @NotNull PsiElement element,
+                                   boolean isCompletion) {
+        super(element, element, isCompletion);
         myResult = result;
         myElement = element;
     }
@@ -61,8 +62,9 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
                         add(identifier);
                     }
                 }
-                List<BallerinaEndpointDefinition> ballerinaEndpointDefinitions = PsiTreeUtil.getChildrenOfTypeAsList(block,
-                        BallerinaEndpointDefinition.class);
+                List<BallerinaEndpointDefinition> ballerinaEndpointDefinitions = PsiTreeUtil.getChildrenOfTypeAsList
+                        (block,
+                                BallerinaEndpointDefinition.class);
                 for (BallerinaEndpointDefinition ballerinaEndpointDefinition : ballerinaEndpointDefinitions) {
                     PsiElement identifier = ballerinaEndpointDefinition.getIdentifier();
                     if (identifier == null) {
@@ -102,6 +104,9 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
                     }
                 }
 
+                if (!isCompletion() && getResult() != null) {
+                    return false;
+                }
 
                 block = PsiTreeUtil.getParentOfType(block, BallerinaBlock.class);
             }
@@ -213,7 +218,7 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
 
     @Override
     public boolean isCompletion() {
-        return true;
+        return myIsCompletion;
     }
 
     @Override
