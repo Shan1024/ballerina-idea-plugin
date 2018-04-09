@@ -718,8 +718,10 @@ ParameterList ::= Parameter (COMMA Parameter)* {pin(".*")=1 /*recoverWhile=Recov
 
 // Todo - Add indexing
 Parameter ::= SimpleParameter | TupleParameter
-private SimpleParameter ::= AnnotationAttachment* TypeName identifier /*{pin=2}*/
-private TupleParameter ::= AnnotationAttachment* LEFT_PARENTHESIS TypeName identifier (COMMA TypeName identifier)* RIGHT_PARENTHESIS
+private SimpleParameter ::= AnnotationAttachment* parameterWithType /*{pin=2}*/
+private TupleParameter ::= AnnotationAttachment* LEFT_PARENTHESIS parameterWithType (COMMA parameterWithType)* RIGHT_PARENTHESIS
+
+parameterWithType ::= TypeName identifier
 
 DefaultableParameter ::= Parameter ASSIGN Expression
 

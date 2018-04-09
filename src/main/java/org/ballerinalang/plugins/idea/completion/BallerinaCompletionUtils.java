@@ -555,6 +555,13 @@ public class BallerinaCompletionUtils {
         return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
     }
 
+        @NotNull
+        public static LookupElement createParameterLookupElement(@NotNull PsiElement element) {
+            LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(element.getText(), element)
+                    .withTypeText("Parameter").withIcon(BallerinaIcons.PARAMETER);
+            return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
+        }
+
     //    @NotNull
     //    public static List<LookupElement> createFunctionLookupElements(@NotNull List<IdentifierPSINode> functions) {
     //        List<LookupElement> lookupElements = new LinkedList<>();
@@ -716,12 +723,7 @@ public class BallerinaCompletionUtils {
     //        return lookupElements;
     //    }
     //
-    //    @NotNull
-    //    public static LookupElement createParameterLookupElement(@NotNull IdentifierPSINode element) {
-    //        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(element.getText(), element)
-    //                .withTypeText("Parameter").withIcon(BallerinaIcons.PARAMETER);
-    //        return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
-    //    }
+
     //
     //    @NotNull
     //    public static List<LookupElement> createParameterLookupElements(@NotNull List<IdentifierPSINode> parameters) {

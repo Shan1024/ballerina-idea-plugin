@@ -176,6 +176,7 @@ public interface BallerinaTypes {
   IElementType PARAMETER_LIST = new BallerinaCompositeElementType("PARAMETER_LIST");
   IElementType PARAMETER_TYPE_NAME = new BallerinaCompositeElementType("PARAMETER_TYPE_NAME");
   IElementType PARAMETER_TYPE_NAME_LIST = new BallerinaCompositeElementType("PARAMETER_TYPE_NAME_LIST");
+  IElementType PARAMETER_WITH_TYPE = new BallerinaCompositeElementType("PARAMETER_WITH_TYPE");
   IElementType PATTERN_CLAUSE = new BallerinaCompositeElementType("PATTERN_CLAUSE");
   IElementType PATTERN_STREAMING_EDGE_INPUT = new BallerinaCompositeElementType("PATTERN_STREAMING_EDGE_INPUT");
   IElementType PATTERN_STREAMING_INPUT = new BallerinaCompositeElementType("PATTERN_STREAMING_INPUT");
@@ -952,6 +953,9 @@ public interface BallerinaTypes {
       }
       else if (type == PARAMETER_TYPE_NAME_LIST) {
         return new BallerinaParameterTypeNameListImpl(node);
+      }
+      else if (type == PARAMETER_WITH_TYPE) {
+        return new BallerinaParameterWithTypeImpl(node);
       }
       else if (type == PATTERN_CLAUSE) {
         return new BallerinaPatternClauseImpl(node);

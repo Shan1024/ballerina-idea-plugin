@@ -666,6 +666,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == PARAMETER_TYPE_NAME) {
       r = parameterTypeName(b, 0);
     }
+    else if (t == PARAMETER_WITH_TYPE) {
+      r = parameterWithType(b, 0);
+    }
     else if (t == RESOURCE_PARAMETER_LIST) {
       r = resourceParameterList(b, 0);
     }
@@ -4952,14 +4955,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // AnnotationAttachment* TypeName identifier
+  // AnnotationAttachment* parameterWithType
   static boolean SimpleParameter(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "SimpleParameter")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = SimpleParameter_0(b, l + 1);
-    r = r && TypeName(b, l + 1, -1);
-    r = r && consumeToken(b, IDENTIFIER);
+    r = r && parameterWithType(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -5760,7 +5762,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // AnnotationAttachment* LEFT_PARENTHESIS TypeName identifier (COMMA TypeName identifier)* RIGHT_PARENTHESIS
+  // AnnotationAttachment* LEFT_PARENTHESIS parameterWithType (COMMA parameterWithType)* RIGHT_PARENTHESIS
   static boolean TupleParameter(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TupleParameter")) return false;
     if (!nextTokenIs(b, "", AT, LEFT_PARENTHESIS)) return false;
@@ -5768,9 +5770,8 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b);
     r = TupleParameter_0(b, l + 1);
     r = r && consumeToken(b, LEFT_PARENTHESIS);
-    r = r && TypeName(b, l + 1, -1);
-    r = r && consumeToken(b, IDENTIFIER);
-    r = r && TupleParameter_4(b, l + 1);
+    r = r && parameterWithType(b, l + 1);
+    r = r && TupleParameter_3(b, l + 1);
     r = r && consumeToken(b, RIGHT_PARENTHESIS);
     exit_section_(b, m, null, r);
     return r;
@@ -5788,26 +5789,25 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // (COMMA TypeName identifier)*
-  private static boolean TupleParameter_4(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "TupleParameter_4")) return false;
+  // (COMMA parameterWithType)*
+  private static boolean TupleParameter_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TupleParameter_3")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!TupleParameter_4_0(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "TupleParameter_4", c)) break;
+      if (!TupleParameter_3_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "TupleParameter_3", c)) break;
       c = current_position_(b);
     }
     return true;
   }
 
-  // COMMA TypeName identifier
-  private static boolean TupleParameter_4_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "TupleParameter_4_0")) return false;
+  // COMMA parameterWithType
+  private static boolean TupleParameter_3_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "TupleParameter_3_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, COMMA);
-    r = r && TypeName(b, l + 1, -1);
-    r = r && consumeToken(b, IDENTIFIER);
+    r = r && parameterWithType(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
@@ -7209,6 +7209,18 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
       c = current_position_(b);
     }
     return true;
+  }
+
+  /* ********************************************************** */
+  // TypeName identifier
+  public static boolean parameterWithType(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "parameterWithType")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, PARAMETER_WITH_TYPE, "<parameter with type>");
+    r = TypeName(b, l + 1, -1);
+    r = r && consumeToken(b, IDENTIFIER);
+    exit_section_(b, l, m, r, false, null);
+    return r;
   }
 
   /* ********************************************************** */

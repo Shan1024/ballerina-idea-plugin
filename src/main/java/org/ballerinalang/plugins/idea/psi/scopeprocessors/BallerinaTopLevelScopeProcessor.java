@@ -40,6 +40,7 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                         PsiElement identifier = child.getIdentifier();
                         if (identifier != null) {
                             if (myResult != null) {
+                                // Todo - Conside oncommit, onabort, etc and set the insert handler
                                 myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(child,
                                         ParenthesisInsertHandler.INSTANCE_WITH_AUTO_POPUP));
                             } else if (myElement.getText().equals(identifier.getText())) {
