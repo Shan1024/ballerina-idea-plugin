@@ -14,6 +14,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaEndpointParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaFieldDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFormalParameterList;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectBody;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaParameter;
@@ -24,9 +25,13 @@ import org.ballerinalang.plugins.idea.psi.BallerinaPublicObjectFields;
 import org.ballerinalang.plugins.idea.psi.BallerinaResourceDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaResourceParameterList;
 import org.ballerinalang.plugins.idea.psi.BallerinaRestParameter;
+import org.ballerinalang.plugins.idea.psi.BallerinaSimpleVariableReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaStatement;
+import org.ballerinalang.plugins.idea.psi.BallerinaTupleDestructuringStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaVariableDefinitionStatement;
+import org.ballerinalang.plugins.idea.psi.BallerinaVariableReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaVariableReferenceList;
 import org.ballerinalang.plugins.idea.psi.BallerinaWorkerDefinition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -103,12 +108,33 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
                         } else if (myElement.getText().equals(identifier.getText())) {
                             add(identifier);
                         }
-                        count++;
-                    }
-                    if (statement instanceof BallerinaAssignmentStatement) {
 
+                    } else if (firstChild instanceof BallerinaAssignmentStatement) {
+                        // Todo
+                    } else if (firstChild instanceof BallerinaTupleDestructuringStatement) {
+                        BallerinaVariableReferenceList variableReferenceList =
+                                ((BallerinaTupleDestructuringStatement) firstChild).getVariableReferenceList();
+                        if (variableReferenceList != null) {
+                            List<BallerinaVariableReference> referenceList =
+                                    variableReferenceList.getVariableReferenceList();
+
+                            for (BallerinaVariableReference ballerinaVariableReference : referenceList) {
+                                if(ballerinaVariableReference instanceof BallerinaSimpleVariableReference){
+                                    BallerinaNameReference nameReference = ((BallerinaSimpleVariableReference)
+                                            ballerinaVariableReference).getNameReference();
+                                    PsiElement identifier = nameReference.getIdentifier();
+                                    if (myResult != null) {
+                                        myResult.addElement(BallerinaCompletionUtils.createVariableLookupElement(identifier));
+                                    } else if (myElement.getText().equals(identifier.getText())) {
+                                        add(identifier);
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
+
+                count++;
 
                 if (!isCompletion() && getResult() != null) {
                     return false;
