@@ -2,10 +2,12 @@ package org.ballerinalang.plugins.idea.psi.scopeprocessors;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
 import org.ballerinalang.plugins.idea.psi.BallerinaAssignmentStatement;
+import org.ballerinalang.plugins.idea.psi.BallerinaAttachedObject;
 import org.ballerinalang.plugins.idea.psi.BallerinaBlock;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaDefaultableParameter;
@@ -186,7 +188,11 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
             return;
         }
 
-        BallerinaObjectBody ballerinaObjectBody = PsiTreeUtil.getParentOfType(ballerinaObjectFunctionDefinition,
+        processObjectFunctionDefinition(ballerinaObjectFunctionDefinition);
+    }
+
+    private void processObjectFunctionDefinition(@NotNull BallerinaObjectFunctionDefinition definition) {
+        BallerinaObjectBody ballerinaObjectBody = PsiTreeUtil.getParentOfType(definition,
                 BallerinaObjectBody.class);
         if (ballerinaObjectBody == null) {
             return;
@@ -200,30 +206,26 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
 
         BallerinaPublicObjectFields publicObjectFields = ballerinaObjectBody.getPublicObjectFields();
         if (publicObjectFields != null) {
-            List<BallerinaFieldDefinition> fieldDefinitionList = publicObjectFields.getFieldDefinitionList();
-            for (BallerinaFieldDefinition ballerinaFieldDefinition : fieldDefinitionList) {
-                PsiElement identifier = ballerinaFieldDefinition.getIdentifier();
-                if (myResult != null) {
-                    myResult.addElement(BallerinaCompletionUtils.createFieldLookupElement(identifier,
-                            ballerinaTypeDefinition.getIdentifier(), ballerinaFieldDefinition.getTypeName().getText(),
-                            true));
-                } else if (myElement.getText().equals(identifier.getText())) {
-                    add(identifier);
-                }
-            }
+            processObjectFields(ballerinaTypeDefinition.getIdentifier(),
+                    publicObjectFields.getFieldDefinitionList(), true);
         }
         BallerinaPrivateObjectFields privateObjectFields = ballerinaObjectBody.getPrivateObjectFields();
         if (privateObjectFields != null) {
-            List<BallerinaFieldDefinition> fieldDefinitionList = privateObjectFields.getFieldDefinitionList();
-            for (BallerinaFieldDefinition ballerinaFieldDefinition : fieldDefinitionList) {
-                PsiElement identifier = ballerinaFieldDefinition.getIdentifier();
-                if (myResult != null) {
-                    myResult.addElement(BallerinaCompletionUtils.createFieldLookupElement(identifier,
-                            ballerinaTypeDefinition.getIdentifier(), ballerinaFieldDefinition.getTypeName().getText(),
-                            false));
-                } else if (myElement.getText().equals(identifier.getText())) {
-                    add(identifier);
-                }
+            processObjectFields(ballerinaTypeDefinition.getIdentifier(),
+                    privateObjectFields.getFieldDefinitionList(), false);
+        }
+    }
+
+    private void processObjectFields(@NotNull PsiElement typeName,
+                                     @NotNull List<BallerinaFieldDefinition> fieldDefinitionList,
+                                     boolean isPublic) {
+        for (BallerinaFieldDefinition ballerinaFieldDefinition : fieldDefinitionList) {
+            PsiElement identifier = ballerinaFieldDefinition.getIdentifier();
+            if (myResult != null) {
+                myResult.addElement(BallerinaCompletionUtils.createFieldLookupElement(identifier,
+                        typeName, ballerinaFieldDefinition.getTypeName().getText(), isPublic));
+            } else if (myElement.getText().equals(identifier.getText())) {
+                add(identifier);
             }
         }
     }
@@ -234,10 +236,28 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
         if (ballerinaFunctionDefinition == null) {
             return;
         }
+
         BallerinaCallableUnitSignature callableUnitSignature = ballerinaFunctionDefinition.getCallableUnitSignature();
         if (callableUnitSignature == null) {
             return;
         }
+
+        BallerinaAttachedObject attachedObject = ballerinaFunctionDefinition.getAttachedObject();
+        if (attachedObject != null) {
+            PsiElement identifier = callableUnitSignature.getIdentifier();
+            PsiReference reference = identifier.getReference();
+            if (reference != null) {
+                PsiElement resolvedElement = reference.resolve();
+                if (resolvedElement != null) {
+                    BallerinaObjectFunctionDefinition objectFunctionDefinition =
+                            PsiTreeUtil.getParentOfType(resolvedElement, BallerinaObjectFunctionDefinition.class);
+                    if (objectFunctionDefinition != null) {
+                        processObjectFunctionDefinition(objectFunctionDefinition);
+                    }
+                }
+            }
+        }
+
         BallerinaFormalParameterList formalParameterList = callableUnitSignature.getFormalParameterList();
         if (formalParameterList == null) {
             return;
@@ -245,7 +265,7 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
         processFormalParameterList(formalParameterList);
     }
 
-    private void processFormalParameterList(BallerinaFormalParameterList formalParameterList) {
+    private void processFormalParameterList(@NotNull BallerinaFormalParameterList formalParameterList) {
         processParameterList(formalParameterList.getParameterList());
 
         List<BallerinaDefaultableParameter> defaultableParameterList =
@@ -275,7 +295,7 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
         }
     }
 
-    private void processParameterList(List<BallerinaParameter> parameterList) {
+    private void processParameterList(@NotNull List<BallerinaParameter> parameterList) {
         for (BallerinaParameter parameter : parameterList) {
             List<BallerinaParameterWithType> parameterWithTypeList = parameter.getParameterWithTypeList();
             for (BallerinaParameterWithType ballerinaParameterWithType : parameterWithTypeList) {
