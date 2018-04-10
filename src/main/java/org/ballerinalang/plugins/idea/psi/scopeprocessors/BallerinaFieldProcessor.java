@@ -2,24 +2,14 @@ package org.ballerinalang.plugins.idea.psi.scopeprocessors;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
-import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
 import org.ballerinalang.plugins.idea.psi.BallerinaField;
-import org.ballerinalang.plugins.idea.psi.BallerinaFieldDefinition;
-import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
-import org.ballerinalang.plugins.idea.psi.BallerinaObjectBody;
-import org.ballerinalang.plugins.idea.psi.BallerinaObjectFunctionDefinition;
-import org.ballerinalang.plugins.idea.psi.BallerinaPrivateObjectFields;
-import org.ballerinalang.plugins.idea.psi.BallerinaPublicObjectFields;
+import org.ballerinalang.plugins.idea.psi.BallerinaSimpleVariableReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
-import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaVariableReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.List;
 
 public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
 
@@ -50,18 +40,30 @@ public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
             System.out.println("Time: " + (end - start));
 
             if (type != null) {
-                PsiElement definition = type.getParent();
-                if (definition instanceof BallerinaTypeDefinition) {
+                PsiElement ballerinaTypeDefinition = type.getParent();
+                if (ballerinaTypeDefinition instanceof BallerinaTypeDefinition) {
                     BallerinaObjectFieldProcessor ballerinaFieldProcessor = new BallerinaObjectFieldProcessor(myResult,
                             myElement, isCompletion());
-                    ballerinaFieldProcessor.execute(definition, ResolveState.initial());
+                    ballerinaFieldProcessor.execute(ballerinaTypeDefinition, ResolveState.initial());
                     PsiElement result = ballerinaFieldProcessor.getResult();
                     if (!isCompletion() && result != null) {
                         add(result);
                     }
                 }
             } else {
-                System.out.println("x");
+                if (prevSibling instanceof BallerinaSimpleVariableReference && "self".equals(prevSibling.getText())) {
+                    BallerinaTypeDefinition ballerinaTypeDefinition = PsiTreeUtil.getParentOfType(prevSibling,
+                            BallerinaTypeDefinition.class);
+                    if(ballerinaTypeDefinition!=null){
+                        BallerinaObjectFieldProcessor ballerinaFieldProcessor = new BallerinaObjectFieldProcessor(myResult,
+                                myElement, isCompletion());
+                        ballerinaFieldProcessor.execute(ballerinaTypeDefinition, ResolveState.initial());
+                        PsiElement result = ballerinaFieldProcessor.getResult();
+                        if (!isCompletion() && result != null) {
+                            add(result);
+                        }
+                    }
+                }
             }
 
         }
