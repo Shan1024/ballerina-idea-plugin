@@ -41,12 +41,7 @@ public class BallerinaObjectFunctionReference extends BallerinaCachedReference<B
     public PsiElement resolveInner() {
         BallerinaScopeProcessorBase processor = new BallerinaObjectFunctionProcessor(null, myElement, false);
         processResolveVariants(processor);
-        PsiElement result = processor.getResult();
-        // Todo - change to consider return value
-        if (result != null) {
-            return result;
-        }
-        return null;
+        return processor.getResult();
     }
 
     @NotNull
@@ -56,17 +51,6 @@ public class BallerinaObjectFunctionReference extends BallerinaCachedReference<B
     }
 
     public boolean processResolveVariants(@NotNull BallerinaScopeProcessor processor) {
-
-        //        BallerinaBlock ballerinaBlock = PsiTreeUtil.getParentOfType(myElement, BallerinaBlock.class);
-        //        if (ballerinaBlock != null && processor instanceof BallerinaBlockProcessor) {
-        //            if (!processor.execute(ballerinaBlock, ResolveState.initial())) {
-        //                System.out.println("Count: "+processor.getCount());
-        //                return false;
-        //            }
-        //            System.out.println("Count: "+processor.getCount());
-        //        }
-
-
         BallerinaFunctionDefinition ballerinaFunctionDefinition = PsiTreeUtil.getParentOfType(myElement,
                 BallerinaFunctionDefinition.class);
 
@@ -91,19 +75,7 @@ public class BallerinaObjectFunctionReference extends BallerinaCachedReference<B
             return true;
         }
 
-        //        PsiFile file = myElement.getContainingFile().getOriginalFile();
-        //        if (!(file instanceof BallerinaFile)) {
-        //            return false;
-        //        }
-
         // Get suggestions from current file.
-        if (!processor.execute(resolvedElement.getParent(), ResolveState.initial())) {
-            System.out.println("Count: " + processor.getCount());
-            return false;
-        }
-        // Recursively find definitions in the project starting from the current directory.
-        //        recursivelyFind(processor, resolvedElement.getContainingDirectory(), resolvedElement);
-        System.out.println("Count: " + processor.getCount());
-        return true;
+        return processor.execute(resolvedElement.getParent(), ResolveState.initial());
     }
 }

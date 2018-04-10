@@ -19,11 +19,8 @@ package org.ballerinalang.plugins.idea.psi.reference;
 
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
-import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
-import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaFieldProcessor;
-import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaObjectFieldProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaScopeProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaScopeProcessorBase;
 import org.jetbrains.annotations.NotNull;
@@ -39,15 +36,8 @@ public class BallerinaFieldReference extends BallerinaCachedReference<BallerinaI
     @Override
     public PsiElement resolveInner() {
         BallerinaScopeProcessorBase processor = new BallerinaFieldProcessor(null, myElement, false);
-
         processResolveVariants(processor);
-        PsiElement result = processor.getResult();
-        // Todo - change to consider return value
-        if (result != null) {
-            return result;
-        }
-
-        return null;
+        return processor.getResult();
     }
 
     @NotNull
@@ -57,7 +47,6 @@ public class BallerinaFieldReference extends BallerinaCachedReference<BallerinaI
     }
 
     public boolean processResolveVariants(@NotNull BallerinaScopeProcessor processor) {
-        processor.execute(myElement, ResolveState.initial());
-        return true;
+        return processor.execute(myElement, ResolveState.initial());
     }
 }

@@ -36,15 +36,8 @@ public class BallerinaInvocationReference extends BallerinaCachedReference<Balle
     @Override
     public PsiElement resolveInner() {
         BallerinaScopeProcessorBase processor = new BallerinaInvocationProcessor(null, myElement, false);
-
         processResolveVariants(processor);
-        PsiElement result = processor.getResult();
-        // Todo - change to consider return value
-        if (result != null) {
-            return result;
-        }
-
-        return null;
+        return processor.getResult();
     }
 
     @NotNull
@@ -54,7 +47,6 @@ public class BallerinaInvocationReference extends BallerinaCachedReference<Balle
     }
 
     public boolean processResolveVariants(@NotNull BallerinaScopeProcessor processor) {
-        processor.execute(myElement, ResolveState.initial());
-        return true;
+        return processor.execute(myElement, ResolveState.initial());
     }
 }

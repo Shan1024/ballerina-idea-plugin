@@ -62,17 +62,7 @@ public class BallerinaTypeReference extends BallerinaCachedReference<BallerinaId
         return new Object[0];
     }
 
-    public boolean processResolveVariants(@NotNull BallerinaScopeProcessor processor) {
-
-//        BallerinaBlock ballerinaBlock = PsiTreeUtil.getParentOfType(myElement, BallerinaBlock.class);
-//        if (ballerinaBlock != null && processor instanceof BallerinaBlockProcessor) {
-//            if (!processor.execute(ballerinaBlock, ResolveState.initial())) {
-//                System.out.println("Count: "+processor.getCount());
-//                return false;
-//            }
-//            System.out.println("Count: "+processor.getCount());
-//        }
-
+    public boolean processResolveVariants(@NotNull BallerinaScopeProcessorBase processor) {
         PsiFile file = myElement.getContainingFile().getOriginalFile();
         if (!(file instanceof BallerinaFile)) {
             return false;
@@ -89,8 +79,13 @@ public class BallerinaTypeReference extends BallerinaCachedReference<BallerinaId
         return true;
     }
 
-    private boolean recursivelyFind(@NotNull PsiScopeProcessor processor, @NotNull PsiDirectory root,
+    // Todo - Merge with method in BallerinaNameReferenceReference
+    private boolean recursivelyFind(@NotNull BallerinaScopeProcessorBase processor, @NotNull PsiDirectory root,
                                     @Nullable PsiElement originToIgnore) {
+
+        if (!processor.isCompletion() && processor.getResult() != null) {
+            return false;
+        }
         // We use breadth first search kind of approach here. First process in all files in the current directory,
         // then process all subdirectories.
         List<PsiDirectory> directories = new LinkedList<>();
