@@ -2,12 +2,10 @@ package org.ballerinalang.plugins.idea.psi.scopeprocessors;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
 import org.ballerinalang.plugins.idea.psi.BallerinaAssignmentStatement;
-import org.ballerinalang.plugins.idea.psi.BallerinaAttachedObject;
 import org.ballerinalang.plugins.idea.psi.BallerinaBlock;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaDefaultableParameter;
@@ -174,6 +172,13 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
 
             // Todo - check return value and continue only if needed
             processObjectInitializer(scopeElement);
+            if (!isCompletion() && getResult() != null) {
+                return false;
+            }
+            processObjectFunctions(scopeElement);
+            if (!isCompletion() && getResult() != null) {
+                return false;
+            }
             processObjectFields(scopeElement);
             if (!isCompletion() && getResult() != null) {
                 return false;
@@ -185,6 +190,42 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
             processResourceSignature(scopeElement);
         }
         return true;
+    }
+
+    private void processObjectFunctions(@NotNull PsiElement scopeElement) {
+        BallerinaTypeDefinition ballerinaTypeDefinition = PsiTreeUtil.getParentOfType(scopeElement,
+                BallerinaTypeDefinition.class);
+        if (ballerinaTypeDefinition != null) {
+            BallerinaObjectFunctionProcessor ballerinaObjectFunctionProcessor =
+                    new BallerinaObjectFunctionProcessor(myResult, myElement, isCompletion());
+            ballerinaObjectFunctionProcessor.execute(ballerinaTypeDefinition, ResolveState.initial());
+            PsiElement result = ballerinaObjectFunctionProcessor.getResult();
+            if (!isCompletion() && result != null) {
+                add(result);
+            }
+        }
+
+
+        //        BallerinaObjectFunctions ballerinaObjectFunctions = PsiTreeUtil.getParentOfType(scopeElement,
+        //                BallerinaObjectFunctions.class);
+        //        if (ballerinaObjectFunctions != null) {
+        //            List<BallerinaObjectFunctionDefinition> objectFunctionDefinitionList =
+        //                    ballerinaObjectFunctions.getObjectFunctionDefinitionList();
+        //            for (BallerinaObjectFunctionDefinition ballerinaObjectFunctionDefinition :
+        // objectFunctionDefinitionList) {
+        //                BallerinaObjectCallableUnitSignature objectCallableUnitSignature =
+        //                        ballerinaObjectFunctionDefinition.getObjectCallableUnitSignature();
+        //                if (objectCallableUnitSignature != null) {
+        //                    PsiElement identifier = objectCallableUnitSignature.getIdentifier();
+        //                    if (myResult != null) {
+        //                        myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(identifier,
+        //                                ParenthesisInsertHandler.INSTANCE_WITH_AUTO_POPUP));
+        //                    } else if (myElement.getText().equals(identifier.getText())) {
+        //                        add(identifier);
+        //                    }
+        //                }
+        //            }
+        //        }
     }
 
     private void processObjectInitializer(@NotNull PsiElement scopeElement) {
