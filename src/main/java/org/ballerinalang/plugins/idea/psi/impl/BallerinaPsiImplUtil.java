@@ -24,6 +24,7 @@ import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Key;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
@@ -365,6 +366,19 @@ public class BallerinaPsiImplUtil {
             }
         }
         return null;
+    }
+
+    public static boolean isAContentRoot(@Nullable PsiDirectory directory) {
+        if (directory == null) {
+            return false;
+        }
+        VirtualFile[] contentRoots = ProjectRootManager.getInstance(directory.getProject()).getContentRoots();
+        for (VirtualFile contentRoot : contentRoots) {
+            if (contentRoot.equals(directory.getVirtualFile())) {
+                return true;
+            }
+        }
+        return false;
     }
 
     @Nullable

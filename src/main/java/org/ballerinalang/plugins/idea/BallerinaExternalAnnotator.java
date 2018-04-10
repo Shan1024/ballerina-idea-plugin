@@ -31,11 +31,13 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.openapi.util.io.FileUtil;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiWhiteSpace;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.PathUtil;
+import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.ballerinalang.plugins.idea.sdk.BallerinaSdkService;
 import org.ballerinalang.util.diagnostic.Diagnostic;
 import org.jetbrains.annotations.NotNull;
@@ -165,7 +167,22 @@ public class BallerinaExternalAnnotator extends ExternalAnnotator<BallerinaExter
      * @param file a psi file
      * @return package name correspond to the provided file
      */
+    @NotNull
     private String getPackageName(PsiFile file) {
+        PsiDirectory parent = file.getParent();
+
+        if(BallerinaPsiImplUtil.isAContentRoot(parent)){
+            return file.getName();
+        }
+        while (parent != null && parent.getParent() != null &&
+                !BallerinaPsiImplUtil.isAContentRoot(parent.getParent())) {
+            parent = parent.getParent();
+        }
+
+        if (parent != null) {
+            return parent.getName();
+        }
+
         //        // Get the package name specified in the file.
         //        PackageDeclarationNode packageDeclarationNode = PsiTreeUtil.findChildOfType(file,
         // PackageDeclarationNode.class);
@@ -214,7 +231,7 @@ public class BallerinaExternalAnnotator extends ExternalAnnotator<BallerinaExter
         //
         //        // Otherwise return the calculated package path.
         //        return packageName;
-        return "";
+        return ".";
     }
 
     /**
@@ -228,7 +245,8 @@ public class BallerinaExternalAnnotator extends ExternalAnnotator<BallerinaExter
         try {
             for (Diagnostic diagnostic : diagnostics) {
                 // Validate the package name.
-                if (packageName != null && !diagnostic.getSource().getPackageName().equals(packageName)) {
+                String sourcePackageName = diagnostic.getSource().getPackageName();
+                if (!sourcePackageName.equals(".") && !sourcePackageName.equals(packageName)) {
                     continue;
                 }
                 // Validate the file name since diagnostics are sent for all files in the package.
