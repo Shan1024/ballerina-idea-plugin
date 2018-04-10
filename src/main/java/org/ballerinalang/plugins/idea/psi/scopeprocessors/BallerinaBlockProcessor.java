@@ -19,8 +19,11 @@ import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaLambdaFunction;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectBody;
+import org.ballerinalang.plugins.idea.psi.BallerinaObjectDefaultableParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectInitializer;
+import org.ballerinalang.plugins.idea.psi.BallerinaObjectParameter;
+import org.ballerinalang.plugins.idea.psi.BallerinaObjectParameterList;
 import org.ballerinalang.plugins.idea.psi.BallerinaParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaParameterList;
 import org.ballerinalang.plugins.idea.psi.BallerinaParameterWithType;
@@ -169,7 +172,7 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
             }
 
             // Todo - check return value and continue only if needed
-            processObjectInit(scopeElement);
+            processObjectInitializer(scopeElement);
             processObjectFields(scopeElement);
             if (!isCompletion() && getResult() != null) {
                 return false;
@@ -183,12 +186,30 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
         return true;
     }
 
-    private void processObjectInit(@NotNull PsiElement scopeElement) {
+    private void processObjectInitializer(@NotNull PsiElement scopeElement) {
         BallerinaObjectInitializer ballerinaObjectInitializer = PsiTreeUtil.getParentOfType(scopeElement,
                 BallerinaObjectInitializer.class);
         if (ballerinaObjectInitializer == null) {
             return;
         }
+
+        // Add parameters which are not object parameters to the suggestions
+        BallerinaObjectParameterList ballerinaObjectParameterList =
+                PsiTreeUtil.findChildOfType(ballerinaObjectInitializer, BallerinaObjectParameterList.class);
+        if (ballerinaObjectParameterList != null) {
+            List<BallerinaObjectDefaultableParameter> objectDefaultableParameterList =
+                    ballerinaObjectParameterList.getObjectDefaultableParameterList();
+            for (BallerinaObjectDefaultableParameter parameter : objectDefaultableParameterList) {
+                BallerinaObjectParameter objectParameter = parameter.getObjectParameter();
+                PsiElement identifier = objectParameter.getIdentifier();
+                if (myResult != null) {
+                    myResult.addElement(BallerinaCompletionUtils.createParameterLookupElement(identifier));
+                } else if (myElement.getText().equals(identifier.getText())) {
+                    add(identifier);
+                }
+            }
+        }
+
         BallerinaObjectBody ballerinaObjectBody = PsiTreeUtil.getParentOfType(ballerinaObjectInitializer,
                 BallerinaObjectBody.class);
         if (ballerinaObjectBody == null) {
