@@ -28,6 +28,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectCallableUnitSignature;
+import org.ballerinalang.plugins.idea.psi.BallerinaObjectParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaOrgName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaParameterWithType;
@@ -96,6 +97,8 @@ public class BallerinaFindUsageProvider implements FindUsagesProvider {
             } else if (superParent instanceof BallerinaPrivateObjectFields) {
                 return "Private Field";
             }
+        } else if (parent instanceof BallerinaObjectParameter) {
+            return "Object Field";
         }
         return "";
     }

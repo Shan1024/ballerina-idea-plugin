@@ -194,7 +194,7 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
         if (ballerinaObjectBody == null) {
             return;
         }
-        processObjectDefnition(ballerinaObjectBody);
+        processObjectDefinition(ballerinaObjectBody);
     }
 
     private void processObjectFields(@NotNull PsiElement scopeElement) {
@@ -207,6 +207,7 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
         processObjectFunctionDefinition(ballerinaObjectFunctionDefinition);
     }
 
+    // Todo - Move to util and merge with duplicate method in BallerinaObjectFieldProcessor
     private void processObjectFunctionDefinition(@NotNull BallerinaObjectFunctionDefinition definition) {
         BallerinaObjectBody ballerinaObjectBody = PsiTreeUtil.getParentOfType(definition,
                 BallerinaObjectBody.class);
@@ -214,10 +215,10 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
             return;
         }
 
-        processObjectDefnition(ballerinaObjectBody);
+        processObjectDefinition(ballerinaObjectBody);
     }
 
-    private void processObjectDefnition(@NotNull BallerinaObjectBody ballerinaObjectBody) {
+    private void processObjectDefinition(@NotNull BallerinaObjectBody ballerinaObjectBody) {
         BallerinaTypeDefinition ballerinaTypeDefinition = PsiTreeUtil.getParentOfType(ballerinaObjectBody,
                 BallerinaTypeDefinition.class);
         if (ballerinaTypeDefinition == null || ballerinaTypeDefinition.getIdentifier() == null) {

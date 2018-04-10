@@ -7,9 +7,11 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.ProcessingContext;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaNameReferenceReference;
+import org.ballerinalang.plugins.idea.psi.reference.BallerinaObjectFieldReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaObjectFunctionReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaTypeReference;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaBlockProcessor;
+import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaObjectFieldProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaObjectFunctionProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaTopLevelScopeProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaTypeProcessor;
@@ -40,6 +42,9 @@ public class BallerinaReferenceCompletionProvider extends CompletionProvider<Com
         } else if (reference instanceof BallerinaObjectFunctionReference) {
             BallerinaObjectFunctionReference ballerinaTypeReference = (BallerinaObjectFunctionReference) reference;
             ballerinaTypeReference.processResolveVariants(new BallerinaObjectFunctionProcessor(result, element, false));
+        }else if (reference instanceof BallerinaObjectFieldReference) {
+            BallerinaObjectFieldReference ballerinaTypeReference = (BallerinaObjectFieldReference) reference;
+            ballerinaTypeReference.processResolveVariants(new BallerinaObjectFieldProcessor(result, element, false));
         }
     }
 }
