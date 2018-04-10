@@ -268,7 +268,8 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
             PsiElement identifier = ballerinaFieldDefinition.getIdentifier();
             if (myResult != null) {
                 myResult.addElement(BallerinaCompletionUtils.createFieldLookupElement(identifier, typeName,
-                        ballerinaFieldDefinition.getTypeName().getText(), isPublic));
+                        ballerinaFieldDefinition.getTypeName().getText(),
+                        BallerinaPsiImplUtil.getObjectFieldDefaultValue(ballerinaFieldDefinition), isPublic));
             } else if (myElement.getText().equals(identifier.getText())) {
                 add(identifier);
             }

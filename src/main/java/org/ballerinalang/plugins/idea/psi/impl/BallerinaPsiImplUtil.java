@@ -42,6 +42,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompositeElement;
 import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaExpression;
+import org.ballerinalang.plugins.idea.psi.BallerinaFieldDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
@@ -340,5 +341,15 @@ public class BallerinaPsiImplUtil {
         }
         // Todo - Update formatting logic
         return ballerinaExpression.getText();
+    }
+
+
+    @Nullable
+    public static String getObjectFieldDefaultValue(@Nullable BallerinaFieldDefinition ballerinaFieldDefinition) {
+        if (ballerinaFieldDefinition == null) {
+            return null;
+        }
+        BallerinaExpression expression = ballerinaFieldDefinition.getExpression();
+        return formatParameterDefaultValue(expression);
     }
 }

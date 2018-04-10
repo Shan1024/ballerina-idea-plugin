@@ -25,6 +25,7 @@ abstract public class BallerinaScopeProcessor extends BaseScopeProcessor {
     return false;
   }
 
+  // Todo - Remove
   public int getCount(){
     return 0;
   }

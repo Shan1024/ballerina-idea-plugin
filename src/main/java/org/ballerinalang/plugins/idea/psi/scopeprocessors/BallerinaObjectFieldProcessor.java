@@ -13,6 +13,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaObjectFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaPrivateObjectFields;
 import org.ballerinalang.plugins.idea.psi.BallerinaPublicObjectFields;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
+import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -65,6 +66,7 @@ public class BallerinaObjectFieldProcessor extends BallerinaScopeProcessorBase {
         }
     }
 
+    // Todo - Merge with function in BallerinaBlockProcessor
     private void processObjectFields(@NotNull PsiElement typeName,
                                      @NotNull List<BallerinaFieldDefinition> fieldDefinitionList,
                                      boolean isPublic) {
@@ -72,7 +74,8 @@ public class BallerinaObjectFieldProcessor extends BallerinaScopeProcessorBase {
             PsiElement identifier = ballerinaFieldDefinition.getIdentifier();
             if (myResult != null) {
                 myResult.addElement(BallerinaCompletionUtils.createFieldLookupElement(identifier, typeName,
-                        ballerinaFieldDefinition.getTypeName().getText(), isPublic));
+                        ballerinaFieldDefinition.getTypeName().getText(),
+                        BallerinaPsiImplUtil.getObjectFieldDefaultValue(ballerinaFieldDefinition), isPublic));
             } else if (myElement.getText().equals(identifier.getText())) {
                 add(identifier);
             }

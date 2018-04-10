@@ -587,7 +587,7 @@ public class BallerinaCompletionUtils {
         }
 
         if (defaultValue != null && !defaultValue.isEmpty()) {
-            builder = builder.withTailText(" ( = " + defaultValue + ")");
+            builder = builder.withTailText(" ( = " + defaultValue + " )");
         }
 
         return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
@@ -610,11 +610,18 @@ public class BallerinaCompletionUtils {
     @NotNull
     public static LookupElement createFieldLookupElement(@NotNull PsiElement fieldName,
                                                          @NotNull PsiElement ownerName,
-                                                         @NotNull String type,
+                                                         @NotNull String type, @Nullable String defaultValue,
                                                          boolean isPublic) {
         LookupElementBuilder lookupElementBuilder = LookupElementBuilder.createWithSmartPointer(fieldName.getText(),
-                fieldName).withTypeText(type).withTailText(" -> " + ownerName.getText(), true);
-        ;
+                fieldName).withTypeText(type);
+
+        if (defaultValue == null || defaultValue.isEmpty()) {
+            lookupElementBuilder = lookupElementBuilder.withTailText(" -> " + ownerName.getText(), true);
+        }else{
+            String tailText = " ( = " + defaultValue + " ) -> " + ownerName.getText();
+            lookupElementBuilder = lookupElementBuilder.withTailText(tailText, true);
+        }
+
         if (isPublic) {
             lookupElementBuilder = lookupElementBuilder.withIcon(BallerinaIcons.PUBLIC_FIELD);
         } else {
