@@ -42,15 +42,9 @@ public class BallerinaTupleDestructuringStatementImpl extends BallerinaComposite
   }
 
   @Override
-  @Nullable
-  public BallerinaActionInvocation getActionInvocation() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaActionInvocation.class);
-  }
-
-  @Override
-  @Nullable
+  @NotNull
   public BallerinaExpression getExpression() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaExpression.class);
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaExpression.class));
   }
 
   @Override

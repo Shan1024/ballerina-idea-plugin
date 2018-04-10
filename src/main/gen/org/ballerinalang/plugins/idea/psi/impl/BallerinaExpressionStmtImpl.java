@@ -42,15 +42,9 @@ public class BallerinaExpressionStmtImpl extends BallerinaCompositeElementImpl i
   }
 
   @Override
-  @Nullable
-  public BallerinaActionInvocation getActionInvocation() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaActionInvocation.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaVariableReference getVariableReference() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaVariableReference.class);
+  @NotNull
+  public BallerinaExpression getExpression() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaExpression.class));
   }
 
   @Override

@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaAwaitExpressionReferenceImpl extends BallerinaVariableReferenceImpl implements BallerinaAwaitExpressionReference {
+public class BallerinaActionInvocationExpressionImpl extends BallerinaExpressionImpl implements BallerinaActionInvocationExpression {
 
-  public BallerinaAwaitExpressionReferenceImpl(ASTNode node) {
+  public BallerinaActionInvocationExpressionImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitAwaitExpressionReference(this);
+    visitor.visitActionInvocationExpression(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -43,8 +43,8 @@ public class BallerinaAwaitExpressionReferenceImpl extends BallerinaVariableRefe
 
   @Override
   @NotNull
-  public BallerinaAwaitExpression getAwaitExpression() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaAwaitExpression.class));
+  public BallerinaActionInvocation getActionInvocation() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaActionInvocation.class));
   }
 
 }

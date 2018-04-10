@@ -23,10 +23,7 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaTupleDestructuringStatement extends BallerinaCompositeElement {
 
-  @Nullable
-  BallerinaActionInvocation getActionInvocation();
-
-  @Nullable
+  @NotNull
   BallerinaExpression getExpression();
 
   @Nullable

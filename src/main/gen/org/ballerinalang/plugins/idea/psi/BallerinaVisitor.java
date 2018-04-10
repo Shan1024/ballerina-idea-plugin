@@ -31,6 +31,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitActionInvocationExpression(@NotNull BallerinaActionInvocationExpression o) {
+    visitExpression(o);
+  }
+
   public void visitAggregationQuery(@NotNull BallerinaAggregationQuery o) {
     visitCompositeElement(o);
   }
@@ -86,10 +90,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
 
   public void visitAwaitExpression(@NotNull BallerinaAwaitExpression o) {
     visitExpression(o);
-  }
-
-  public void visitAwaitExpressionReference(@NotNull BallerinaAwaitExpressionReference o) {
-    visitVariableReference(o);
   }
 
   public void visitBinaryAddSubExpression(@NotNull BallerinaBinaryAddSubExpression o) {

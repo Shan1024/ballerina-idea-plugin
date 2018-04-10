@@ -21,18 +21,9 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaPublicObjectFields extends BallerinaCompositeElement {
+public interface BallerinaActionInvocationExpression extends BallerinaExpression {
 
   @NotNull
-  List<BallerinaFieldDefinition> getFieldDefinitionList();
-
-  @NotNull
-  PsiElement getLeftBrace();
-
-  @Nullable
-  PsiElement getRightBrace();
-
-  @NotNull
-  PsiElement getPublic();
+  BallerinaActionInvocation getActionInvocation();
 
 }

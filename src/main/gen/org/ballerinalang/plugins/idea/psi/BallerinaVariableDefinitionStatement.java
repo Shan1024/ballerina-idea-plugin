@@ -26,9 +26,6 @@ import org.ballerinalang.plugins.idea.stubs.BallerinaVariableDefinitionStatement
 public interface BallerinaVariableDefinitionStatement extends BallerinaNamedElement, StubBasedPsiElement<BallerinaVariableDefinitionStatementStub> {
 
   @Nullable
-  BallerinaActionInvocation getActionInvocation();
-
-  @Nullable
   BallerinaExpression getExpression();
 
   @NotNull

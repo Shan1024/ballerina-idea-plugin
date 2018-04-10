@@ -47,4 +47,10 @@ public class BallerinaVariableReferenceExpressionImpl extends BallerinaExpressio
     return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaVariableReference.class));
   }
 
+  @Override
+  @Nullable
+  public PsiElement getAsync() {
+    return findChildByType(ASYNC);
+  }
+
 }

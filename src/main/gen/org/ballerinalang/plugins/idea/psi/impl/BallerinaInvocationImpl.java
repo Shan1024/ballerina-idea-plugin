@@ -54,15 +54,21 @@ public class BallerinaInvocationImpl extends BallerinaCompositeElementImpl imple
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getDot() {
-    return notNullChild(findChildByType(DOT));
+    return findChildByType(DOT);
   }
 
   @Override
   @NotNull
   public PsiElement getLeftParenthesis() {
     return notNullChild(findChildByType(LEFT_PARENTHESIS));
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getNot() {
+    return findChildByType(NOT);
   }
 
   @Override

@@ -48,9 +48,9 @@ public class BallerinaPublicObjectFieldsImpl extends BallerinaCompositeElementIm
   }
 
   @Override
-  @Nullable
+  @NotNull
   public PsiElement getLeftBrace() {
-    return findChildByType(LEFT_BRACE);
+    return notNullChild(findChildByType(LEFT_BRACE));
   }
 
   @Override

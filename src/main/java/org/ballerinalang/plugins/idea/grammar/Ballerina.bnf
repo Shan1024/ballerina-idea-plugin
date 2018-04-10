@@ -114,7 +114,7 @@
 
     extends("(FunctionInvocation|SimpleVariable|MapArrayVariable|FieldVariable|XmlAttribVariable|Invocation|AwaitExpression)Reference") = VariableReference
 
-    extends("((Simple|Array|Record|Xml|StringTemplate)Literal|(ValueType|BuiltInReferenceType)Type|VariableReference|LambdaFunction|TypeInit|Type(Casting|Conversion|Access)|BracedOrTuple|Await|TableQuery|MatchExpr|Checked|TableLiteral|Elvis)Expression") = Expression
+    extends("((Simple|Array|Record|Xml|StringTemplate)Literal|(ValueType|BuiltInReferenceType)Type|VariableReference|LambdaFunction|TypeInit|Type(Casting|Conversion|Access)|BracedOrTuple|Await|TableQuery|MatchExpr|Checked|TableLiteral|Elvis|ActionInvocation)Expression") = Expression
     extends("(Unary|Binary|Ternary)Expression") = Expression
 
     extends("Binary(Pow|DivMulMod|AddSub|Compare|Equal|And|Or)Expression") = BinaryExpression
@@ -241,7 +241,7 @@ TypeDefinition ::= (public)? type identifier FiniteType SEMICOLON {
 
 ObjectBody ::= PublicObjectFields? PrivateObjectFields? ObjectInitializer? ObjectFunctions?
 
-PublicObjectFields ::= public LEFT_BRACE fieldDefinition* RIGHT_BRACE {pin=1}
+PublicObjectFields ::= public LEFT_BRACE fieldDefinition* RIGHT_BRACE {pin=2}
 
 PrivateObjectFields ::= private LEFT_BRACE fieldDefinition* RIGHT_BRACE {pin=1}
 
@@ -429,7 +429,7 @@ VariableDefinitionStatement ::= TypeName identifier VariableAssignment? SEMICOLO
     stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaVariableDefinitionStatementStub"
 }
 
-private VariableAssignment ::= ASSIGN (ActionInvocation | Expression) {pin=1}
+private VariableAssignment ::= ASSIGN Expression {pin=1}
 
 RecordLiteral ::= LEFT_BRACE RecordLiteralBody? RIGHT_BRACE {pin(".*")=1}
 
@@ -449,11 +449,11 @@ TypeInitExpr ::= new UserDefineTypeName LEFT_PARENTHESIS InvocationArgList? RIGH
 
 AssignmentStatement ::= withVar | withoutVar
 
-private withVar ::= var VariableReference ASSIGN (ActionInvocation | Expression) SEMICOLON {pin=1}
-private withoutVar ::= VariableReference ASSIGN (ActionInvocation | Expression) SEMICOLON {pin=2}
+private withVar ::= var VariableReference ASSIGN Expression SEMICOLON {pin=1}
+private withoutVar ::= VariableReference ASSIGN Expression SEMICOLON {pin=2}
 
-tupleDestructuringStatement ::= var? LEFT_PARENTHESIS VariableReferenceList RIGHT_PARENTHESIS ASSIGN (ActionInvocation | Expression) SEMICOLON
-                                | LEFT_PARENTHESIS ParameterList RIGHT_PARENTHESIS ASSIGN (ActionInvocation | Expression) SEMICOLON
+tupleDestructuringStatement ::= var? LEFT_PARENTHESIS VariableReferenceList RIGHT_PARENTHESIS ASSIGN Expression SEMICOLON
+                                | LEFT_PARENTHESIS ParameterList RIGHT_PARENTHESIS ASSIGN Expression SEMICOLON
 
 CompoundAssignmentStatement ::= VariableReference CompoundOperator Expression SEMICOLON
 
@@ -543,7 +543,6 @@ VariableReference ::= MapArrayVariableReference
                       | XmlAttribVariableReference
                       | FunctionInvocationReference
                       | SimpleVariableReference
-                      | AwaitExpressionReference
 
 InvocationReference ::= VariableReference Invocation
 MapArrayVariableReference ::= VariableReference Index
@@ -551,7 +550,6 @@ FieldVariableReference ::= VariableReference Field
 XmlAttribVariableReference ::= VariableReference XmlAttrib
 FunctionInvocationReference ::= (async)? FunctionInvocation
 SimpleVariableReference ::=  NameReference
-AwaitExpressionReference ::= AwaitExpression
 
 Field ::= (DOT | NOT) (identifier | MUL) {
     /*pin=1*/
@@ -566,7 +564,7 @@ XmlAttrib ::= AT (LEFT_BRACKET Expression RIGHT_BRACKET)? /*{pin=1}*/
 FunctionInvocation ::= NameReference LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS
 
 // Todo - Adding pin will mess function invocation.
-Invocation ::= DOT AnyIdentifierName LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS /*{pin=1}*/
+Invocation ::= (DOT | NOT) AnyIdentifierName LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS /*{pin=1}*/
 
 InvocationArgList ::= InvocationArg (COMMA InvocationArg)* {pin(".*")=1}
 
@@ -581,7 +579,7 @@ ExpressionList ::= Expression (COMMA Expression)* {
 }
 //private ExpressionListRecover ::= !(RIGHT_PARENTHESIS | SEMICOLON)
 
-ExpressionStmt ::= (ActionInvocation | VariableReference) SEMICOLON {pin=1}
+ExpressionStmt ::= Expression SEMICOLON {pin=1}
 
 TransactionStatement ::= TransactionClause OnretryClause?
 
@@ -625,6 +623,7 @@ Expression
     |   ArrayLiteralExpression
     |   ValueTypeTypeExpression
     |   BuiltInReferenceTypeTypeExpression
+    |   ActionInvocationExpression
     |   VariableReferenceExpression
     |   TypeInitExpression
     |   TypeConversionExpression
@@ -644,6 +643,8 @@ Expression
     |   AwaitExpression {
     recoverWhile=ExpressionRecover
 }
+
+ActionInvocationExpression::= ActionInvocation
 
 ElvisExpression::= Expression ELVIS Expression
 
@@ -665,7 +666,7 @@ XmlLiteralExpression ::= XmlLiteral
 StringTemplateLiteralExpression ::= StringTemplateLiteral
 ValueTypeTypeExpression ::= ValueTypeName DOT identifier
 BuiltInReferenceTypeTypeExpression ::= BuiltInReferenceTypeName DOT identifier
-VariableReferenceExpression ::= VariableReference
+VariableReferenceExpression ::= async? VariableReference
 LambdaFunctionExpression ::= LambdaFunction
 TypeInitExpression ::= TypeInitExpr
 TypeConversionExpression ::= LT TypeName (COMMA FunctionInvocation)? GT Expression {pin=1}

@@ -596,10 +596,10 @@ public class BallerinaCompletionUtils {
     }
 
     @NotNull
-    public static LookupElementBuilder createFieldLookupElement(@NotNull PsiElement fieldName,
-                                                                @NotNull PsiElement ownerName,
-                                                                @NotNull String type,
-                                                                boolean isPublic) {
+    public static LookupElement createFieldLookupElement(@NotNull PsiElement fieldName,
+                                                         @NotNull PsiElement ownerName,
+                                                         @NotNull String type,
+                                                         boolean isPublic) {
         LookupElementBuilder lookupElementBuilder = LookupElementBuilder.createWithSmartPointer(fieldName.getText(),
                 fieldName).withTypeText(type).withTailText(" -> " + ownerName.getText(), true);
         ;
@@ -608,7 +608,7 @@ public class BallerinaCompletionUtils {
         } else {
             lookupElementBuilder = lookupElementBuilder.withIcon(BallerinaIcons.PRIVATE_FIELD);
         }
-        return lookupElementBuilder;
+        return PrioritizedLookupElement.withPriority(lookupElementBuilder, VARIABLE_PRIORITY);
     }
 
     //    @NotNull

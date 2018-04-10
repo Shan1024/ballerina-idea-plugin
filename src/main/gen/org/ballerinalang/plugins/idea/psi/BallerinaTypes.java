@@ -27,6 +27,7 @@ public interface BallerinaTypes {
 
   IElementType ABORT_STATEMENT = new BallerinaCompositeElementType("ABORT_STATEMENT");
   IElementType ACTION_INVOCATION = new BallerinaCompositeElementType("ACTION_INVOCATION");
+  IElementType ACTION_INVOCATION_EXPRESSION = new BallerinaCompositeElementType("ACTION_INVOCATION_EXPRESSION");
   IElementType AGGREGATION_QUERY = new BallerinaCompositeElementType("AGGREGATION_QUERY");
   IElementType ALIAS = BallerinaElementTypeFactory.stubFactory("ALIAS");
   IElementType ANNOTATION_ATTACHMENT = new BallerinaCompositeElementType("ANNOTATION_ATTACHMENT");
@@ -41,7 +42,6 @@ public interface BallerinaTypes {
   IElementType ATTACHMENT_POINT = new BallerinaCompositeElementType("ATTACHMENT_POINT");
   IElementType ATTRIBUTE = new BallerinaCompositeElementType("ATTRIBUTE");
   IElementType AWAIT_EXPRESSION = new BallerinaCompositeElementType("AWAIT_EXPRESSION");
-  IElementType AWAIT_EXPRESSION_REFERENCE = new BallerinaCompositeElementType("AWAIT_EXPRESSION_REFERENCE");
   IElementType BINARY_ADD_SUB_EXPRESSION = new BallerinaCompositeElementType("BINARY_ADD_SUB_EXPRESSION");
   IElementType BINARY_AND_EXPRESSION = new BallerinaCompositeElementType("BINARY_AND_EXPRESSION");
   IElementType BINARY_COMPARE_EXPRESSION = new BallerinaCompositeElementType("BINARY_COMPARE_EXPRESSION");
@@ -507,6 +507,9 @@ public interface BallerinaTypes {
       else if (type == ACTION_INVOCATION) {
         return new BallerinaActionInvocationImpl(node);
       }
+      else if (type == ACTION_INVOCATION_EXPRESSION) {
+        return new BallerinaActionInvocationExpressionImpl(node);
+      }
       else if (type == AGGREGATION_QUERY) {
         return new BallerinaAggregationQueryImpl(node);
       }
@@ -548,9 +551,6 @@ public interface BallerinaTypes {
       }
       else if (type == AWAIT_EXPRESSION) {
         return new BallerinaAwaitExpressionImpl(node);
-      }
-      else if (type == AWAIT_EXPRESSION_REFERENCE) {
-        return new BallerinaAwaitExpressionReferenceImpl(node);
       }
       else if (type == BINARY_ADD_SUB_EXPRESSION) {
         return new BallerinaBinaryAddSubExpressionImpl(node);
