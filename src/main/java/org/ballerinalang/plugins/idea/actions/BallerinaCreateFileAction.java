@@ -82,19 +82,19 @@ public class BallerinaCreateFileAction extends CreateFileFromTemplateAction impl
     protected void postProcess(PsiFile createdElement, String templateName, Map<String, String> customProperties) {
         if (createdElement instanceof BallerinaFile) {
             // Moving the caret to the end of the file.
-            Project project = createdElement.getProject();
-            Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-            if (editor == null) {
-                return;
-            }
-            VirtualFile virtualFile = createdElement.getContainingFile().getVirtualFile();
-            if (virtualFile == null) {
-                return;
-            }
-            PsiElement lastChild = createdElement.getLastChild();
-            if (FileDocumentManager.getInstance().getDocument(virtualFile) == editor.getDocument()) {
-                editor.getCaretModel().moveToOffset(lastChild.getTextRange().getEndOffset());
-            }
+//            Project project = createdElement.getProject();
+//            Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
+//            if (editor == null) {
+//                return;
+//            }
+//            VirtualFile virtualFile = createdElement.getContainingFile().getVirtualFile();
+//            if (virtualFile == null) {
+//                return;
+//            }
+//            PsiElement lastChild = createdElement.getLastChild();
+//            if (FileDocumentManager.getInstance().getDocument(virtualFile) == editor.getDocument()) {
+//                editor.getCaretModel().moveToOffset(lastChild.getTextRange().getEndOffset());
+//            }
         }
     }
 
