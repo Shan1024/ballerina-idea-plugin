@@ -2,9 +2,13 @@ package org.ballerinalang.plugins.idea.psi.scopeprocessors;
 
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.ballerinalang.plugins.idea.psi.BallerinaAttachedObject;
 import org.ballerinalang.plugins.idea.psi.BallerinaField;
+import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaObjectFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleVariableReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaVariableReference;
@@ -48,24 +52,53 @@ public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
                     PsiElement result = ballerinaFieldProcessor.getResult();
                     if (!isCompletion() && result != null) {
                         add(result);
+                        return false;
                     }
                 }
             } else {
                 if (prevSibling instanceof BallerinaSimpleVariableReference && "self".equals(prevSibling.getText())) {
                     BallerinaTypeDefinition ballerinaTypeDefinition = PsiTreeUtil.getParentOfType(prevSibling,
                             BallerinaTypeDefinition.class);
-                    if(ballerinaTypeDefinition!=null){
-                        BallerinaObjectFieldProcessor ballerinaFieldProcessor = new BallerinaObjectFieldProcessor(myResult,
-                                myElement, isCompletion());
-                        ballerinaFieldProcessor.execute(ballerinaTypeDefinition, ResolveState.initial());
-                        PsiElement result = ballerinaFieldProcessor.getResult();
-                        if (!isCompletion() && result != null) {
-                            add(result);
+                    if (ballerinaTypeDefinition != null) {
+                        if (!processTypeDefinition(ballerinaTypeDefinition)) {
+                            return false;
                         }
                     }
+
+                    BallerinaFunctionDefinition functionDefinition = PsiTreeUtil.getParentOfType(prevSibling,
+                            BallerinaFunctionDefinition.class);
+                    if (functionDefinition == null || functionDefinition.getAttachedObject() == null) {
+                        return true;
+                    }
+                    BallerinaAttachedObject attachedObject = functionDefinition.getAttachedObject();
+                    if (attachedObject == null) {
+                        return true;
+                    }
+                    PsiElement identifier = attachedObject.getIdentifier();
+                    PsiReference reference = identifier.getReference();
+                    if (reference == null) {
+                        return true;
+                    }
+                    PsiElement resolvedElement = reference.resolve();
+                    if (resolvedElement == null || !(resolvedElement.getParent() instanceof BallerinaTypeDefinition)) {
+                        return true;
+                    }
+
+                    return processTypeDefinition(((BallerinaTypeDefinition) resolvedElement.getParent()));
                 }
             }
+        }
+        return true;
+    }
 
+    private boolean processTypeDefinition(@NotNull BallerinaTypeDefinition ballerinaTypeDefinition) {
+        BallerinaObjectFieldProcessor ballerinaFieldProcessor =
+                new BallerinaObjectFieldProcessor(myResult, myElement, isCompletion());
+        ballerinaFieldProcessor.execute(ballerinaTypeDefinition, ResolveState.initial());
+        PsiElement result = ballerinaFieldProcessor.getResult();
+        if (!isCompletion() && result != null) {
+            add(result);
+            return false;
         }
         return true;
     }

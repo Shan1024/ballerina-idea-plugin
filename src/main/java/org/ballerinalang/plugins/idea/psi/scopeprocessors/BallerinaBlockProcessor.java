@@ -288,21 +288,23 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
             return;
         }
 
-        BallerinaAttachedObject attachedObject = ballerinaFunctionDefinition.getAttachedObject();
-        if (attachedObject != null) {
-            PsiElement identifier = callableUnitSignature.getIdentifier();
-            PsiReference reference = identifier.getReference();
-            if (reference != null) {
-                PsiElement resolvedElement = reference.resolve();
-                if (resolvedElement != null) {
-                    BallerinaObjectFunctionDefinition objectFunctionDefinition =
-                            PsiTreeUtil.getParentOfType(resolvedElement, BallerinaObjectFunctionDefinition.class);
-                    if (objectFunctionDefinition != null) {
-                        processObjectFunctionDefinition(objectFunctionDefinition);
-                    }
-                }
-            }
-        }
+        // Todo - Needed here? Cannot access without self?
+        //        BallerinaAttachedObject attachedObject = ballerinaFunctionDefinition.getAttachedObject();
+        //        if (attachedObject != null) {
+        //            PsiElement identifier = callableUnitSignature.getIdentifier();
+        //            PsiReference reference = identifier.getReference();
+        //            if (reference != null) {
+        //                PsiElement resolvedElement = reference.resolve();
+        //                if (resolvedElement != null) {
+        //                    BallerinaObjectFunctionDefinition objectFunctionDefinition =
+        //                            PsiTreeUtil.getParentOfType(resolvedElement, BallerinaObjectFunctionDefinition
+        // .class);
+        //                    if (objectFunctionDefinition != null) {
+        //                        processObjectFunctionDefinition(objectFunctionDefinition);
+        //                    }
+        //                }
+        //            }
+        //        }
 
         BallerinaFormalParameterList formalParameterList = callableUnitSignature.getFormalParameterList();
         if (formalParameterList == null) {

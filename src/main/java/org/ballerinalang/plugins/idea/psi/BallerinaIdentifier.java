@@ -70,7 +70,10 @@ public class BallerinaIdentifier extends LeafPsiElement implements PsiNameIdenti
         } else if (parent instanceof BallerinaTriggerWorker) {
             return new BallerinaNameReferenceReference(this);
         } else if (parent instanceof BallerinaObjectParameter) {
+            // Todo - Enable if needed
+            //            if (parent.getParent() instanceof BallerinaObjectParameterList) {
             return new BallerinaObjectFieldReference(this);
+            //            }
         } else if (parent instanceof BallerinaOrgName) {
             return new BallerinaOrgReference(this);
         } else if (parent instanceof BallerinaAttachedObject) {
