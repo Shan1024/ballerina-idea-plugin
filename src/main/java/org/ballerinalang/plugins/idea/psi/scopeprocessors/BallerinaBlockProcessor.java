@@ -20,6 +20,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaLambdaFunction;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectBody;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaObjectInitializer;
 import org.ballerinalang.plugins.idea.psi.BallerinaParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaParameterList;
 import org.ballerinalang.plugins.idea.psi.BallerinaParameterWithType;
@@ -168,6 +169,7 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
             }
 
             // Todo - check return value and continue only if needed
+            processObjectInit(scopeElement);
             processObjectFields(scopeElement);
             if (!isCompletion() && getResult() != null) {
                 return false;
@@ -179,6 +181,20 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
             processResourceSignature(scopeElement);
         }
         return true;
+    }
+
+    private void processObjectInit(@NotNull PsiElement scopeElement) {
+        BallerinaObjectInitializer ballerinaObjectInitializer = PsiTreeUtil.getParentOfType(scopeElement,
+                BallerinaObjectInitializer.class);
+        if (ballerinaObjectInitializer == null) {
+            return;
+        }
+        BallerinaObjectBody ballerinaObjectBody = PsiTreeUtil.getParentOfType(ballerinaObjectInitializer,
+                BallerinaObjectBody.class);
+        if (ballerinaObjectBody == null) {
+            return;
+        }
+        processObjectDefnition(ballerinaObjectBody);
     }
 
     private void processObjectFields(@NotNull PsiElement scopeElement) {
@@ -198,6 +214,10 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
             return;
         }
 
+        processObjectDefnition(ballerinaObjectBody);
+    }
+
+    private void processObjectDefnition(@NotNull BallerinaObjectBody ballerinaObjectBody) {
         BallerinaTypeDefinition ballerinaTypeDefinition = PsiTreeUtil.getParentOfType(ballerinaObjectBody,
                 BallerinaTypeDefinition.class);
         if (ballerinaTypeDefinition == null || ballerinaTypeDefinition.getIdentifier() == null) {
@@ -206,13 +226,13 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
 
         BallerinaPublicObjectFields publicObjectFields = ballerinaObjectBody.getPublicObjectFields();
         if (publicObjectFields != null) {
-            processObjectFields(ballerinaTypeDefinition.getIdentifier(),
-                    publicObjectFields.getFieldDefinitionList(), true);
+            processObjectFields(ballerinaTypeDefinition.getIdentifier(), publicObjectFields.getFieldDefinitionList(),
+                    true);
         }
         BallerinaPrivateObjectFields privateObjectFields = ballerinaObjectBody.getPrivateObjectFields();
         if (privateObjectFields != null) {
-            processObjectFields(ballerinaTypeDefinition.getIdentifier(),
-                    privateObjectFields.getFieldDefinitionList(), false);
+            processObjectFields(ballerinaTypeDefinition.getIdentifier(), privateObjectFields.getFieldDefinitionList(),
+                    false);
         }
     }
 
