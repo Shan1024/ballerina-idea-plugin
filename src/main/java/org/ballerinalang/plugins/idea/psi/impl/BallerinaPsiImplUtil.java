@@ -41,6 +41,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompositeElement;
 import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaExpression;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
@@ -323,5 +324,21 @@ public class BallerinaPsiImplUtil {
         return null;
     }
 
+    @Nullable
+    public static String formatParameterType(@Nullable BallerinaTypeName ballerinaTypeName) {
+        if (ballerinaTypeName == null) {
+            return null;
+        }
+        // Todo - Update formatting logic
+        return ballerinaTypeName.getText();
+    }
 
+    @Nullable
+    public static String formatParameterDefaultValue(@Nullable BallerinaExpression ballerinaExpression) {
+        if (ballerinaExpression == null) {
+            return null;
+        }
+        // Todo - Update formatting logic
+        return ballerinaExpression.getText();
+    }
 }

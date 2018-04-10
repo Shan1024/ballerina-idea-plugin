@@ -575,9 +575,21 @@ public class BallerinaCompletionUtils {
     }
 
     @NotNull
-    public static LookupElement createParameterLookupElement(@NotNull PsiElement element) {
+    public static LookupElement createParameterLookupElement(@NotNull PsiElement element, @Nullable String type,
+                                                             @Nullable String defaultValue) {
+        // Todo - Add support to render default value
         LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(element.getText(), element)
-                .withTypeText("Parameter").withIcon(BallerinaIcons.PARAMETER);
+                .withIcon(BallerinaIcons.PARAMETER);
+        if (type == null || type.isEmpty()) {
+            builder = builder.withTypeText("Parameter");
+        } else {
+            builder = builder.withTypeText(type, true);
+        }
+
+        if (defaultValue != null && !defaultValue.isEmpty()) {
+            builder = builder.withTailText(" ( = " + defaultValue + ")");
+        }
+
         return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
     }
 
