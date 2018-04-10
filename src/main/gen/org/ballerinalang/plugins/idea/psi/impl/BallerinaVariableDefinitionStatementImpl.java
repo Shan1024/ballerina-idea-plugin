@@ -77,4 +77,9 @@ public class BallerinaVariableDefinitionStatementImpl extends BallerinaNamedElem
     return notNullChild(findChildByType(IDENTIFIER));
   }
 
+  @Nullable
+  public BallerinaTypeName getType() {
+    return BallerinaPsiImplUtil.getType(this);
+  }
+
 }

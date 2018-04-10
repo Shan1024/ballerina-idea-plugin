@@ -26,6 +26,7 @@ import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaElementFactory;
+import org.ballerinalang.plugins.idea.psi.reference.BallerinaFieldReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaNameReferenceReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaObjectFieldReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaObjectFunctionReference;
@@ -85,6 +86,8 @@ public class BallerinaIdentifier extends LeafPsiElement implements PsiNameIdenti
                     return new BallerinaTypeReference(this);
                 }
             }
+        } else if (parent instanceof BallerinaField) {
+            return new BallerinaFieldReference(this);
         }
         return null;
     }

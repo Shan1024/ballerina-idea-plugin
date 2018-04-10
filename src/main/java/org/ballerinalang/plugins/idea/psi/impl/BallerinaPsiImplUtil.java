@@ -32,6 +32,7 @@ import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.psi.util.PsiModificationTracker;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
@@ -54,7 +55,10 @@ import org.ballerinalang.plugins.idea.psi.BallerinaPackageDeclaration;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageVersion;
+import org.ballerinalang.plugins.idea.psi.BallerinaSimpleVariableReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
+import org.ballerinalang.plugins.idea.psi.BallerinaVariableDefinitionStatement;
+import org.ballerinalang.plugins.idea.psi.BallerinaVariableReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaCompletePackageNameReferenceSet;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaPackageNameReference;
 import org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub;
@@ -198,7 +202,45 @@ public class BallerinaPsiImplUtil {
                 .createSmartPsiElementPointer(element));
     }
 
-    //
+    @Nullable
+    public static BallerinaTypeName getType(BallerinaVariableDefinitionStatement ballerinaVariableDefinitionStatement) {
+        return ballerinaVariableDefinitionStatement.getTypeName();
+    }
+
+    @Nullable
+    public static PsiElement getType(@NotNull BallerinaVariableReference ballerinaVariableReference) {
+        return CachedValuesManager.getCachedValue(ballerinaVariableReference,
+                () -> CachedValueProvider.Result.create(getBallerinaType(ballerinaVariableReference),
+                        ProjectRootManager.getInstance(ballerinaVariableReference.getProject())));
+    }
+
+    private static PsiElement getBallerinaType(@NotNull BallerinaVariableReference ballerinaVariableReference) {
+        if (ballerinaVariableReference instanceof BallerinaSimpleVariableReference) {
+            BallerinaNameReference nameReference =
+                    ((BallerinaSimpleVariableReference) ballerinaVariableReference).getNameReference();
+            PsiElement identifier = nameReference.getIdentifier();
+            PsiReference reference = identifier.getReference();
+            if (reference == null) {
+                return null;
+            }
+            PsiElement resolvedElement = reference.resolve();
+            if (resolvedElement == null) {
+                return null;
+            }
+            PsiElement parent = resolvedElement.getParent();
+            if (parent instanceof BallerinaVariableDefinitionStatement) {
+                BallerinaTypeName type = ((BallerinaVariableDefinitionStatement) parent).getTypeName();
+
+                reference = type.findReferenceAt(type.getTextLength());
+                if (reference == null) {
+                    return null;
+                }
+                return reference.resolve();
+            }
+        }
+        return null;
+    }
+
     public static boolean processDeclarations(@NotNull BallerinaCompositeElement o,
                                               @NotNull PsiScopeProcessor processor,
                                               @NotNull ResolveState state,

@@ -6,11 +6,13 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.util.ProcessingContext;
+import org.ballerinalang.plugins.idea.psi.reference.BallerinaFieldReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaNameReferenceReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaObjectFieldReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaObjectFunctionReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaTypeReference;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaBlockProcessor;
+import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaFieldProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaObjectFieldProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaObjectFunctionProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaTopLevelScopeProcessor;
@@ -29,7 +31,7 @@ public class BallerinaReferenceCompletionProvider extends CompletionProvider<Com
         if (reference == null) {
             return;
         }
-
+        // Todo - Refactor
         if (reference instanceof BallerinaNameReferenceReference) {
             BallerinaNameReferenceReference nameReferenceReference = (BallerinaNameReferenceReference) reference;
             if (!nameReferenceReference.processResolveVariants(new BallerinaBlockProcessor(result, element, true))) {
@@ -40,11 +42,15 @@ public class BallerinaReferenceCompletionProvider extends CompletionProvider<Com
             BallerinaTypeReference ballerinaTypeReference = (BallerinaTypeReference) reference;
             ballerinaTypeReference.processResolveVariants(new BallerinaTypeProcessor(result, element));
         } else if (reference instanceof BallerinaObjectFunctionReference) {
-            BallerinaObjectFunctionReference ballerinaTypeReference = (BallerinaObjectFunctionReference) reference;
-            ballerinaTypeReference.processResolveVariants(new BallerinaObjectFunctionProcessor(result, element, false));
-        }else if (reference instanceof BallerinaObjectFieldReference) {
-            BallerinaObjectFieldReference ballerinaTypeReference = (BallerinaObjectFieldReference) reference;
-            ballerinaTypeReference.processResolveVariants(new BallerinaObjectFieldProcessor(result, element, false));
+            BallerinaObjectFunctionReference objectFunctionReference = (BallerinaObjectFunctionReference) reference;
+            objectFunctionReference.processResolveVariants(new BallerinaObjectFunctionProcessor(result, element,
+                    false));
+        } else if (reference instanceof BallerinaObjectFieldReference) {
+            BallerinaObjectFieldReference objectFieldReference = (BallerinaObjectFieldReference) reference;
+            objectFieldReference.processResolveVariants(new BallerinaObjectFieldProcessor(result, element, false));
+        } else if (reference instanceof BallerinaFieldReference) {
+            BallerinaFieldReference fieldReference = (BallerinaFieldReference) reference;
+            fieldReference.processResolveVariants(new BallerinaFieldProcessor(result, element, false));
         }
     }
 }

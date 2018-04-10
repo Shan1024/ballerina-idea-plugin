@@ -613,12 +613,12 @@ public class BallerinaCompletionUtils {
                                                          @NotNull String type, @Nullable String defaultValue,
                                                          boolean isPublic) {
         LookupElementBuilder lookupElementBuilder = LookupElementBuilder.createWithSmartPointer(fieldName.getText(),
-                fieldName).withTypeText(type);
+                fieldName).withTypeText(type).bold();
 
         if (defaultValue == null || defaultValue.isEmpty()) {
             lookupElementBuilder = lookupElementBuilder.withTailText(" -> " + ownerName.getText(), true);
         }else{
-            String tailText = " ( = " + defaultValue + " ) -> " + ownerName.getText();
+            String tailText = "(= " + defaultValue + ") -> " + ownerName.getText();
             lookupElementBuilder = lookupElementBuilder.withTailText(tailText, true);
         }
 

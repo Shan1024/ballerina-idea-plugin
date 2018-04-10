@@ -7,6 +7,7 @@ import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
+import org.ballerinalang.plugins.idea.psi.reference.BallerinaFieldReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaNameReferenceReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaObjectFieldReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaObjectFunctionReference;
@@ -22,6 +23,7 @@ public class BallerinaCompletionContributor extends CompletionContributor {
         extend(CompletionType.BASIC, isBallerinaTypeReference(), new BallerinaReferenceCompletionProvider());
         extend(CompletionType.BASIC, isBallerinaObjectFunctionReference(), new BallerinaReferenceCompletionProvider());
         extend(CompletionType.BASIC, isBallerinaObjectFieldReference(), new BallerinaReferenceCompletionProvider());
+        extend(CompletionType.BASIC, isBallerinaFieldReference(), new BallerinaReferenceCompletionProvider());
     }
 
     @Override
@@ -43,6 +45,10 @@ public class BallerinaCompletionContributor extends CompletionContributor {
 
     public PsiElementPattern.Capture<PsiElement> isBallerinaObjectFieldReference() {
         return psiElement().withReference(BallerinaObjectFieldReference.class);
+    }
+
+    public PsiElementPattern.Capture<PsiElement> isBallerinaFieldReference() {
+        return psiElement().withReference(BallerinaFieldReference.class);
     }
 
     @Override

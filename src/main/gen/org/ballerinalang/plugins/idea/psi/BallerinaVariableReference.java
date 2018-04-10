@@ -23,4 +23,7 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaVariableReference extends BallerinaCompositeElement {
 
+  @Nullable
+  PsiElement getType();
+
 }

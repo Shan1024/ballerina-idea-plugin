@@ -30,7 +30,7 @@ public interface BallerinaServiceBody extends BallerinaCompositeElement {
   List<BallerinaResourceDefinition> getResourceDefinitionList();
 
   @NotNull
-  List<BallerinaVariableDefinitionStatementInService> getVariableDefinitionStatementInServiceList();
+  List<BallerinaVariableDefinitionStatement> getVariableDefinitionStatementList();
 
   @NotNull
   PsiElement getLeftBrace();

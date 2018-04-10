@@ -862,10 +862,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitNamedElement(o);
   }
 
-  public void visitVariableDefinitionStatementInService(@NotNull BallerinaVariableDefinitionStatementInService o) {
-    visitCompositeElement(o);
-  }
-
   public void visitVariableReference(@NotNull BallerinaVariableReference o) {
     visitCompositeElement(o);
   }

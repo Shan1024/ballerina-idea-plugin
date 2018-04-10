@@ -41,4 +41,9 @@ public abstract class BallerinaVariableReferenceImpl extends BallerinaCompositeE
     else super.accept(visitor);
   }
 
+  @Nullable
+  public PsiElement getType() {
+    return BallerinaPsiImplUtil.getType(this);
+  }
+
 }

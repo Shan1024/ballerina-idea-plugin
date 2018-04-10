@@ -40,4 +40,7 @@ public interface BallerinaVariableDefinitionStatement extends BallerinaNamedElem
   @NotNull
   PsiElement getIdentifier();
 
+  @Nullable
+  BallerinaTypeName getType();
+
 }

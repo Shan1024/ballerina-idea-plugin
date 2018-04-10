@@ -55,8 +55,8 @@ public class BallerinaServiceBodyImpl extends BallerinaCompositeElementImpl impl
 
   @Override
   @NotNull
-  public List<BallerinaVariableDefinitionStatementInService> getVariableDefinitionStatementInServiceList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaVariableDefinitionStatementInService.class);
+  public List<BallerinaVariableDefinitionStatement> getVariableDefinitionStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaVariableDefinitionStatement.class);
   }
 
   @Override

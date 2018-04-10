@@ -259,7 +259,6 @@ public interface BallerinaTypes {
   IElementType VALUE_TYPE_NAME = new BallerinaCompositeElementType("VALUE_TYPE_NAME");
   IElementType VALUE_TYPE_TYPE_EXPRESSION = new BallerinaCompositeElementType("VALUE_TYPE_TYPE_EXPRESSION");
   IElementType VARIABLE_DEFINITION_STATEMENT = BallerinaElementTypeFactory.stubFactory("VARIABLE_DEFINITION_STATEMENT");
-  IElementType VARIABLE_DEFINITION_STATEMENT_IN_SERVICE = new BallerinaCompositeElementType("VARIABLE_DEFINITION_STATEMENT_IN_SERVICE");
   IElementType VARIABLE_REFERENCE = new BallerinaCompositeElementType("VARIABLE_REFERENCE");
   IElementType VARIABLE_REFERENCE_EXPRESSION = new BallerinaCompositeElementType("VARIABLE_REFERENCE_EXPRESSION");
   IElementType VARIABLE_REFERENCE_LIST = new BallerinaCompositeElementType("VARIABLE_REFERENCE_LIST");
@@ -1199,9 +1198,6 @@ public interface BallerinaTypes {
       }
       else if (type == VARIABLE_DEFINITION_STATEMENT) {
         return new BallerinaVariableDefinitionStatementImpl(node);
-      }
-      else if (type == VARIABLE_DEFINITION_STATEMENT_IN_SERVICE) {
-        return new BallerinaVariableDefinitionStatementInServiceImpl(node);
       }
       else if (type == VARIABLE_REFERENCE_EXPRESSION) {
         return new BallerinaVariableReferenceExpressionImpl(node);
