@@ -47,7 +47,7 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                                 // Note - Child is passed here instead of identifier because it is is top level
                                 // definition.
                                 myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(child,
-                                        ParenthesisInsertHandler.INSTANCE_WITH_AUTO_POPUP));
+                                        ParenthesisInsertHandler.INSTANCE));
                             } else if (myElement.getText().equals(identifier.getText())) {
                                 add(identifier);
                             }

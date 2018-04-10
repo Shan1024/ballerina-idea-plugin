@@ -359,7 +359,7 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
             // Todo - Refactor code
             if (element instanceof BallerinaFunctionDefinition) {
                 results.add(BallerinaCompletionUtils.createFunctionLookupElement(element,
-                        ParenthesisInsertHandler.INSTANCE_WITH_AUTO_POPUP));
+                        ParenthesisInsertHandler.INSTANCE));
             } else if (element instanceof BallerinaGlobalVariableDefinition) {
                 results.add(BallerinaCompletionUtils.createGlobalVariableLookupElement(element));
             } else if (element instanceof BallerinaTypeDefinition) {

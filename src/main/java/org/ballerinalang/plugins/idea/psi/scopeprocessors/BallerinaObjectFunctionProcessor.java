@@ -46,7 +46,7 @@ public class BallerinaObjectFunctionProcessor extends BallerinaScopeProcessorBas
                 PsiElement identifier = objectCallableUnitSignature.getIdentifier();
                 if (myResult != null) {
                     myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(identifier,
-                            ParenthesisInsertHandler.INSTANCE_WITH_AUTO_POPUP));
+                            ParenthesisInsertHandler.INSTANCE));
                 } else if (myElement.getText().equals(identifier.getText())) {
                     add(identifier);
                 }

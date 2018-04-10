@@ -5,6 +5,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
+import org.ballerinalang.plugins.idea.psi.BallerinaAnyTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaAttachedObject;
 import org.ballerinalang.plugins.idea.psi.BallerinaField;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
@@ -14,7 +16,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaVariableReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
+public class BallerinaInvocationProcessor extends BallerinaScopeProcessorBase {
 
     @Nullable
     private final CompletionResultSet myResult;
@@ -22,8 +24,8 @@ public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
     private final PsiElement myElement;
     private int count;
 
-    public BallerinaFieldProcessor(@Nullable CompletionResultSet result, @NotNull PsiElement element,
-                                   boolean isCompletion) {
+    public BallerinaInvocationProcessor(@Nullable CompletionResultSet result, @NotNull PsiElement element,
+                                        boolean isCompletion) {
         super(element, element, isCompletion);
         myResult = result;
         myElement = element;
@@ -33,7 +35,14 @@ public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
     public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
         if (accept(element)) {
             PsiElement parent = element.getParent();
-            PsiElement prevSibling = parent.getPrevSibling();
+            if(parent==null){
+                return true;
+            }
+            PsiElement superParent = parent.getParent();
+            if(superParent==null){
+                return true;
+            }
+            PsiElement prevSibling = superParent.getPrevSibling();
             if (prevSibling == null || !(prevSibling instanceof BallerinaVariableReference)) {
                 return true;
             }
@@ -41,7 +50,8 @@ public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
             PsiElement type = ((BallerinaVariableReference) prevSibling).getType();
             long end = System.nanoTime();
             System.out.println("Time: " + (end - start));
-            // Todo - Refactor and remove duplication in BallerinaInvocationProcessor
+
+            // Todo - Refactor and remove duplication in BallerinaFieldProcessor
             if (type != null) {
                 PsiElement ballerinaTypeDefinition = type.getParent();
                 if (ballerinaTypeDefinition instanceof BallerinaTypeDefinition) {
@@ -90,21 +100,20 @@ public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
     }
 
     private boolean processTypeDefinition(@NotNull BallerinaTypeDefinition ballerinaTypeDefinition) {
-        BallerinaObjectFieldProcessor ballerinaFieldProcessor =
-                new BallerinaObjectFieldProcessor(myResult, myElement, isCompletion());
-        ballerinaFieldProcessor.execute(ballerinaTypeDefinition, ResolveState.initial());
-        PsiElement result = ballerinaFieldProcessor.getResult();
-        if (!isCompletion() && result != null) {
-            add(result);
-            return false;
-        }
+        //        BallerinaObjectFieldProcessor ballerinaFieldProcessor =
+        //                new BallerinaObjectFieldProcessor(myResult, myElement, isCompletion());
+        //        ballerinaFieldProcessor.execute(ballerinaTypeDefinition, ResolveState.initial());
+        //        PsiElement result = ballerinaFieldProcessor.getResult();
+        //        if (!isCompletion() && result != null) {
+        //            add(result);
+        //            return false;
+        //        }
 
-        // Note - This is needed for code completion.
-        // Todo - Remove duplication in BallerinaInvocationProcessor
+        // Todo - Remove duplication in BallerinaFieldProcessor
         BallerinaObjectFunctionProcessor ballerinaObjectFunctionProcessor
                 = new BallerinaObjectFunctionProcessor(myResult, myElement, isCompletion());
         ballerinaObjectFunctionProcessor.execute(ballerinaTypeDefinition, ResolveState.initial());
-        result = ballerinaObjectFunctionProcessor.getResult();
+        PsiElement result = ballerinaObjectFunctionProcessor.getResult();
         if (!isCompletion() && result != null) {
             add(result);
             return false;
@@ -114,7 +123,7 @@ public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
 
 
     protected boolean accept(@NotNull PsiElement element) {
-        return element.getParent() instanceof BallerinaField;
+        return element.getParent() instanceof BallerinaAnyIdentifierName;
     }
 
     @Override
