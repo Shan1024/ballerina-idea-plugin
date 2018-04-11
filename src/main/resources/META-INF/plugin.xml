@@ -99,15 +99,15 @@
         <liveTemplateContext implementation="org.ballerinalang.plugins.idea.template.BallerinaCodeContextType$File"/>
         <liveTemplateContext implementation="org.ballerinalang.plugins.idea.template.BallerinaCodeContextType$Service"/>
         <!--<liveTemplateContext-->
-                <!--implementation="org.ballerinalang.plugins.idea.template.BallerinaCodeContextType$Resource"/>-->
+        <!--implementation="org.ballerinalang.plugins.idea.template.BallerinaCodeContextType$Resource"/>-->
         <!--<liveTemplateContext-->
-                <!--implementation="org.ballerinalang.plugins.idea.template.BallerinaCodeContextType$Connector"/>-->
+        <!--implementation="org.ballerinalang.plugins.idea.template.BallerinaCodeContextType$Connector"/>-->
         <!--<liveTemplateContext-->
-                <!--implementation="org.ballerinalang.plugins.idea.template.BallerinaCodeContextType$Action"/>-->
+        <!--implementation="org.ballerinalang.plugins.idea.template.BallerinaCodeContextType$Action"/>-->
         <liveTemplateContext
                 implementation="org.ballerinalang.plugins.idea.template.BallerinaCodeContextType$Function"/>
         <!--<liveTemplateContext-->
-                <!--implementation="org.ballerinalang.plugins.idea.template.BallerinaCodeContextType$ForkJoin"/>-->
+        <!--implementation="org.ballerinalang.plugins.idea.template.BallerinaCodeContextType$ForkJoin"/>-->
 
         <!--formatter-->
         <lang.formatter language="Ballerina"
@@ -160,6 +160,9 @@
         <!--implementationClass="org.ballerinalang.plugins.idea.runconfig.BallerinaTestLineMarkerProvider"/>-->
 
         <console.folding implementation="org.ballerinalang.plugins.idea.runconfig.BallerinaConsoleFolding"/>
+
+        <codeInsight.template.postfixTemplateProvider language="Ballerina"
+                                                      implementationClass="org.ballerinalang.plugins.idea.codeinsight.template.postfix.BallerinaPostfixTemplateProvider"/>
 
     </extensions>
     <actions>

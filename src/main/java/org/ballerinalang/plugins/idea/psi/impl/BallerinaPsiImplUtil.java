@@ -286,12 +286,16 @@ public class BallerinaPsiImplUtil {
     @Nullable
     public static PsiElement resolveBallerinaType(@NotNull BallerinaVariableDefinitionStatement statement) {
         BallerinaTypeName type = statement.getTypeName();
-
         PsiReference reference = type.findReferenceAt(type.getTextLength());
         if (reference == null) {
-            return null;
+            return type;
         }
-        return reference.resolve();
+        PsiElement resolvedElement = reference.resolve();
+        if (resolvedElement != null) {
+            return resolvedElement;
+        } else {
+            return type;
+        }
     }
 
     @Nullable
