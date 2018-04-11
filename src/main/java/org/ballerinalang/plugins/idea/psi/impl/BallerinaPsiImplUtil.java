@@ -37,6 +37,7 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
 import org.ballerinalang.plugins.idea.psi.BallerinaAlias;
+import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompositeElement;
@@ -48,6 +49,9 @@ import org.ballerinalang.plugins.idea.psi.BallerinaFieldVariableReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFormalParameterList;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaFunctionInvocation;
+import org.ballerinalang.plugins.idea.psi.BallerinaFunctionInvocationReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaFunctionNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaImportDeclaration;
@@ -59,6 +63,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaPackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageVersion;
 import org.ballerinalang.plugins.idea.psi.BallerinaParameterWithType;
+import org.ballerinalang.plugins.idea.psi.BallerinaReturnParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaReturnType;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleVariableReference;
@@ -200,6 +205,14 @@ public class BallerinaPsiImplUtil {
         return ballerinaNameReference.getPackageReference() == null;
     }
 
+    public static boolean isInLocalPackage(@NotNull BallerinaFunctionNameReference nameReference) {
+        //        PsiElement resolve = ballerinaNameReference.resolve();
+        //        if (resolve instanceof GoTypeSpec) return ((GoTypeSpec) resolve).getSpecType();
+        //        // hacky C resolve
+        //        return resolve == ballerinaNameReference ? new GoCType(ballerinaNameReference) : null;
+        return nameReference.getPackageReference() == null;
+    }
+
     @Nullable
     public static PsiElement getContextElement(@Nullable ResolveState state) {
         SmartPsiElementPointer<PsiElement> context = state != null ? state.get(CONTEXT) : null;
@@ -239,10 +252,10 @@ public class BallerinaPsiImplUtil {
     }
 
     @Nullable
-    private static PsiElement getBallerinaType(@NotNull BallerinaVariableReference ballerinaVariableReference) {
-        if (ballerinaVariableReference instanceof BallerinaSimpleVariableReference) {
+    private static PsiElement getBallerinaType(@NotNull BallerinaVariableReference variableReference) {
+        if (variableReference instanceof BallerinaSimpleVariableReference) {
             BallerinaNameReference nameReference =
-                    ((BallerinaSimpleVariableReference) ballerinaVariableReference).getNameReference();
+                    ((BallerinaSimpleVariableReference) variableReference).getNameReference();
             PsiElement identifier = nameReference.getIdentifier();
             PsiReference reference = identifier.getReference();
             if (reference == null) {
@@ -261,8 +274,8 @@ public class BallerinaPsiImplUtil {
             } else if (parent instanceof BallerinaParameterWithType) {
                 return getTypeNameFromParameter(((BallerinaParameterWithType) parent));
             }
-        } else if (ballerinaVariableReference instanceof BallerinaFieldVariableReference) {
-            BallerinaField field = ((BallerinaFieldVariableReference) ballerinaVariableReference).getField();
+        } else if (variableReference instanceof BallerinaFieldVariableReference) {
+            BallerinaField field = ((BallerinaFieldVariableReference) variableReference).getField();
             PsiElement identifier = field.getIdentifier();
             if (identifier == null) {
                 return null;
@@ -279,6 +292,21 @@ public class BallerinaPsiImplUtil {
             if (parent instanceof BallerinaFieldDefinition) {
                 return getTypeNameFromField(((BallerinaFieldDefinition) parent));
             }
+        } else if (variableReference instanceof BallerinaFunctionInvocationReference) {
+//            BallerinaFunctionInvocationReference functionInvocationReference = (BallerinaFunctionInvocationReference)
+//                    variableReference;
+//            BallerinaFunctionInvocation functionInvocation = functionInvocationReference.getFunctionInvocation();
+//            BallerinaFunctionNameReference functionNameReference = functionInvocation.getFunctionNameReference();
+//            BallerinaAnyIdentifierName anyIdentifierName = functionNameReference.getAnyIdentifierName();
+//            PsiElement identifier = anyIdentifierName.getIdentifier();
+//            PsiReference reference = identifier.getReference();
+//            PsiElement resolvedElement = reference.resolve();
+//            BallerinaFunctionDefinition functionDefinitionName =
+//                    (BallerinaFunctionDefinition)resolvedElement.getParent();
+//            BallerinaCallableUnitSignature callableUnitSignature = functionDefinitionName.getCallableUnitSignature();
+//            BallerinaReturnParameter returnParameter = callableUnitSignature.getReturnParameter();
+//          return   returnParameter.getReturnType();
+
         }
         return null;
     }

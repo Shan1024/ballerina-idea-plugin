@@ -27,9 +27,16 @@ public interface BallerinaFunctionNameReference extends BallerinaCompositeElemen
   BallerinaAnyIdentifierName getAnyIdentifierName();
 
   @Nullable
-  PsiElement getColon();
+  BallerinaPackageReference getPackageReference();
 
-  @Nullable
-  PsiElement getIdentifier();
+  //WARNING: getQualifier(...) is skipped
+  //matching getQualifier(BallerinaFunctionNameReference, ...)
+  //methods are not found in BallerinaPsiImplUtil
+
+  //WARNING: resolveType(...) is skipped
+  //matching resolveType(BallerinaFunctionNameReference, ...)
+  //methods are not found in BallerinaPsiImplUtil
+
+  boolean isInLocalPackage();
 
 }

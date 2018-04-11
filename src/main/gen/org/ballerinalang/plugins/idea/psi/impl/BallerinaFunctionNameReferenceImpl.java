@@ -49,14 +49,12 @@ public class BallerinaFunctionNameReferenceImpl extends BallerinaCompositeElemen
 
   @Override
   @Nullable
-  public PsiElement getColon() {
-    return findChildByType(COLON);
+  public BallerinaPackageReference getPackageReference() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaPackageReference.class);
   }
 
-  @Override
-  @Nullable
-  public PsiElement getIdentifier() {
-    return findChildByType(IDENTIFIER);
+  public boolean isInLocalPackage() {
+    return BallerinaPsiImplUtil.isInLocalPackage(this);
   }
 
 }

@@ -23,8 +23,10 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
 import org.ballerinalang.plugins.idea.psi.BallerinaBlock;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
+import org.ballerinalang.plugins.idea.psi.BallerinaFunctionNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
@@ -80,13 +82,20 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
         if (!(containingFile instanceof BallerinaFile)) {
             return false;
         }
-
-        if (myElement instanceof BallerinaNameReference) {
-            return true;
+        boolean inLocalPackage = true;
+        PsiElement parent = myElement.getParent();
+        if (parent instanceof BallerinaNameReference) {
+            BallerinaNameReference nameReference = (BallerinaNameReference) parent;
+            inLocalPackage = nameReference.isInLocalPackage();
+        } else if (parent instanceof BallerinaAnyIdentifierName) {
+            PsiElement prevSibling = parent.getPrevSibling();
+            if (prevSibling instanceof BallerinaPackageReference) {
+                inLocalPackage = false;
+            }
         }
 
-        BallerinaNameReference nameReference = (BallerinaNameReference) myElement.getParent();
-        if (nameReference.isInLocalPackage()) {
+
+        if (inLocalPackage) {
             // Note - Execute BallerinaStatementProcessor first.
             BallerinaStatement ballerinaStatement = PsiTreeUtil.getParentOfType(myElement, BallerinaStatement.class);
             if (ballerinaStatement != null && processor instanceof BallerinaStatementProcessor) {
@@ -116,7 +125,17 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
                 recursivelyFindOutwards(processor, originalFile.getContainingDirectory(), originalFile);
             }
         } else {
-            BallerinaPackageReference packageReference = nameReference.getPackageReference();
+            BallerinaPackageReference packageReference = null;
+
+            if (parent instanceof BallerinaAnyIdentifierName) {
+                PsiElement prevSibling = parent.getPrevSibling();
+                if (prevSibling instanceof BallerinaPackageReference) {
+                    packageReference = ((BallerinaPackageReference) prevSibling);
+                }
+            } else if (parent instanceof BallerinaNameReference) {
+                packageReference = ((BallerinaNameReference) parent).getPackageReference();
+            }
+
             if (packageReference == null) {
                 return false;
             }
@@ -130,8 +149,6 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
             }
             return recursivelyFindInPackage(processor, ((PsiDirectory) resolvedElement));
         }
-
-
         return true;
     }
 

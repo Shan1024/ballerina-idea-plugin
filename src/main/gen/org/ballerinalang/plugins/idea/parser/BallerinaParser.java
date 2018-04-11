@@ -6938,7 +6938,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // (identifier COLON)? AnyIdentifierName
+  // PackageReference? AnyIdentifierName
   public static boolean functionNameReference(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "functionNameReference")) return false;
     boolean r;
@@ -6949,21 +6949,11 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // (identifier COLON)?
+  // PackageReference?
   private static boolean functionNameReference_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "functionNameReference_0")) return false;
-    functionNameReference_0_0(b, l + 1);
+    PackageReference(b, l + 1);
     return true;
-  }
-
-  // identifier COLON
-  private static boolean functionNameReference_0_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "functionNameReference_0_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, IDENTIFIER, COLON);
-    exit_section_(b, m, null, r);
-    return r;
   }
 
   /* ********************************************************** */

@@ -703,7 +703,9 @@ NameReference ::= <<isPackageExpected>> PackageReference identifier | identifier
 //    elementType=test
 }
 
-functionNameReference ::= (identifier COLON)? AnyIdentifierName
+functionNameReference ::= PackageReference? AnyIdentifierName {
+    methods=[/*getReference*/ getQualifier /*resolve*/ resolveType isInLocalPackage]
+}
 
 PackageReference ::= identifier COLON {
     pin=2
