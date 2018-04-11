@@ -5,11 +5,20 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
+import org.ballerinalang.plugins.idea.psi.BallerinaExpression;
+import org.ballerinalang.plugins.idea.psi.BallerinaIntRangeExpression;
+import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaNamedPattern;
 import org.ballerinalang.plugins.idea.psi.BallerinaRecordKey;
+import org.ballerinalang.plugins.idea.psi.BallerinaRecordKeyValue;
+import org.ballerinalang.plugins.idea.psi.BallerinaRecordLiteralExpression;
+import org.ballerinalang.plugins.idea.psi.BallerinaSimpleVariableReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaVariableDefinitionStatement;
+import org.ballerinalang.plugins.idea.psi.BallerinaVariableReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaVariableReferenceExpression;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaStatementImpl;
 import org.jetbrains.annotations.NotNull;
@@ -38,6 +47,32 @@ public class BallerinaStatementProcessor extends BallerinaScopeProcessorBase {
             BallerinaRecordKey ballerinaRecordKey = PsiTreeUtil.getParentOfType(myElement, BallerinaRecordKey.class);
             // Todo - Check for record literal expression to find other types.
             if (ballerinaRecordKey != null) {
+
+                BallerinaRecordLiteralExpression literalExpression = PsiTreeUtil.getParentOfType(ballerinaRecordKey,
+                        BallerinaRecordLiteralExpression.class);
+                if (literalExpression != null && literalExpression.getParent() instanceof BallerinaRecordKeyValue) {
+
+                    BallerinaRecordKeyValue expressionParent = (BallerinaRecordKeyValue) literalExpression.getParent();
+                    BallerinaRecordKey parentRecordKey = expressionParent.getRecordKey();
+
+
+                    BallerinaExpression expression = parentRecordKey.getExpression();
+                    PsiElement resolvedElement = BallerinaPsiImplUtil.getBallerinaType(expression);
+
+                    if (resolvedElement != null && resolvedElement.getParent() instanceof BallerinaTypeDefinition) {
+                        BallerinaObjectFieldProcessor ballerinaFieldProcessor = new BallerinaObjectFieldProcessor
+                                (myResult, myElement, isCompletion());
+                        ballerinaFieldProcessor.execute(resolvedElement.getParent(), ResolveState.initial());
+                        PsiElement result = ballerinaFieldProcessor.getResult();
+                        if (!isCompletion() && result != null) {
+                            add(result);
+                            return false;
+                        }
+                    }
+                    return false;
+
+                }
+
                 if (statement.getFirstChild() instanceof BallerinaVariableDefinitionStatement) {
                     PsiElement resolvedElement = BallerinaPsiImplUtil.resolveBallerinaType((
                             (BallerinaVariableDefinitionStatement) statement.getFirstChild()));
