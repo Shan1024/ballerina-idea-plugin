@@ -42,9 +42,9 @@ public class BallerinaActionInvocationImpl extends BallerinaCompositeElementImpl
   }
 
   @Override
-  @NotNull
+  @Nullable
   public BallerinaFunctionInvocation getFunctionInvocation() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaFunctionInvocation.class));
+    return PsiTreeUtil.getChildOfType(this, BallerinaFunctionInvocation.class);
   }
 
   @Override

@@ -727,29 +727,24 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // async? NameReference RARROW FunctionInvocation {/*pin=3 recoverWhile=StatementRecover*/}
+  // async? NameReference RARROW FunctionInvocation
   public static boolean ActionInvocation(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ActionInvocation")) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, ACTION_INVOCATION, "<action invocation>");
     r = ActionInvocation_0(b, l + 1);
     r = r && NameReference(b, l + 1);
     r = r && consumeToken(b, RARROW);
+    p = r; // pin = 3
     r = r && FunctionInvocation(b, l + 1);
-    r = r && ActionInvocation_4(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // async?
   private static boolean ActionInvocation_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ActionInvocation_0")) return false;
     consumeToken(b, ASYNC);
-    return true;
-  }
-
-  // {/*pin=3 recoverWhile=StatementRecover*/}
-  private static boolean ActionInvocation_4(PsiBuilder b, int l) {
     return true;
   }
 

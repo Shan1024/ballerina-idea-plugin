@@ -576,7 +576,7 @@ InvocationArgList ::= InvocationArg (COMMA InvocationArg)* {pin(".*")=1}
 InvocationArg ::= NamedArgs | RestArgs | Expression
 
 // Todo - Update the recovery rule
-ActionInvocation ::= async? NameReference RARROW FunctionInvocation {/*pin=3 recoverWhile=StatementRecover*/}
+ActionInvocation ::= async? NameReference RARROW FunctionInvocation {pin=3 /*recoverWhile=StatementRecover*/}
 
 ExpressionList ::= Expression (COMMA Expression)* {
     pin(".*")=1

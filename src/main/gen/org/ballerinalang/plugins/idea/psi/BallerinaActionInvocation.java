@@ -23,7 +23,7 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaActionInvocation extends BallerinaCompositeElement {
 
-  @NotNull
+  @Nullable
   BallerinaFunctionInvocation getFunctionInvocation();
 
   @NotNull
