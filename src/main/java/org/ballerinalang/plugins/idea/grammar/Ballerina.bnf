@@ -319,11 +319,11 @@ FiniteTypeUnit ::= SimpleLiteral | TypeName
 
 //todo
 TypeName ::= TupleTypeName
+             | SimpleTypeName
              | GroupTypeName
              | ArrayTypeName
              | UnionTypeName
              | ObjectTypeName
-             | SimpleTypeName
 //             | AnnotatedTypeName
              | NullableTypeName
              | RecordTypeName

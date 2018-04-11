@@ -7873,11 +7873,11 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // Expression root: TypeName
   // Operator priority table:
   // 0: ATOM(TupleTypeName)
-  // 1: PREFIX(GroupTypeName)
-  // 2: POSTFIX(ArrayTypeName)
-  // 3: N_ARY(UnionTypeName)
-  // 4: ATOM(ObjectTypeName)
-  // 5: ATOM(SimpleTypeName)
+  // 1: ATOM(SimpleTypeName)
+  // 2: PREFIX(GroupTypeName)
+  // 3: POSTFIX(ArrayTypeName)
+  // 4: N_ARY(UnionTypeName)
+  // 5: ATOM(ObjectTypeName)
   // 6: POSTFIX(NullableTypeName)
   // 7: ATOM(RecordTypeName)
   public static boolean TypeName(PsiBuilder b, int l, int g) {
@@ -7886,9 +7886,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, "<type name>");
     r = TupleTypeName(b, l + 1);
+    if (!r) r = SimpleTypeName(b, l + 1);
     if (!r) r = GroupTypeName(b, l + 1);
     if (!r) r = ObjectTypeName(b, l + 1);
-    if (!r) r = SimpleTypeName(b, l + 1);
     if (!r) r = RecordTypeName(b, l + 1);
     p = r;
     r = r && TypeName_0(b, l + 1, g);
@@ -7901,13 +7901,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     boolean r = true;
     while (true) {
       Marker m = enter_section_(b, l, _LEFT_, null);
-      if (g < 2 && ArrayTypeName_0(b, l + 1)) {
+      if (g < 3 && ArrayTypeName_0(b, l + 1)) {
         r = true;
         exit_section_(b, l, m, ARRAY_TYPE_NAME, r, true, null);
       }
-      else if (g < 3 && consumeTokenSmart(b, PIPE)) {
+      else if (g < 4 && consumeTokenSmart(b, PIPE)) {
         while (true) {
-          r = report_error_(b, TypeName(b, l, 3));
+          r = report_error_(b, TypeName(b, l, 4));
           if (!consumeTokenSmart(b, PIPE)) break;
         }
         exit_section_(b, l, m, UNION_TYPE_NAME, r, true, null);
@@ -7961,6 +7961,26 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
+  // NULL_LITERAL
+  //                    | AnyTypeName
+  //                    | TypeDescTypeName
+  //                    | ValueTypeName
+  //                    | ReferenceTypeName
+  //                    | EmptyTupleLiteral
+  public static boolean SimpleTypeName(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "SimpleTypeName")) return false;
+    boolean r;
+    Marker m = enter_section_(b, l, _NONE_, SIMPLE_TYPE_NAME, "<simple type name>");
+    r = consumeTokenSmart(b, NULL_LITERAL);
+    if (!r) r = AnyTypeName(b, l + 1);
+    if (!r) r = TypeDescTypeName(b, l + 1);
+    if (!r) r = ValueTypeName(b, l + 1);
+    if (!r) r = ReferenceTypeName(b, l + 1);
+    if (!r) r = EmptyTupleLiteral(b, l + 1);
+    exit_section_(b, l, m, r, false, null);
+    return r;
+  }
+
   public static boolean GroupTypeName(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "GroupTypeName")) return false;
     if (!nextTokenIsSmart(b, LEFT_PARENTHESIS)) return false;
@@ -7968,7 +7988,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     Marker m = enter_section_(b, l, _NONE_, null);
     r = consumeTokenSmart(b, LEFT_PARENTHESIS);
     p = r;
-    r = p && TypeName(b, l, 1);
+    r = p && TypeName(b, l, 2);
     r = p && report_error_(b, consumeToken(b, RIGHT_PARENTHESIS)) && r;
     exit_section_(b, l, m, GROUP_TYPE_NAME, r, p, null);
     return r || p;
@@ -8012,26 +8032,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     r = p && consumeToken(b, RIGHT_BRACE) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
-  }
-
-  // NULL_LITERAL
-  //                    | AnyTypeName
-  //                    | TypeDescTypeName
-  //                    | ValueTypeName
-  //                    | ReferenceTypeName
-  //                    | EmptyTupleLiteral
-  public static boolean SimpleTypeName(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "SimpleTypeName")) return false;
-    boolean r;
-    Marker m = enter_section_(b, l, _NONE_, SIMPLE_TYPE_NAME, "<simple type name>");
-    r = consumeTokenSmart(b, NULL_LITERAL);
-    if (!r) r = AnyTypeName(b, l + 1);
-    if (!r) r = TypeDescTypeName(b, l + 1);
-    if (!r) r = ValueTypeName(b, l + 1);
-    if (!r) r = ReferenceTypeName(b, l + 1);
-    if (!r) r = EmptyTupleLiteral(b, l + 1);
-    exit_section_(b, l, m, r, false, null);
-    return r;
   }
 
   // LEFT_BRACE FieldDefinitionList RIGHT_BRACE
