@@ -31,7 +31,10 @@ public class BallerinaObjectFunctionProcessor extends BallerinaScopeProcessorBas
     @Override
     public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
         if (accept(element)) {
-
+            PsiElement owner = ((BallerinaTypeDefinition) element).getIdentifier();
+            if (owner == null) {
+                return true;
+            }
             Collection<BallerinaObjectFunctionDefinition> objectFunctionDefinitions =
                     PsiTreeUtil.findChildrenOfType(element, BallerinaObjectFunctionDefinition.class);
 
@@ -44,8 +47,8 @@ public class BallerinaObjectFunctionProcessor extends BallerinaScopeProcessorBas
 
                 PsiElement identifier = objectCallableUnitSignature.getIdentifier();
                 if (myResult != null) {
-                    myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(identifier,
-                            ParenthesisInsertHandler.INSTANCE));
+                    myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(objectFunctionDefinition,
+                            owner, ParenthesisInsertHandler.INSTANCE));
                 } else if (myElement.getText().equals(identifier.getText())) {
                     add(identifier);
                 }

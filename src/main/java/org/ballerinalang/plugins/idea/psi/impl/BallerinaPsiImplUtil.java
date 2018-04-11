@@ -464,7 +464,7 @@ public class BallerinaPsiImplUtil {
     @Nullable
     public static String formatBallerinaFunctionParameters(@Nullable BallerinaFormalParameterList parameterList) {
         if (parameterList == null) {
-            return null;
+            return "()";
         }
         // Todo - Update formatting logic
         return "(" + parameterList.getText() + ")";

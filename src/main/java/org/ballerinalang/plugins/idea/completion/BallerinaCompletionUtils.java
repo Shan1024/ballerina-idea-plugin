@@ -34,6 +34,7 @@ import org.ballerinalang.plugins.idea.BallerinaIcons;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaFormalParameterList;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaObjectCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaReturnParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaReturnType;
@@ -529,11 +530,11 @@ public class BallerinaCompletionUtils {
                 .getText(), definition).withIcon(definition.getIcon(Iconable.ICON_FLAG_VISIBILITY)).bold()
                 .withInsertHandler(insertHandler);
 
-        builder = builder.withTypeText("Function");
         if (definition instanceof BallerinaFunctionDefinition) {
             BallerinaCallableUnitSignature callableUnitSignature =
                     ((BallerinaFunctionDefinition) definition).getCallableUnitSignature();
             if (callableUnitSignature != null) {
+                // Add parameters.
                 BallerinaReturnParameter returnParameter = callableUnitSignature.getReturnParameter();
                 if (returnParameter != null) {
                     BallerinaReturnType returnType = returnParameter.getReturnType();
@@ -541,26 +542,43 @@ public class BallerinaCompletionUtils {
                         builder = builder.withTypeText(BallerinaPsiImplUtil.formatBallerinaFunctionReturnType
                                 (returnType));
                     }
+                } else {
+                    builder = builder.withTypeText("nil");
                 }
+                // Add return type.
                 BallerinaFormalParameterList formalParameterList = callableUnitSignature.getFormalParameterList();
-                if (formalParameterList != null) {
-                    builder = builder.withTailText(BallerinaPsiImplUtil.formatBallerinaFunctionParameters
-                            (formalParameterList));
-                }
+
+                builder = builder.withTailText(BallerinaPsiImplUtil.formatBallerinaFunctionParameters
+                        (formalParameterList));
+
             }
         }
         return PrioritizedLookupElement.withPriority(builder, FUNCTION_PRIORITY);
     }
 
     @NotNull
-    public static LookupElement createFunctionLookupElement(@NotNull PsiElement identifier,
+    public static LookupElement createFunctionLookupElement(@NotNull BallerinaObjectFunctionDefinition definition,
+                                                            @NotNull PsiElement owner,
                                                             @Nullable InsertHandler<LookupElement> insertHandler) {
+
+        BallerinaObjectCallableUnitSignature objectCallableUnitSignature = definition.getObjectCallableUnitSignature();
+        PsiElement identifier = objectCallableUnitSignature.getIdentifier();
         LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(identifier.getText(), identifier)
-                .withTypeText("Function").withIcon(BallerinaIcons.FUNCTION).bold()
-                // Todo - Add tail text
-                //                .withTailText(BallerinaDocumentationProvider.getParametersAndReturnTypes(element
-                // .getParent()))
-                .withInsertHandler(insertHandler);
+                .withIcon(BallerinaIcons.FUNCTION).bold().withInsertHandler(insertHandler);
+        // Add parameters.
+        BallerinaReturnParameter returnParameter = objectCallableUnitSignature.getReturnParameter();
+        if (returnParameter != null) {
+            BallerinaReturnType returnType = returnParameter.getReturnType();
+            if (returnType != null) {
+                builder = builder.withTypeText(BallerinaPsiImplUtil.formatBallerinaFunctionReturnType(returnType));
+            }
+        } else {
+            builder = builder.withTypeText("nil");
+        }
+        // Add return type.
+        BallerinaFormalParameterList formalParameterList = objectCallableUnitSignature.getFormalParameterList();
+        builder = builder.withTailText(BallerinaPsiImplUtil.formatBallerinaFunctionParameters(formalParameterList)
+                + " -> " + owner.getText());
         return PrioritizedLookupElement.withPriority(builder, FUNCTION_PRIORITY);
     }
 
