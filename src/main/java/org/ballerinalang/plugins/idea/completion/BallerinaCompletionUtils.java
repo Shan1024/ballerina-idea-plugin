@@ -31,7 +31,13 @@ import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import org.ballerinalang.plugins.idea.BallerinaIcons;
+import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
+import org.ballerinalang.plugins.idea.psi.BallerinaFormalParameterList;
+import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaReturnParameter;
+import org.ballerinalang.plugins.idea.psi.BallerinaReturnType;
+import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaTopLevelDefinition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -520,12 +526,29 @@ public class BallerinaCompletionUtils {
     public static LookupElement createFunctionLookupElement(@NotNull BallerinaTopLevelDefinition definition,
                                                             @Nullable InsertHandler<LookupElement> insertHandler) {
         LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(definition.getIdentifier()
-                .getText(), definition)
-                .withTypeText("Function").withIcon(definition.getIcon(Iconable.ICON_FLAG_VISIBILITY)).bold()
-                // Todo - Add tail text
-                //                .withTailText(BallerinaDocumentationProvider.getParametersAndReturnTypes(element
-                // .getParent()))
+                .getText(), definition).withIcon(definition.getIcon(Iconable.ICON_FLAG_VISIBILITY)).bold()
                 .withInsertHandler(insertHandler);
+
+        builder = builder.withTypeText("Function");
+        if (definition instanceof BallerinaFunctionDefinition) {
+            BallerinaCallableUnitSignature callableUnitSignature =
+                    ((BallerinaFunctionDefinition) definition).getCallableUnitSignature();
+            if (callableUnitSignature != null) {
+                BallerinaReturnParameter returnParameter = callableUnitSignature.getReturnParameter();
+                if (returnParameter != null) {
+                    BallerinaReturnType returnType = returnParameter.getReturnType();
+                    if (returnType != null) {
+                        builder = builder.withTypeText(BallerinaPsiImplUtil.formatBallerinaFunctionReturnType
+                                (returnType));
+                    }
+                }
+                BallerinaFormalParameterList formalParameterList = callableUnitSignature.getFormalParameterList();
+                if (formalParameterList != null) {
+                    builder = builder.withTailText(BallerinaPsiImplUtil.formatBallerinaFunctionParameters
+                            (formalParameterList));
+                }
+            }
+        }
         return PrioritizedLookupElement.withPriority(builder, FUNCTION_PRIORITY);
     }
 
@@ -588,7 +611,7 @@ public class BallerinaCompletionUtils {
         if (type == null || type.isEmpty()) {
             builder = builder.withTypeText("Parameter");
         } else {
-            builder = builder.withTypeText(type, true);
+            builder = builder.withTypeText(type);
         }
 
         if (defaultValue != null && !defaultValue.isEmpty()) {

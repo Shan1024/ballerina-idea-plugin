@@ -46,6 +46,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaExpression;
 import org.ballerinalang.plugins.idea.psi.BallerinaFieldDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
+import org.ballerinalang.plugins.idea.psi.BallerinaFormalParameterList;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
@@ -56,7 +57,9 @@ import org.ballerinalang.plugins.idea.psi.BallerinaPackageDeclaration;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageVersion;
+import org.ballerinalang.plugins.idea.psi.BallerinaReturnType;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleVariableReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaTupleTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaVariableDefinitionStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaVariableReference;
@@ -379,6 +382,30 @@ public class BallerinaPsiImplUtil {
             }
         }
         return false;
+    }
+
+    @Nullable
+    public static String formatBallerinaFunctionParameters(@Nullable BallerinaFormalParameterList parameterList) {
+        if (parameterList == null) {
+            return null;
+        }
+        // Todo - Update formatting logic
+        return "(" + parameterList.getText() + ")";
+    }
+
+    @Nullable
+    public static String formatBallerinaFunctionReturnType(@Nullable BallerinaReturnType ballerinaReturnType) {
+        if (ballerinaReturnType == null) {
+            return null;
+        }
+        BallerinaTypeName typeName = ballerinaReturnType.getTypeName();
+        if (typeName instanceof BallerinaTupleTypeName) {
+            List<BallerinaTypeName> typeNameList = ((BallerinaTupleTypeName) typeName).getTypeNameList();
+            if (!typeNameList.isEmpty()) {
+                return typeNameList.get(0).getText();
+            }
+        }
+        return typeName.getText();
     }
 
     @Nullable
