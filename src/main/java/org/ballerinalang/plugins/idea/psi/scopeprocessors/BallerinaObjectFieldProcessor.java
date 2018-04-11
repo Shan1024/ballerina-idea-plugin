@@ -5,14 +5,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
-import org.ballerinalang.plugins.idea.psi.BallerinaDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFieldDefinition;
-import org.ballerinalang.plugins.idea.psi.BallerinaFile;
+import org.ballerinalang.plugins.idea.psi.BallerinaFieldDefinitionList;
+import org.ballerinalang.plugins.idea.psi.BallerinaFiniteType;
+import org.ballerinalang.plugins.idea.psi.BallerinaFiniteTypeUnit;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectBody;
-import org.ballerinalang.plugins.idea.psi.BallerinaObjectFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaPrivateObjectFields;
 import org.ballerinalang.plugins.idea.psi.BallerinaPublicObjectFields;
+import org.ballerinalang.plugins.idea.psi.BallerinaRecordTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,10 +39,41 @@ public class BallerinaObjectFieldProcessor extends BallerinaScopeProcessorBase {
     public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
         if (accept(element)) {
             BallerinaObjectBody ballerinaObjectBody = PsiTreeUtil.findChildOfType(element, BallerinaObjectBody.class);
-            if (ballerinaObjectBody == null) {
-                return true;
+            if (ballerinaObjectBody != null) {
+                processObjectDefinition(ballerinaObjectBody);
+            } else {
+                PsiElement owner = ((BallerinaTypeDefinition) element).getIdentifier();
+                if (owner == null) {
+                    return true;
+                }
+                BallerinaFiniteType ballerinaFiniteType = PsiTreeUtil.getChildOfType(element,
+                        BallerinaFiniteType.class);
+                if (ballerinaFiniteType == null) {
+                    return true;
+                }
+
+                List<BallerinaFiniteTypeUnit> finiteTypeUnitList = ballerinaFiniteType.getFiniteTypeUnitList();
+                for (BallerinaFiniteTypeUnit ballerinaFiniteTypeUnit : finiteTypeUnitList) {
+                    BallerinaTypeName typeName = ballerinaFiniteTypeUnit.getTypeName();
+                    if (typeName instanceof BallerinaRecordTypeName) {
+                        BallerinaFieldDefinitionList fieldDefinitionList =
+                                ((BallerinaRecordTypeName) typeName).getFieldDefinitionList();
+                        List<BallerinaFieldDefinition> fieldList = fieldDefinitionList.getFieldDefinitionList();
+                        for (BallerinaFieldDefinition ballerinaFieldDefinition : fieldList) {
+                            PsiElement identifier = ballerinaFieldDefinition.getIdentifier();
+                            if (myResult != null) {
+                                myResult.addElement(BallerinaCompletionUtils.createFieldLookupElement(identifier, owner,
+                                        ballerinaFieldDefinition.getTypeName().getText(),
+                                        BallerinaPsiImplUtil.getObjectFieldDefaultValue(ballerinaFieldDefinition),
+                                        false));
+                            } else if (myElement.getText().equals(identifier.getText())) {
+                                add(identifier);
+                            }
+                        }
+
+                    }
+                }
             }
-            processObjectDefinition(ballerinaObjectBody);
         }
         return true;
     }
@@ -78,7 +111,7 @@ public class BallerinaObjectFieldProcessor extends BallerinaScopeProcessorBase {
             } else if (myElement.getText().equals(identifier.getText())) {
                 add(identifier);
             }
-            if(!isCompletion()&&getResult()!=null){
+            if (!isCompletion() && getResult() != null) {
                 return;
             }
         }
