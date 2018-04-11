@@ -42,7 +42,9 @@ import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompositeElement;
 import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaExpression;
+import org.ballerinalang.plugins.idea.psi.BallerinaField;
 import org.ballerinalang.plugins.idea.psi.BallerinaFieldDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaFieldVariableReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFormalParameterList;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
@@ -50,11 +52,13 @@ import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaImportDeclaration;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaNullableTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaOrgName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageDeclaration;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageVersion;
+import org.ballerinalang.plugins.idea.psi.BallerinaParameterWithType;
 import org.ballerinalang.plugins.idea.psi.BallerinaReturnType;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleVariableReference;
@@ -247,10 +251,31 @@ public class BallerinaPsiImplUtil {
             if (resolvedElement == null) {
                 return null;
             }
+            // Todo - Move to util
             PsiElement parent = resolvedElement.getParent();
             if (parent instanceof BallerinaVariableDefinitionStatement) {
                 return resolveBallerinaType(((BallerinaVariableDefinitionStatement) parent));
             } else if (parent instanceof BallerinaFieldDefinition) {
+                return getTypeNameFromField(((BallerinaFieldDefinition) parent));
+            } else if (parent instanceof BallerinaParameterWithType) {
+                return getTypeNameFromParameter(((BallerinaParameterWithType) parent));
+            }
+        } else if (ballerinaVariableReference instanceof BallerinaFieldVariableReference) {
+            BallerinaField field = ((BallerinaFieldVariableReference) ballerinaVariableReference).getField();
+            PsiElement identifier = field.getIdentifier();
+            if (identifier == null) {
+                return null;
+            }
+            PsiReference reference = identifier.getReference();
+            if (reference == null) {
+                return null;
+            }
+            PsiElement resolvedElement = reference.resolve();
+            if (resolvedElement == null) {
+                return null;
+            }
+            PsiElement parent = resolvedElement.getParent();
+            if (parent instanceof BallerinaFieldDefinition) {
                 return getTypeNameFromField(((BallerinaFieldDefinition) parent));
             }
         }
@@ -274,26 +299,45 @@ public class BallerinaPsiImplUtil {
         if (typeName instanceof BallerinaSimpleTypeName) {
 
         } else if (typeName instanceof BallerinaUnionTypeName) {
-            if (isNillableType(typeName)) {
-                BallerinaTypeName ballerinaTypeName = getTypeNameFromNillableType(((BallerinaUnionTypeName) typeName));
-                if (ballerinaTypeName == null) {
-                    return null;
-                }
-                PsiReference reference = ballerinaTypeName.findReferenceAt(ballerinaTypeName.getTextLength());
-                if (reference == null) {
-                    return null;
-                }
-                return reference.resolve();
+            BallerinaTypeName ballerinaTypeName = getTypeNameFromNillableType(((BallerinaUnionTypeName) typeName));
+            if (ballerinaTypeName == null) {
+                return null;
             }
+            // Todo - Use a util method
+            PsiReference reference = ballerinaTypeName.findReferenceAt(ballerinaTypeName.getTextLength());
+            if (reference == null) {
+                return null;
+            }
+            return reference.resolve();
+        } else if (typeName instanceof BallerinaNullableTypeName) {
+            BallerinaTypeName typeNameFromNillableType = getTypeNameFromNillableType((BallerinaNullableTypeName)
+                    typeName);
+            PsiReference reference = typeNameFromNillableType.findReferenceAt(typeNameFromNillableType.getTextLength());
+            if (reference == null) {
+                return null;
+            }
+            return reference.resolve();
         }
-
         return null;
     }
 
+    //    public static boolean isNillableType(@NotNull BallerinaTypeName typeName) {
+    //        if (typeName instanceof BallerinaUnionTypeName) {
+    //            return true;
+    //        } else if (typeName instanceof BallerinaNullableTypeName) {
+    //            return true;
+    //        }
+    //        return true;
+    //    }
 
-    public static boolean isNillableType(@NotNull BallerinaTypeName typeName) {
-
-        return true;
+    @Nullable
+    public static PsiElement getTypeNameFromParameter(@NotNull BallerinaParameterWithType parameter) {
+        BallerinaTypeName typeName = parameter.getTypeName();
+        PsiReference reference = typeName.findReferenceAt(typeName.getTextLength());
+        if (reference == null) {
+            return null;
+        }
+        return reference.resolve();
     }
 
     @Nullable
@@ -320,6 +364,11 @@ public class BallerinaPsiImplUtil {
             return typeName2;
         }
         return null;
+    }
+
+    @NotNull
+    public static BallerinaTypeName getTypeNameFromNillableType(@NotNull BallerinaNullableTypeName ballerinaTypeName) {
+        return ballerinaTypeName.getTypeName();
     }
 
     public static boolean processDeclarations(@NotNull BallerinaCompositeElement o,
@@ -464,7 +513,7 @@ public class BallerinaPsiImplUtil {
     @Nullable
     public static String formatBallerinaFunctionParameters(@Nullable BallerinaFormalParameterList parameterList) {
         if (parameterList == null) {
-            return "()";
+            return "";
         }
         // Todo - Update formatting logic
         return "(" + parameterList.getText() + ")";
