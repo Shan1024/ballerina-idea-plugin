@@ -415,7 +415,8 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
             PsiElement identifier = endpointParameter.getIdentifier();
             if (identifier != null) {
                 if (myResult != null) {
-                    myResult.addElement(BallerinaCompletionUtils.createParameterLookupElement(identifier, null, null));
+                    myResult.addElement(BallerinaCompletionUtils.createParameterLookupElement(identifier, "Endpoint",
+                            null));
                 } else if (myElement.getText().equals(identifier.getText())) {
                     add(identifier);
                 }
