@@ -11,6 +11,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
+import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,7 +58,8 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                     PsiElement identifier = child.getIdentifier();
                     if (identifier != null) {
                         if (myResult != null) {
-                            myResult.addElement(BallerinaCompletionUtils.createGlobalVariableLookupElement(child));
+                            myResult.addElement(BallerinaCompletionUtils.createGlobalVariableLookupElement(child,
+                                    BallerinaPsiImplUtil.formatBallerinaTypeName(child.getTypeName())));
                         } else if (myElement.getText().equals(identifier.getText())) {
                             add(identifier);
                         }

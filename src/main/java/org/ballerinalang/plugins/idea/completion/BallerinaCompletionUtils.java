@@ -565,10 +565,16 @@ public class BallerinaCompletionUtils {
     }
 
     @NotNull
-    public static LookupElement createGlobalVariableLookupElement(@NotNull BallerinaTopLevelDefinition definition) {
-        LookupElementBuilder builder =
-                LookupElementBuilder.createWithSmartPointer(definition.getIdentifier().getText(), definition)
-                        .withTypeText("Variable").withIcon(definition.getIcon(Iconable.ICON_FLAG_VISIBILITY));
+    public static LookupElement createGlobalVariableLookupElement(@NotNull BallerinaTopLevelDefinition definition,
+                                                                  @Nullable String type) {
+        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(definition.getIdentifier().getText(),
+                definition).withIcon(definition.getIcon(Iconable.ICON_FLAG_VISIBILITY));
+        if (type == null || type.isEmpty()) {
+            builder = builder.withTypeText("Variable");
+        } else {
+            builder = builder.withTypeText(type);
+        }
+
         return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
     }
 
