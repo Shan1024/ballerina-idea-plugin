@@ -49,8 +49,8 @@ public class BallerinaVariableReferenceExpressionImpl extends BallerinaExpressio
 
   @Override
   @Nullable
-  public PsiElement getAsync() {
-    return findChildByType(ASYNC);
+  public PsiElement getStart() {
+    return findChildByType(START);
   }
 
 }

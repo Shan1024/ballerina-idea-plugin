@@ -167,9 +167,9 @@ public class BallerinaRunUtil {
         }
 
         // Get the function name.
-        PsiElement functionName = callableUnitSignature.getIdentifier();
+        PsiElement functionName = callableUnitSignature.getAnyIdentifierName().getIdentifier();
         // Check whether the function name is "main".
-        if (!BallerinaConstants.MAIN.equals(functionName.getText())) {
+        if (functionName == null || !BallerinaConstants.MAIN.equals(functionName.getText())) {
             return false;
         }
 
@@ -190,7 +190,7 @@ public class BallerinaRunUtil {
         if (typeName == null) {
             return false;
         }
-        if(!(typeName instanceof BallerinaArrayTypeName)){
+        if (!(typeName instanceof BallerinaArrayTypeName)) {
             return false;
         }
         // "string", "[", "]" will be in 3 different child nodes.

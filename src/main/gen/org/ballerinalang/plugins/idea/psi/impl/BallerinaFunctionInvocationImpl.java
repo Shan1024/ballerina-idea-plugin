@@ -49,8 +49,8 @@ public class BallerinaFunctionInvocationImpl extends BallerinaCompositeElementIm
 
   @Override
   @NotNull
-  public BallerinaNameReference getNameReference() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaNameReference.class));
+  public BallerinaFunctionNameReference getFunctionNameReference() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaFunctionNameReference.class));
   }
 
   @Override

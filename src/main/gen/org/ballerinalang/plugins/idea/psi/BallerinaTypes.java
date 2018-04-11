@@ -54,7 +54,6 @@ public interface BallerinaTypes {
   IElementType BREAK_STATEMENT = new BallerinaCompositeElementType("BREAK_STATEMENT");
   IElementType BUILT_IN_REFERENCE_TYPE_NAME = new BallerinaCompositeElementType("BUILT_IN_REFERENCE_TYPE_NAME");
   IElementType BUILT_IN_REFERENCE_TYPE_TYPE_EXPRESSION = new BallerinaCompositeElementType("BUILT_IN_REFERENCE_TYPE_TYPE_EXPRESSION");
-  IElementType BUILT_IN_TYPE_NAME = new BallerinaCompositeElementType("BUILT_IN_TYPE_NAME");
   IElementType CALLABLE_UNIT_BODY = new BallerinaCompositeElementType("CALLABLE_UNIT_BODY");
   IElementType CALLABLE_UNIT_SIGNATURE = new BallerinaCompositeElementType("CALLABLE_UNIT_SIGNATURE");
   IElementType CATCH_CLAUSE = new BallerinaCompositeElementType("CATCH_CLAUSE");
@@ -109,6 +108,7 @@ public interface BallerinaTypes {
   IElementType FUNCTION_DEFINITION = BallerinaElementTypeFactory.stubFactory("FUNCTION_DEFINITION");
   IElementType FUNCTION_INVOCATION = new BallerinaCompositeElementType("FUNCTION_INVOCATION");
   IElementType FUNCTION_INVOCATION_REFERENCE = new BallerinaCompositeElementType("FUNCTION_INVOCATION_REFERENCE");
+  IElementType FUNCTION_NAME_REFERENCE = new BallerinaCompositeElementType("FUNCTION_NAME_REFERENCE");
   IElementType FUNCTION_TYPE_NAME = new BallerinaCompositeElementType("FUNCTION_TYPE_NAME");
   IElementType FUTURE_TYPE_NAME = new BallerinaCompositeElementType("FUTURE_TYPE_NAME");
   IElementType GLOBAL_ENDPOINT_DEFINITION = BallerinaElementTypeFactory.stubFactory("GLOBAL_ENDPOINT_DEFINITION");
@@ -293,7 +293,6 @@ public interface BallerinaTypes {
   IElementType ANY = new BallerinaTokenType("any");
   IElementType AS = new BallerinaTokenType("as");
   IElementType ASSIGN = new BallerinaTokenType("=");
-  IElementType ASYNC = new BallerinaTokenType("async");
   IElementType AT = new BallerinaTokenType("@");
   IElementType AWAIT = new BallerinaTokenType("await");
   IElementType BACKTICK = new BallerinaTokenType("`");
@@ -443,6 +442,7 @@ public interface BallerinaTypes {
   IElementType SINGLE_QUOTE_END = new BallerinaTokenType("SINGLE_QUOTE_END");
   IElementType SNAPSHOT = new BallerinaTokenType("snapshot");
   IElementType SOME = new BallerinaTokenType("some");
+  IElementType START = new BallerinaTokenType("start");
   IElementType STREAM = new BallerinaTokenType("stream");
   IElementType STRING = new BallerinaTokenType("string");
   IElementType STRING_TEMPLATE_EXPRESSION_START = new BallerinaTokenType("STRING_TEMPLATE_EXPRESSION_START");
@@ -461,7 +461,6 @@ public interface BallerinaTypes {
   IElementType TRY = new BallerinaTokenType("try");
   IElementType TYPE = new BallerinaTokenType("type");
   IElementType TYPEDESC = new BallerinaTokenType("typedesc");
-  IElementType TYPEOF = new BallerinaTokenType("typeof");
   IElementType TYPE_PARAMETER = new BallerinaTokenType("TYPE_PARAMETER");
   IElementType UNIDIRECTIONAL = new BallerinaTokenType("unidirectional");
   IElementType UNTAINT = new BallerinaTokenType("untaint");
@@ -586,9 +585,6 @@ public interface BallerinaTypes {
       }
       else if (type == BUILT_IN_REFERENCE_TYPE_TYPE_EXPRESSION) {
         return new BallerinaBuiltInReferenceTypeTypeExpressionImpl(node);
-      }
-      else if (type == BUILT_IN_TYPE_NAME) {
-        return new BallerinaBuiltInTypeNameImpl(node);
       }
       else if (type == CALLABLE_UNIT_BODY) {
         return new BallerinaCallableUnitBodyImpl(node);
@@ -751,6 +747,9 @@ public interface BallerinaTypes {
       }
       else if (type == FUNCTION_INVOCATION_REFERENCE) {
         return new BallerinaFunctionInvocationReferenceImpl(node);
+      }
+      else if (type == FUNCTION_NAME_REFERENCE) {
+        return new BallerinaFunctionNameReferenceImpl(node);
       }
       else if (type == FUNCTION_TYPE_NAME) {
         return new BallerinaFunctionTypeNameImpl(node);

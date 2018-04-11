@@ -114,7 +114,7 @@
 
     extends("(FunctionInvocation|SimpleVariable|MapArrayVariable|FieldVariable|XmlAttribVariable|Invocation|AwaitExpression)Reference") = VariableReference
 
-    extends("((Simple|Array|Record|Xml|StringTemplate)Literal|(ValueType|BuiltInReferenceType)Type|VariableReference|LambdaFunction|TypeInit|Type(Casting|Conversion|Access)|BracedOrTuple|Await|TableQuery|MatchExpr|Checked|TableLiteral|Elvis|ActionInvocation)Expression") = Expression
+    extends("((Simple|Array|Record|Xml|StringTemplate)Literal|(ValueType|BuiltInReferenceType)Type|VariableReference|LambdaFunction|TypeInit|Type(Casting|Conversion|Access)|BracedOrTuple|Await|TableQuery|MatchExpr|Checked|TableLiteral|Elvis|ActionInvocation|typeAccess)Expression") = Expression
     extends("(Unary|Binary|Ternary)Expression") = Expression
 
     extends("Binary(Pow|DivMulMod|AddSub|Compare|Equal|And|Or)Expression") = BinaryExpression
@@ -232,7 +232,7 @@ AttachedObject ::= identifier
 LambdaFunction ::= LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS EQUAL_GT LambdaReturnParameter? CallableUnitBody {pin=4}
 
 // Todo - cache and add Signature owner?
-CallableUnitSignature ::= identifier LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS ReturnParameter? {pin=1}
+CallableUnitSignature ::= AnyIdentifierName LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS ReturnParameter? {pin=1}
 
 TypeDefinition ::= (public)? type identifier FiniteType SEMICOLON {
     pin=2
@@ -269,8 +269,7 @@ ObjectDefaultableParameter ::= ObjectParameter ASSIGN Expression
 ObjectFunctionDefinition ::= (public)? (native)? function ObjectCallableUnitSignature (CallableUnitBody | SEMICOLON) {pin=3}
 
 //TODO merge with callableUnitSignature later
-ObjectCallableUnitSignature ::= identifier LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS ReturnParameter?
-
+ObjectCallableUnitSignature ::= AnyIdentifierName LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS ReturnParameter?
 
 
 AnnotationDefinition ::= (public)? annotation (LT AttachmentPoint (COMMA AttachmentPoint)* GT)? identifier UserDefineTypeName? SEMICOLON {
@@ -348,11 +347,11 @@ RecordTypeName ::= LEFT_BRACE FieldDefinitionList RIGHT_BRACE
 
 FieldDefinitionList ::= fieldDefinition*
 
-BuiltInTypeName ::= AnyTypeName
-                    | SimpleTypeName (LEFT_BRACKET RIGHT_BRACKET)+
-                    | TypeDescTypeName
-                    | ValueTypeName
-                    | BuiltInReferenceTypeName
+//BuiltInTypeName ::= AnyTypeName
+//                    | SimpleTypeName (LEFT_BRACKET RIGHT_BRACKET)+
+//                    | TypeDescTypeName
+//                    | ValueTypeName
+//                    | BuiltInReferenceTypeName
 
 ReferenceTypeName ::= BuiltInReferenceTypeName
                       | UserDefineTypeName
@@ -553,7 +552,7 @@ InvocationReference ::= VariableReference Invocation
 MapArrayVariableReference ::= VariableReference Index
 FieldVariableReference ::= VariableReference Field
 XmlAttribVariableReference ::= VariableReference XmlAttrib
-FunctionInvocationReference ::= (async)? FunctionInvocation
+FunctionInvocationReference ::= FunctionInvocation
 SimpleVariableReference ::=  NameReference
 
 Field ::= (DOT | NOT) (identifier | MUL) {
@@ -566,7 +565,7 @@ Index ::= LEFT_BRACKET Expression RIGHT_BRACKET /*{pin=1}*/
 XmlAttrib ::= AT (LEFT_BRACKET Expression RIGHT_BRACKET)? /*{pin=1}*/
 
 // Todo - Need to pin?
-FunctionInvocation ::= NameReference LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS
+FunctionInvocation ::= functionNameReference LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS
 
 // Todo - Adding pin will mess function invocation.
 Invocation ::= (DOT | NOT) AnyIdentifierName LEFT_PARENTHESIS InvocationArgList? RIGHT_PARENTHESIS /*{pin=1}*/
@@ -576,7 +575,7 @@ InvocationArgList ::= InvocationArg (COMMA InvocationArg)* {pin(".*")=1}
 InvocationArg ::= NamedArgs | RestArgs | Expression
 
 // Todo - Update the recovery rule
-ActionInvocation ::= async? NameReference RARROW FunctionInvocation {pin=3 /*recoverWhile=StatementRecover*/}
+ActionInvocation ::= start? NameReference RARROW FunctionInvocation {/*pin=3 recoverWhile=StatementRecover*/}
 
 ExpressionList ::= Expression (COMMA Expression)* {
     pin(".*")=1
@@ -633,7 +632,6 @@ Expression
     |   TypeInitExpression
     |   TypeConversionExpression
     |   UnaryExpression // Unary > Type access - if (typeof temp_int)
-    |   TypeAccessExpression
     |   BinaryPowExpression
     |   BinaryDivMulModExpression
     |   BinaryAddSubExpression
@@ -645,9 +643,12 @@ Expression
     |   MatchExprExpression
     |   CheckedExpression
     |   ElvisExpression
-    |   AwaitExpression {
+    |   AwaitExpression
+    |   typeAccessExpression{
     recoverWhile=ExpressionRecover
 }
+
+typeAccessExpression ::= TypeName
 
 ActionInvocationExpression::= ActionInvocation
 
@@ -671,11 +672,10 @@ XmlLiteralExpression ::= XmlLiteral
 StringTemplateLiteralExpression ::= StringTemplateLiteral
 ValueTypeTypeExpression ::= ValueTypeName DOT identifier
 BuiltInReferenceTypeTypeExpression ::= BuiltInReferenceTypeName DOT identifier
-VariableReferenceExpression ::= async? VariableReference
+VariableReferenceExpression ::= start? VariableReference
 LambdaFunctionExpression ::= LambdaFunction
 TypeInitExpression ::= TypeInitExpr
 TypeConversionExpression ::= LT TypeName (COMMA FunctionInvocation)? GT Expression {pin=1}
-TypeAccessExpression ::= typeof (BuiltInTypeName | Expression){pin=1}
 UnaryExpression ::= (ADD | SUB | NOT | lengthof | untaint) Expression {pin=1}
 BracedOrTupleExpression ::= LEFT_PARENTHESIS Expression (COMMA Expression)* RIGHT_PARENTHESIS
 BinaryPowExpression ::= Expression POW Expression
@@ -702,6 +702,8 @@ NameReference ::= <<isPackageExpected>> PackageReference identifier | identifier
 //    extends=test
 //    elementType=test
 }
+
+functionNameReference ::= (identifier COLON)? AnyIdentifierName
 
 PackageReference ::= identifier COLON {
     pin=2
@@ -797,7 +799,7 @@ private StringTemplateTextContent ::= STRING_TEMPLATE_TEXT
 
 AnyIdentifierName ::= identifier | ReservedWord
 
-ReservedWord ::= foreach | map
+ReservedWord ::= foreach | map | start
 
 
 //Siddhi Streams and Tables related

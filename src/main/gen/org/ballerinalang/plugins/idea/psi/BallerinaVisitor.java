@@ -144,10 +144,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitExpression(o);
   }
 
-  public void visitBuiltInTypeName(@NotNull BallerinaBuiltInTypeName o) {
-    visitCompositeElement(o);
-  }
-
   public void visitCallableUnitBody(@NotNull BallerinaCallableUnitBody o) {
     visitCompositeElement(o);
   }
@@ -809,10 +805,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitTypeName(o);
   }
 
-  public void visitTypeAccessExpression(@NotNull BallerinaTypeAccessExpression o) {
-    visitExpression(o);
-  }
-
   public void visitTypeConversionExpression(@NotNull BallerinaTypeConversionExpression o) {
     visitExpression(o);
   }
@@ -1015,6 +1007,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitFunctionNameReference(@NotNull BallerinaFunctionNameReference o) {
+    visitCompositeElement(o);
+  }
+
   public void visitMatchExpression(@NotNull BallerinaMatchExpression o) {
     visitCompositeElement(o);
   }
@@ -1065,6 +1061,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
 
   public void visitTupleDestructuringStatement(@NotNull BallerinaTupleDestructuringStatement o) {
     visitCompositeElement(o);
+  }
+
+  public void visitTypeAccessExpression(@NotNull BallerinaTypeAccessExpression o) {
+    visitExpression(o);
   }
 
   public void visitUnnamedPattern(@NotNull BallerinaUnnamedPattern o) {

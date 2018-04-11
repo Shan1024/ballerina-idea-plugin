@@ -41,7 +41,6 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ANY_IDENTIFIER_N
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ARRAY_TYPE_NAME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.AS;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ASSIGN;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ASYNC;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.AWAIT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BIND;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BREAK;
@@ -188,6 +187,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SIMPLE_TYPE_NAME
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SIMPLE_VARIABLE_REFERENCE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SNAPSHOT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SOME;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.START;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.STREAM;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SUB;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TABLE;
@@ -196,7 +196,6 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TIMEOUT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TRANSACTION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TRY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TUPLE_TYPE_NAME;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TYPEOF;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TYPE_CONVERSION_EXPRESSION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.UNARY_EXPRESSION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.UNIDIRECTIONAL;
@@ -282,12 +281,11 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(ONABORT).spaceIf(true)
                 .around(ONCOMMIT).spaceIf(true)
                 .around(LENGTHOF).spaceIf(true)
-                .around(TYPEOF).spaceIf(true)
                 .around(WITH).spaceIf(true)
                 .around(IN).spaceIf(true)
                 .around(LOCK).spaceIf(true)
                 .around(UNTAINT).spaceIf(true) // Todo
-                .around(ASYNC).spaceIf(true)
+                .around(START).spaceIf(true)
                 .around(AWAIT).spaceIf(true)
                 .around(CHECK).spaceIf(true)
                 .around(BUT).spaceIf(true)

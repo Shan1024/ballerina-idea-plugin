@@ -39,7 +39,6 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ALL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ANNOTATION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ANY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.AS;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ASYNC;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.AWAIT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BINARY_INTEGER_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BIND;
@@ -130,6 +129,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SERVICE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SET;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SNAPSHOT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SOME;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.START;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.STREAM;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.STRING;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TABLE;
@@ -139,7 +139,6 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TRANSACTION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TRY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TYPE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TYPEDESC;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TYPEOF;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.UNIDIRECTIONAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.UNTAINT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.VAR;
@@ -164,12 +163,13 @@ public class BallerinaParserDefinition implements ParserDefinition {
     public static final TokenSet NUMBERS = TokenSet.create(DECIMAL_INTEGER_LITERAL, HEX_INTEGER_LITERAL,
             OCTAL_INTEGER_LITERAL, BINARY_INTEGER_LITERAL, FLOATING_POINT_LITERAL);
 
-    public static final TokenSet KEYWORDS = TokenSet.create(ABORT, ALL, ANNOTATION, ANY, AS, ASYNC, AWAIT, BIND,
+    // Todo - Annotate ReservedWord in the runtime to prevent highlighting as keywords.
+    public static final TokenSet KEYWORDS = TokenSet.create(ABORT, ALL, ANNOTATION, ANY, AS, AWAIT, BIND,
             BLOB, BOOLEAN, BREAK, BUT, CATCH, CHECK, DOCUMENTATION, DEPRECATED, ELSE, ENDPOINT, ENUM, FAIL,
             FINALLY, FLOAT, FOREACH, FORK, FUNCTION, FUTURE, IF, IMPORT, IN, INT, JOIN, JSON, LENGTHOF, LOCK, MAP,
             MATCH, NATIVE, NEW, NEXT, OBJECT, ONABORT, ONCOMMIT, ONRETRY, PACKAGE, PARAMETER, PRIVATE, PUBLIC, RESOURCE,
-            RETRIES, RETURN, RETURNS, SERVICE, SOME, STREAM, STRING, TABLE, TIMEOUT, TRANSACTION, TRY, TYPE,
-            TYPEDESC, TYPEOF, THROW, UNTAINT, WHILE, WITH, WORKER, VAR, VERSION, XML, XMLNS, BOOLEAN_LITERAL,
+            RETRIES, RETURN, RETURNS, SERVICE, SOME, START, STREAM, STRING, TABLE, TIMEOUT, TRANSACTION, TRY, TYPE,
+            TYPEDESC, THROW, UNTAINT, WHILE, WITH, WORKER, VAR, VERSION, XML, XMLNS, BOOLEAN_LITERAL,
             NULL_LITERAL,
 
             FROM, ON, SELECT, GROUP, BY, HAVING, ORDER, WHERE, FOLLOWED, SET, FOR, WINDOW, EXPIRED, CURRENT, EVENTS,

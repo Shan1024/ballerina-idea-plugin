@@ -47,10 +47,4 @@ public class BallerinaFunctionInvocationReferenceImpl extends BallerinaVariableR
     return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaFunctionInvocation.class));
   }
 
-  @Override
-  @Nullable
-  public PsiElement getAsync() {
-    return findChildByType(ASYNC);
-  }
-
 }

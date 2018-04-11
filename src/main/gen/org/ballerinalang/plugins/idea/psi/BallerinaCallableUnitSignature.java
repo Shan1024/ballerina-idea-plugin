@@ -23,6 +23,9 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaCallableUnitSignature extends BallerinaCompositeElement {
 
+  @NotNull
+  BallerinaAnyIdentifierName getAnyIdentifierName();
+
   @Nullable
   BallerinaFormalParameterList getFormalParameterList();
 
@@ -34,8 +37,5 @@ public interface BallerinaCallableUnitSignature extends BallerinaCompositeElemen
 
   @Nullable
   PsiElement getRightParenthesis();
-
-  @NotNull
-  PsiElement getIdentifier();
 
 }

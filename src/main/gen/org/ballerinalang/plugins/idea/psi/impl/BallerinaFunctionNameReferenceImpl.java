@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaBuiltInTypeNameImpl extends BallerinaCompositeElementImpl implements BallerinaBuiltInTypeName {
+public class BallerinaFunctionNameReferenceImpl extends BallerinaCompositeElementImpl implements BallerinaFunctionNameReference {
 
-  public BallerinaBuiltInTypeNameImpl(ASTNode node) {
+  public BallerinaFunctionNameReferenceImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitBuiltInTypeName(this);
+    visitor.visitFunctionNameReference(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -42,33 +42,21 @@ public class BallerinaBuiltInTypeNameImpl extends BallerinaCompositeElementImpl 
   }
 
   @Override
-  @Nullable
-  public BallerinaAnyTypeName getAnyTypeName() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaAnyTypeName.class);
+  @NotNull
+  public BallerinaAnyIdentifierName getAnyIdentifierName() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaAnyIdentifierName.class));
   }
 
   @Override
   @Nullable
-  public BallerinaBuiltInReferenceTypeName getBuiltInReferenceTypeName() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaBuiltInReferenceTypeName.class);
+  public PsiElement getColon() {
+    return findChildByType(COLON);
   }
 
   @Override
   @Nullable
-  public BallerinaSimpleTypeName getSimpleTypeName() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaSimpleTypeName.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaTypeDescTypeName getTypeDescTypeName() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaTypeDescTypeName.class);
-  }
-
-  @Override
-  @Nullable
-  public BallerinaValueTypeName getValueTypeName() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaValueTypeName.class);
+  public PsiElement getIdentifier() {
+    return findChildByType(IDENTIFIER);
   }
 
 }

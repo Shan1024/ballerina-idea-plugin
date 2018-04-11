@@ -31,6 +31,7 @@ import com.intellij.openapi.util.Iconable;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import org.ballerinalang.plugins.idea.BallerinaIcons;
+import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaFormalParameterList;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
@@ -562,7 +563,8 @@ public class BallerinaCompletionUtils {
                                                             @Nullable InsertHandler<LookupElement> insertHandler) {
 
         BallerinaObjectCallableUnitSignature objectCallableUnitSignature = definition.getObjectCallableUnitSignature();
-        PsiElement identifier = objectCallableUnitSignature.getIdentifier();
+        BallerinaAnyIdentifierName anyIdentifierName = objectCallableUnitSignature.getAnyIdentifierName();
+        PsiElement identifier = anyIdentifierName.getIdentifier();
         LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(identifier.getText(), identifier)
                 .withIcon(BallerinaIcons.FUNCTION).bold().withInsertHandler(insertHandler);
         // Add parameters.

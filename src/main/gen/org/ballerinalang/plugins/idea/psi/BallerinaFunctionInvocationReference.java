@@ -26,7 +26,4 @@ public interface BallerinaFunctionInvocationReference extends BallerinaVariableR
   @NotNull
   BallerinaFunctionInvocation getFunctionInvocation();
 
-  @Nullable
-  PsiElement getAsync();
-
 }

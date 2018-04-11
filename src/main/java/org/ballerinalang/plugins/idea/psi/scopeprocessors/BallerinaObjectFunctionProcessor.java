@@ -45,15 +45,16 @@ public class BallerinaObjectFunctionProcessor extends BallerinaScopeProcessorBas
                     continue;
                 }
 
-                PsiElement identifier = objectCallableUnitSignature.getIdentifier();
-                if (myResult != null) {
-                    myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(objectFunctionDefinition,
-                            owner, ParenthesisInsertHandler.INSTANCE));
-                } else if (myElement.getText().equals(identifier.getText())) {
-                    add(identifier);
+                PsiElement identifier = objectCallableUnitSignature.getAnyIdentifierName().getIdentifier();
+                if (identifier != null) {
+                    if (myResult != null) {
+                        myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement
+                                (objectFunctionDefinition, owner, ParenthesisInsertHandler.INSTANCE));
+                    } else if (myElement.getText().equals(identifier.getText())) {
+                        add(identifier);
+                    }
                 }
             }
-
         }
         return true;
     }

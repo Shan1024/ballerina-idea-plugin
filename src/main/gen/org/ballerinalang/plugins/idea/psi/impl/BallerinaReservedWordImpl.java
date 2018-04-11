@@ -53,4 +53,10 @@ public class BallerinaReservedWordImpl extends BallerinaCompositeElementImpl imp
     return findChildByType(MAP);
   }
 
+  @Override
+  @Nullable
+  public PsiElement getStart() {
+    return findChildByType(START);
+  }
+
 }

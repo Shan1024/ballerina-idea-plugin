@@ -42,6 +42,12 @@ public class BallerinaCallableUnitSignatureImpl extends BallerinaCompositeElemen
   }
 
   @Override
+  @NotNull
+  public BallerinaAnyIdentifierName getAnyIdentifierName() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaAnyIdentifierName.class));
+  }
+
+  @Override
   @Nullable
   public BallerinaFormalParameterList getFormalParameterList() {
     return PsiTreeUtil.getChildOfType(this, BallerinaFormalParameterList.class);
@@ -63,12 +69,6 @@ public class BallerinaCallableUnitSignatureImpl extends BallerinaCompositeElemen
   @Nullable
   public PsiElement getRightParenthesis() {
     return findChildByType(RIGHT_PARENTHESIS);
-  }
-
-  @Override
-  @NotNull
-  public PsiElement getIdentifier() {
-    return notNullChild(findChildByType(IDENTIFIER));
   }
 
 }

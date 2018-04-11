@@ -27,6 +27,6 @@ public interface BallerinaVariableReferenceExpression extends BallerinaExpressio
   BallerinaVariableReference getVariableReference();
 
   @Nullable
-  PsiElement getAsync();
+  PsiElement getStart();
 
 }

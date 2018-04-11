@@ -128,7 +128,7 @@ public class BallerinaPsiImplUtil {
         //            return attachedObject.getIdentifier();
         //        }
         BallerinaCallableUnitSignature callableUnitSignature = ballerinaFunctionDefinition.getCallableUnitSignature();
-        return callableUnitSignature != null ? callableUnitSignature.getIdentifier() : null;
+        return callableUnitSignature != null ? callableUnitSignature.getAnyIdentifierName().getIdentifier() : null;
     }
 
     @Nullable
@@ -158,7 +158,8 @@ public class BallerinaPsiImplUtil {
     @Nullable
     public static String getName(BallerinaFunctionDefinition ballerinaFunctionDefinition) {
         BallerinaCallableUnitSignature callableUnitSignature = ballerinaFunctionDefinition.getCallableUnitSignature();
-        return callableUnitSignature != null ? callableUnitSignature.getIdentifier().getText() : "";
+        return callableUnitSignature != null && callableUnitSignature.getAnyIdentifierName().getIdentifier() != null ?
+                callableUnitSignature.getAnyIdentifierName().getIdentifier().getText() : "";
     }
 
     //    @NotNull

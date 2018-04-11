@@ -23,13 +23,7 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaTypeAccessExpression extends BallerinaExpression {
 
-  @Nullable
-  BallerinaBuiltInTypeName getBuiltInTypeName();
-
-  @Nullable
-  BallerinaExpression getExpression();
-
   @NotNull
-  PsiElement getTypeof();
+  BallerinaTypeName getTypeName();
 
 }

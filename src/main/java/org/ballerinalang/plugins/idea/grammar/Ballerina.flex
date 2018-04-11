@@ -365,7 +365,6 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "annotation"                                { return ANNOTATION; }
     "any"                                       { return ANY; }
     "as"                                        { return AS; }
-    "async"                                     { return ASYNC; }
     "await"                                     { return AWAIT; }
 
     "bind"                                      { return BIND; }
@@ -426,6 +425,7 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
 
     "service"                                   { return SERVICE; }
     "some"                                      { return SOME; }
+    "start"                                     { return START; }
     "stream"                                    { return STREAM; }
     "string"                                    { return STRING; }
 
@@ -435,7 +435,6 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "try"                                       { return TRY; }
     "type"                                      { return TYPE; }
     "typedesc"                                  { return TYPEDESC; }
-    "typeof"                                    { return TYPEOF; }
     "throw"                                     { return THROW; }
 
     "untaint"                                   { return UNTAINT; }

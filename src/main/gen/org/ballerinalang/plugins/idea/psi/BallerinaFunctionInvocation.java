@@ -27,7 +27,7 @@ public interface BallerinaFunctionInvocation extends BallerinaCompositeElement {
   BallerinaInvocationArgList getInvocationArgList();
 
   @NotNull
-  BallerinaNameReference getNameReference();
+  BallerinaFunctionNameReference getFunctionNameReference();
 
   @NotNull
   PsiElement getLeftParenthesis();

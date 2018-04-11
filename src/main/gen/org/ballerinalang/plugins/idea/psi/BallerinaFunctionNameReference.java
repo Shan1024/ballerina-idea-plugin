@@ -21,21 +21,15 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaBuiltInTypeName extends BallerinaCompositeElement {
+public interface BallerinaFunctionNameReference extends BallerinaCompositeElement {
+
+  @NotNull
+  BallerinaAnyIdentifierName getAnyIdentifierName();
 
   @Nullable
-  BallerinaAnyTypeName getAnyTypeName();
+  PsiElement getColon();
 
   @Nullable
-  BallerinaBuiltInReferenceTypeName getBuiltInReferenceTypeName();
-
-  @Nullable
-  BallerinaSimpleTypeName getSimpleTypeName();
-
-  @Nullable
-  BallerinaTypeDescTypeName getTypeDescTypeName();
-
-  @Nullable
-  BallerinaValueTypeName getValueTypeName();
+  PsiElement getIdentifier();
 
 }
