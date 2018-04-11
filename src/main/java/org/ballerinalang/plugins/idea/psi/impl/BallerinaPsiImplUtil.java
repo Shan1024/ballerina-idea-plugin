@@ -33,6 +33,7 @@ import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
+import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
@@ -293,20 +294,46 @@ public class BallerinaPsiImplUtil {
                 return getTypeNameFromField(((BallerinaFieldDefinition) parent));
             }
         } else if (variableReference instanceof BallerinaFunctionInvocationReference) {
-//            BallerinaFunctionInvocationReference functionInvocationReference = (BallerinaFunctionInvocationReference)
-//                    variableReference;
-//            BallerinaFunctionInvocation functionInvocation = functionInvocationReference.getFunctionInvocation();
-//            BallerinaFunctionNameReference functionNameReference = functionInvocation.getFunctionNameReference();
-//            BallerinaAnyIdentifierName anyIdentifierName = functionNameReference.getAnyIdentifierName();
-//            PsiElement identifier = anyIdentifierName.getIdentifier();
-//            PsiReference reference = identifier.getReference();
-//            PsiElement resolvedElement = reference.resolve();
-//            BallerinaFunctionDefinition functionDefinitionName =
-//                    (BallerinaFunctionDefinition)resolvedElement.getParent();
-//            BallerinaCallableUnitSignature callableUnitSignature = functionDefinitionName.getCallableUnitSignature();
-//            BallerinaReturnParameter returnParameter = callableUnitSignature.getReturnParameter();
-//          return   returnParameter.getReturnType();
-
+            BallerinaFunctionInvocationReference functionInvocationReference = (BallerinaFunctionInvocationReference)
+                    variableReference;
+            BallerinaFunctionInvocation functionInvocation = functionInvocationReference.getFunctionInvocation();
+            BallerinaFunctionNameReference functionNameReference = functionInvocation.getFunctionNameReference();
+            BallerinaAnyIdentifierName anyIdentifierName = functionNameReference.getAnyIdentifierName();
+            PsiElement identifier = anyIdentifierName.getIdentifier();
+            if (identifier == null) {
+                return null;
+            }
+            PsiReference reference = identifier.getReference();
+            if (reference == null) {
+                return null;
+            }
+            PsiElement resolvedElement = reference.resolve();
+            BallerinaFunctionDefinition functionDefinitionName = PsiTreeUtil.getParentOfType(resolvedElement,
+                    BallerinaFunctionDefinition.class);
+            if (functionDefinitionName == null) {
+                return null;
+            }
+            BallerinaCallableUnitSignature callableUnitSignature = functionDefinitionName.getCallableUnitSignature();
+            if (callableUnitSignature == null) {
+                return null;
+            }
+            BallerinaReturnParameter returnParameter = callableUnitSignature.getReturnParameter();
+            if (returnParameter == null) {
+                return null;
+            }
+            BallerinaReturnType returnType = returnParameter.getReturnType();
+            if (returnType == null) {
+                return null;
+            }
+            BallerinaTypeName typeName = returnType.getTypeName();
+            if (typeName instanceof BallerinaUnionTypeName) {
+                return typeName;
+            } else if (typeName instanceof BallerinaTupleTypeName) {
+                List<BallerinaTypeName> typeNameList = ((BallerinaTupleTypeName) typeName).getTypeNameList();
+                if (!typeNameList.isEmpty()) {
+                    return typeNameList.get(0);
+                }
+            }
         }
         return null;
     }
