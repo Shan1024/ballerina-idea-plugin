@@ -233,16 +233,21 @@ public class BallerinaPsiImplUtil {
             }
             PsiElement parent = resolvedElement.getParent();
             if (parent instanceof BallerinaVariableDefinitionStatement) {
-                BallerinaTypeName type = ((BallerinaVariableDefinitionStatement) parent).getTypeName();
-
-                reference = type.findReferenceAt(type.getTextLength());
-                if (reference == null) {
-                    return null;
-                }
-                return reference.resolve();
+                return resolveBallerinaType(((BallerinaVariableDefinitionStatement) parent));
             }
         }
         return null;
+    }
+
+    @Nullable
+    public static PsiElement resolveBallerinaType(@NotNull BallerinaVariableDefinitionStatement statement) {
+        BallerinaTypeName type = statement.getTypeName();
+
+        PsiReference reference = type.findReferenceAt(type.getTextLength());
+        if (reference == null) {
+            return null;
+        }
+        return reference.resolve();
     }
 
     public static boolean processDeclarations(@NotNull BallerinaCompositeElement o,
