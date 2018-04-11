@@ -382,7 +382,7 @@ public class BallerinaPsiImplUtil {
     }
 
     @Nullable
-    public static String formatParameterType(@Nullable BallerinaTypeName ballerinaTypeName) {
+    public static String formatBallerinaTypeName(@Nullable BallerinaTypeName ballerinaTypeName) {
         if (ballerinaTypeName == null) {
             return null;
         }

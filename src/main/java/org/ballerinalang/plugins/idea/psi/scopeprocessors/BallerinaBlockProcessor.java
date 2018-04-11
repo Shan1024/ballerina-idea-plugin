@@ -116,9 +116,12 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
                         continue;
                     }
                     if (firstChild instanceof BallerinaVariableDefinitionStatement) {
-                        PsiElement identifier = ((BallerinaVariableDefinitionStatement) firstChild).getIdentifier();
+                        BallerinaVariableDefinitionStatement definitionStatement =
+                                (BallerinaVariableDefinitionStatement) firstChild;
+                        PsiElement identifier = definitionStatement.getIdentifier();
                         if (myResult != null) {
-                            myResult.addElement(BallerinaCompletionUtils.createVariableLookupElement(identifier));
+                            myResult.addElement(BallerinaCompletionUtils.createVariableLookupElement(identifier,
+                                    BallerinaPsiImplUtil.formatBallerinaTypeName(definitionStatement.getTypeName())));
                         } else if (myElement.getText().equals(identifier.getText())) {
                             add(identifier);
                         }
@@ -131,7 +134,8 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
                                     variableReference).getNameReference();
                             PsiElement identifier = nameReference.getIdentifier();
                             if (myResult != null) {
-                                myResult.addElement(BallerinaCompletionUtils.createVariableLookupElement(identifier));
+                                myResult.addElement(BallerinaCompletionUtils.createVariableLookupElement(identifier,
+                                        "")); // Todo - Get type
                             } else if (myElement.getText().equals(identifier.getText())) {
                                 add(identifier);
                             }
@@ -150,7 +154,7 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
                                     PsiElement identifier = nameReference.getIdentifier();
                                     if (myResult != null) {
                                         myResult.addElement(BallerinaCompletionUtils.createVariableLookupElement
-                                                (identifier));
+                                                (identifier, "")); // Todo - Get type
                                     } else if (myElement.getText().equals(identifier.getText())) {
                                         add(identifier);
                                     }
@@ -242,7 +246,7 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
                 PsiElement identifier = objectParameter.getIdentifier();
                 if (myResult != null) {
                     myResult.addElement(BallerinaCompletionUtils.createParameterLookupElement(identifier,
-                            BallerinaPsiImplUtil.formatParameterType(objectParameter.getTypeName()),
+                            BallerinaPsiImplUtil.formatBallerinaTypeName(objectParameter.getTypeName()),
                             BallerinaPsiImplUtil.formatParameterDefaultValue(parameter.getExpression())));
                 } else if (myElement.getText().equals(identifier.getText())) {
                     add(identifier);
@@ -386,7 +390,9 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
             for (BallerinaParameterWithType ballerinaParameterWithType : parameterWithTypeList) {
                 PsiElement identifier = ballerinaParameterWithType.getIdentifier();
                 if (myResult != null) {
-                    myResult.addElement(BallerinaCompletionUtils.createParameterLookupElement(identifier, null, null));
+                    myResult.addElement(BallerinaCompletionUtils.createParameterLookupElement(identifier,
+                            BallerinaPsiImplUtil.formatBallerinaTypeName(ballerinaParameterWithType.getTypeName()),
+                            null));
                 } else if (myElement.getText().equals(identifier.getText())) {
                     add(identifier);
                 }

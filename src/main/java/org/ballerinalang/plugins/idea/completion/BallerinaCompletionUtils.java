@@ -515,6 +515,7 @@ public class BallerinaCompletionUtils {
     //        return lookupElements;
     //    }
 
+    // Todo - Update icon getting logic to get the icon from a util method.
     @NotNull
     public static LookupElement createFunctionLookupElement(@NotNull BallerinaTopLevelDefinition definition,
                                                             @Nullable InsertHandler<LookupElement> insertHandler) {
@@ -562,15 +563,19 @@ public class BallerinaCompletionUtils {
     @NotNull
     public static LookupElement createGlobalEndpointLookupElement(@NotNull BallerinaTopLevelDefinition definition) {
         LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(definition.getIdentifier().getText(),
-                definition)
-                .withTypeText("Endpoint").withIcon(definition.getIcon(Iconable.ICON_FLAG_VISIBILITY));
+                definition).withTypeText("Endpoint").withIcon(definition.getIcon(Iconable.ICON_FLAG_VISIBILITY));
         return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
     }
 
     @NotNull
-    public static LookupElement createVariableLookupElement(@NotNull PsiElement element) {
+    public static LookupElement createVariableLookupElement(@NotNull PsiElement element, @Nullable String type) {
         LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(element.getText(), element)
-                .withTypeText("Variable").withIcon(BallerinaIcons.VARIABLE);
+                .withIcon(BallerinaIcons.VARIABLE);
+        if (type == null || type.isEmpty()) {
+            builder = builder.withTypeText("Variable");
+        } else {
+            builder = builder.withTypeText(type);
+        }
         return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
     }
 
@@ -617,7 +622,7 @@ public class BallerinaCompletionUtils {
 
         if (defaultValue == null || defaultValue.isEmpty()) {
             lookupElementBuilder = lookupElementBuilder.withTailText(" -> " + ownerName.getText(), true);
-        }else{
+        } else {
             String tailText = "(= " + defaultValue + ") -> " + ownerName.getText();
             lookupElementBuilder = lookupElementBuilder.withTailText(tailText, true);
         }

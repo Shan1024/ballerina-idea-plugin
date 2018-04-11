@@ -7,6 +7,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
 import org.ballerinalang.plugins.idea.psi.BallerinaNamedPattern;
 import org.ballerinalang.plugins.idea.psi.BallerinaStatement;
+import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,9 +34,13 @@ public class BallerinaStatementProcessor extends BallerinaScopeProcessorBase {
             while (ballerinaNamedPattern != null) {
                 PsiElement identifier = ballerinaNamedPattern.getIdentifier();
                 if (myResult != null) {
-                    myResult.addElement(BallerinaCompletionUtils.createVariableLookupElement(identifier));
+                    myResult.addElement(BallerinaCompletionUtils.createVariableLookupElement(identifier,
+                            BallerinaPsiImplUtil.formatBallerinaTypeName(ballerinaNamedPattern.getTypeName())));
                 } else if (myElement.getText().equals(identifier.getText())) {
                     add(identifier);
+                }
+                if (!isCompletion() && getResult() != null) {
+                    return false;
                 }
                 ballerinaNamedPattern = PsiTreeUtil.getParentOfType(ballerinaNamedPattern, BallerinaNamedPattern.class);
             }
