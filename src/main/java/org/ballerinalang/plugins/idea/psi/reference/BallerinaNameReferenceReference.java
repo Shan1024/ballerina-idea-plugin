@@ -68,10 +68,8 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
         BallerinaBlock ballerinaBlock = PsiTreeUtil.getParentOfType(myElement, BallerinaBlock.class);
         if (ballerinaBlock != null && processor instanceof BallerinaBlockProcessor) {
             if (!processor.execute(ballerinaBlock, ResolveState.initial())) {
-                System.out.println("Count: " + processor.getCount());
                 return false;
             }
-            System.out.println("Count: " + processor.getCount());
         }
 
         PsiFile file = myElement.getContainingFile().getOriginalFile();
@@ -81,13 +79,11 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
 
         // Get suggestions from current file.
         if (!processor.execute(file, ResolveState.initial())) {
-            System.out.println("Count: " + processor.getCount());
             return false;
         }
         // Recursively find definitions in the project starting from the current directory.
         if (file.getContainingDirectory() != null) {
             recursivelyFind(processor, file.getContainingDirectory(), file);
-            System.out.println("Count: " + processor.getCount());
         }
         return true;
     }

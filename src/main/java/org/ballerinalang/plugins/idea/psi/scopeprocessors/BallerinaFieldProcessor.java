@@ -20,7 +20,6 @@ public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
     private final CompletionResultSet myResult;
     @NotNull
     private final PsiElement myElement;
-    private int count;
 
     public BallerinaFieldProcessor(@Nullable CompletionResultSet result, @NotNull PsiElement element,
                                    boolean isCompletion) {
@@ -37,10 +36,41 @@ public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
             if (prevSibling == null || !(prevSibling instanceof BallerinaVariableReference)) {
                 return true;
             }
-            long start = System.nanoTime();
+
+            // Note - This check should occur before resolving the type. Otherwise there will be a performance issue
+            // when the "self" is tried to resolve to a definition.
+            if (prevSibling instanceof BallerinaSimpleVariableReference && "self".equals(prevSibling.getText())) {
+                BallerinaTypeDefinition ballerinaTypeDefinition = PsiTreeUtil.getParentOfType(prevSibling,
+                        BallerinaTypeDefinition.class);
+                if (ballerinaTypeDefinition != null) {
+                    if (!processTypeDefinition(ballerinaTypeDefinition)) {
+                        return false;
+                    }
+                }
+
+                BallerinaFunctionDefinition functionDefinition = PsiTreeUtil.getParentOfType(prevSibling,
+                        BallerinaFunctionDefinition.class);
+                if (functionDefinition == null || functionDefinition.getAttachedObject() == null) {
+                    return true;
+                }
+                BallerinaAttachedObject attachedObject = functionDefinition.getAttachedObject();
+                if (attachedObject == null) {
+                    return true;
+                }
+                PsiElement identifier = attachedObject.getIdentifier();
+                PsiReference reference = identifier.getReference();
+                if (reference == null) {
+                    return true;
+                }
+                PsiElement resolvedElement = reference.resolve();
+                if (resolvedElement == null || !(resolvedElement.getParent() instanceof BallerinaTypeDefinition)) {
+                    return true;
+                }
+                return processTypeDefinition(((BallerinaTypeDefinition) resolvedElement.getParent()));
+            }
+
             PsiElement type = ((BallerinaVariableReference) prevSibling).getType();
-            long end = System.nanoTime();
-            System.out.println("Time: " + (end - start));
+
             // Todo - Refactor and remove duplication in BallerinaInvocationProcessor
             if (type != null) {
                 PsiElement ballerinaTypeDefinition = type.getParent();
@@ -53,36 +83,6 @@ public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
                         add(result);
                         return false;
                     }
-                }
-            } else {
-                if (prevSibling instanceof BallerinaSimpleVariableReference && "self".equals(prevSibling.getText())) {
-                    BallerinaTypeDefinition ballerinaTypeDefinition = PsiTreeUtil.getParentOfType(prevSibling,
-                            BallerinaTypeDefinition.class);
-                    if (ballerinaTypeDefinition != null) {
-                        if (!processTypeDefinition(ballerinaTypeDefinition)) {
-                            return false;
-                        }
-                    }
-
-                    BallerinaFunctionDefinition functionDefinition = PsiTreeUtil.getParentOfType(prevSibling,
-                            BallerinaFunctionDefinition.class);
-                    if (functionDefinition == null || functionDefinition.getAttachedObject() == null) {
-                        return true;
-                    }
-                    BallerinaAttachedObject attachedObject = functionDefinition.getAttachedObject();
-                    if (attachedObject == null) {
-                        return true;
-                    }
-                    PsiElement identifier = attachedObject.getIdentifier();
-                    PsiReference reference = identifier.getReference();
-                    if (reference == null) {
-                        return true;
-                    }
-                    PsiElement resolvedElement = reference.resolve();
-                    if (resolvedElement == null || !(resolvedElement.getParent() instanceof BallerinaTypeDefinition)) {
-                        return true;
-                    }
-                    return processTypeDefinition(((BallerinaTypeDefinition) resolvedElement.getParent()));
                 }
             }
         }
@@ -125,10 +125,5 @@ public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
     @Override
     protected boolean crossOff(@NotNull PsiElement e) {
         return false;
-    }
-
-    @Override
-    public int getCount() {
-        return count;
     }
 }

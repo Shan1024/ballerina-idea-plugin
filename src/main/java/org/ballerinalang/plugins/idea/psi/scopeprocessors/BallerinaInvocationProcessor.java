@@ -22,7 +22,6 @@ public class BallerinaInvocationProcessor extends BallerinaScopeProcessorBase {
     private final CompletionResultSet myResult;
     @NotNull
     private final PsiElement myElement;
-    private int count;
 
     public BallerinaInvocationProcessor(@Nullable CompletionResultSet result, @NotNull PsiElement element,
                                         boolean isCompletion) {
@@ -35,21 +34,18 @@ public class BallerinaInvocationProcessor extends BallerinaScopeProcessorBase {
     public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
         if (accept(element)) {
             PsiElement parent = element.getParent();
-            if(parent==null){
+            if (parent == null) {
                 return true;
             }
             PsiElement superParent = parent.getParent();
-            if(superParent==null){
+            if (superParent == null) {
                 return true;
             }
             PsiElement prevSibling = superParent.getPrevSibling();
             if (prevSibling == null || !(prevSibling instanceof BallerinaVariableReference)) {
                 return true;
             }
-            long start = System.nanoTime();
             PsiElement type = ((BallerinaVariableReference) prevSibling).getType();
-            long end = System.nanoTime();
-            System.out.println("Time: " + (end - start));
 
             // Todo - Refactor and remove duplication in BallerinaFieldProcessor
             if (type != null) {
@@ -134,10 +130,5 @@ public class BallerinaInvocationProcessor extends BallerinaScopeProcessorBase {
     @Override
     protected boolean crossOff(@NotNull PsiElement e) {
         return false;
-    }
-
-    @Override
-    public int getCount() {
-        return count;
     }
 }

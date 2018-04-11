@@ -22,7 +22,6 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
     private final CompletionResultSet myResult;
     @NotNull
     private final PsiElement myElement;
-    private int count;
 
     public BallerinaTopLevelScopeProcessor(@Nullable CompletionResultSet result, @NotNull PsiElement element,
                                            boolean isCompletion) {
@@ -87,7 +86,6 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                 if (!isCompletion() && getResult() != null) {
                     return false;
                 }
-                count++;
             }
         }
         return true;
@@ -105,10 +103,5 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
     @Override
     protected boolean crossOff(@NotNull PsiElement e) {
         return false;
-    }
-
-    @Override
-    public int getCount() {
-        return count;
     }
 }

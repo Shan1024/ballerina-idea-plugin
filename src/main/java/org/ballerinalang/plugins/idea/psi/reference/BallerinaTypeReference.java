@@ -70,12 +70,10 @@ public class BallerinaTypeReference extends BallerinaCachedReference<BallerinaId
 
         // Get suggestions from current file.
         if (!processor.execute(file, ResolveState.initial())) {
-            System.out.println("Count: "+processor.getCount());
             return false;
         }
         // Recursively find definitions in the project starting from the current directory.
         recursivelyFind(processor, file.getContainingDirectory(), file);
-        System.out.println("Count: "+processor.getCount());
         return true;
     }
 

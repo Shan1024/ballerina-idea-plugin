@@ -25,7 +25,6 @@ public class BallerinaObjectFieldProcessor extends BallerinaScopeProcessorBase {
     private final CompletionResultSet myResult;
     @NotNull
     private final PsiElement myElement;
-    private int count;
 
     public BallerinaObjectFieldProcessor(@Nullable CompletionResultSet result, @NotNull PsiElement element,
                                          boolean isCompletion) {
@@ -79,6 +78,9 @@ public class BallerinaObjectFieldProcessor extends BallerinaScopeProcessorBase {
             } else if (myElement.getText().equals(identifier.getText())) {
                 add(identifier);
             }
+            if(!isCompletion()&&getResult()!=null){
+                return;
+            }
         }
     }
 
@@ -94,10 +96,5 @@ public class BallerinaObjectFieldProcessor extends BallerinaScopeProcessorBase {
     @Override
     protected boolean crossOff(@NotNull PsiElement e) {
         return false;
-    }
-
-    @Override
-    public int getCount() {
-        return count;
     }
 }

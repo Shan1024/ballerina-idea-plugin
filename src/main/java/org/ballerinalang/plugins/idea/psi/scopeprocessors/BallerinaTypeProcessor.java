@@ -18,7 +18,6 @@ public class BallerinaTypeProcessor extends BallerinaScopeProcessorBase {
     private final CompletionResultSet myResult;
     @NotNull
     private final PsiElement myElement;
-    private int count;
 
     public BallerinaTypeProcessor(@Nullable CompletionResultSet result, @NotNull PsiElement element) {
         super(element);
@@ -43,7 +42,6 @@ public class BallerinaTypeProcessor extends BallerinaScopeProcessorBase {
                         }
                     }
                 }
-                count++;
             }
         }
         return true;
@@ -61,10 +59,5 @@ public class BallerinaTypeProcessor extends BallerinaScopeProcessorBase {
     @Override
     protected boolean crossOff(@NotNull PsiElement e) {
         return false;
-    }
-
-    @Override
-    public int getCount() {
-        return count;
     }
 }
