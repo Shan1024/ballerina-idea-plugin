@@ -31,6 +31,7 @@ import org.ballerinalang.plugins.idea.psi.reference.BallerinaNameReferenceRefere
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaObjectFieldReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaObjectFunctionReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaOrgReference;
+import org.ballerinalang.plugins.idea.psi.reference.BallerinaPackageNameReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaTypeReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -62,8 +63,11 @@ public class BallerinaIdentifier extends LeafPsiElement implements PsiNameIdenti
     public PsiReference getReference() {
         // Note - Don't need to return references for definitions.
         PsiElement parent = getParent();
-        if (parent instanceof BallerinaNameReference) {
-            // Todo - Need to consider the parent type?
+        if (parent instanceof BallerinaOrgName) {
+            return new BallerinaOrgReference(this);
+        } else if (parent instanceof BallerinaPackageName) {
+//            return new BallerinaPackageNameReference(this);
+        } else if (parent instanceof BallerinaNameReference) {
             return new BallerinaNameReferenceReference(this);
         } else if (parent instanceof BallerinaWorkerReply) {
             return new BallerinaNameReferenceReference(this);
@@ -74,8 +78,6 @@ public class BallerinaIdentifier extends LeafPsiElement implements PsiNameIdenti
             //            if (parent.getParent() instanceof BallerinaObjectParameterList) {
             return new BallerinaObjectFieldReference(this);
             //            }
-        } else if (parent instanceof BallerinaOrgName) {
-            return new BallerinaOrgReference(this);
         } else if (parent instanceof BallerinaAttachedObject) {
             return new BallerinaTypeReference(this);
         } else if (parent instanceof BallerinaCallableUnitSignature) {

@@ -20,11 +20,14 @@ package org.ballerinalang.plugins.idea.psi.reference;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.psi.BallerinaBlock;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
+import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaStatement;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaBlockProcessor;
@@ -73,47 +76,68 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
     }
 
     public boolean processResolveVariants(@NotNull BallerinaScopeProcessorBase processor) {
-        // Note - Execute BallerinaStatementProcessor first.
-        BallerinaStatement ballerinaStatement = PsiTreeUtil.getParentOfType(myElement, BallerinaStatement.class);
-        if (ballerinaStatement != null && processor instanceof BallerinaStatementProcessor) {
-            if (!processor.execute(ballerinaStatement, ResolveState.initial())) {
-                return false;
-            }
-        }
-
-        BallerinaBlock ballerinaBlock = PsiTreeUtil.getParentOfType(myElement, BallerinaBlock.class);
-        if (ballerinaBlock != null && processor instanceof BallerinaBlockProcessor) {
-            if (!processor.execute(ballerinaBlock, ResolveState.initial())) {
-                return false;
-            }
-        }
-
         PsiFile containingFile = myElement.getContainingFile();
         if (!(containingFile instanceof BallerinaFile)) {
             return false;
         }
 
-        // Get suggestions from current file. This is needed sometimes because without the dummy identifier inserted
-        // by the IDEA, the file might not generate the PSI tree correctly.
-        if (!processor.execute(containingFile, ResolveState.initial())) {
-            return false;
+        if (myElement instanceof BallerinaNameReference) {
+            return true;
         }
 
-        PsiFile originalFile = containingFile.getOriginalFile();
-        // Get suggestions from current file.
-        if (!processor.execute(originalFile, ResolveState.initial())) {
-            return false;
+        BallerinaNameReference nameReference = (BallerinaNameReference) myElement.getParent();
+        if (nameReference.isInLocalPackage()) {
+            // Note - Execute BallerinaStatementProcessor first.
+            BallerinaStatement ballerinaStatement = PsiTreeUtil.getParentOfType(myElement, BallerinaStatement.class);
+            if (ballerinaStatement != null && processor instanceof BallerinaStatementProcessor) {
+                if (!processor.execute(ballerinaStatement, ResolveState.initial())) {
+                    return false;
+                }
+            }
+            BallerinaBlock ballerinaBlock = PsiTreeUtil.getParentOfType(myElement, BallerinaBlock.class);
+            if (ballerinaBlock != null && processor instanceof BallerinaBlockProcessor) {
+                if (!processor.execute(ballerinaBlock, ResolveState.initial())) {
+                    return false;
+                }
+            }
+
+            // Get suggestions from current file. This is needed sometimes because without the dummy identifier inserted
+            // by the IDEA, the file might not generate the PSI tree correctly.
+            if (!processor.execute(containingFile, ResolveState.initial())) {
+                return false;
+            }
+            PsiFile originalFile = containingFile.getOriginalFile();
+            // Get suggestions from current file.
+            if (!processor.execute(originalFile, ResolveState.initial())) {
+                return false;
+            }
+            // Recursively find definitions in the project starting from the current directory.
+            if (originalFile.getContainingDirectory() != null) {
+                recursivelyFindOutwards(processor, originalFile.getContainingDirectory(), originalFile);
+            }
+        } else {
+            BallerinaPackageReference packageReference = nameReference.getPackageReference();
+            if (packageReference == null) {
+                return false;
+            }
+            PsiReference reference = packageReference.getReference();
+            if (reference == null) {
+                return false;
+            }
+            PsiElement resolvedElement = reference.resolve();
+            if (resolvedElement == null || !(resolvedElement instanceof PsiDirectory)) {
+                return true;
+            }
+            return recursivelyFindInPackage(processor, ((PsiDirectory) resolvedElement));
         }
-        // Recursively find definitions in the project starting from the current directory.
-        if (originalFile.getContainingDirectory() != null) {
-            recursivelyFind(processor, originalFile.getContainingDirectory(), originalFile);
-        }
+
+
         return true;
     }
 
     // Todo - Merge with method in BallerinaTypeReference
-    private boolean recursivelyFind(@NotNull BallerinaScopeProcessorBase processor, @NotNull PsiDirectory root,
-                                    @Nullable PsiElement originToIgnore) {
+    private boolean recursivelyFindOutwards(@NotNull BallerinaScopeProcessorBase processor, @NotNull PsiDirectory root,
+                                            @Nullable PsiElement originToIgnore) {
         if (!processor.isCompletion() && processor.getResult() != null) {
             return false;
         }
@@ -152,7 +176,7 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
                 }
                 if (!(BallerinaPsiImplUtil.isAContentRoot(superParent) && IGNORED_DIRECTORIES.contains(directory
                         .getName()))) {
-                    recursivelyFind(processor, directory, null);
+                    recursivelyFindOutwards(processor, directory, null);
                 }
             }
 
@@ -162,9 +186,38 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
                     return true;
                 }
                 if (!BallerinaPsiImplUtil.isAContentRoot(parent)) {
-                    return recursivelyFind(processor, parent, root);
+                    return recursivelyFindOutwards(processor, parent, root);
                 }
             }
+        }
+        return true;
+    }
+
+    // Todo - Merge with method in BallerinaTypeReference
+    private boolean recursivelyFindInPackage(@NotNull BallerinaScopeProcessorBase processor,
+                                             @NotNull PsiDirectory root) {
+        if (!processor.isCompletion() && processor.getResult() != null) {
+            return false;
+        }
+        // We use breadth first search kind of approach here. First process in all files in the current directory,
+        // then process all subdirectories.
+        List<PsiDirectory> directories = new LinkedList<>();
+
+        // Iterate through all elements in the current directory.
+        for (PsiElement child : root.getChildren()) {
+            if (child instanceof PsiDirectory) {
+                // If the child is a directory, we add it to the directories list to process later.
+                directories.add(((PsiDirectory) child));
+            } else if (child instanceof BallerinaFile) {
+                // If the child is a Ballerina file, process the file.
+                if (!processor.execute(child, ResolveState.initial())) {
+                    return false;
+                }
+            }
+        }
+        // Iterate though all directories and process them.
+        for (PsiDirectory directory : directories) {
+            recursivelyFindInPackage(processor, directory);
         }
         return true;
     }
