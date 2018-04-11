@@ -88,18 +88,25 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
             }
         }
 
-        PsiFile file = myElement.getContainingFile().getOriginalFile();
-        if (!(file instanceof BallerinaFile)) {
+        PsiFile containingFile = myElement.getContainingFile();
+        if (!(containingFile instanceof BallerinaFile)) {
             return false;
         }
 
+        // Get suggestions from current file. This is needed sometimes because without the dummy identifier inserted
+        // by the IDEA, the file might not generate the PSI tree correctly.
+        if (!processor.execute(containingFile, ResolveState.initial())) {
+            return false;
+        }
+
+        PsiFile originalFile = containingFile.getOriginalFile();
         // Get suggestions from current file.
-        if (!processor.execute(file, ResolveState.initial())) {
+        if (!processor.execute(originalFile, ResolveState.initial())) {
             return false;
         }
         // Recursively find definitions in the project starting from the current directory.
-        if (file.getContainingDirectory() != null) {
-            recursivelyFind(processor, file.getContainingDirectory(), file);
+        if (originalFile.getContainingDirectory() != null) {
+            recursivelyFind(processor, originalFile.getContainingDirectory(), originalFile);
         }
         return true;
     }
