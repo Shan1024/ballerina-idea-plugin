@@ -82,6 +82,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FAIL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FIELD;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FIELD_DEFINITION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FINALLY;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FINITE_TYPE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FIRST;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FLOATING_POINT_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FOLLOWED;
@@ -449,6 +450,9 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
 
                 .between(FORK, SEMICOLON).spaceIf(false)
                 .around(FORK).spaceIf(true)
+
+                .between(IDENTIFIER, FINITE_TYPE).spaceIf(true)
+
                 // Streaming
                 .before(WHERE_CLAUSE).spaceIf(true)
                 .before(WINDOW_CLAUSE).spaceIf(true)
