@@ -45,15 +45,8 @@ public class BallerinaTypeReference extends BallerinaCachedReference<BallerinaId
     @Override
     public PsiElement resolveInner() {
         BallerinaScopeProcessorBase processor = new BallerinaTypeProcessor(null, myElement);
-
         processResolveVariants(processor);
-        PsiElement result = processor.getResult();
-        // Todo - change to consider return value
-        if (result != null) {
-            return result;
-        }
-
-        return null;
+        return processor.getResult();
     }
 
     @NotNull

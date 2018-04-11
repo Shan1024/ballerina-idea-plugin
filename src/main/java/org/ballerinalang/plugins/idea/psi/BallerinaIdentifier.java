@@ -65,8 +65,6 @@ public class BallerinaIdentifier extends LeafPsiElement implements PsiNameIdenti
         PsiElement parent = getParent();
         if (parent instanceof BallerinaOrgName) {
             return new BallerinaOrgReference(this);
-        } else if (parent instanceof BallerinaPackageName) {
-//            return new BallerinaPackageNameReference(this);
         } else if (parent instanceof BallerinaNameReference) {
             return new BallerinaNameReferenceReference(this);
         } else if (parent instanceof BallerinaWorkerReply) {
@@ -87,8 +85,6 @@ public class BallerinaIdentifier extends LeafPsiElement implements PsiNameIdenti
                 BallerinaAttachedObject attachedObject = ballerinaFunctionDefinition.getAttachedObject();
                 if (attachedObject != null) {
                     return new BallerinaObjectFunctionReference(this);
-                } else {
-                    return new BallerinaTypeReference(this);
                 }
             }
         } else if (parent instanceof BallerinaField) {
