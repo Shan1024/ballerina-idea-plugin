@@ -333,6 +333,11 @@ public class BallerinaPsiImplUtil {
                 if (!typeNameList.isEmpty()) {
                     return typeNameList.get(0);
                 }
+            } else if (typeName instanceof BallerinaSimpleTypeName) {
+                reference = typeName.findReferenceAt(typeName.getTextLength());
+                if (reference != null) {
+                    return reference.resolve();
+                }
             }
         }
         return null;
