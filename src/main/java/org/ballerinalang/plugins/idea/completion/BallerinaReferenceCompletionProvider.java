@@ -17,6 +17,7 @@ import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaFieldProcesso
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaInvocationProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaObjectFieldProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaObjectFunctionProcessor;
+import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaStatementProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaTopLevelScopeProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaTypeProcessor;
 import org.jetbrains.annotations.NotNull;
@@ -36,6 +37,9 @@ public class BallerinaReferenceCompletionProvider extends CompletionProvider<Com
         // Todo - Refactor
         if (reference instanceof BallerinaNameReferenceReference) {
             BallerinaNameReferenceReference nameReferenceReference = (BallerinaNameReferenceReference) reference;
+            if (!nameReferenceReference.processResolveVariants(new BallerinaStatementProcessor(result, element, true))) {
+                return;
+            }
             if (!nameReferenceReference.processResolveVariants(new BallerinaBlockProcessor(result, element, true))) {
                 return;
             }

@@ -25,9 +25,11 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.psi.BallerinaBlock;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
+import org.ballerinalang.plugins.idea.psi.BallerinaStatement;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaBlockProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaScopeProcessorBase;
+import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaStatementProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaTopLevelScopeProcessor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -45,10 +47,16 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
     @Nullable
     @Override
     public PsiElement resolveInner() {
-        BallerinaScopeProcessorBase processor = new BallerinaBlockProcessor(null, myElement, false);
+        BallerinaScopeProcessorBase processor = new BallerinaStatementProcessor(null, myElement, false);
         processResolveVariants(processor);
         PsiElement result = processor.getResult();
-        // Todo - change to consider return value
+        if (result != null) {
+            return result;
+        }
+
+        processor = new BallerinaBlockProcessor(null, myElement, false);
+        processResolveVariants(processor);
+        result = processor.getResult();
         if (result != null) {
             return result;
         }
@@ -65,6 +73,14 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
     }
 
     public boolean processResolveVariants(@NotNull BallerinaScopeProcessorBase processor) {
+        // Note - Execute BallerinaStatementProcessor first.
+        BallerinaStatement ballerinaStatement = PsiTreeUtil.getParentOfType(myElement, BallerinaStatement.class);
+        if (ballerinaStatement != null && processor instanceof BallerinaStatementProcessor) {
+            if (!processor.execute(ballerinaStatement, ResolveState.initial())) {
+                return false;
+            }
+        }
+
         BallerinaBlock ballerinaBlock = PsiTreeUtil.getParentOfType(myElement, BallerinaBlock.class);
         if (ballerinaBlock != null && processor instanceof BallerinaBlockProcessor) {
             if (!processor.execute(ballerinaBlock, ResolveState.initial())) {
@@ -127,7 +143,8 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
                 if (superParent == null) {
                     continue;
                 }
-                if (!(BallerinaPsiImplUtil.isAContentRoot(superParent) && IGNORED_DIRECTORIES.contains(directory.getName()))) {
+                if (!(BallerinaPsiImplUtil.isAContentRoot(superParent) && IGNORED_DIRECTORIES.contains(directory
+                        .getName()))) {
                     recursivelyFind(processor, directory, null);
                 }
             }
