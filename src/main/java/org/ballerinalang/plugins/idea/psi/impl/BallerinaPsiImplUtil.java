@@ -365,15 +365,16 @@ public class BallerinaPsiImplUtil {
 
         } else if (typeName instanceof BallerinaUnionTypeName) {
             BallerinaTypeName ballerinaTypeName = getTypeNameFromNillableType(((BallerinaUnionTypeName) typeName));
-            if (ballerinaTypeName == null) {
-                return null;
+            if (ballerinaTypeName != null) {
+                // Todo - Use a util method
+                PsiReference reference = ballerinaTypeName.findReferenceAt(ballerinaTypeName.getTextLength());
+                if (reference == null) {
+                    return null;
+                }
+                return reference.resolve();
+            } else {
+                return typeName;
             }
-            // Todo - Use a util method
-            PsiReference reference = ballerinaTypeName.findReferenceAt(ballerinaTypeName.getTextLength());
-            if (reference == null) {
-                return null;
-            }
-            return reference.resolve();
         } else if (typeName instanceof BallerinaNullableTypeName) {
             BallerinaTypeName typeNameFromNillableType = getTypeNameFromNillableType((BallerinaNullableTypeName)
                     typeName);
