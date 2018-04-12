@@ -28,6 +28,7 @@ import com.intellij.codeInsight.template.impl.TemplateSettings;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorModificationUtil;
 import com.intellij.openapi.util.Iconable;
+import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import org.ballerinalang.plugins.idea.BallerinaIcons;
@@ -64,6 +65,9 @@ public class BallerinaCompletionUtils {
     private static final int ANNOTATION_PRIORITY = VALUE_TYPES_PRIORITY - 1;
     private static final int ENUM_PRIORITY = VALUE_TYPES_PRIORITY - 1;
     public static final int KEYWORDS_PRIORITY = VALUE_TYPES_PRIORITY - 2;
+
+
+    public static final Key<String> FUNCTION_RETURN_TYPE_KEY = Key.create("FUNCTION_RETURN_TYPE");
 
     // File level keywords
     private static final LookupElementBuilder PUBLIC;
@@ -530,7 +534,6 @@ public class BallerinaCompletionUtils {
         LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(definition.getIdentifier()
                 .getText(), definition).withIcon(definition.getIcon(Iconable.ICON_FLAG_VISIBILITY)).bold()
                 .withInsertHandler(insertHandler);
-
         if (definition instanceof BallerinaFunctionDefinition) {
             BallerinaCallableUnitSignature callableUnitSignature =
                     ((BallerinaFunctionDefinition) definition).getCallableUnitSignature();
@@ -545,6 +548,7 @@ public class BallerinaCompletionUtils {
                     }
                 } else {
                     builder = builder.withTypeText("nil");
+                    definition.putUserData(FUNCTION_RETURN_TYPE_KEY, "nil");
                 }
                 // Add return type.
                 BallerinaFormalParameterList formalParameterList = callableUnitSignature.getFormalParameterList();
@@ -576,6 +580,7 @@ public class BallerinaCompletionUtils {
             }
         } else {
             builder = builder.withTypeText("nil");
+            identifier.putUserData(FUNCTION_RETURN_TYPE_KEY ,"nil");
         }
         // Add return type.
         BallerinaFormalParameterList formalParameterList = objectCallableUnitSignature.getFormalParameterList();

@@ -27,6 +27,8 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDocumentManager;
 
+import static org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils.FUNCTION_RETURN_TYPE_KEY;
+
 /**
  * Provides parenthesis completion support.
  */
@@ -58,7 +60,12 @@ public class ParenthesisInsertHandler implements InsertHandler<LookupElement> {
         if (project != null) {
             int completionCharOffset = getCompletionCharOffset(editor);
             if (completionCharOffset == -1) {
-                EditorModificationUtil.insertStringAtCaret(editor, "()", false, 1);
+                Object userData = item.getPsiElement().getUserData(FUNCTION_RETURN_TYPE_KEY);
+                if (userData != null) {
+                    EditorModificationUtil.insertStringAtCaret(editor, "();", false, 1);
+                } else {
+                    EditorModificationUtil.insertStringAtCaret(editor, "()", false, 1);
+                }
                 PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
             } else {
                 editor.getCaretModel().moveToOffset(editor.getCaretModel().getOffset() + completionCharOffset + 1);
