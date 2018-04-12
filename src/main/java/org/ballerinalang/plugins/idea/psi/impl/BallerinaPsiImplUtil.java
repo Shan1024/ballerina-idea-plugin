@@ -57,6 +57,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaImportDeclaration;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaNamedPattern;
 import org.ballerinalang.plugins.idea.psi.BallerinaNullableTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaOrgName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageDeclaration;
@@ -274,6 +275,8 @@ public class BallerinaPsiImplUtil {
                 return getTypeNameFromField(((BallerinaFieldDefinition) parent));
             } else if (parent instanceof BallerinaParameterWithType) {
                 return getTypeNameFromParameter(((BallerinaParameterWithType) parent));
+            } else if (parent instanceof BallerinaNamedPattern) {
+                return getTypeNameFromNamedPattern(((BallerinaNamedPattern) parent));
             }
         } else if (variableReference instanceof BallerinaFieldVariableReference) {
             BallerinaField field = ((BallerinaFieldVariableReference) variableReference).getField();
@@ -395,6 +398,15 @@ public class BallerinaPsiImplUtil {
     //        }
     //        return true;
     //    }
+
+    @Nullable
+    public static PsiElement getTypeNameFromNamedPattern(@NotNull BallerinaNamedPattern pattern) {
+        BallerinaTypeName typeName = pattern.getTypeName();
+        if (typeName instanceof BallerinaTupleTypeName) {
+            return PsiTreeUtil.getChildOfType(typeName, BallerinaUnionTypeName.class);
+        }
+        return null;
+    }
 
     @Nullable
     public static PsiElement getTypeNameFromParameter(@NotNull BallerinaParameterWithType parameter) {
