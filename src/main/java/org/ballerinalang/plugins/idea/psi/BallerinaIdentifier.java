@@ -68,7 +68,9 @@ public class BallerinaIdentifier extends LeafPsiElement implements PsiNameIdenti
         } else if (parent instanceof BallerinaNameReference) {
             return new BallerinaNameReferenceReference(this);
         } else if (parent instanceof BallerinaAnyIdentifierName) {
-            return new BallerinaNameReferenceReference(this);
+            if (!(parent.getParent() instanceof BallerinaCallableUnitSignature)) {
+                return new BallerinaNameReferenceReference(this);
+            }
         } else if (parent instanceof BallerinaWorkerReply) {
             return new BallerinaNameReferenceReference(this);
         } else if (parent instanceof BallerinaTriggerWorker) {
@@ -91,8 +93,8 @@ public class BallerinaIdentifier extends LeafPsiElement implements PsiNameIdenti
             }
         } else if (parent instanceof BallerinaField) {
             return new BallerinaFieldReference(this);
-        } else if (parent instanceof BallerinaAnyIdentifierName) {
-            return new org.ballerinalang.plugins.idea.psi.reference.BallerinaInvocationReference(this);
+            //        } else if (parent instanceof BallerinaAnyIdentifierName) {
+            //            return new org.ballerinalang.plugins.idea.psi.reference.BallerinaInvocationReference(this);
         }
         return null;
     }
