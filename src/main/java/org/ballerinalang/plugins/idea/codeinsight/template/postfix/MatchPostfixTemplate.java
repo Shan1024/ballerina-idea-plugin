@@ -35,6 +35,7 @@ public class MatchPostfixTemplate extends StringBasedPostfixTemplate {
             List<BallerinaTypeName> typeNameList = ballerinaUnionTypeName.getTypeNameList();
             for (int i = 0; i < typeNameList.size(); i++) {
                 template.addVariable("name" + i, name, name, true);
+                template.addVariable("value" + i, name, name, true);
             }
         }
     }
@@ -49,15 +50,13 @@ public class MatchPostfixTemplate extends StringBasedPostfixTemplate {
 
             for (int i = 0; i < typeNameList.size(); i++) {
                 template.append("    ").append(typeNameList.get(i).getText()).append(" $name").append(i)
-                        .append("$ => {");
-                if (i == 0) {
-                    template.append("$END$");
-                }
-                template.append("}");
+                        .append("$ => {\n").append("$value").append(i).append("$").append("\n}");
                 if (i != typeNameList.size() - 1) {
                     template.append("\n");
                 }
             }
+        } else {
+            template.append("$END$");
         }
         return template.append("    \n}").toString();
     }
