@@ -141,8 +141,9 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                                     IElementType tokenType = latestDoneMarker.getTokenType();
                                     // io:println(jwtToken); as the first statement in a function.
                                     // runtime:sleepCurrentWorker(20); in the first statement as the second worker
-                                    if (tokenType == BallerinaTypes.CALLABLE_UNIT_SIGNATURE ||
-                                            tokenType == BallerinaTypes.WORKER_DEFINITION) {
+                                    if (tokenType == BallerinaTypes.CALLABLE_UNIT_SIGNATURE
+                                            || tokenType == BallerinaTypes.OBJECT_CALLABLE_UNIT_SIGNATURE
+                                            || tokenType == BallerinaTypes.WORKER_DEFINITION) {
                                         return true;
                                     }
                                 }
