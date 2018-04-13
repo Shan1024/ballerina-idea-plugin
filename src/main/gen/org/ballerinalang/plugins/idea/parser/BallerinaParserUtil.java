@@ -131,12 +131,16 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                                 //
                                 if (latestDoneMarker != null) {
                                     IElementType tokenType = latestDoneMarker.getTokenType();
-                                    if (tokenType == BallerinaTypes.INVOCATION_ARG
-                                            || tokenType == BallerinaTypes.RECORD_KEY_VALUE) {
+                                    if (tokenType == BallerinaTypes.INVOCATION_ARG) {
+                                        return true;
+                                    } else if (tokenType == BallerinaTypes.RECORD_KEY_VALUE) {
                                         return false;
                                     }
                                 }
                                 // return (variable:^"person 1".^"first name", variable2:^"person 2".^"current age2");
+                                return true;
+                            } else if (rawLookup == BallerinaTypes.COMMA
+                                    && rawLookup2 == BallerinaTypes.QUOTED_STRING_LITERAL) {
                                 return true;
                             } else if (rawLookup == BallerinaTypes.LEFT_BRACE
                                     && rawLookup2 == BallerinaTypes.IDENTIFIER) {
