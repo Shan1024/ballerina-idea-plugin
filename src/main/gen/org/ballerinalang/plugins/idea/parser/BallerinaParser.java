@@ -3890,17 +3890,28 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PatternStreamingEdgeInput followed by PatternStreamingInput
+  // PatternStreamingEdgeInput (followed by | COMMA) PatternStreamingInput
   static boolean Pattern1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "Pattern1")) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_);
     r = PatternStreamingEdgeInput(b, l + 1);
-    r = r && consumeTokens(b, 1, FOLLOWED, BY);
+    r = r && Pattern1_1(b, l + 1);
     p = r; // pin = 2
     r = r && PatternStreamingInput(b, l + 1);
     exit_section_(b, l, m, r, p, null);
     return r || p;
+  }
+
+  // followed by | COMMA
+  private static boolean Pattern1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "Pattern1_1")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = parseTokens(b, 0, FOLLOWED, BY);
+    if (!r) r = consumeToken(b, COMMA);
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   /* ********************************************************** */

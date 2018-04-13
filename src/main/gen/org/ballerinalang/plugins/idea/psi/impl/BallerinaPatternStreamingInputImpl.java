@@ -67,6 +67,12 @@ public class BallerinaPatternStreamingInputImpl extends BallerinaCompositeElemen
 
   @Override
   @Nullable
+  public PsiElement getComma() {
+    return findChildByType(COMMA);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getLeftParenthesis() {
     return findChildByType(LEFT_PARENTHESIS);
   }

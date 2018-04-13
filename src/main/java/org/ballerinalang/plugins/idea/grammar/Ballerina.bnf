@@ -856,7 +856,7 @@ PatternStreamingInput ::=
     |   Pattern3
     |   PatternStreamingEdgeInput
 
-private Pattern1 ::= PatternStreamingEdgeInput followed by PatternStreamingInput {pin=2}
+private Pattern1 ::= PatternStreamingEdgeInput (followed by | COMMA) PatternStreamingInput {pin=2}
 private Pattern2 ::= LEFT_PARENTHESIS PatternStreamingInput RIGHT_PARENTHESIS
 private Pattern4 ::= NOT PatternStreamingEdgeInput (AND PatternStreamingEdgeInput | for SimpleLiteral) {pin(".*")=1}
 private Pattern3 ::= foreach PatternStreamingInput {pin=1}

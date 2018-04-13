@@ -36,6 +36,9 @@ public interface BallerinaPatternStreamingInput extends BallerinaCompositeElemen
   PsiElement getAnd();
 
   @Nullable
+  PsiElement getComma();
+
+  @Nullable
   PsiElement getLeftParenthesis();
 
   @Nullable
