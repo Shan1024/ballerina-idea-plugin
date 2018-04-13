@@ -29,7 +29,7 @@ public interface BallerinaObjectInitializerParameterList extends BallerinaCompos
   @NotNull
   PsiElement getLeftParenthesis();
 
-  @NotNull
+  @Nullable
   PsiElement getRightParenthesis();
 
 }

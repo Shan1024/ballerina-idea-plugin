@@ -248,7 +248,7 @@ PrivateObjectFields ::= private LEFT_BRACE fieldDefinition* RIGHT_BRACE {pin=1}
 
 ObjectInitializer ::= AnnotationAttachment* documentationAttachment? (public)? (native)? new ObjectInitializerParameterList CallableUnitBody {pin=5}
 
-ObjectInitializerParameterList ::= LEFT_PARENTHESIS ObjectParameterList? RIGHT_PARENTHESIS
+ObjectInitializerParameterList ::= LEFT_PARENTHESIS ObjectParameterList? RIGHT_PARENTHESIS {pin=1}
 
 ObjectFunctions ::= (AnnotationAttachment* documentationAttachment? deprecatedAttachment? ObjectFunctionDefinition)+
 
@@ -260,7 +260,7 @@ ObjectParameterList ::= (ObjectDefaultableParameter | ObjectParameter) (COMMA (O
 
 // Todo - Revert back the changes?
 // TODO try to merge with parameter later
-ObjectParameter ::= AnnotationAttachment* (identifier | TypeName identifier)
+ObjectParameter ::= AnnotationAttachment* (TypeName identifier | identifier)
 
 // TODO try to merge with defaultable Parameter later
 ObjectDefaultableParameter ::= ObjectParameter ASSIGN Expression
@@ -735,7 +735,7 @@ parameterWithType ::= TypeName identifier
 
 DefaultableParameter ::= Parameter ASSIGN Expression
 
-RestParameter ::= AnnotationAttachment* TypeName ELLIPSIS identifier
+RestParameter ::= AnnotationAttachment* TypeName ELLIPSIS identifier {pin=3}
 
 FormalParameterList ::= (DefaultableParameter | Parameter) (COMMA (DefaultableParameter | Parameter))* (COMMA RestParameter)? | RestParameter
 

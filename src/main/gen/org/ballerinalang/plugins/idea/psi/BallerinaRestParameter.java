@@ -32,7 +32,7 @@ public interface BallerinaRestParameter extends BallerinaCompositeElement {
   @NotNull
   PsiElement getEllipsis();
 
-  @NotNull
+  @Nullable
   PsiElement getIdentifier();
 
 }

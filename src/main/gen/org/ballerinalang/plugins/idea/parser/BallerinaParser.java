@@ -3443,13 +3443,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean ObjectInitializerParameterList(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ObjectInitializerParameterList")) return false;
     if (!nextTokenIs(b, LEFT_PARENTHESIS)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, OBJECT_INITIALIZER_PARAMETER_LIST, null);
     r = consumeToken(b, LEFT_PARENTHESIS);
-    r = r && ObjectInitializerParameterList_1(b, l + 1);
-    r = r && consumeToken(b, RIGHT_PARENTHESIS);
-    exit_section_(b, m, OBJECT_INITIALIZER_PARAMETER_LIST, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, ObjectInitializerParameterList_1(b, l + 1));
+    r = p && consumeToken(b, RIGHT_PARENTHESIS) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // ObjectParameterList?
@@ -3460,7 +3461,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // AnnotationAttachment* (identifier | TypeName identifier)
+  // AnnotationAttachment* (TypeName identifier | identifier)
   public static boolean ObjectParameter(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ObjectParameter")) return false;
     boolean r;
@@ -3483,20 +3484,20 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // identifier | TypeName identifier
+  // TypeName identifier | identifier
   private static boolean ObjectParameter_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ObjectParameter_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, IDENTIFIER);
-    if (!r) r = ObjectParameter_1_1(b, l + 1);
+    r = ObjectParameter_1_0(b, l + 1);
+    if (!r) r = consumeToken(b, IDENTIFIER);
     exit_section_(b, m, null, r);
     return r;
   }
 
   // TypeName identifier
-  private static boolean ObjectParameter_1_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ObjectParameter_1_1")) return false;
+  private static boolean ObjectParameter_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ObjectParameter_1_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = TypeName(b, l + 1, -1);
@@ -4411,13 +4412,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   // AnnotationAttachment* TypeName ELLIPSIS identifier
   public static boolean RestParameter(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "RestParameter")) return false;
-    boolean r;
+    boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, REST_PARAMETER, "<rest parameter>");
     r = RestParameter_0(b, l + 1);
     r = r && TypeName(b, l + 1, -1);
-    r = r && consumeTokens(b, 0, ELLIPSIS, IDENTIFIER);
-    exit_section_(b, l, m, r, false, null);
-    return r;
+    r = r && consumeTokens(b, 1, ELLIPSIS, IDENTIFIER);
+    p = r; // pin = 3
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // AnnotationAttachment*
