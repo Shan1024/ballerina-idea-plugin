@@ -29,11 +29,13 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
     public static boolean isPackageExpected(PsiBuilder builder, int level) {
         // Todo - Refactor code to methods
         IElementType next1Element = builder.lookAhead(1);
-        if (next1Element == null || !next1Element.toString().equals(":")) {
+        if (next1Element == null || (next1Element != BallerinaTypes.COLON
+                && next1Element != BallerinaTypes.RIGHT_PARENTHESIS)) {
             return true;
         }
         IElementType next2Element = builder.lookAhead(2);
-        if (next2Element == null || next2Element != BallerinaTypes.IDENTIFIER) {
+        if (next2Element == null || (next2Element != BallerinaTypes.IDENTIFIER
+                && next2Element != BallerinaTypes.RIGHT_BRACE)) {
             return true;
         }
         IElementType next3Element = builder.lookAhead(3);
@@ -48,7 +50,9 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                 || next3Element == BallerinaTypes.EQUAL || next3Element == BallerinaTypes.NOT_EQUAL
                 || next3Element == BallerinaTypes.GT || next3Element == BallerinaTypes.LT
                 || next3Element == BallerinaTypes.GT_EQUAL || next3Element == BallerinaTypes.LT_EQUAL
-                || next3Element == BallerinaTypes.DOT
+                || next3Element == BallerinaTypes.DOT || next3Element == BallerinaTypes.ADD
+                || next3Element == BallerinaTypes.SUB || next3Element == BallerinaTypes.DIV
+                || next3Element == BallerinaTypes.MUL
         )) {
             // We need to look behind few steps to identify the last token. If this token is not "?" only we
             // identify that the package is required.
@@ -94,8 +98,11 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                                 .IDENTIFIER)*/
                                 // @Args{value : stringvalue}
                                 && !(rawLookup == BallerinaTypes.LEFT_BRACE && rawLookup2 == BallerinaTypes.AT)
-
                                 && !(rawLookup == BallerinaTypes.LEFT_BRACE && rawLookup2 == BallerinaTypes.COLON)
+                                // Connection conn = new({initialContextFactory:config.initialContextFactory});
+                                && !(rawLookup == BallerinaTypes.LEFT_BRACE && rawLookup2 == BallerinaTypes.NEW)
+                                // {message:"Notification failed for topic [" + topic + "]",  cause:httpConnectorError }
+                                && !(rawLookup == BallerinaTypes.COMMA && rawLookup2 == BallerinaTypes.ADD)
                                 ) {
                             return true;
                         } else {
@@ -116,6 +123,14 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                                 // EmployeeSalary s = {id:e.id, salary:e.salary};
                                 if (latestDoneMarker != null
                                         && latestDoneMarker.getTokenType() == BallerinaTypes.RECORD_KEY_VALUE) {
+                                    return false;
+                                }
+                                // return (variable:^"person 1".^"first name", variable2:^"person 2".^"current age2");
+                                return true;
+                            } else if (rawLookup == BallerinaTypes.COMMA && rawLookup2 == BallerinaTypes.ADD) {
+                                //
+                                if (latestDoneMarker != null
+                                        && latestDoneMarker.getTokenType() == BallerinaTypes.INVOCATION_ARG) {
                                     return false;
                                 }
                                 // return (variable:^"person 1".^"first name", variable2:^"person 2".^"current age2");

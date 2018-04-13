@@ -196,7 +196,7 @@ Definition ::= documentationAttachment? deprecatedAttachment? AnnotationAttachme
     recoverWhile=TopLevelDefinitionRecover
 }
 
-private TopLevelDefinitionRecover ::= !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|service|function|enum|annotation|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|stream|object|future|identifier|'{')
+private TopLevelDefinitionRecover ::= !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|native|public|type|typedesc|service|function|enum|annotation|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|stream|object|future|identifier|'{')
 
 ServiceDefinition ::= service (LT NameReference GT)? identifier ServiceEndpointAttachments?  ServiceBody {pin=1}
 ServiceEndpointAttachments ::= bind (NameReference (COMMA NameReference)* | RecordLiteral) {pin=1}
@@ -703,7 +703,7 @@ NameReference ::= <<isPackageExpected>> PackageReference identifier | identifier
 //    elementType=test
 }
 
-functionNameReference ::= PackageReference? AnyIdentifierName {
+functionNameReference ::= <<isPackageExpected>> PackageReference? AnyIdentifierName {
     methods=[/*getReference*/ getQualifier /*resolve*/ resolveType isInLocalPackage]
 }
 

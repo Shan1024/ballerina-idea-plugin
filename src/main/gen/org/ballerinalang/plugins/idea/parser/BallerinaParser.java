@@ -5524,7 +5524,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|service|function|enum|annotation|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|stream|object|future|identifier|'{')
+  // !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|native|public|type|typedesc|service|function|enum|annotation|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|stream|object|future|identifier|'{')
   static boolean TopLevelDefinitionRecover(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopLevelDefinitionRecover")) return false;
     boolean r;
@@ -5534,7 +5534,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|public|type|typedesc|service|function|enum|annotation|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|stream|object|future|identifier|'{'
+  // DOCUMENTATION_TEMPLATE_START|DEPRECATED_TEMPLATE_START|'@'|native|public|type|typedesc|service|function|enum|annotation|endpoint|int|float|boolean|string|blob|map|xml|xmlns|json|table|any|stream|object|future|identifier|'{'
   private static boolean TopLevelDefinitionRecover_0(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TopLevelDefinitionRecover_0")) return false;
     boolean r;
@@ -5542,6 +5542,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     r = consumeToken(b, DOCUMENTATION_TEMPLATE_START);
     if (!r) r = consumeToken(b, DEPRECATED_TEMPLATE_START);
     if (!r) r = consumeToken(b, AT);
+    if (!r) r = consumeToken(b, NATIVE);
     if (!r) r = consumeToken(b, PUBLIC);
     if (!r) r = consumeToken(b, TYPE);
     if (!r) r = consumeToken(b, TYPEDESC);
@@ -6950,20 +6951,21 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // PackageReference? AnyIdentifierName
+  // <<isPackageExpected>> PackageReference? AnyIdentifierName
   public static boolean functionNameReference(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "functionNameReference")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, FUNCTION_NAME_REFERENCE, "<function name reference>");
-    r = functionNameReference_0(b, l + 1);
+    r = isPackageExpected(b, l + 1);
+    r = r && functionNameReference_1(b, l + 1);
     r = r && AnyIdentifierName(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
   }
 
   // PackageReference?
-  private static boolean functionNameReference_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "functionNameReference_0")) return false;
+  private static boolean functionNameReference_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "functionNameReference_1")) return false;
     PackageReference(b, l + 1);
     return true;
   }
