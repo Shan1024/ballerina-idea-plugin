@@ -141,7 +141,13 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                                 return true;
                             } else if (rawLookup == BallerinaTypes.COMMA
                                     && rawLookup2 == BallerinaTypes.QUOTED_STRING_LITERAL) {
-                                return true;
+                                if (latestDoneMarker != null) {
+                                    IElementType tokenType = latestDoneMarker.getTokenType();
+                                    if (tokenType == BallerinaTypes.RECORD_KEY_VALUE) {
+                                        return false;
+                                    }
+                                    return true;
+                                }
                             } else if (rawLookup == BallerinaTypes.LEFT_BRACE
                                     && rawLookup2 == BallerinaTypes.IDENTIFIER) {
                                 if (latestDoneMarker != null) {
