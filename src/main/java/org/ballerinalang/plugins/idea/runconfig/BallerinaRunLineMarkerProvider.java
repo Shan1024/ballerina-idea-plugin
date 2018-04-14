@@ -22,6 +22,7 @@ import com.intellij.execution.lineMarker.RunLineMarkerContributor;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.Function;
 import org.ballerinalang.plugins.idea.BallerinaIcons;
+import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaServiceDefinition;
@@ -47,13 +48,13 @@ public class BallerinaRunLineMarkerProvider extends RunLineMarkerContributor {
         }
         // Get the parent element.
         PsiElement parent = element.getParent();
-        if (parent instanceof BallerinaCallableUnitSignature) {
+        if (parent instanceof BallerinaAnyIdentifierName) {
             PsiElement superParent = parent.getParent();
-            if (!(superParent instanceof BallerinaFunctionDefinition)) {
+            if (!(superParent instanceof BallerinaCallableUnitSignature)) {
                 return null;
             }
             // Check whether the element is an identifier of a function node.
-            boolean isMain = BallerinaRunUtil.isMainFunction((BallerinaFunctionDefinition) superParent);
+            boolean isMain = BallerinaRunUtil.isMainFunction((BallerinaFunctionDefinition) superParent.getParent());
             if (!isMain) {
                 return null;
             }
