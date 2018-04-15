@@ -6,21 +6,14 @@ import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
 import org.ballerinalang.plugins.idea.psi.BallerinaExpression;
-import org.ballerinalang.plugins.idea.psi.BallerinaIntRangeExpression;
-import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaNamedPattern;
 import org.ballerinalang.plugins.idea.psi.BallerinaRecordKey;
 import org.ballerinalang.plugins.idea.psi.BallerinaRecordKeyValue;
 import org.ballerinalang.plugins.idea.psi.BallerinaRecordLiteralExpression;
-import org.ballerinalang.plugins.idea.psi.BallerinaSimpleVariableReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
-import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaVariableDefinitionStatement;
-import org.ballerinalang.plugins.idea.psi.BallerinaVariableReference;
-import org.ballerinalang.plugins.idea.psi.BallerinaVariableReferenceExpression;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
-import org.ballerinalang.plugins.idea.psi.impl.BallerinaStatementImpl;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -57,7 +50,7 @@ public class BallerinaStatementProcessor extends BallerinaScopeProcessorBase {
 
 
                     BallerinaExpression expression = parentRecordKey.getExpression();
-                    PsiElement resolvedElement = BallerinaPsiImplUtil.getBallerinaType(expression);
+                    PsiElement resolvedElement = BallerinaPsiImplUtil.getBallerinaTypeFromExpression(expression);
 
                     if (resolvedElement != null && resolvedElement.getParent() instanceof BallerinaTypeDefinition) {
                         BallerinaObjectFieldProcessor ballerinaFieldProcessor = new BallerinaObjectFieldProcessor

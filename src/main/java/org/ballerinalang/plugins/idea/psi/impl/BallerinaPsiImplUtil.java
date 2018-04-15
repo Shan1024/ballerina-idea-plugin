@@ -227,34 +227,49 @@ public class BallerinaPsiImplUtil {
                 .createSmartPsiElementPointer(element));
     }
 
-    @Nullable
+    /**
+     * Used to retrieve the type from a {@link BallerinaVariableDefinitionStatement}.
+     *
+     * @param ballerinaVariableDefinitionStatement a {@link BallerinaVariableDefinitionStatement} object.
+     * @return Type of the definition.
+     */
+    @NotNull
     public static BallerinaTypeName getType(BallerinaVariableDefinitionStatement ballerinaVariableDefinitionStatement) {
         return ballerinaVariableDefinitionStatement.getTypeName();
     }
 
+    /**
+     * Used to retrieve the type from a {@link BallerinaVariableReference}.
+     *
+     * @param ballerinaVariableReference a {@link BallerinaVariableReference} object.
+     * @return Type of the definition.
+     */
     @Nullable
     public static PsiElement getType(@NotNull BallerinaVariableReference ballerinaVariableReference) {
         return CachedValuesManager.getCachedValue(ballerinaVariableReference,
-                () -> CachedValueProvider.Result.create(getBallerinaType(ballerinaVariableReference),
+                () -> CachedValueProvider.Result.create(getBallerinaTypeFromVariableReference
+                                (ballerinaVariableReference),
                         ProjectRootManager.getInstance(ballerinaVariableReference.getProject())));
     }
 
     @Nullable
-    public static PsiElement getBallerinaType(@Nullable BallerinaExpression expression) {
+    public static PsiElement getBallerinaTypeFromExpression(@Nullable BallerinaExpression expression) {
+        // Todo - add caching
         if (expression instanceof BallerinaVariableReferenceExpression) {
             BallerinaVariableReference variableReference = ((BallerinaVariableReferenceExpression)
                     expression).getVariableReference();
             //            if (variableReference instanceof BallerinaSimpleVariableReference) {
             //                BallerinaNameReference nameReference = ((BallerinaSimpleVariableReference)
             //                        variableReference).getNameReference();
-            return BallerinaPsiImplUtil.getBallerinaType(variableReference);
+            return BallerinaPsiImplUtil.getBallerinaTypeFromVariableReference(variableReference);
             //            }
         }
         return null;
     }
 
     @Nullable
-    private static PsiElement getBallerinaType(@NotNull BallerinaVariableReference variableReference) {
+    private static PsiElement getBallerinaTypeFromVariableReference(@NotNull BallerinaVariableReference
+                                                                            variableReference) {
         if (variableReference instanceof BallerinaSimpleVariableReference) {
             BallerinaNameReference nameReference =
                     ((BallerinaSimpleVariableReference) variableReference).getNameReference();
@@ -404,6 +419,12 @@ public class BallerinaPsiImplUtil {
         BallerinaTypeName typeName = pattern.getTypeName();
         if (typeName instanceof BallerinaTupleTypeName) {
             return PsiTreeUtil.getChildOfType(typeName, BallerinaUnionTypeName.class);
+        } else if (typeName instanceof BallerinaSimpleTypeName) {
+            PsiReference reference = typeName.findReferenceAt(typeName.getTextLength());
+            if (reference == null) {
+                return typeName;
+            }
+            return reference.resolve();
         }
         return null;
     }
