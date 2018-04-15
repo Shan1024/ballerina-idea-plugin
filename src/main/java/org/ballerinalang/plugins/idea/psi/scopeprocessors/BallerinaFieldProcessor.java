@@ -5,14 +5,20 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
+import org.ballerinalang.plugins.idea.completion.inserthandlers.ParenthesisInsertHandler;
 import org.ballerinalang.plugins.idea.psi.BallerinaAttachedObject;
 import org.ballerinalang.plugins.idea.psi.BallerinaField;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaSimpleTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleVariableReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaVariableReference;
+import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
 
@@ -83,6 +89,25 @@ public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
                         add(result);
                         return false;
                     }
+                } else if (type instanceof BallerinaSimpleTypeName) {
+                    List<BallerinaFunctionDefinition> functionDefinitions =
+                            BallerinaPsiImplUtil.suggestNativeFunctions(((BallerinaSimpleTypeName) type));
+                    for (BallerinaFunctionDefinition functionDefinition : functionDefinitions) {
+
+                        PsiElement identifier = functionDefinition.getIdentifier();
+                        if (identifier != null) {
+                            if (myResult != null) {
+                                // Todo - Conside oncommit, onabort, etc and set the insert handler
+                                // Note - Child is passed here instead of identifier because it is is top level
+                                // definition.
+                                myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(
+                                        functionDefinition, ParenthesisInsertHandler.INSTANCE));
+                            } else if (myElement.getText().equals(identifier.getText())) {
+                                add(identifier);
+                            }
+                        }
+                    }
+
                 }
             }
         }

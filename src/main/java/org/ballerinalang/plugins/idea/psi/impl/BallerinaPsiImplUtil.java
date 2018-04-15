@@ -17,15 +17,21 @@
 
 package org.ballerinalang.plugins.idea.psi.impl;
 
+import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.projectRoots.Sdk;
+import com.intellij.openapi.roots.ModuleRootManager;
 import com.intellij.openapi.roots.OrderRootType;
 import com.intellij.openapi.roots.ProjectRootManager;
 import com.intellij.openapi.util.Key;
+import com.intellij.openapi.vfs.LocalFileSystem;
 import com.intellij.openapi.vfs.VfsUtilCore;
 import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiFile;
+import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.SmartPointerManager;
@@ -78,18 +84,31 @@ import org.ballerinalang.plugins.idea.psi.BallerinaVariableReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaVariableReferenceExpression;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaCompletePackageNameReferenceSet;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaPackageNameReference;
+import org.ballerinalang.plugins.idea.sdk.BallerinaSdkService;
 import org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub;
 import org.ballerinalang.plugins.idea.stubs.BallerinaPackageReferenceStub;
 import org.ballerinalang.plugins.idea.stubs.BallerinaPackageVersionStub;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class BallerinaPsiImplUtil {
 
     private static final Key<SmartPsiElementPointer<PsiElement>> CONTEXT = Key.create("CONTEXT");
+
+    private static List<String> BUILTIN_DIRECTORIES = new LinkedList<>();
+    private static Map<String, List<BallerinaFunctionDefinition>> BUILTIN_CACHE = new HashMap<>();
+
+    static {
+        BUILTIN_DIRECTORIES.add("/builtin");
+    }
 
     @Nullable
     public static String getName(@NotNull BallerinaPackageDeclaration packageClause) {
@@ -226,6 +245,42 @@ public class BallerinaPsiImplUtil {
     public static ResolveState createContextOnElement(@NotNull PsiElement element) {
         return ResolveState.initial().put(CONTEXT, SmartPointerManager.getInstance(element.getProject())
                 .createSmartPsiElementPointer(element));
+    }
+
+    @NotNull
+    public static List<BallerinaFunctionDefinition> suggestNativeFunctions(@NotNull BallerinaSimpleTypeName type) {
+        String key = type.getText();
+        if (BUILTIN_CACHE.containsKey(key)) {
+            return BUILTIN_CACHE.get(key);
+        }
+        // Add elements from built-in packages
+        for (String builtInDirectory : BUILTIN_DIRECTORIES) {
+
+            VirtualFile file = BallerinaPsiImplUtil.findFileInSDK(type, builtInDirectory);
+            if (file == null) {
+                return new LinkedList<>();
+            }
+            VirtualFile[] builtInFiles = file.getChildren();
+            for (VirtualFile builtInFile : builtInFiles) {
+                if (builtInFile.isDirectory() || !"bal".equals(builtInFile.getExtension())
+                        || !builtInFile.getName().equals(key + "lib.bal")) {
+                    continue;
+                }
+                // Find the file.
+                Project project = type.getProject();
+                PsiFile psiFile = PsiManager.getInstance(project).findFile(builtInFile);
+                if (psiFile == null) {
+                    return new LinkedList<>();
+                }
+                List<BallerinaFunctionDefinition> functionDefinitions =
+                        new ArrayList<>(PsiTreeUtil.findChildrenOfType(psiFile, BallerinaFunctionDefinition.class));
+                if (!functionDefinitions.isEmpty()) {
+                    BUILTIN_CACHE.put(key, functionDefinitions);
+                    return functionDefinitions;
+                }
+            }
+        }
+        return new LinkedList<>();
     }
 
     /**
@@ -595,30 +650,6 @@ public class BallerinaPsiImplUtil {
         });
     }
 
-    /**
-     * Finds a file in the project SDK.
-     *
-     * @param project current project
-     * @param path    relative file path in the SDK
-     * @return {@code null} if the file cannot be found, otherwise returns the corresponding {@link VirtualFile}.
-     */
-    @Nullable
-    public static VirtualFile findFileInProjectSDK(@NotNull Project project, @NotNull String path) {
-        Sdk projectSdk = ProjectRootManager.getInstance(project).getProjectSdk();
-        if (projectSdk == null) {
-            return null;
-        }
-        VirtualFile[] roots = projectSdk.getSdkModificator().getRoots(OrderRootType.SOURCES);
-        VirtualFile file;
-        for (VirtualFile root : roots) {
-            file = VfsUtilCore.findRelativeFile(path, root);
-            if (file != null) {
-                return file;
-            }
-        }
-        return null;
-    }
-
     public static boolean isAContentRoot(@Nullable PsiDirectory directory) {
         if (directory == null) {
             return false;
@@ -643,9 +674,10 @@ public class BallerinaPsiImplUtil {
     @Nullable
     public static String formatBallerinaFunctionParameters(@Nullable BallerinaFormalParameterList parameterList) {
         if (parameterList == null) {
-            return "";
+            return "()";
         }
-        // Todo - Update formatting logic
+        // Todo - Update formatting logic.
+        // Todo - Format anonymous structs correctly.
         return "(" + parameterList.getText() + ")";
     }
 
@@ -690,5 +722,89 @@ public class BallerinaPsiImplUtil {
         }
         BallerinaExpression expression = ballerinaFieldDefinition.getExpression();
         return formatParameterDefaultValue(expression);
+    }
+
+    /**
+     * Finds a file in project or module SDK.
+     *
+     * @param element a PsiElement
+     * @param path    relative file path in the SDK
+     * @return {@code null} if the file cannot be found, otherwise returns the corresponding {@link VirtualFile}.
+     */
+    @Nullable
+    public static VirtualFile findFileInSDK(@NotNull PsiElement element, @NotNull String path) {
+        // First we check the sources of module SDK.
+        VirtualFile file = findFileInModuleSDK(element, path);
+        if (file != null) {
+            return file;
+        }
+        // Then we check the sources of project SDK.
+        Project project = element.getProject();
+        file = findFileInProjectSDK(project, path);
+        if (file != null) {
+            return file;
+        }
+        String sdkHomePath = BallerinaSdkService.getInstance(project).getSdkHomePath(null);
+        if (sdkHomePath == null) {
+            return null;
+        }
+        VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByPath(sdkHomePath);
+        if (virtualFile == null) {
+            return null;
+        }
+        return VfsUtilCore.findRelativeFile("src/" + path, virtualFile);
+    }
+
+    /**
+     * Finds a file in the module SDK.
+     *
+     * @param element a PsiElement
+     * @param path    relative file path in the SDK
+     * @return {@code null} if the file cannot be found, otherwise returns the corresponding {@link VirtualFile}.
+     */
+    @Nullable
+    public static VirtualFile findFileInModuleSDK(@NotNull PsiElement element, @NotNull String path) {
+        Module module = ModuleUtilCore.findModuleForPsiElement(element);
+        if (module == null) {
+            return null;
+        }
+
+        Sdk moduleSdk = ModuleRootManager.getInstance(module).getSdk();
+        if (moduleSdk == null) {
+            return null;
+        }
+        VirtualFile[] roots = moduleSdk.getSdkModificator().getRoots(OrderRootType.SOURCES);
+        VirtualFile file;
+        for (VirtualFile root : roots) {
+            file = VfsUtilCore.findRelativeFile(path, root);
+            if (file != null) {
+                return file;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Finds a file in the project SDK.
+     *
+     * @param project current project
+     * @param path    relative file path in the SDK
+     * @return {@code null} if the file cannot be found, otherwise returns the corresponding {@link VirtualFile}.
+     */
+    @Nullable
+    public static VirtualFile findFileInProjectSDK(@NotNull Project project, @NotNull String path) {
+        Sdk projectSdk = ProjectRootManager.getInstance(project).getProjectSdk();
+        if (projectSdk == null) {
+            return null;
+        }
+        VirtualFile[] roots = projectSdk.getSdkModificator().getRoots(OrderRootType.SOURCES);
+        VirtualFile file;
+        for (VirtualFile root : roots) {
+            file = VfsUtilCore.findRelativeFile(path, root);
+            if (file != null) {
+                return file;
+            }
+        }
+        return null;
     }
 }
