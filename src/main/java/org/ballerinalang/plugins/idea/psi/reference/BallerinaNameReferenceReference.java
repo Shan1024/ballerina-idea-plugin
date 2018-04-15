@@ -24,15 +24,19 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
+import org.ballerinalang.plugins.idea.psi.BallerinaAssignmentStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaBlock;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
-import org.ballerinalang.plugins.idea.psi.BallerinaFunctionNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaRecordKey;
 import org.ballerinalang.plugins.idea.psi.BallerinaStatement;
+import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaVariableDefinitionStatement;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaBlockProcessor;
+import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaObjectFieldProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaScopeProcessorBase;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaStatementProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaTopLevelScopeProcessor;
@@ -52,23 +56,57 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
     @Nullable
     @Override
     public PsiElement resolveInner() {
-        BallerinaScopeProcessorBase processor = new BallerinaStatementProcessor(null, myElement, false);
-        processResolveVariants(processor);
-        PsiElement result = processor.getResult();
-        if (result != null) {
-            return result;
-        }
 
-        processor = new BallerinaBlockProcessor(null, myElement, false);
-        processResolveVariants(processor);
-        result = processor.getResult();
-        if (result != null) {
-            return result;
-        }
+        BallerinaRecordKey recordKey = PsiTreeUtil.getParentOfType(myElement, BallerinaRecordKey.class);
+        if (recordKey == null) {
+            BallerinaScopeProcessorBase processor = new BallerinaStatementProcessor(null, myElement, false);
+            processResolveVariants(processor);
+            PsiElement result = processor.getResult();
+            if (result != null) {
+                return result;
+            }
 
-        processor = new BallerinaTopLevelScopeProcessor(null, myElement, false);
-        processResolveVariants(processor);
-        return processor.getResult();
+            processor = new BallerinaBlockProcessor(null, myElement, false);
+            processResolveVariants(processor);
+            result = processor.getResult();
+            if (result != null) {
+                return result;
+            }
+
+            processor = new BallerinaTopLevelScopeProcessor(null, myElement, false);
+            processResolveVariants(processor);
+            return processor.getResult();
+        } else {
+            BallerinaVariableDefinitionStatement definitionStatement = PsiTreeUtil.getParentOfType(recordKey,
+                    BallerinaVariableDefinitionStatement.class);
+            if (definitionStatement != null) {
+                PsiElement type = definitionStatement.getType();
+                if (type != null && type.getParent() instanceof BallerinaTypeDefinition) {
+                    BallerinaObjectFieldProcessor ballerinaFieldProcessor =
+                            new BallerinaObjectFieldProcessor(null, myElement, false);
+                    ballerinaFieldProcessor.execute(type.getParent(), ResolveState.initial());
+                    PsiElement result = ballerinaFieldProcessor.getResult();
+                    if (result != null) {
+                        return result;
+                    }
+                }
+            }
+            BallerinaAssignmentStatement assignmentStatement = PsiTreeUtil.getParentOfType(recordKey,
+                    BallerinaAssignmentStatement.class);
+            if (assignmentStatement != null) {
+                PsiElement type = BallerinaPsiImplUtil.getType(assignmentStatement);
+                if (type != null && type.getParent() instanceof BallerinaTypeDefinition) {
+                    BallerinaObjectFieldProcessor ballerinaFieldProcessor =
+                            new BallerinaObjectFieldProcessor(null, myElement, false);
+                    ballerinaFieldProcessor.execute(type.getParent(), ResolveState.initial());
+                    PsiElement result = ballerinaFieldProcessor.getResult();
+                    if (result != null) {
+                        return result;
+                    }
+                }
+            }
+        }
+        return null;
     }
 
     @NotNull

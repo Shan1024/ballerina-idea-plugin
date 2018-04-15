@@ -32,6 +32,7 @@ import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import org.ballerinalang.plugins.idea.BallerinaIcons;
+import org.ballerinalang.plugins.idea.completion.inserthandlers.ColonInsertHandler;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaFormalParameterList;
@@ -672,7 +673,7 @@ public class BallerinaCompletionUtils {
                                                          @NotNull String type, @Nullable String defaultValue,
                                                          boolean isPublic) {
         LookupElementBuilder lookupElementBuilder = LookupElementBuilder.createWithSmartPointer(fieldName.getText(),
-                fieldName).withTypeText(type).bold();
+                fieldName).withTypeText(type).bold().withInsertHandler(ColonInsertHandler.INSTANCE_WITH_AUTO_POPUP);
 
         if (defaultValue == null || defaultValue.isEmpty()) {
             lookupElementBuilder = lookupElementBuilder.withTailText(" -> " + ownerName.getText(), true);

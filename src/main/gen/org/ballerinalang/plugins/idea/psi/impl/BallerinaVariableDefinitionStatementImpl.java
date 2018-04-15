@@ -78,7 +78,7 @@ public class BallerinaVariableDefinitionStatementImpl extends BallerinaNamedElem
   }
 
   @Nullable
-  public BallerinaTypeName getType() {
+  public PsiElement getType() {
     return BallerinaPsiImplUtil.getType(this);
   }
 

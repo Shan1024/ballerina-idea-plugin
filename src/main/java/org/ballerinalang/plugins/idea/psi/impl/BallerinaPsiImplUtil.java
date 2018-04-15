@@ -39,6 +39,7 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
 import org.ballerinalang.plugins.idea.psi.BallerinaAlias;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
+import org.ballerinalang.plugins.idea.psi.BallerinaAssignmentStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompositeElement;
@@ -233,9 +234,31 @@ public class BallerinaPsiImplUtil {
      * @param ballerinaVariableDefinitionStatement a {@link BallerinaVariableDefinitionStatement} object.
      * @return Type of the definition.
      */
-    @NotNull
-    public static BallerinaTypeName getType(BallerinaVariableDefinitionStatement ballerinaVariableDefinitionStatement) {
-        return ballerinaVariableDefinitionStatement.getTypeName();
+    @Nullable
+    public static PsiElement getType(BallerinaVariableDefinitionStatement ballerinaVariableDefinitionStatement) {
+        PsiElement type = ballerinaVariableDefinitionStatement.getTypeName();
+        PsiReference reference = type.findReferenceAt(type.getTextLength());
+        if (reference == null) {
+            return type;
+        }
+        return reference.resolve();
+
+    }
+
+    public static PsiElement getType(BallerinaAssignmentStatement ballerinaAssignmentStatement) {
+        BallerinaVariableReference variableReference = ballerinaAssignmentStatement.getVariableReference();
+        if (variableReference == null) {
+            return null;
+        }
+        PsiElement type = variableReference.getType();
+        if (type == null) {
+            return null;
+        }
+        PsiReference reference = type.findReferenceAt(type.getTextLength());
+        if (reference == null) {
+            return type;
+        }
+        return reference.resolve();
     }
 
     /**

@@ -20,10 +20,10 @@ package org.ballerinalang.plugins.idea.usage;
 import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
+import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFieldDefinition;
-import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
@@ -36,7 +36,6 @@ import org.ballerinalang.plugins.idea.psi.BallerinaPrivateObjectFields;
 import org.ballerinalang.plugins.idea.psi.BallerinaPublicObjectFields;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaWorkerDefinition;
-import org.ballerinalang.plugins.idea.psi.reference.BallerinaObjectFunctionReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -67,8 +66,8 @@ public class BallerinaFindUsageProvider implements FindUsagesProvider {
     public String getType(@NotNull PsiElement element) {
         PsiElement parent = element.getParent();
         PsiElement superParent = parent.getParent();
-        if (parent instanceof BallerinaCallableUnitSignature) {
-            if (superParent instanceof BallerinaFunctionDefinition) {
+        if (parent instanceof BallerinaAnyIdentifierName) {
+            if (superParent instanceof BallerinaCallableUnitSignature) {
                 return "Function";
             }
         } else if (parent instanceof BallerinaPackageReference) {
