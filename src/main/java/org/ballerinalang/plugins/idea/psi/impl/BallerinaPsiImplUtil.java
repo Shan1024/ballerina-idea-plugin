@@ -97,7 +97,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class BallerinaPsiImplUtil {
 
@@ -250,6 +249,11 @@ public class BallerinaPsiImplUtil {
     @NotNull
     public static List<BallerinaFunctionDefinition> suggestNativeFunctions(@NotNull BallerinaSimpleTypeName type) {
         String key = type.getText();
+        // Todo - Use a map?
+        // File which contains functions for some types does not have the type as the prefix in the name.
+        if ("future".equals(key)) {
+            key = "async";
+        }
         if (BUILTIN_CACHE.containsKey(key)) {
             return BUILTIN_CACHE.get(key);
         }

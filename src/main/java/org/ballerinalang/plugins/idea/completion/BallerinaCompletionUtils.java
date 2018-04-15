@@ -68,7 +68,8 @@ public class BallerinaCompletionUtils {
     public static final int KEYWORDS_PRIORITY = VALUE_TYPES_PRIORITY - 2;
 
 
-    public static final Key<String> FUNCTION_RETURN_TYPE_KEY = Key.create("FUNCTION_RETURN_TYPE");
+    public static final Key<String> HAS_A_RETURN_VALUE = Key.create("HAS_A_RETURN_VALUE");
+    public static final Key<String> REQUIRE_PARAMETERS = Key.create("REQUIRE_PARAMETERS");
 
     // File level keywords
     private static final LookupElementBuilder PUBLIC;
@@ -549,14 +550,16 @@ public class BallerinaCompletionUtils {
                     }
                 } else {
                     builder = builder.withTypeText("nil");
-                    definition.putUserData(FUNCTION_RETURN_TYPE_KEY, "nil");
+                    definition.putUserData(HAS_A_RETURN_VALUE, "nil");
                 }
                 // Add return type.
                 BallerinaFormalParameterList formalParameterList = callableUnitSignature.getFormalParameterList();
 
                 builder = builder.withTailText(BallerinaPsiImplUtil.formatBallerinaFunctionParameters
                         (formalParameterList));
-
+                if (formalParameterList != null) {
+                    definition.putUserData(REQUIRE_PARAMETERS, "YES");
+                }
             }
         }
         return PrioritizedLookupElement.withPriority(builder, FUNCTION_PRIORITY);
@@ -581,7 +584,7 @@ public class BallerinaCompletionUtils {
             }
         } else {
             builder = builder.withTypeText("nil");
-            identifier.putUserData(FUNCTION_RETURN_TYPE_KEY ,"nil");
+            identifier.putUserData(HAS_A_RETURN_VALUE, "nil");
         }
         // Add return type.
         BallerinaFormalParameterList formalParameterList = objectCallableUnitSignature.getFormalParameterList();
