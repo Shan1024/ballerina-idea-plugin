@@ -585,6 +585,14 @@ public class BallerinaPsiImplUtil {
                 return true;
             }
         }
+
+        Sdk projectSdk = ProjectRootManager.getInstance(directory.getProject()).getProjectSdk();
+        if (projectSdk != null) {
+            VirtualFile homeDirectory = projectSdk.getHomeDirectory();
+            if (homeDirectory != null && homeDirectory.equals(directory.getVirtualFile())) {
+                return true;
+            }
+        }
         return false;
     }
 
