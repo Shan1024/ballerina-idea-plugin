@@ -63,6 +63,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaFunctionNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaImportDeclaration;
+import org.ballerinalang.plugins.idea.psi.BallerinaInvocationReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaNamedPattern;
 import org.ballerinalang.plugins.idea.psi.BallerinaNullableTypeName;
@@ -456,6 +457,47 @@ public class BallerinaPsiImplUtil {
                     return reference.resolve();
                 }
             }
+        } else if (variableReference instanceof BallerinaInvocationReference) {
+            BallerinaAnyIdentifierName anyIdentifierName = ((BallerinaInvocationReferenceImpl) variableReference)
+                    .getInvocation().getAnyIdentifierName();
+            PsiElement identifier = anyIdentifierName.getIdentifier();
+            if (identifier == null) {
+                return null;
+            }
+            PsiReference reference = identifier.getReference();
+            if (reference == null) {
+                return null;
+            }
+            PsiElement resolvedElement = reference.resolve();
+            if (resolvedElement == null) {
+                return null;
+            }
+            PsiElement parent = resolvedElement.getParent();
+            if (!(parent instanceof BallerinaAnyIdentifierName)) {
+                return null;
+            }
+            BallerinaFunctionDefinition definition = PsiTreeUtil.getParentOfType(parent,
+                    BallerinaFunctionDefinition.class);
+            if (definition == null) {
+                return null;
+            }
+            BallerinaCallableUnitSignature callableUnitSignature = definition.getCallableUnitSignature();
+            if (callableUnitSignature == null) {
+                return null;
+            }
+            BallerinaReturnParameter returnParameter = callableUnitSignature.getReturnParameter();
+            if (returnParameter == null) {
+                return null;
+            }
+            BallerinaReturnType returnType = returnParameter.getReturnType();
+            if (returnType == null) {
+                return null;
+            }
+            BallerinaTypeName typeName = returnType.getTypeName();
+            if (typeName instanceof BallerinaTupleTypeName) {
+                return ((BallerinaTupleTypeName) typeName).getTypeNameList().get(0);
+            }
+            return typeName;
         }
         return null;
     }
