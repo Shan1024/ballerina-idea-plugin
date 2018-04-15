@@ -132,7 +132,6 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
             }
         }
 
-
         if (inLocalPackage) {
             // Note - Execute BallerinaStatementProcessor first.
             BallerinaStatement ballerinaStatement = PsiTreeUtil.getParentOfType(myElement, BallerinaStatement.class);

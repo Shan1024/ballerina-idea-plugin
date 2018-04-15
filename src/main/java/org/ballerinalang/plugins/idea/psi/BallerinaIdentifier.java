@@ -31,7 +31,6 @@ import org.ballerinalang.plugins.idea.psi.reference.BallerinaNameReferenceRefere
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaObjectFieldReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaObjectFunctionReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaOrgReference;
-import org.ballerinalang.plugins.idea.psi.reference.BallerinaPackageNameReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaTypeReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -68,7 +67,9 @@ public class BallerinaIdentifier extends LeafPsiElement implements PsiNameIdenti
         } else if (parent instanceof BallerinaNameReference) {
             return new BallerinaNameReferenceReference(this);
         } else if (parent instanceof BallerinaAnyIdentifierName) {
-            if (!(parent.getParent() instanceof BallerinaCallableUnitSignature)) {
+            if (parent.getParent() instanceof BallerinaInvocation) {
+                return new org.ballerinalang.plugins.idea.psi.reference.BallerinaInvocationReference(this);
+            } else if (!(parent.getParent() instanceof BallerinaCallableUnitSignature)) {
                 return new BallerinaNameReferenceReference(this);
             }
         } else if (parent instanceof BallerinaWorkerReply) {

@@ -102,11 +102,21 @@ public class BallerinaPsiImplUtil {
 
     private static final Key<SmartPsiElementPointer<PsiElement>> CONTEXT = Key.create("CONTEXT");
 
+    private static List<String> BUILTIN_TYPES = new LinkedList<>();
     private static List<String> BUILTIN_DIRECTORIES = new LinkedList<>();
     private static Map<String, List<BallerinaFunctionDefinition>> BUILTIN_CACHE = new HashMap<>();
 
     static {
         BUILTIN_DIRECTORIES.add("/builtin");
+
+        BUILTIN_TYPES.add("future"); //async
+        BUILTIN_TYPES.add("blob");
+        BUILTIN_TYPES.add("json");
+        BUILTIN_TYPES.add("map");
+        BUILTIN_TYPES.add("stream");
+        BUILTIN_TYPES.add("string");
+        BUILTIN_TYPES.add("table");
+        BUILTIN_TYPES.add("xml");
     }
 
     @Nullable
@@ -246,8 +256,15 @@ public class BallerinaPsiImplUtil {
                 .createSmartPsiElementPointer(element));
     }
 
+    public static boolean hasBuiltInDefinitions(@NotNull BallerinaSimpleTypeName type) {
+        return BUILTIN_TYPES.contains(type.getText());
+    }
+
     @NotNull
     public static List<BallerinaFunctionDefinition> suggestNativeFunctions(@NotNull BallerinaSimpleTypeName type) {
+        if (!hasBuiltInDefinitions(type)) {
+            return new LinkedList<>();
+        }
         String key = type.getText();
         // Todo - Use a map?
         // File which contains functions for some types does not have the type as the prefix in the name.
