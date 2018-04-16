@@ -676,7 +676,7 @@ public class BallerinaCompletionUtils {
                                                          @NotNull String type, @Nullable String defaultValue,
                                                          boolean isPublic) {
         LookupElementBuilder lookupElementBuilder = LookupElementBuilder.createWithSmartPointer(fieldName.getText(),
-                fieldName).withTypeText(type).bold().withInsertHandler(ColonInsertHandler.INSTANCE_WITH_AUTO_POPUP);
+                fieldName).withTypeText(type).bold();
 
         if (defaultValue == null || defaultValue.isEmpty()) {
             lookupElementBuilder = lookupElementBuilder.withTailText(" -> " + ownerName.getText(), true);
