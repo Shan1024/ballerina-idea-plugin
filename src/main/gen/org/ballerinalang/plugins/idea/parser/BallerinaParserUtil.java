@@ -103,6 +103,7 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                                 && !(rawLookup == BallerinaTypes.LEFT_BRACE && rawLookup2 == BallerinaTypes.NEW)
                                 // {message:"Notification failed for topic [" + topic + "]",  cause:httpConnectorError }
                                 && !(rawLookup == BallerinaTypes.COMMA && rawLookup2 == BallerinaTypes.ADD)
+                                && !(rawLookup == BallerinaTypes.QUESTION_MARK && rawLookup2 == BallerinaTypes.RIGHT_PARENTHESIS)
                                 ) {
                             return true;
                         } else {
