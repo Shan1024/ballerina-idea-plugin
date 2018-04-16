@@ -372,59 +372,68 @@ public class BallerinaPsiImplUtil {
     @Nullable
     public static PsiElement getType(@NotNull BallerinaTupleDestructuringStatement ballerinaTupleDestructuringStatement,
                                      @NotNull PsiElement identifier) {
+        int index = getVariableIndex(identifier);
+        if (index == -1) {
+            return null;
+        }
+
+        BallerinaExpression expression = ballerinaTupleDestructuringStatement.getExpression();
+        if ((expression instanceof BallerinaVariableReferenceExpression)) {
+            BallerinaVariableReference variableReference = ((BallerinaVariableReferenceExpression) expression)
+                    .getVariableReference();
+            if (variableReference instanceof BallerinaFunctionInvocationReference) {
+
+                BallerinaFunctionDefinition definition =
+                        getFunctionDefinition(((BallerinaFunctionInvocationReference) variableReference));
+                if (definition == null) {
+                    return null;
+                }
+                BallerinaTypeName returnType = getReturnTypeFromFunction(definition);
+                if (returnType instanceof BallerinaTupleTypeName) {
+                    List<BallerinaTypeName> typeNameList = ((BallerinaTupleTypeName) returnType).getTypeNameList();
+                    if (typeNameList.size() <= index) {
+                        return null;
+                    }
+                    return typeNameList.get(index);
+                }
+                return null;
+            } else if (variableReference instanceof BallerinaSimpleVariableReference) {
+                return getBallerinaTypeFromVariableReference(variableReference, index);
+            }
+            return null;
+        } else if (expression instanceof BallerinaTypeConversionExpression) {
+            return ((BallerinaTypeConversionExpression) expression).getTypeName();
+        }
+        return null;
+    }
+
+    private static int getVariableIndex(@NotNull PsiElement identifier) {
+        int index = -1;
         BallerinaVariableReferenceList ballerinaVariableReferenceList = PsiTreeUtil.getParentOfType(identifier,
                 BallerinaVariableReferenceList.class);
         if (ballerinaVariableReferenceList == null) {
-            return null;
+            return index;
         }
-        int index = -1;
+
         List<BallerinaVariableReference> variableReferenceList =
                 ballerinaVariableReferenceList.getVariableReferenceList();
-
         int count = 0;
         for (BallerinaVariableReference ballerinaVariableReference : variableReferenceList) {
             if (!(ballerinaVariableReference instanceof BallerinaSimpleVariableReference)) {
                 count++;
                 continue;
             }
-            PsiElement element = ((BallerinaSimpleVariableReference) ballerinaVariableReference)
-                    .getNameReference().getIdentifier();
+            BallerinaSimpleVariableReference variableReference =
+                    (BallerinaSimpleVariableReference) ballerinaVariableReference;
+            BallerinaNameReference nameReference = variableReference.getNameReference();
+            PsiElement element = nameReference.getIdentifier();
             if (element.equals(identifier)) {
                 index = count;
                 break;
             }
             count++;
         }
-        if (index == -1) {
-            return null;
-        }
-
-        BallerinaExpression expression = ballerinaTupleDestructuringStatement.getExpression();
-        if (!(expression instanceof BallerinaVariableReferenceExpression)) {
-            return null;
-        }
-        BallerinaVariableReference variableReference = ((BallerinaVariableReferenceExpression) expression)
-                .getVariableReference();
-        if (variableReference instanceof BallerinaFunctionInvocationReference) {
-
-            BallerinaFunctionDefinition definition =
-                    getFunctionDefinition(((BallerinaFunctionInvocationReference) variableReference));
-            if (definition == null) {
-                return null;
-            }
-            BallerinaTypeName returnType = getReturnTypeFromFunction(definition);
-            if (returnType instanceof BallerinaTupleTypeName) {
-                List<BallerinaTypeName> typeNameList = ((BallerinaTupleTypeName) returnType).getTypeNameList();
-                if (typeNameList.size() <= index) {
-                    return null;
-                }
-                return typeNameList.get(index);
-            }
-            return null;
-        } else if (variableReference instanceof BallerinaSimpleVariableReference) {
-            return getBallerinaTypeFromVariableReference(variableReference);
-        }
-        return null;
+        return index;
     }
 
     /**
@@ -458,7 +467,7 @@ public class BallerinaPsiImplUtil {
 
     @Nullable
     private static PsiElement getBallerinaTypeFromVariableReference(@NotNull BallerinaVariableReference
-                                                                            variableReference) {
+                                                                            variableReference, int index) {
         if (variableReference instanceof BallerinaSimpleVariableReference) {
             BallerinaNameReference nameReference =
                     ((BallerinaSimpleVariableReference) variableReference).getNameReference();
@@ -499,7 +508,16 @@ public class BallerinaPsiImplUtil {
                 BallerinaTupleDestructuringStatement tupleDestructuringStatement = PsiTreeUtil.getParentOfType(parent,
                         BallerinaTupleDestructuringStatement.class);
                 if (tupleDestructuringStatement != null) {
-                    return getType(tupleDestructuringStatement, resolvedElement);
+                    PsiElement type = getType(tupleDestructuringStatement, resolvedElement);
+                    index = getVariableIndex(resolvedElement);
+                    if (!(type instanceof BallerinaTupleTypeName) || index == -1) {
+                        return type;
+                    }
+                    List<BallerinaTypeName> typeNameList = ((BallerinaTupleTypeName) type).getTypeNameList();
+                    if (typeNameList.size() <= index) {
+                        return null;
+                    }
+                    return typeNameList.get(index);
                 }
             }
         } else if (variableReference instanceof BallerinaFieldVariableReference) {
@@ -532,9 +550,10 @@ public class BallerinaPsiImplUtil {
                 return typeName;
             } else if (typeName instanceof BallerinaTupleTypeName) {
                 List<BallerinaTypeName> typeNameList = ((BallerinaTupleTypeName) typeName).getTypeNameList();
-                if (!typeNameList.isEmpty()) {
+                if (typeNameList.size() == 1) {
                     return typeNameList.get(0);
                 }
+                return typeName;
             } else if (typeName instanceof BallerinaSimpleTypeName) {
                 PsiReference reference = typeName.findReferenceAt(typeName.getTextLength());
                 if (reference == null) {
@@ -589,6 +608,12 @@ public class BallerinaPsiImplUtil {
             return typeName;
         }
         return null;
+    }
+
+    @Nullable
+    private static PsiElement getBallerinaTypeFromVariableReference(@NotNull BallerinaVariableReference
+                                                                            variableReference) {
+        return getBallerinaTypeFromVariableReference(variableReference, -1);
     }
 
     @Nullable
