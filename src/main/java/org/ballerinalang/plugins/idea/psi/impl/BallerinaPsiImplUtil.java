@@ -45,6 +45,7 @@ import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
 import org.ballerinalang.plugins.idea.psi.BallerinaAlias;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
+import org.ballerinalang.plugins.idea.psi.BallerinaArrayTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaAssignmentStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
@@ -63,6 +64,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaFunctionNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaImportDeclaration;
+import org.ballerinalang.plugins.idea.psi.BallerinaIndex;
 import org.ballerinalang.plugins.idea.psi.BallerinaInvocationReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaNamedPattern;
@@ -257,12 +259,12 @@ public class BallerinaPsiImplUtil {
                 .createSmartPsiElementPointer(element));
     }
 
-    public static boolean hasBuiltInDefinitions(@NotNull BallerinaSimpleTypeName type) {
+    public static boolean hasBuiltInDefinitions(@NotNull BallerinaTypeName type) {
         return BUILTIN_TYPES.contains(type.getText());
     }
 
     @NotNull
-    public static List<BallerinaFunctionDefinition> suggestNativeFunctions(@NotNull BallerinaSimpleTypeName type) {
+    public static List<BallerinaFunctionDefinition> suggestNativeFunctions(@NotNull BallerinaTypeName type) {
         if (!hasBuiltInDefinitions(type)) {
             return new LinkedList<>();
         }
@@ -391,7 +393,14 @@ public class BallerinaPsiImplUtil {
             } else if (parent instanceof BallerinaParameterWithType) {
                 return getTypeNameFromParameter(((BallerinaParameterWithType) parent));
             } else if (parent instanceof BallerinaNamedPattern) {
-                return getTypeNameFromNamedPattern(((BallerinaNamedPattern) parent));
+                BallerinaNamedPattern ballerinaNamedPattern = (BallerinaNamedPattern) parent;
+                BallerinaTypeName typeName = ballerinaNamedPattern.getTypeName();
+                if (typeName instanceof BallerinaArrayTypeName && !(variableReference.getNextSibling()
+                        instanceof BallerinaIndex)) {
+                    return null;
+                }
+
+                return getTypeNameFromNamedPattern(typeName);
             }
         } else if (variableReference instanceof BallerinaFieldVariableReference) {
             BallerinaField field = ((BallerinaFieldVariableReference) variableReference).getField();
@@ -556,8 +565,7 @@ public class BallerinaPsiImplUtil {
     //    }
 
     @Nullable
-    public static PsiElement getTypeNameFromNamedPattern(@NotNull BallerinaNamedPattern pattern) {
-        BallerinaTypeName typeName = pattern.getTypeName();
+    public static PsiElement getTypeNameFromNamedPattern(@NotNull BallerinaTypeName typeName) {
         if (typeName instanceof BallerinaTupleTypeName) {
             return PsiTreeUtil.getChildOfType(typeName, BallerinaUnionTypeName.class);
         } else if (typeName instanceof BallerinaSimpleTypeName) {
@@ -566,6 +574,8 @@ public class BallerinaPsiImplUtil {
                 return typeName;
             }
             return reference.resolve();
+        } else if (typeName instanceof BallerinaArrayTypeName) {
+            return ((BallerinaArrayTypeName) typeName).getTypeName();
         }
         return null;
     }
