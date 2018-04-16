@@ -530,7 +530,7 @@ public class BallerinaPsiImplUtil {
     public static PsiElement getTypeNameFromField(@NotNull BallerinaFieldDefinition fieldDefinition) {
         BallerinaTypeName typeName = fieldDefinition.getTypeName();
         if (typeName instanceof BallerinaSimpleTypeName) {
-
+            return typeName;
         } else if (typeName instanceof BallerinaUnionTypeName) {
             BallerinaTypeName ballerinaTypeName = getTypeNameFromNillableType(((BallerinaUnionTypeName) typeName));
             if (ballerinaTypeName != null) {
