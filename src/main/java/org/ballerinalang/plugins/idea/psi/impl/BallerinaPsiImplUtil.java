@@ -64,6 +64,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaFunctionInvocationReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaFutureTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaImportDeclaration;
 import org.ballerinalang.plugins.idea.psi.BallerinaIndex;
@@ -469,6 +470,8 @@ public class BallerinaPsiImplUtil {
             PsiElement parent = resolvedElement.getParent();
             if (parent instanceof BallerinaVariableDefinitionStatement) {
                 return resolveBallerinaType(((BallerinaVariableDefinitionStatement) parent));
+            } else if (parent instanceof BallerinaGlobalVariableDefinition) {
+                return resolveBallerinaType(((BallerinaGlobalVariableDefinition) parent));
             } else if (parent instanceof BallerinaFieldDefinition) {
                 return getTypeNameFromField(((BallerinaFieldDefinition) parent));
             } else if (parent instanceof BallerinaParameterWithType) {
@@ -621,6 +624,17 @@ public class BallerinaPsiImplUtil {
     @Nullable
     public static PsiElement resolveBallerinaType(@NotNull BallerinaVariableDefinitionStatement statement) {
         BallerinaTypeName type = statement.getTypeName();
+        return getTypeFromTypeName(type);
+    }
+
+    @Nullable
+    public static PsiElement resolveBallerinaType(@NotNull BallerinaGlobalVariableDefinition statement) {
+        BallerinaTypeName type = statement.getTypeName();
+        return getTypeFromTypeName(type);
+    }
+
+    @Nullable
+    private static PsiElement getTypeFromTypeName(@NotNull BallerinaTypeName type) {
         PsiReference reference = type.findReferenceAt(type.getTextLength());
         if (reference == null) {
             BallerinaBuiltInReferenceTypeName builtInReferenceTypeName = PsiTreeUtil.findChildOfType(type,
