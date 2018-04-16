@@ -88,6 +88,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaStreamTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaTableTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaTupleDestructuringStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaTupleTypeName;
+import org.ballerinalang.plugins.idea.psi.BallerinaTypeConversionExpression;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaUnionTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaVariableDefinitionStatement;
@@ -360,6 +361,8 @@ public class BallerinaPsiImplUtil {
                 if (ballerinaVariableReference instanceof BallerinaFunctionInvocationReference) {
                     return getType(ballerinaVariableReference);
                 }
+            } else if (expression instanceof BallerinaTypeConversionExpression) {
+                return ((BallerinaTypeConversionExpression) expression).getTypeName();
             }
 
         }
@@ -402,22 +405,24 @@ public class BallerinaPsiImplUtil {
         }
         BallerinaVariableReference variableReference = ((BallerinaVariableReferenceExpression) expression)
                 .getVariableReference();
-        if (!(variableReference instanceof BallerinaFunctionInvocationReference)) {
-            return null;
-        }
+        if (variableReference instanceof BallerinaFunctionInvocationReference) {
 
-        BallerinaFunctionDefinition definition =
-                getFunctionDefinition(((BallerinaFunctionInvocationReference) variableReference));
-        if (definition == null) {
-            return null;
-        }
-        BallerinaTypeName returnType = getReturnTypeFromFunction(definition);
-        if (returnType instanceof BallerinaTupleTypeName) {
-            List<BallerinaTypeName> typeNameList = ((BallerinaTupleTypeName) returnType).getTypeNameList();
-            if (typeNameList.size() <= index) {
+            BallerinaFunctionDefinition definition =
+                    getFunctionDefinition(((BallerinaFunctionInvocationReference) variableReference));
+            if (definition == null) {
                 return null;
             }
-            return typeNameList.get(index);
+            BallerinaTypeName returnType = getReturnTypeFromFunction(definition);
+            if (returnType instanceof BallerinaTupleTypeName) {
+                List<BallerinaTypeName> typeNameList = ((BallerinaTupleTypeName) returnType).getTypeNameList();
+                if (typeNameList.size() <= index) {
+                    return null;
+                }
+                return typeNameList.get(index);
+            }
+            return null;
+        } else if (variableReference instanceof BallerinaSimpleVariableReference) {
+            return getBallerinaTypeFromVariableReference(variableReference);
         }
         return null;
     }
