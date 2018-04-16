@@ -47,6 +47,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaAlias;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
 import org.ballerinalang.plugins.idea.psi.BallerinaArrayTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaAssignmentStatement;
+import org.ballerinalang.plugins.idea.psi.BallerinaBuiltInReferenceTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompositeElement;
@@ -61,11 +62,14 @@ import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionInvocation;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionInvocationReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionNameReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaFutureTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaImportDeclaration;
 import org.ballerinalang.plugins.idea.psi.BallerinaIndex;
 import org.ballerinalang.plugins.idea.psi.BallerinaInvocationReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaJsonTypeName;
+import org.ballerinalang.plugins.idea.psi.BallerinaMapTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaNamedPattern;
 import org.ballerinalang.plugins.idea.psi.BallerinaNullableTypeName;
@@ -79,6 +83,8 @@ import org.ballerinalang.plugins.idea.psi.BallerinaReturnParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaReturnType;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleVariableReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaStreamTypeName;
+import org.ballerinalang.plugins.idea.psi.BallerinaTableTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaTupleDestructuringStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaTupleTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
@@ -87,6 +93,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaVariableDefinitionStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaVariableReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaVariableReferenceExpression;
 import org.ballerinalang.plugins.idea.psi.BallerinaVariableReferenceList;
+import org.ballerinalang.plugins.idea.psi.BallerinaXmlTypeName;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaCompletePackageNameReferenceSet;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaPackageNameReference;
 import org.ballerinalang.plugins.idea.sdk.BallerinaSdkService;
@@ -261,12 +268,12 @@ public class BallerinaPsiImplUtil {
                 .createSmartPsiElementPointer(element));
     }
 
-    public static boolean hasBuiltInDefinitions(@NotNull BallerinaTypeName type) {
+    public static boolean hasBuiltInDefinitions(@NotNull PsiElement type) {
         return BUILTIN_TYPES.contains(type.getText());
     }
 
     @NotNull
-    public static List<BallerinaFunctionDefinition> suggestNativeFunctions(@NotNull BallerinaTypeName type) {
+    public static List<BallerinaFunctionDefinition> suggestNativeFunctions(@NotNull PsiElement type) {
         if (!hasBuiltInDefinitions(type)) {
             return new LinkedList<>();
         }
@@ -616,7 +623,36 @@ public class BallerinaPsiImplUtil {
         BallerinaTypeName type = statement.getTypeName();
         PsiReference reference = type.findReferenceAt(type.getTextLength());
         if (reference == null) {
-            return type;
+            BallerinaBuiltInReferenceTypeName builtInReferenceTypeName = PsiTreeUtil.findChildOfType(type,
+                    BallerinaBuiltInReferenceTypeName.class);
+            if (builtInReferenceTypeName == null) {
+                return type;
+            }
+            BallerinaFutureTypeName futureTypeName = builtInReferenceTypeName.getFutureTypeName();
+            if (futureTypeName != null) {
+                return futureTypeName.getFuture();
+            }
+            BallerinaJsonTypeName jsonTypeName = builtInReferenceTypeName.getJsonTypeName();
+            if (jsonTypeName != null) {
+                return jsonTypeName.getJson();
+            }
+            BallerinaMapTypeName mapTypeName = builtInReferenceTypeName.getMapTypeName();
+            if (mapTypeName != null) {
+                return mapTypeName.getMap();
+            }
+            BallerinaStreamTypeName streamTypeName = builtInReferenceTypeName.getStreamTypeName();
+            if (streamTypeName != null) {
+                return streamTypeName.getStream();
+            }
+            BallerinaTableTypeName tableTypeName = builtInReferenceTypeName.getTableTypeName();
+            if (tableTypeName != null) {
+                return tableTypeName.getTable();
+            }
+            BallerinaXmlTypeName xmlTypeName = builtInReferenceTypeName.getXmlTypeName();
+            if (xmlTypeName != null) {
+                return xmlTypeName.getXml();
+            }
+            return null;
         }
         PsiElement resolvedElement = reference.resolve();
         if (resolvedElement != null) {

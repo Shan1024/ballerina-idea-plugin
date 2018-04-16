@@ -9,9 +9,12 @@ import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
 import org.ballerinalang.plugins.idea.completion.inserthandlers.ParenthesisInsertHandler;
 import org.ballerinalang.plugins.idea.psi.BallerinaArrayTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaAttachedObject;
+import org.ballerinalang.plugins.idea.psi.BallerinaBuiltInReferenceTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaField;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaMapArrayVariableReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaReferenceTypeName;
+import org.ballerinalang.plugins.idea.psi.BallerinaReturnType;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleVariableReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
@@ -128,6 +131,24 @@ public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
                                 } else if (myElement.getText().equals(identifier.getText())) {
                                     add(identifier);
                                 }
+                            }
+                        }
+                    }
+                } else if (type.getParent().getParent() instanceof BallerinaBuiltInReferenceTypeName) {
+                    List<BallerinaFunctionDefinition> functionDefinitions =
+                            BallerinaPsiImplUtil.suggestNativeFunctions(type);
+
+                    for (BallerinaFunctionDefinition functionDefinition : functionDefinitions) {
+                        PsiElement identifier = functionDefinition.getIdentifier();
+                        if (identifier != null) {
+                            if (myResult != null) {
+                                // Todo - Conside oncommit, onabort, etc and set the insert handler
+                                // Note - Child is passed here instead of identifier because it is is top level
+                                // definition.
+                                myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(
+                                        functionDefinition, ParenthesisInsertHandler.INSTANCE));
+                            } else if (myElement.getText().equals(identifier.getText())) {
+                                add(identifier);
                             }
                         }
                     }
