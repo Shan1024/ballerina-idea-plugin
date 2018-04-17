@@ -23,10 +23,13 @@ import com.intellij.psi.PsiElement;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaEndpointParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaFieldDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
+import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaNamedPattern;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaOrgName;
@@ -34,7 +37,9 @@ import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaParameterWithType;
 import org.ballerinalang.plugins.idea.psi.BallerinaPrivateObjectFields;
 import org.ballerinalang.plugins.idea.psi.BallerinaPublicObjectFields;
+import org.ballerinalang.plugins.idea.psi.BallerinaRestParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaVariableDefinitionStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaWorkerDefinition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -69,6 +74,8 @@ public class BallerinaFindUsageProvider implements FindUsagesProvider {
         if (parent instanceof BallerinaAnyIdentifierName) {
             if (superParent instanceof BallerinaCallableUnitSignature) {
                 return "Function";
+            } else if (superParent instanceof BallerinaObjectCallableUnitSignature) {
+                return "Object Function";
             }
         } else if (parent instanceof BallerinaPackageReference) {
             return "Package";
@@ -92,12 +99,24 @@ public class BallerinaFindUsageProvider implements FindUsagesProvider {
             return "Worker";
         } else if (parent instanceof BallerinaFieldDefinition) {
             if (superParent instanceof BallerinaPublicObjectFields) {
-                return "Public Field";
+                return "Public Object Field";
             } else if (superParent instanceof BallerinaPrivateObjectFields) {
-                return "Private Field";
+                return "Private Object Field";
+            } else {
+                return "Field";
             }
         } else if (parent instanceof BallerinaObjectParameter) {
             return "Object Field";
+        } else if (parent instanceof BallerinaNameReference) {
+//            return "Variable";
+        } else if (parent instanceof BallerinaVariableDefinitionStatement) {
+            return "Variable";
+        } else if (parent instanceof BallerinaNamedPattern) {
+            return "Variable";
+        } else if (parent instanceof BallerinaRestParameter) {
+            return "Parameter";
+        } else if (parent instanceof BallerinaEndpointParameter) {
+            return "Endpoint Parameter";
         }
         return "";
     }
