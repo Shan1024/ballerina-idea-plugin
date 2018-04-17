@@ -59,6 +59,10 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
         myElement = element;
     }
 
+    protected boolean accept(@NotNull PsiElement element) {
+        return element instanceof BallerinaBlock;
+    }
+
     @Override
     public boolean execute(@NotNull PsiElement scopeElement, @NotNull ResolveState state) {
         if (accept(scopeElement)) {
@@ -499,10 +503,6 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
         if (parameterList != null) {
             processParameterList(parameterList.getParameterList());
         }
-    }
-
-    protected boolean accept(@NotNull PsiElement element) {
-        return element instanceof BallerinaBlock;
     }
 
     @Override

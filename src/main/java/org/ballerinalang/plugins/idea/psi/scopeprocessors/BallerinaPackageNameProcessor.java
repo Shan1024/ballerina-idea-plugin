@@ -4,23 +4,24 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
-import org.ballerinalang.plugins.idea.psi.BallerinaDefinition;
+import org.ballerinalang.plugins.idea.completion.inserthandlers.ColonInsertHandler;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
-import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaImportDeclaration;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
-public class BallerinaTypeProcessor extends BallerinaScopeProcessorBase {
+public class BallerinaPackageNameProcessor extends BallerinaScopeProcessorBase {
 
     @Nullable
     private final CompletionResultSet myResult;
     @NotNull
     private final PsiElement myElement;
 
-    public BallerinaTypeProcessor(@Nullable CompletionResultSet result, @NotNull PsiElement element) {
-        super(element);
+    public BallerinaPackageNameProcessor(@Nullable CompletionResultSet result, @NotNull PsiElement element,
+                                         boolean isCompletion) {
+        super(element, element, isCompletion);
         myResult = result;
         myElement = element;
     }
@@ -32,18 +33,15 @@ public class BallerinaTypeProcessor extends BallerinaScopeProcessorBase {
     @Override
     public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
         if (accept(element)) {
-            List<BallerinaDefinition> definitions = ((BallerinaFile) element).getDefinitions();
-            for (BallerinaDefinition definition : definitions) {
-                PsiElement lastChild = definition.getLastChild();
-                if (lastChild instanceof BallerinaTypeDefinition) {
-                    BallerinaTypeDefinition child = (BallerinaTypeDefinition) lastChild;
-                    PsiElement identifier = child.getIdentifier();
-                    if (identifier != null) {
-                        if (myResult != null) {
-                            myResult.addElement(BallerinaCompletionUtils.createTypeLookupElement(child));
-                        } else if (myElement.getText().equals(identifier.getText())) {
-                            add(identifier);
-                        }
+            List<BallerinaImportDeclaration> cachedImports = ((BallerinaFile) element).getCachedImports();
+            for (BallerinaImportDeclaration cachedImport : cachedImports) {
+                PsiElement identifier = cachedImport.getShortPackageName();
+                if (identifier != null) {
+                    if (myResult != null) {
+                        myResult.addElement(BallerinaCompletionUtils.createPackageLookup(identifier,
+                                ColonInsertHandler.INSTANCE_WITH_AUTO_POPUP));
+                    } else if (myElement.getText().equals(identifier.getText())) {
+                        add(identifier);
                     }
                 }
             }

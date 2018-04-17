@@ -35,6 +35,10 @@ public class BallerinaObjectFieldProcessor extends BallerinaScopeProcessorBase {
         myElement = element;
     }
 
+    protected boolean accept(@NotNull PsiElement element) {
+        return element instanceof BallerinaTypeDefinition;
+    }
+
     @Override
     public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
         if (accept(element)) {
@@ -115,10 +119,6 @@ public class BallerinaObjectFieldProcessor extends BallerinaScopeProcessorBase {
                 return;
             }
         }
-    }
-
-    protected boolean accept(@NotNull PsiElement element) {
-        return element instanceof BallerinaTypeDefinition;
     }
 
     @Override

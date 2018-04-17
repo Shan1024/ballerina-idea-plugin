@@ -37,6 +37,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaVariableDefinitionStatement;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaBlockProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaObjectFieldProcessor;
+import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaPackageNameProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaScopeProcessorBase;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaStatementProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaTopLevelScopeProcessor;
@@ -120,6 +121,13 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
         if (!(containingFile instanceof BallerinaFile)) {
             return false;
         }
+
+        if (processor instanceof BallerinaPackageNameProcessor) {
+            if (!processor.execute(containingFile, ResolveState.initial())) {
+                return false;
+            }
+        }
+
         boolean inLocalPackage = true;
         PsiElement parent = myElement.getParent();
         if (parent instanceof BallerinaNameReference) {

@@ -31,6 +31,10 @@ public class BallerinaStatementProcessor extends BallerinaScopeProcessorBase {
         myElement = element;
     }
 
+    protected boolean accept(@NotNull PsiElement element) {
+        return element instanceof BallerinaStatement;
+    }
+
     @Override
     public boolean execute(@NotNull PsiElement scopeElement, @NotNull ResolveState state) {
         if (accept(scopeElement)) {
@@ -101,10 +105,6 @@ public class BallerinaStatementProcessor extends BallerinaScopeProcessorBase {
             }
         }
         return true;
-    }
-
-    protected boolean accept(@NotNull PsiElement element) {
-        return element instanceof BallerinaStatement;
     }
 
     @Override

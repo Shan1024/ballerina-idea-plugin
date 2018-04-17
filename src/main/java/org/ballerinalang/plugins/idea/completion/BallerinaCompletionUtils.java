@@ -32,7 +32,6 @@ import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import org.ballerinalang.plugins.idea.BallerinaIcons;
-import org.ballerinalang.plugins.idea.completion.inserthandlers.ColonInsertHandler;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaFormalParameterList;
@@ -472,12 +471,17 @@ public class BallerinaCompletionUtils {
         return lookupElements;
     }
 
-    static LookupElement getPackageAsLookups(@NotNull PsiDirectory directory,
-                                             @Nullable InsertHandler<LookupElement> insertHandler) {
+    public static LookupElement createPackageLookup(@NotNull PsiDirectory directory,
+                                                    @Nullable InsertHandler<LookupElement> insertHandler) {
         return LookupElementBuilder.create(directory.getName()).withTypeText("Package")
                 .withIcon(BallerinaIcons.PACKAGE).withInsertHandler(insertHandler);
     }
 
+    public static LookupElement createPackageLookup(@NotNull String packageName,
+                                                    @Nullable InsertHandler<LookupElement> insertHandler) {
+        return LookupElementBuilder.create(packageName).withTypeText("Package")
+                .withIcon(BallerinaIcons.PACKAGE).withInsertHandler(insertHandler);
+    }
     //    @NotNull
     //    private static LookupElementBuilder createPackageLookupElement(@NotNull PsiDirectory directory,
     //                                                                   @NotNull String name) {
@@ -528,6 +532,13 @@ public class BallerinaCompletionUtils {
     //        }
     //        return lookupElements;
     //    }
+
+    public static LookupElement createPackageLookup(@NotNull PsiElement identifier,
+                                                    @Nullable InsertHandler<LookupElement> insertHandler) {
+        LookupElementBuilder builder = LookupElementBuilder.create(identifier.getText()).withTypeText("Package")
+                .withIcon(BallerinaIcons.PACKAGE).withInsertHandler(insertHandler);
+        return PrioritizedLookupElement.withPriority(builder, PACKAGE_PRIORITY);
+    }
 
     // Todo - Update icon getting logic to get the icon from a util method.
     @NotNull

@@ -35,6 +35,10 @@ public class BallerinaInvocationProcessor extends BallerinaScopeProcessorBase {
         myElement = element;
     }
 
+    protected boolean accept(@NotNull PsiElement element) {
+        return element.getParent() instanceof BallerinaAnyIdentifierName;
+    }
+
     @Override
     public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
         if (accept(element)) {
@@ -151,11 +155,6 @@ public class BallerinaInvocationProcessor extends BallerinaScopeProcessorBase {
             return false;
         }
         return true;
-    }
-
-
-    protected boolean accept(@NotNull PsiElement element) {
-        return element.getParent() instanceof BallerinaAnyIdentifierName;
     }
 
     @Override
