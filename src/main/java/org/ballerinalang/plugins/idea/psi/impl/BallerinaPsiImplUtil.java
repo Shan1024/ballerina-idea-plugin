@@ -75,6 +75,8 @@ import org.ballerinalang.plugins.idea.psi.BallerinaMapTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaNamedPattern;
 import org.ballerinalang.plugins.idea.psi.BallerinaNullableTypeName;
+import org.ballerinalang.plugins.idea.psi.BallerinaObjectCallableUnitSignature;
+import org.ballerinalang.plugins.idea.psi.BallerinaObjectFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaOrgName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageDeclaration;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageName;
@@ -649,26 +651,49 @@ public class BallerinaPsiImplUtil {
         }
         BallerinaFunctionDefinition definition = PsiTreeUtil.getParentOfType(parent,
                 BallerinaFunctionDefinition.class);
-        if (definition == null) {
-            return null;
+        if (definition != null) {
+            BallerinaCallableUnitSignature callableUnitSignature = definition.getCallableUnitSignature();
+            if (callableUnitSignature == null) {
+                return null;
+            }
+            BallerinaReturnParameter returnParameter = callableUnitSignature.getReturnParameter();
+            if (returnParameter == null) {
+                return null;
+            }
+            BallerinaReturnType returnType = returnParameter.getReturnType();
+            if (returnType == null) {
+                return null;
+            }
+            BallerinaTypeName typeName = returnType.getTypeName();
+            if (typeName instanceof BallerinaTupleTypeName) {
+                return ((BallerinaTupleTypeName) typeName).getTypeNameList().get(0);
+            }
+            return typeName;
         }
-        BallerinaCallableUnitSignature callableUnitSignature = definition.getCallableUnitSignature();
-        if (callableUnitSignature == null) {
-            return null;
+
+        BallerinaObjectFunctionDefinition objectFunctionDefinition = PsiTreeUtil.getParentOfType(parent,
+                BallerinaObjectFunctionDefinition.class);
+        if (objectFunctionDefinition != null) {
+            BallerinaObjectCallableUnitSignature callableUnitSignature =
+                    objectFunctionDefinition.getObjectCallableUnitSignature();
+            if (callableUnitSignature == null) {
+                return null;
+            }
+            BallerinaReturnParameter returnParameter = callableUnitSignature.getReturnParameter();
+            if (returnParameter == null) {
+                return null;
+            }
+            BallerinaReturnType returnType = returnParameter.getReturnType();
+            if (returnType == null) {
+                return null;
+            }
+            BallerinaTypeName typeName = returnType.getTypeName();
+            if (typeName instanceof BallerinaTupleTypeName) {
+                return ((BallerinaTupleTypeName) typeName).getTypeNameList().get(0);
+            }
+            return typeName;
         }
-        BallerinaReturnParameter returnParameter = callableUnitSignature.getReturnParameter();
-        if (returnParameter == null) {
-            return null;
-        }
-        BallerinaReturnType returnType = returnParameter.getReturnType();
-        if (returnType == null) {
-            return null;
-        }
-        BallerinaTypeName typeName = returnType.getTypeName();
-        if (typeName instanceof BallerinaTupleTypeName) {
-            return ((BallerinaTupleTypeName) typeName).getTypeNameList().get(0);
-        }
-        return typeName;
+        return null;
     }
 
     private static boolean isVariableReferenceInForEach(@NotNull BallerinaVariableReference variableReference) {

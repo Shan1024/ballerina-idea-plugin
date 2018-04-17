@@ -33,6 +33,7 @@ public class MatchPostfixTemplate extends StringBasedPostfixTemplate {
         if (type != null && type instanceof BallerinaUnionTypeName) {
             BallerinaUnionTypeName ballerinaUnionTypeName = (BallerinaUnionTypeName) type;
             List<BallerinaTypeName> typeNameList = ballerinaUnionTypeName.getTypeNameList();
+            // Todo - Consider package as well.
             for (int i = 0; i < typeNameList.size(); i++) {
                 template.addVariable("name" + i, name, name, true);
                 template.addVariable("value" + i, name, name, true);
