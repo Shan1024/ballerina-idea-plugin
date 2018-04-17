@@ -340,7 +340,7 @@ TypeDescTypeName ::= typedesc
 ArrayTypeName ::= TypeName (LEFT_BRACKET RIGHT_BRACKET)+
 NullableTypeName ::= TypeName QUESTION_MARK
 UnionTypeName ::= TypeName (PIPE TypeName)+
-GroupTypeName ::= LEFT_PARENTHESIS TypeName RIGHT_PARENTHESIS
+GroupTypeName ::= LEFT_PARENTHESIS <<isGroupType>> TypeName RIGHT_PARENTHESIS
 TupleTypeName ::= LEFT_PARENTHESIS TypeName (COMMA TypeName)* RIGHT_PARENTHESIS
 ObjectTypeName ::= object LEFT_BRACE ObjectBody RIGHT_BRACE {pin=1}
 RecordTypeName ::= LEFT_BRACE FieldDefinitionList RIGHT_BRACE
@@ -631,7 +631,7 @@ Expression
     |   VariableReferenceExpression
     |   TypeInitExpression
     |   TypeConversionExpression
-    |   UnaryExpression // Unary > Type access - if (typeof temp_int)
+    |   UnaryExpression
     |   BinaryPowExpression
     |   BinaryDivMulModExpression
     |   BinaryAddSubExpression
@@ -644,7 +644,7 @@ Expression
     |   CheckedExpression
     |   ElvisExpression
     |   AwaitExpression
-    |   typeAccessExpression{
+    |   typeAccessExpression {
     recoverWhile=ExpressionRecover
 }
 

@@ -103,7 +103,8 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                                 && !(rawLookup == BallerinaTypes.LEFT_BRACE && rawLookup2 == BallerinaTypes.NEW)
                                 // {message:"Notification failed for topic [" + topic + "]",  cause:httpConnectorError }
                                 && !(rawLookup == BallerinaTypes.COMMA && rawLookup2 == BallerinaTypes.ADD)
-                                && !(rawLookup == BallerinaTypes.QUESTION_MARK && rawLookup2 == BallerinaTypes.RIGHT_PARENTHESIS)
+                                && !(rawLookup == BallerinaTypes.QUESTION_MARK && rawLookup2 == BallerinaTypes
+                                .RIGHT_PARENTHESIS)
                                 ) {
                             return true;
                         } else {
@@ -182,6 +183,14 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
     public static boolean isVarDef(PsiBuilder builder, int level) {
         IElementType lookAhead = builder.lookAhead(0);
         if (lookAhead == BallerinaTypes.LEFT_PARENTHESIS) {
+            return false;
+        }
+        return false;
+    }
+
+    public static boolean isGroupType(PsiBuilder builder, int level) {
+        IElementType lookAhead = builder.lookAhead(1);
+        if (lookAhead == BallerinaTypes.ADD || lookAhead == BallerinaTypes.SUB) {
             return false;
         }
         return false;

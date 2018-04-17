@@ -7951,12 +7951,23 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!nextTokenIsSmart(b, LEFT_PARENTHESIS)) return false;
     boolean r, p;
     Marker m = enter_section_(b, l, _NONE_, null);
-    r = consumeTokenSmart(b, LEFT_PARENTHESIS);
+    r = GroupTypeName_0(b, l + 1);
     p = r;
     r = p && TypeName(b, l, 2);
     r = p && report_error_(b, consumeToken(b, RIGHT_PARENTHESIS)) && r;
     exit_section_(b, l, m, GROUP_TYPE_NAME, r, p, null);
     return r || p;
+  }
+
+  // LEFT_PARENTHESIS <<isGroupType>>
+  private static boolean GroupTypeName_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "GroupTypeName_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = consumeTokenSmart(b, LEFT_PARENTHESIS);
+    r = r && isGroupType(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   // (LEFT_BRACKET RIGHT_BRACKET)+
