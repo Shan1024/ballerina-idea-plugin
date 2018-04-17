@@ -831,9 +831,12 @@ public class BallerinaPsiImplUtil {
     @Nullable
     public static PsiElement getTypeNameFromParameter(@NotNull BallerinaParameterWithType parameter) {
         BallerinaTypeName typeName = parameter.getTypeName();
+        if(typeName instanceof BallerinaUnionTypeName){
+            return typeName;
+        }
         PsiReference reference = typeName.findReferenceAt(typeName.getTextLength());
         if (reference == null) {
-            return null;
+            return typeName;
         }
         return reference.resolve();
     }
