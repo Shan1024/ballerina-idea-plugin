@@ -494,6 +494,11 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
             }
             processParameterList(parameterList.getParameterList());
         }
+
+        BallerinaParameterList parameterList = resourceParameterList.getParameterList();
+        if (parameterList != null) {
+            processParameterList(parameterList.getParameterList());
+        }
     }
 
     protected boolean accept(@NotNull PsiElement element) {
