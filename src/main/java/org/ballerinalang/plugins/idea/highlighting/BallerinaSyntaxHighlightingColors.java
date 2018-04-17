@@ -53,4 +53,6 @@ public class BallerinaSyntaxHighlightingColors {
             createTextAttributesKey("BALLERINA_DOCUMENTATION_VARIABLE", DOC_COMMENT_TAG);
     public static final TextAttributesKey DOCUMENTATION_INLINE_CODE =
             createTextAttributesKey("BALLERINA_DOCUMENTATION_INLINE_CODE", DOC_COMMENT_TAG_VALUE);
+    public static final TextAttributesKey GLOBAL_VARIABLE = createTextAttributesKey("BALLERINA_GLOBAL_VARIABLE",
+            DefaultLanguageHighlighterColors.INSTANCE_FIELD);
 }
