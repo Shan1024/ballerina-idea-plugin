@@ -41,6 +41,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ANY_IDENTIFIER_N
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ARRAY_TYPE_NAME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.AS;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ASSIGN;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ATTACHMENT_POINT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.AWAIT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BIND;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BREAK;
@@ -243,7 +244,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(NATIVE).spaceIf(true)
                 .around(RESOURCE).spaceIf(true)
                 .around(OBJECT).spaceIf(true)
-                .around(ANNOTATION).spaceIf(true)
+//                .around(ANNOTATION).spaceIf(true)
                 .around(ENUM).spaceIf(true)
                 .around(WORKER).spaceIf(true)
                 .around(ENDPOINT).spaceIf(true)
@@ -407,6 +408,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .between(MAP, LT).spaceIf(false)
                 .between(STREAM, LT).spaceIf(false)
                 .between(TABLE, LT).spaceIf(false)
+                .between(ANNOTATION, LT).spaceIf(false)
 
                 .around(PIPE).spaceIf(false)
                 .between(NULLABLE_TYPE_NAME, IDENTIFIER).spaceIf(true)
@@ -442,6 +444,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(OBJECT_INITIALIZER).spaceIf(true)
 
                 .around(ANNOTATION_ATTACHMENT).spaceIf(true)
+                .around(ATTACHMENT_POINT).spaceIf(false)
 
                 .betweenInside(ADD, VARIABLE_REFERENCE_EXPRESSION, UNARY_EXPRESSION).spaceIf(false)
                 .betweenInside(SUB, VARIABLE_REFERENCE_EXPRESSION, UNARY_EXPRESSION).spaceIf(false)
