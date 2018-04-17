@@ -12,6 +12,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaDefaultableParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaEndpointParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaFieldDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaForeachStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaFormalParameterList;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaLambdaFunction;
@@ -100,6 +101,72 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
                     BallerinaFormalParameterList formalParameterList = ballerinaLambdaFunction.getFormalParameterList();
                     if (formalParameterList != null) {
                         processFormalParameterList(formalParameterList);
+                    }
+                }
+
+                // Check for enclosing foreach statements.
+                BallerinaForeachStatement ballerinaForeachStatement = PsiTreeUtil.getParentOfType(block,
+                        BallerinaForeachStatement.class);
+                if (ballerinaForeachStatement != null) {
+                    BallerinaVariableReferenceList variableReferenceList = ballerinaForeachStatement
+                            .getVariableReferenceList();
+                    if (variableReferenceList != null) {
+                        List<BallerinaVariableReference> referenceList = variableReferenceList
+                                .getVariableReferenceList();
+
+                        for (int i = 0; i < referenceList.size(); i++) {
+                            String type = null;
+                            if (referenceList.size() == 2 && i == 0) {
+
+                                type = "int";
+                                BallerinaVariableReference ballerinaVariableReference = referenceList.get(0);
+                                BallerinaNameReference nameReference = ((BallerinaSimpleVariableReference)
+                                        ballerinaVariableReference).getNameReference();
+                                PsiElement identifier = nameReference.getIdentifier();
+                                if (myResult != null) {
+                                    myResult.addElement(BallerinaCompletionUtils
+                                            .createVariableLookupElement(identifier, type));
+                                } else if (myElement.getText().equals(identifier.getText())) {
+                                    add(identifier);
+                                    return false;
+                                }
+                                continue;
+                            }
+
+                            BallerinaVariableReference ballerinaVariableReference = referenceList.get(i);
+
+
+                            //                            BallerinaSimpleVariableReference simpleVariableReference =
+                            //                                    PsiTreeUtil.getParentOfType(myElement,
+                            // BallerinaSimpleVariableReference.class);
+                            // We need to ignore invoking in the first variable.
+                            //                            if (simpleVariableReference == null
+                            //                                    || !simpleVariableReference.equals
+                            // (ballerinaVariableReference)) {
+                            //                                continue;
+                            //                            }
+
+                            if (ballerinaVariableReference instanceof BallerinaSimpleVariableReference) {
+
+
+                                PsiElement ballerinaVariableReferenceType = ballerinaVariableReference.getType();
+                                if (ballerinaVariableReferenceType != null) {
+                                    type = ballerinaVariableReferenceType.getText();
+                                }
+
+
+                                BallerinaNameReference nameReference = ((BallerinaSimpleVariableReference)
+                                        ballerinaVariableReference).getNameReference();
+                                PsiElement identifier = nameReference.getIdentifier();
+                                if (myResult != null) {
+                                    myResult.addElement(BallerinaCompletionUtils
+                                            .createVariableLookupElement(identifier, type));
+                                } else if (myElement.getText().equals(identifier.getText())) {
+                                    add(identifier);
+                                    return false;
+                                }
+                            }
+                        }
                     }
                 }
 

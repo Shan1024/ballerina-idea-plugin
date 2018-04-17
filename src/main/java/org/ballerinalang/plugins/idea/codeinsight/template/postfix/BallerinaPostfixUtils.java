@@ -2,17 +2,9 @@ package org.ballerinalang.plugins.idea.codeinsight.template.postfix;
 
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplateExpressionSelector;
 import com.intellij.codeInsight.template.postfix.templates.PostfixTemplateExpressionSelectorBase;
-import com.intellij.codeInsight.template.postfix.util.JavaPostfixTemplatesUtils;
 import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.util.Condition;
-import com.intellij.psi.CommonClassNames;
-import com.intellij.psi.PsiArrayType;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiExpression;
-import com.intellij.psi.PsiExpressionStatement;
-import com.intellij.psi.PsiType;
-import com.intellij.psi.util.InheritanceUtil;
-import com.intellij.psi.util.PsiExpressionTrimRenderer;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.Function;
 import com.intellij.util.containers.ContainerUtil;
@@ -20,7 +12,6 @@ import org.ballerinalang.plugins.idea.psi.BallerinaExpression;
 import org.ballerinalang.plugins.idea.psi.BallerinaExpressionStmt;
 import org.ballerinalang.plugins.idea.psi.BallerinaUnionTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaVariableReferenceExpression;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -54,9 +45,7 @@ public class BallerinaPostfixUtils {
 
     @NotNull
     public static Function<PsiElement, String> getRenderer() {
-        return element -> {
-            return new RenderFunction().fun((BallerinaExpression) element);
-        };
+        return element -> new RenderFunction().fun((BallerinaExpression) element);
     }
 
     public static final Condition<PsiElement> IS_ITERABLE_OR_ARRAY = element ->

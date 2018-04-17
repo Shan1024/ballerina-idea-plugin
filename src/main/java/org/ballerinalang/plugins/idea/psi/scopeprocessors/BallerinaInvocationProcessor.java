@@ -4,6 +4,7 @@ import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
 import org.ballerinalang.plugins.idea.completion.inserthandlers.ParenthesisInsertHandler;
@@ -52,11 +53,11 @@ public class BallerinaInvocationProcessor extends BallerinaScopeProcessorBase {
                 // Todo - Refactor and remove duplication in BallerinaFieldProcessor
                 if (type != null) {
                     // Resolve to built-in package.
-                    if (type instanceof BallerinaSimpleTypeName) {
-                        BallerinaSimpleTypeName simpleTypeName = (BallerinaSimpleTypeName) type;
-                        if (BallerinaPsiImplUtil.hasBuiltInDefinitions(simpleTypeName)) {
+                    if (type instanceof BallerinaSimpleTypeName || type instanceof LeafPsiElement) {
+
+                        if (BallerinaPsiImplUtil.hasBuiltInDefinitions(type)) {
                             List<BallerinaFunctionDefinition> definitions =
-                                    BallerinaPsiImplUtil.suggestNativeFunctions(simpleTypeName);
+                                    BallerinaPsiImplUtil.suggestNativeFunctions(type);
                             for (BallerinaFunctionDefinition definition : definitions) {
                                 PsiElement identifier = definition.getIdentifier();
                                 if (identifier != null) {

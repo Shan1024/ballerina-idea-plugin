@@ -57,6 +57,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaField;
 import org.ballerinalang.plugins.idea.psi.BallerinaFieldDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFieldVariableReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
+import org.ballerinalang.plugins.idea.psi.BallerinaForeachStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaFormalParameterList;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionInvocation;
@@ -469,9 +470,33 @@ public class BallerinaPsiImplUtil {
     private static PsiElement getBallerinaTypeFromVariableReference(@NotNull BallerinaVariableReference
                                                                             variableReference, int index) {
         if (variableReference instanceof BallerinaSimpleVariableReference) {
-            BallerinaNameReference nameReference =
+            if (isVariableReferenceInForEach(variableReference)) {
+                BallerinaForeachStatement foreachStatement = PsiTreeUtil.getParentOfType(variableReference,
+                        BallerinaForeachStatement.class);
+                if (foreachStatement != null) {
+                    BallerinaVariableReferenceList variableReferenceList = foreachStatement.getVariableReferenceList();
+
+                    if (variableReferenceList != null) {
+                        List<BallerinaVariableReference> referenceList = variableReferenceList
+                                .getVariableReferenceList();
+
+                        if (referenceList.size() == 1) {
+                            return getType(foreachStatement);
+                        } else if (referenceList.size() == 2) {
+
+                            // This is used to get the type for the lookup element.
+                            if (referenceList.get(1).getText().equals(variableReference.getText())) {
+                                return getType(foreachStatement);
+                            }
+                        }
+                    }
+                }
+            }
+
+            BallerinaNameReference ballerinaNameReference =
                     ((BallerinaSimpleVariableReference) variableReference).getNameReference();
-            PsiElement identifier = nameReference.getIdentifier();
+
+            PsiElement identifier = ballerinaNameReference.getIdentifier();
             PsiReference reference = identifier.getReference();
             if (reference == null) {
                 return null;
@@ -500,6 +525,35 @@ public class BallerinaPsiImplUtil {
 
                 return getTypeNameFromNamedPattern(typeName);
             } else if (parent instanceof BallerinaNameReference) {
+                PsiElement superParent = parent.getParent();
+                if (superParent instanceof BallerinaVariableReference) {
+                    BallerinaVariableReference ballerinaVariableReference = (BallerinaVariableReference) superParent;
+                    if (isVariableReferenceInForEach(ballerinaVariableReference)) {
+                        BallerinaForeachStatement foreachStatement =
+                                PsiTreeUtil.getParentOfType(ballerinaVariableReference,
+                                        BallerinaForeachStatement.class);
+                        if (foreachStatement != null) {
+                            BallerinaVariableReferenceList variableReferenceList = foreachStatement
+                                    .getVariableReferenceList();
+
+                            if (variableReferenceList != null) {
+                                List<BallerinaVariableReference> referenceList = variableReferenceList
+                                        .getVariableReferenceList();
+                                // If there is only one element in the list, we resolve the type.
+                                if (referenceList.size() == 1) {
+                                    return getType(foreachStatement);
+                                } else if (referenceList.size() == 2) {
+                                    // If there are two items, the first one will be the index. So we only resolve
+                                    // the second element.
+                                    if (variableReference.getText().equals(referenceList.get(1).getText())) {
+                                        return getType(foreachStatement);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
                 BallerinaAssignmentStatement ballerinaAssignmentStatement = PsiTreeUtil.getParentOfType(parent,
                         BallerinaAssignmentStatement.class);
                 if (ballerinaAssignmentStatement != null) {
@@ -608,6 +662,20 @@ public class BallerinaPsiImplUtil {
             return typeName;
         }
         return null;
+    }
+
+    private static boolean isVariableReferenceInForEach(@NotNull BallerinaVariableReference variableReference) {
+        PsiElement parent = variableReference.getParent();
+        if (!(parent instanceof BallerinaVariableReferenceList)) {
+            return false;
+        }
+        PsiElement superParent = parent.getParent();
+        return superParent instanceof BallerinaForeachStatement;
+    }
+
+    private static PsiElement getType(@NotNull BallerinaForeachStatement foreachStatement) {
+        BallerinaExpression expression = foreachStatement.getExpression();
+        return getBallerinaTypeFromExpression(expression);
     }
 
     @Nullable
