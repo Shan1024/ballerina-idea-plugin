@@ -83,6 +83,15 @@ public class BallerinaInvocationProcessor extends BallerinaScopeProcessorBase {
                             add(result);
                             return false;
                         }
+
+                        BallerinaObjectFunctionProcessor ballerinaObjectFunctionProcessor
+                                = new BallerinaObjectFunctionProcessor(myResult, myElement, isCompletion());
+                        ballerinaObjectFunctionProcessor.execute(ballerinaTypeDefinition, ResolveState.initial());
+                        result = ballerinaObjectFunctionProcessor.getResult();
+                        if (!isCompletion() && result != null) {
+                            add(result);
+                            return false;
+                        }
                     }
                 } else {
                     if (prevSibling instanceof BallerinaSimpleVariableReference

@@ -64,7 +64,7 @@ public class ParenthesisInsertHandler implements InsertHandler<LookupElement> {
             if (completionCharOffset == -1) {
                 PsiElement psiElement = item.getPsiElement();
                 if (psiElement != null) {
-                    Object hasAReturnValue = psiElement.getUserData(HAS_A_RETURN_VALUE);
+                    String hasAReturnValue = psiElement.getUserData(HAS_A_RETURN_VALUE);
                     String requireParameters = psiElement.getUserData(REQUIRE_PARAMETERS);
                     int caretShift = 1;
                     if (hasAReturnValue != null) {

@@ -590,6 +590,9 @@ public class BallerinaCompletionUtils {
         BallerinaFormalParameterList formalParameterList = objectCallableUnitSignature.getFormalParameterList();
         builder = builder.withTailText(BallerinaPsiImplUtil.formatBallerinaFunctionParameters(formalParameterList)
                 + " -> " + owner.getText());
+        if (formalParameterList != null) {
+            identifier.putUserData(REQUIRE_PARAMETERS, "YES");
+        }
         return PrioritizedLookupElement.withPriority(builder, FUNCTION_PRIORITY);
     }
 
