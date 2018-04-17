@@ -158,7 +158,9 @@ public class BallerinaParserUtil extends GeneratedParserUtilBase {
                                     // runtime:sleepCurrentWorker(20); in the first statement as the second worker
                                     if (tokenType == BallerinaTypes.CALLABLE_UNIT_SIGNATURE
                                             || tokenType == BallerinaTypes.OBJECT_CALLABLE_UNIT_SIGNATURE
-                                            || tokenType == BallerinaTypes.WORKER_DEFINITION) {
+                                            || tokenType == BallerinaTypes.WORKER_DEFINITION
+                                            || tokenType == BallerinaTypes.UNARY_EXPRESSION
+                                            ) {
                                         return true;
                                     }
                                 }
