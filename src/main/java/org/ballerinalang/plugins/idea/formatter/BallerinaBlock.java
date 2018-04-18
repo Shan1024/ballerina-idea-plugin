@@ -132,7 +132,7 @@ public class BallerinaBlock extends AbstractBlock {
             }
             Alignment alignment = getAlignment(child);
             Indent indent = calculateIndent(child);
-            blocks.add(new BallerinaBlock(child, alignment, indent, null, mySettings, mySpacingBuilder,
+            blocks.add(new BallerinaBlock(child, alignment, indent, myWrap, mySettings, mySpacingBuilder,
                     myAlignmentMap));
         }
         return blocks;
@@ -142,7 +142,8 @@ public class BallerinaBlock extends AbstractBlock {
         Alignment alignment = null;
         IElementType childElementType = child.getElementType();
         IElementType parentElementType = myNode.getElementType();
-        if (childElementType == BallerinaTypes.PARAMETER
+        if ((childElementType == BallerinaTypes.PARAMETER || childElementType == BallerinaTypes.DEFAULTABLE_PARAMETER
+                || childElementType == BallerinaTypes.REST_PARAMETER)
                 && parentElementType == BallerinaTypes.FORMAL_PARAMETER_LIST) {
             if (myAlignmentMap.containsKey(myNode)) {
                 alignment = myAlignmentMap.get(myNode);
@@ -161,6 +162,17 @@ public class BallerinaBlock extends AbstractBlock {
         } else if (childElementType == BallerinaTypes.PARAMETER
                 && parentElementType == BallerinaTypes.PARAMETER_LIST) {
             ASTNode treeParent = myNode.getTreeParent().getTreeParent();
+            if (myAlignmentMap.containsKey(treeParent)) {
+                alignment = myAlignmentMap.get(treeParent);
+            } else {
+                alignment = Alignment.createAlignment(true, Alignment.Anchor.LEFT);
+                myAlignmentMap.put(treeParent, alignment);
+            }
+        } else if ((childElementType == BallerinaTypes.OBJECT_PARAMETER
+                || childElementType == BallerinaTypes.OBJECT_DEFAULTABLE_PARAMETER
+                || childElementType == BallerinaTypes.REST_PARAMETER)
+                && parentElementType == BallerinaTypes.OBJECT_PARAMETER_LIST) {
+            ASTNode treeParent = myNode.getTreeParent();
             if (myAlignmentMap.containsKey(treeParent)) {
                 alignment = myAlignmentMap.get(treeParent);
             } else {
