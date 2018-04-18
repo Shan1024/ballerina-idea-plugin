@@ -12,6 +12,7 @@ import org.ballerinalang.plugins.idea.psi.reference.BallerinaNameReferenceRefere
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaObjectFieldReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaObjectFunctionReference;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaTypeReference;
+import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaActionInvocationProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaBlockProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaFieldProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaInvocationProcessor;
@@ -38,8 +39,13 @@ public class BallerinaReferenceCompletionProvider extends CompletionProvider<Com
         // Todo - Refactor
         if (reference instanceof BallerinaNameReferenceReference) {
             BallerinaNameReferenceReference nameReferenceReference = (BallerinaNameReferenceReference) reference;
+            if (!nameReferenceReference.processResolveVariants(new BallerinaActionInvocationProcessor(result,
+                    element, true))) {
+                return;
+            }
             nameReferenceReference.processResolveVariants(new BallerinaPackageNameProcessor(result, element, true));
-            if (!nameReferenceReference.processResolveVariants(new BallerinaStatementProcessor(result, element, true))) {
+            if (!nameReferenceReference.processResolveVariants(new BallerinaStatementProcessor(result, element, true)
+            )) {
                 return;
             }
             if (!nameReferenceReference.processResolveVariants(new BallerinaBlockProcessor(result, element, true))) {

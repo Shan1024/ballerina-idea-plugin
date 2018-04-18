@@ -22,6 +22,7 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
+import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
 import org.ballerinalang.plugins.idea.psi.BallerinaAssignmentStatement;
@@ -33,8 +34,10 @@ import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaRecordKey;
 import org.ballerinalang.plugins.idea.psi.BallerinaStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaTypes;
 import org.ballerinalang.plugins.idea.psi.BallerinaVariableDefinitionStatement;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
+import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaActionInvocationProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaBlockProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaObjectFieldProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaPackageNameProcessor;
@@ -57,12 +60,18 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
     @Nullable
     @Override
     public PsiElement resolveInner() {
+        BallerinaScopeProcessorBase processor = new BallerinaActionInvocationProcessor(null, myElement, false);
+        processResolveVariants(processor);
+        PsiElement result = processor.getResult();
+        if (result != null) {
+            return result;
+        }
 
         BallerinaRecordKey recordKey = PsiTreeUtil.getParentOfType(myElement, BallerinaRecordKey.class);
         if (recordKey == null) {
-            BallerinaScopeProcessorBase processor = new BallerinaStatementProcessor(null, myElement, false);
+            processor = new BallerinaStatementProcessor(null, myElement, false);
             processResolveVariants(processor);
-            PsiElement result = processor.getResult();
+            result = processor.getResult();
             if (result != null) {
                 return result;
             }
@@ -86,7 +95,7 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
                     BallerinaObjectFieldProcessor ballerinaFieldProcessor =
                             new BallerinaObjectFieldProcessor(null, myElement, false);
                     ballerinaFieldProcessor.execute(type.getParent(), ResolveState.initial());
-                    PsiElement result = ballerinaFieldProcessor.getResult();
+                    result = ballerinaFieldProcessor.getResult();
                     if (result != null) {
                         return result;
                     }
@@ -100,7 +109,7 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
                     BallerinaObjectFieldProcessor ballerinaFieldProcessor =
                             new BallerinaObjectFieldProcessor(null, myElement, false);
                     ballerinaFieldProcessor.execute(type.getParent(), ResolveState.initial());
-                    PsiElement result = ballerinaFieldProcessor.getResult();
+                    result = ballerinaFieldProcessor.getResult();
                     if (result != null) {
                         return result;
                     }
@@ -120,6 +129,17 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
         PsiFile containingFile = myElement.getContainingFile();
         if (!(containingFile instanceof BallerinaFile)) {
             return false;
+        }
+
+        if (processor instanceof BallerinaActionInvocationProcessor) {
+            PsiElement prevVisibleLeaf = PsiTreeUtil.prevVisibleLeaf(myElement);
+            if (prevVisibleLeaf != null && prevVisibleLeaf instanceof LeafPsiElement) {
+                if (((LeafPsiElement) prevVisibleLeaf).getElementType() == BallerinaTypes.RARROW) {
+                    if (!processor.execute(containingFile, ResolveState.initial())) {
+                        return false;
+                    }
+                }
+            }
         }
 
         if (processor instanceof BallerinaPackageNameProcessor) {
