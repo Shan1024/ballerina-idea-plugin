@@ -24,6 +24,7 @@ import com.intellij.formatting.Indent;
 import com.intellij.formatting.Spacing;
 import com.intellij.formatting.SpacingBuilder;
 import com.intellij.formatting.Wrap;
+import com.intellij.formatting.WrapType;
 import com.intellij.lang.ASTNode;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.TokenType;
@@ -132,7 +133,8 @@ public class BallerinaBlock extends AbstractBlock {
             }
             Alignment alignment = getAlignment(child);
             Indent indent = calculateIndent(child);
-            blocks.add(new BallerinaBlock(child, alignment, indent, myWrap, mySettings, mySpacingBuilder,
+            Wrap wrap = createWrap(child);
+            blocks.add(new BallerinaBlock(child, alignment, indent, wrap, mySettings, mySpacingBuilder,
                     myAlignmentMap));
         }
         return blocks;
@@ -275,6 +277,10 @@ public class BallerinaBlock extends AbstractBlock {
             }
         }
         return Indent.getNoneIndent();
+    }
+
+    private Wrap createWrap(ASTNode child) {
+        return Wrap.createWrap(WrapType.CHOP_DOWN_IF_LONG, false);
     }
 
     @Nullable
