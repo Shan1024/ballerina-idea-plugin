@@ -34,6 +34,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.HashMap;
 
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ABORT;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ACTION_INVOCATION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ADD;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ALL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.AND;
@@ -97,7 +98,6 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FULL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FUNCTION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FUNCTION_INVOCATION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.GROUP;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.GROUP_TYPE_NAME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.GT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.GT_EQUAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.HAVING;
@@ -141,7 +141,6 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NEXT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NOT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NOT_EQUAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NULLABLE_TYPE_NAME;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NULL_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OBJECT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OBJECT_BODY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OBJECT_INITIALIZER;
@@ -197,6 +196,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TABLE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.THROW;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TIMEOUT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TRANSACTION;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TRIGGER_WORKER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TRY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TUPLE_TYPE_NAME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TYPE_CONVERSION_EXPRESSION;
@@ -344,7 +344,6 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .between(SIMPLE_TYPE_NAME, EQUAL_GT).spaceIf(true)
                 .after(ANNOTATION_ATTACHMENT).spaceIf(true)
                 .around(SIMPLE_TYPE_NAME).spaceIf(false)
-                .between(NAME_REFERENCE, RARROW).spaceIf(true)
                 .between(NAME_REFERENCE, RECORD_LITERAL).spaceIf(true)
                 .around(NAME_REFERENCE).spaceIf(false)
                 .before(RETURN_TYPE).spaceIf(false)
@@ -388,7 +387,6 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .between(INVOCATION_ARG, COMMA).spaceIf(false)
                 .between(ANY_IDENTIFIER_NAME, LEFT_PARENTHESIS).spaceIf(false)
                 .between(EXPRESSION_LIST, LARROW).spaceIf(true)
-                .between(EXPRESSION_LIST, RARROW).spaceIf(true)
                 .around(EXPRESSION_LIST).spaceIf(false)
                 .between(ARRAY_TYPE_NAME, IDENTIFIER).spaceIf(true)
                 .aroundInside(GT, TYPE_CONVERSION_EXPRESSION).spaceIf(false)
@@ -485,7 +483,11 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(AND).spaceIf(true)
                 .around(OR).spaceIf(true)
 
-                .around(RARROW).spaceIf(true)
+                .aroundInside(RARROW, ACTION_INVOCATION).spaceIf(false)
+                .aroundInside(RARROW, TRIGGER_WORKER).spaceIf(true)
+                .between(EXPRESSION_LIST, RARROW).spaceIf(true)
+                .around(RARROW).spaceIf(false)
+
                 .around(LARROW).spaceIf(true)
                 .around(EQUAL_GT).spaceIf(true)
                 .around(ELVIS).spaceIf(true)
