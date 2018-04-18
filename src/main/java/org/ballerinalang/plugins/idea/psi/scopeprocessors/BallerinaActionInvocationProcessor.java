@@ -75,7 +75,7 @@ public class BallerinaActionInvocationProcessor extends BallerinaScopeProcessorB
                     BallerinaNameReference ballerinaNameReference = nameReferenceList.get(0);
 
 
-                    PsiElement type = BallerinaPsiImplUtil.getType(ballerinaNameReference);
+                    PsiElement type = BallerinaPsiImplUtil.getCachedType(ballerinaNameReference);
 
                     if (type == null) {
                         return true;

@@ -377,7 +377,14 @@ public class BallerinaPsiImplUtil {
     }
 
     @Nullable
-    public static PsiElement getType(@NotNull BallerinaNameReference ballerinaNameReference) {
+    public static PsiElement getCachedType(@NotNull BallerinaNameReference ballerinaNameReference) {
+        return CachedValuesManager.getCachedValue(ballerinaNameReference,
+                () -> CachedValueProvider.Result.create(getType(ballerinaNameReference),
+                        ProjectRootManager.getInstance(ballerinaNameReference.getProject())));
+    }
+
+    @Nullable
+    private static PsiElement getType(@NotNull BallerinaNameReference ballerinaNameReference) {
         // Todo - cache
         PsiElement identifier = ballerinaNameReference.getIdentifier();
         PsiReference reference = identifier.getReference();
