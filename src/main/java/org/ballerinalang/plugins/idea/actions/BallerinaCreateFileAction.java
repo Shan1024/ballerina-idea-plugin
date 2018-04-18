@@ -43,9 +43,9 @@ public class BallerinaCreateFileAction extends CreateFileFromTemplateAction impl
     private static final String BALLERINA_EMPTY_FILE = "Ballerina File";
     private static final String BALLERINA_MAIN = "Ballerina Main";
     private static final String BALLERINA_SERVICE = "Ballerina Service";
-    private static final String BALLERINA_CONNECTOR = "Ballerina Connector";
-    private static final String BALLERINA_WEBSOCKET = "Ballerina WebSocket";
-    private static final String BALLERINA_TEST = "Ballerina Test";
+//    private static final String BALLERINA_CONNECTOR = "Ballerina Connector";
+//    private static final String BALLERINA_WEBSOCKET = "Ballerina WebSocket";
+//    private static final String BALLERINA_TEST = "Ballerina Test";
 
     private static final String NEW_BALLERINA_FILE = "New Ballerina File";
     private static final String DEFAULT_BALLERINA_TEMPLATE_PROPERTY = "Empty file";
@@ -59,9 +59,9 @@ public class BallerinaCreateFileAction extends CreateFileFromTemplateAction impl
                                @NotNull CreateFileFromTemplateDialog.Builder builder) {
         builder.setTitle(NEW_BALLERINA_FILE).addKind(BALLERINA_MAIN, BallerinaIcons.ICON, BALLERINA_MAIN)
                 .addKind(BALLERINA_SERVICE, BallerinaIcons.ICON, BALLERINA_SERVICE)
-                .addKind(BALLERINA_CONNECTOR, BallerinaIcons.ICON, BALLERINA_CONNECTOR)
-                .addKind(BALLERINA_WEBSOCKET, BallerinaIcons.ICON, BALLERINA_WEBSOCKET)
-                .addKind(BALLERINA_TEST, BallerinaIcons.ICON, BALLERINA_TEST)
+//                .addKind(BALLERINA_CONNECTOR, BallerinaIcons.ICON, BALLERINA_CONNECTOR)
+//                .addKind(BALLERINA_WEBSOCKET, BallerinaIcons.ICON, BALLERINA_WEBSOCKET)
+//                .addKind(BALLERINA_TEST, BallerinaIcons.ICON, BALLERINA_TEST)
                 .addKind(BALLERINA_EMPTY_FILE, BallerinaIcons.ICON, BALLERINA_EMPTY_FILE);
     }
 
