@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaOutputEventTypeImpl extends BallerinaCompositeElementImpl implements BallerinaOutputEventType {
+public class BallerinaLimitClauseImpl extends BallerinaCompositeElementImpl implements BallerinaLimitClause {
 
-  public BallerinaOutputEventTypeImpl(ASTNode node) {
+  public BallerinaLimitClauseImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitOutputEventType(this);
+    visitor.visitLimitClause(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -43,26 +43,14 @@ public class BallerinaOutputEventTypeImpl extends BallerinaCompositeElementImpl 
 
   @Override
   @Nullable
-  public PsiElement getAll() {
-    return findChildByType(ALL);
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getCurrent() {
-    return findChildByType(CURRENT);
+  public PsiElement getDecimalIntegerLiteral() {
+    return findChildByType(DECIMAL_INTEGER_LITERAL);
   }
 
   @Override
   @NotNull
-  public PsiElement getEvents() {
-    return notNullChild(findChildByType(EVENTS));
-  }
-
-  @Override
-  @Nullable
-  public PsiElement getExpired() {
-    return findChildByType(EXPIRED);
+  public PsiElement getLimit() {
+    return notNullChild(findChildByType(LIMIT));
   }
 
 }

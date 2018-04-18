@@ -21,24 +21,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaTableQuery extends BallerinaCompositeElement {
+public interface BallerinaOrderByType extends BallerinaCompositeElement {
 
   @Nullable
-  BallerinaJoinStreamingInput getJoinStreamingInput();
+  PsiElement getAscending();
 
   @Nullable
-  BallerinaLimitClause getLimitClause();
-
-  @Nullable
-  BallerinaOrderByClause getOrderByClause();
-
-  @Nullable
-  BallerinaSelectClause getSelectClause();
-
-  @Nullable
-  BallerinaStreamingInput getStreamingInput();
-
-  @NotNull
-  PsiElement getFrom();
+  PsiElement getDescending();
 
 }

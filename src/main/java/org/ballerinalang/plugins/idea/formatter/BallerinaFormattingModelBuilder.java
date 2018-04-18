@@ -60,7 +60,6 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COLON;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMMA;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMPLETE_PACKAGE_NAME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.COMPOUND_OPERATOR;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CURRENT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DAY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DECIMAL_INTEGER_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DEPRECATED;
@@ -79,7 +78,6 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EQUAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EQUAL_GT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EVENTS;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EVERY;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EXPIRED;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.EXPRESSION_LIST;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FAIL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FIELD;
@@ -307,8 +305,6 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(SET).spaceIf(true)
                 .around(FOR).spaceIf(true)
                 .around(WINDOW).spaceIf(true)
-                .around(EXPIRED).spaceIf(true)
-                .around(CURRENT).spaceIf(true)
                 .around(EVENTS).spaceIf(true)
                 .around(EVERY).spaceIf(true)
                 .around(WITHIN).spaceIf(true)

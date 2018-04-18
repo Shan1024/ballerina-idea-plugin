@@ -293,10 +293,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitFunctionClause(@NotNull BallerinaFunctionClause o) {
-    visitCompositeElement(o);
-  }
-
   public void visitFunctionDefinition(@NotNull BallerinaFunctionDefinition o) {
     visitNamedElement(o);
     // visitTopLevelDefinition(o);
@@ -416,6 +412,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
+  public void visitLimitClause(@NotNull BallerinaLimitClause o) {
+    visitCompositeElement(o);
+  }
+
   public void visitLockStatement(@NotNull BallerinaLockStatement o) {
     visitCompositeElement(o);
   }
@@ -517,12 +517,16 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitOrgName(@NotNull BallerinaOrgName o) {
-    visitNamedElement(o);
+  public void visitOrderByType(@NotNull BallerinaOrderByType o) {
+    visitCompositeElement(o);
   }
 
-  public void visitOutputEventType(@NotNull BallerinaOutputEventType o) {
+  public void visitOrderByVariable(@NotNull BallerinaOrderByVariable o) {
     visitCompositeElement(o);
+  }
+
+  public void visitOrgName(@NotNull BallerinaOrgName o) {
+    visitNamedElement(o);
   }
 
   public void visitOutputRateLimit(@NotNull BallerinaOutputRateLimit o) {

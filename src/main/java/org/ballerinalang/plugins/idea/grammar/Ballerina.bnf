@@ -805,7 +805,7 @@ ReservedWord ::= foreach | map | start
 
 
 //Siddhi Streams and Tables related
-TableQuery ::= from StreamingInput JoinStreamingInput? SelectClause? OrderByClause? {pin=1}
+TableQuery ::= from StreamingInput JoinStreamingInput? SelectClause? OrderByClause? LimitClause? {pin=1}
 
 AggregationQuery ::= from StreamingInput SelectClause? OrderByClause?
 
@@ -823,7 +823,11 @@ PatternClause ::= every? PatternStreamingInput WithinClause?
 
 WithinClause ::= within Expression {pin=1}
 
-OrderByClause ::= order by VariableReferenceList {pin=1}
+OrderByClause ::= order by OrderByVariable (COMMA OrderByVariable)* {pin=1}
+
+OrderByVariable ::= VariableReference OrderByType?
+
+LimitClause ::= limit DECIMAL_INTEGER_LITERAL {pin=1}
 
 SelectClause ::= select (MUL| SelectExpressionList) GroupByClause? HavingClause? {pin=1}
 
@@ -866,11 +870,9 @@ PatternStreamingEdgeInput ::= VariableReference WhereClause? IntRangeExpression?
 
 WhereClause ::= where Expression {pin=1}
 
-FunctionClause ::= function FunctionInvocation
-
 WindowClause ::= window FunctionInvocation  {pin=1}
 
-OutputEventType ::= all events | expired events | current events
+OrderByType ::= ascending | descending
 
 JoinType ::= left outer join | right outer join | full outer join | outer join | inner? join
 

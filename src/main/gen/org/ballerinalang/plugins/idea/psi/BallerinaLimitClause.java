@@ -21,18 +21,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaOutputEventType extends BallerinaCompositeElement {
+public interface BallerinaLimitClause extends BallerinaCompositeElement {
 
   @Nullable
-  PsiElement getAll();
-
-  @Nullable
-  PsiElement getCurrent();
+  PsiElement getDecimalIntegerLiteral();
 
   @NotNull
-  PsiElement getEvents();
-
-  @Nullable
-  PsiElement getExpired();
+  PsiElement getLimit();
 
 }

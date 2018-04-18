@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaFunctionClauseImpl extends BallerinaCompositeElementImpl implements BallerinaFunctionClause {
+public class BallerinaOrderByTypeImpl extends BallerinaCompositeElementImpl implements BallerinaOrderByType {
 
-  public BallerinaFunctionClauseImpl(ASTNode node) {
+  public BallerinaOrderByTypeImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitFunctionClause(this);
+    visitor.visitOrderByType(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -42,15 +42,15 @@ public class BallerinaFunctionClauseImpl extends BallerinaCompositeElementImpl i
   }
 
   @Override
-  @NotNull
-  public BallerinaFunctionInvocation getFunctionInvocation() {
-    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaFunctionInvocation.class));
+  @Nullable
+  public PsiElement getAscending() {
+    return findChildByType(ASCENDING);
   }
 
   @Override
-  @NotNull
-  public PsiElement getFunction() {
-    return notNullChild(findChildByType(FUNCTION));
+  @Nullable
+  public PsiElement getDescending() {
+    return findChildByType(DESCENDING);
   }
 
 }

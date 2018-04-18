@@ -49,6 +49,12 @@ public class BallerinaTableQueryImpl extends BallerinaCompositeElementImpl imple
 
   @Override
   @Nullable
+  public BallerinaLimitClause getLimitClause() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaLimitClause.class);
+  }
+
+  @Override
+  @Nullable
   public BallerinaOrderByClause getOrderByClause() {
     return PsiTreeUtil.getChildOfType(this, BallerinaOrderByClause.class);
   }

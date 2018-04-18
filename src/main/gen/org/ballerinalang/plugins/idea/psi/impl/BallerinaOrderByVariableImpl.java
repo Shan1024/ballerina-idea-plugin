@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaOrderByClauseImpl extends BallerinaCompositeElementImpl implements BallerinaOrderByClause {
+public class BallerinaOrderByVariableImpl extends BallerinaCompositeElementImpl implements BallerinaOrderByVariable {
 
-  public BallerinaOrderByClauseImpl(ASTNode node) {
+  public BallerinaOrderByVariableImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitOrderByClause(this);
+    visitor.visitOrderByVariable(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -42,21 +42,15 @@ public class BallerinaOrderByClauseImpl extends BallerinaCompositeElementImpl im
   }
 
   @Override
-  @NotNull
-  public List<BallerinaOrderByVariable> getOrderByVariableList() {
-    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaOrderByVariable.class);
-  }
-
-  @Override
   @Nullable
-  public PsiElement getBy() {
-    return findChildByType(BY);
+  public BallerinaOrderByType getOrderByType() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaOrderByType.class);
   }
 
   @Override
   @NotNull
-  public PsiElement getOrder() {
-    return notNullChild(findChildByType(ORDER));
+  public BallerinaVariableReference getVariableReference() {
+    return notNullChild(PsiTreeUtil.getChildOfType(this, BallerinaVariableReference.class));
   }
 
 }

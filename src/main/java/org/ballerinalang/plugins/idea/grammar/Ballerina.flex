@@ -365,6 +365,7 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "annotation"                                { return ANNOTATION; }
     "any"                                       { return ANY; }
     "as"                                        { return AS; }
+    "ascending"                                 { return ASCENDING; }
     "await"                                     { return AWAIT; }
 
     "bind"                                      { return BIND; }
@@ -378,6 +379,7 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
 
     "documentation"                             { return DOCUMENTATION; }
     "deprecated"                                { return DEPRECATED; }
+    "descending"                                { return DESCENDING; }
 
     "else"                                      { return ELSE; }
     "endpoint"                                  { return ENDPOINT; }
@@ -399,6 +401,7 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "json"                                      { return JSON; }
 
     "lengthof"                                  { return LENGTHOF; }
+    "limit"                                     { return LIMIT; }
     "lock"                                      { return LOCK; }
 
     "map"                                       { return MAP; }
@@ -515,8 +518,8 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "for"                                       { return FOR; }
     "window"                                    { return WINDOW; }
 //    "query"                                     { return QUERY; }
-    "expired"                                   { return EXPIRED; }
-    "current"                                   { return CURRENT; }
+//    "expired"                                   { return EXPIRED; }
+//    "current"                                   { return CURRENT; }
     "events"                                    { if(inSiddhiInsertQuery) { inSiddhiInsertQuery = false; return EVENTS; } return IDENTIFIER; }
     "every"                                     { return EVERY; }
     "within"                                    { return WITHIN; }

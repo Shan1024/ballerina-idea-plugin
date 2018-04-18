@@ -104,7 +104,6 @@ public interface BallerinaTypes {
   IElementType FORK_JOIN_STATEMENT = new BallerinaCompositeElementType("FORK_JOIN_STATEMENT");
   IElementType FORK_STATEMENT_BODY = new BallerinaCompositeElementType("FORK_STATEMENT_BODY");
   IElementType FORMAL_PARAMETER_LIST = new BallerinaCompositeElementType("FORMAL_PARAMETER_LIST");
-  IElementType FUNCTION_CLAUSE = new BallerinaCompositeElementType("FUNCTION_CLAUSE");
   IElementType FUNCTION_DEFINITION = BallerinaElementTypeFactory.stubFactory("FUNCTION_DEFINITION");
   IElementType FUNCTION_INVOCATION = new BallerinaCompositeElementType("FUNCTION_INVOCATION");
   IElementType FUNCTION_INVOCATION_REFERENCE = new BallerinaCompositeElementType("FUNCTION_INVOCATION_REFERENCE");
@@ -135,6 +134,7 @@ public interface BallerinaTypes {
   IElementType LAMBDA_FUNCTION = new BallerinaCompositeElementType("LAMBDA_FUNCTION");
   IElementType LAMBDA_FUNCTION_EXPRESSION = new BallerinaCompositeElementType("LAMBDA_FUNCTION_EXPRESSION");
   IElementType LAMBDA_RETURN_PARAMETER = new BallerinaCompositeElementType("LAMBDA_RETURN_PARAMETER");
+  IElementType LIMIT_CLAUSE = new BallerinaCompositeElementType("LIMIT_CLAUSE");
   IElementType LOCK_STATEMENT = new BallerinaCompositeElementType("LOCK_STATEMENT");
   IElementType MAP_ARRAY_VARIABLE_REFERENCE = new BallerinaCompositeElementType("MAP_ARRAY_VARIABLE_REFERENCE");
   IElementType MAP_TYPE_NAME = new BallerinaCompositeElementType("MAP_TYPE_NAME");
@@ -165,8 +165,9 @@ public interface BallerinaTypes {
   IElementType ONCOMMIT_STATEMENT = new BallerinaCompositeElementType("ONCOMMIT_STATEMENT");
   IElementType ONRETRY_CLAUSE = new BallerinaCompositeElementType("ONRETRY_CLAUSE");
   IElementType ORDER_BY_CLAUSE = new BallerinaCompositeElementType("ORDER_BY_CLAUSE");
+  IElementType ORDER_BY_TYPE = new BallerinaCompositeElementType("ORDER_BY_TYPE");
+  IElementType ORDER_BY_VARIABLE = new BallerinaCompositeElementType("ORDER_BY_VARIABLE");
   IElementType ORG_NAME = BallerinaElementTypeFactory.stubFactory("ORG_NAME");
-  IElementType OUTPUT_EVENT_TYPE = new BallerinaCompositeElementType("OUTPUT_EVENT_TYPE");
   IElementType OUTPUT_RATE_LIMIT = new BallerinaCompositeElementType("OUTPUT_RATE_LIMIT");
   IElementType PACKAGE_DECLARATION = BallerinaElementTypeFactory.stubFactory("PACKAGE_DECLARATION");
   IElementType PACKAGE_NAME = BallerinaElementTypeFactory.stubFactory("PACKAGE_NAME");
@@ -292,6 +293,7 @@ public interface BallerinaTypes {
   IElementType ANNOTATION = new BallerinaTokenType("annotation");
   IElementType ANY = new BallerinaTokenType("any");
   IElementType AS = new BallerinaTokenType("as");
+  IElementType ASCENDING = new BallerinaTokenType("ascending");
   IElementType ASSIGN = new BallerinaTokenType("=");
   IElementType AT = new BallerinaTokenType("@");
   IElementType AWAIT = new BallerinaTokenType("await");
@@ -313,7 +315,6 @@ public interface BallerinaTypes {
   IElementType COMPOUND_DIV = new BallerinaTokenType("/=");
   IElementType COMPOUND_MUL = new BallerinaTokenType("*=");
   IElementType COMPOUND_SUB = new BallerinaTokenType("-=");
-  IElementType CURRENT = new BallerinaTokenType("current");
   IElementType DAY = new BallerinaTokenType("day");
   IElementType DB_DEPRECATED_INLINE_CODE_START = new BallerinaTokenType("DB_DEPRECATED_INLINE_CODE_START");
   IElementType DB_DOC_INLINE_CODE_START = new BallerinaTokenType("DB_DOC_INLINE_CODE_START");
@@ -323,6 +324,7 @@ public interface BallerinaTypes {
   IElementType DEPRECATED_TEMPLATE_END = new BallerinaTokenType("DEPRECATED_TEMPLATE_END");
   IElementType DEPRECATED_TEMPLATE_START = new BallerinaTokenType("DEPRECATED_TEMPLATE_START");
   IElementType DEPRECATED_TEMPLATE_TEXT = new BallerinaTokenType("DEPRECATED_TEMPLATE_TEXT");
+  IElementType DESCENDING = new BallerinaTokenType("descending");
   IElementType DIV = new BallerinaTokenType("/");
   IElementType DOCUMENTATION = new BallerinaTokenType("documentation");
   IElementType DOCUMENTATION_TEMPLATE_ATTRIBUTE_END = new BallerinaTokenType("DOCUMENTATION_TEMPLATE_ATTRIBUTE_END");
@@ -346,7 +348,6 @@ public interface BallerinaTypes {
   IElementType EQUAL_GT = new BallerinaTokenType("=>");
   IElementType EVENTS = new BallerinaTokenType("events");
   IElementType EVERY = new BallerinaTokenType("every");
-  IElementType EXPIRED = new BallerinaTokenType("expired");
   IElementType EXPRESSION_END = new BallerinaTokenType("EXPRESSION_END");
   IElementType FAIL = new BallerinaTokenType("fail");
   IElementType FINALLY = new BallerinaTokenType("finally");
@@ -384,6 +385,7 @@ public interface BallerinaTypes {
   IElementType LEFT_BRACKET = new BallerinaTokenType("[");
   IElementType LEFT_PARENTHESIS = new BallerinaTokenType("(");
   IElementType LENGTHOF = new BallerinaTokenType("lengthof");
+  IElementType LIMIT = new BallerinaTokenType("limit");
   IElementType LINE_COMMENT = new BallerinaTokenType("LINE_COMMENT");
   IElementType LOCK = new BallerinaTokenType("lock");
   IElementType LT = new BallerinaTokenType("<");
@@ -736,9 +738,6 @@ public interface BallerinaTypes {
       else if (type == FORMAL_PARAMETER_LIST) {
         return new BallerinaFormalParameterListImpl(node);
       }
-      else if (type == FUNCTION_CLAUSE) {
-        return new BallerinaFunctionClauseImpl(node);
-      }
       else if (type == FUNCTION_DEFINITION) {
         return new BallerinaFunctionDefinitionImpl(node);
       }
@@ -828,6 +827,9 @@ public interface BallerinaTypes {
       }
       else if (type == LAMBDA_RETURN_PARAMETER) {
         return new BallerinaLambdaReturnParameterImpl(node);
+      }
+      else if (type == LIMIT_CLAUSE) {
+        return new BallerinaLimitClauseImpl(node);
       }
       else if (type == LOCK_STATEMENT) {
         return new BallerinaLockStatementImpl(node);
@@ -919,11 +921,14 @@ public interface BallerinaTypes {
       else if (type == ORDER_BY_CLAUSE) {
         return new BallerinaOrderByClauseImpl(node);
       }
+      else if (type == ORDER_BY_TYPE) {
+        return new BallerinaOrderByTypeImpl(node);
+      }
+      else if (type == ORDER_BY_VARIABLE) {
+        return new BallerinaOrderByVariableImpl(node);
+      }
       else if (type == ORG_NAME) {
         return new BallerinaOrgNameImpl(node);
-      }
-      else if (type == OUTPUT_EVENT_TYPE) {
-        return new BallerinaOutputEventTypeImpl(node);
       }
       else if (type == OUTPUT_RATE_LIMIT) {
         return new BallerinaOutputRateLimitImpl(node);

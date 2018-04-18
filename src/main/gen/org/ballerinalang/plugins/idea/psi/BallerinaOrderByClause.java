@@ -23,8 +23,8 @@ import com.intellij.psi.PsiElement;
 
 public interface BallerinaOrderByClause extends BallerinaCompositeElement {
 
-  @Nullable
-  BallerinaVariableReferenceList getVariableReferenceList();
+  @NotNull
+  List<BallerinaOrderByVariable> getOrderByVariableList();
 
   @Nullable
   PsiElement getBy();

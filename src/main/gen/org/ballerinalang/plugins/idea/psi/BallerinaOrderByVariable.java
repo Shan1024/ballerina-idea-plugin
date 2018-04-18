@@ -21,12 +21,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaFunctionClause extends BallerinaCompositeElement {
+public interface BallerinaOrderByVariable extends BallerinaCompositeElement {
+
+  @Nullable
+  BallerinaOrderByType getOrderByType();
 
   @NotNull
-  BallerinaFunctionInvocation getFunctionInvocation();
-
-  @NotNull
-  PsiElement getFunction();
+  BallerinaVariableReference getVariableReference();
 
 }
