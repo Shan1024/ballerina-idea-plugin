@@ -43,6 +43,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaArrayTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaFormalParameterList;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaRestParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaServiceDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaValueTypeName;
@@ -179,34 +180,41 @@ public class BallerinaRunUtil {
         if (parameterListNode == null) {
             return false;
         }
-        // Get the child nodes. These are objects of ParameterNode.
-        PsiElement[] parameterNodes = parameterListNode.getChildren();
-        // There should be only one parameter for main function.
-        if (parameterNodes.length != 1) {
-            return false;
-        }
-        // Get the TypeNameNode which contains the type of the parameter. In this case, it will be "string[]".
-        BallerinaTypeName typeName = PsiTreeUtil.findChildOfType(parameterNodes[0], BallerinaTypeName.class);
-        if (typeName == null) {
-            return false;
-        }
-        if (!(typeName instanceof BallerinaArrayTypeName)) {
-            return false;
-        }
-        // "string", "[", "]" will be in 3 different child nodes.
-        PsiElement[] children = typeName.getChildren();
-        if (children.length != 1) {
-            return false;
-        }
 
-        // ValueTypeNameNode will contain the actual value of the type (string).
-        BallerinaValueTypeName valueTypeNameNode = PsiTreeUtil.findChildOfType(children[0],
-                BallerinaValueTypeName.class);
-        if (valueTypeNameNode == null) {
-            return false;
+        BallerinaRestParameter restParameter = parameterListNode.getRestParameter();
+        if (restParameter != null) {
+            BallerinaTypeName typeName = restParameter.getTypeName();
+            return typeName.getText().equals("string");
+        } else {
+            // Get the child nodes. These are objects of ParameterNode.
+            PsiElement[] parameterNodes = parameterListNode.getChildren();
+            // There should be only one parameter for main function.
+            if (parameterNodes.length != 1) {
+                return false;
+            }
+            // Get the TypeNameNode which contains the type of the parameter. In this case, it will be "string[]".
+            BallerinaTypeName typeName = PsiTreeUtil.findChildOfType(parameterNodes[0], BallerinaTypeName.class);
+            if (typeName == null) {
+                return false;
+            }
+            if (!(typeName instanceof BallerinaArrayTypeName)) {
+                return false;
+            }
+            // "string", "[", "]" will be in 3 different child nodes.
+            PsiElement[] children = typeName.getChildren();
+            if (children.length != 1) {
+                return false;
+            }
+
+            // ValueTypeNameNode will contain the actual value of the type (string).
+            BallerinaValueTypeName valueTypeNameNode = PsiTreeUtil.findChildOfType(children[0],
+                    BallerinaValueTypeName.class);
+            if (valueTypeNameNode == null) {
+                return false;
+            }
+            // Get the text (string) and check and return the result.
+            return valueTypeNameNode.getText() != null && "string".equals(valueTypeNameNode.getText());
         }
-        // Get the text (string) and check and return the result.
-        return valueTypeNameNode.getText() != null && "string".equals(valueTypeNameNode.getText());
     }
 
     @Contract("null -> false")
