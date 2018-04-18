@@ -31,6 +31,8 @@ import org.ballerinalang.plugins.idea.BallerinaLanguage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.HashMap;
+
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ABORT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ADD;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ALL;
@@ -225,7 +227,8 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
     @Override
     public FormattingModel createModel(PsiElement element, CodeStyleSettings settings) {
         BallerinaBlock rootBlock = new BallerinaBlock(
-                element.getNode(), null, Indent.getNoneIndent(), null, settings, createSpaceBuilder(settings)
+                element.getNode(), null, Indent.getNoneIndent(), null, settings, createSpaceBuilder(settings),
+                new HashMap<>()
         );
         return FormattingModelProvider.createFormattingModelForPsiFile(
                 element.getContainingFile(), rootBlock, settings
@@ -244,7 +247,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(NATIVE).spaceIf(true)
                 .around(RESOURCE).spaceIf(true)
                 .around(OBJECT).spaceIf(true)
-//                .around(ANNOTATION).spaceIf(true)
+                //                .around(ANNOTATION).spaceIf(true)
                 .around(ENUM).spaceIf(true)
                 .around(WORKER).spaceIf(true)
                 .around(ENDPOINT).spaceIf(true)

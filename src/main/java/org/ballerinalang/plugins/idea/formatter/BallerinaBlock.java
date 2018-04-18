@@ -37,6 +37,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents a code block.
@@ -57,11 +58,13 @@ public class BallerinaBlock extends AbstractBlock {
     private final SpacingBuilder mySpacingBuilder;
     @Nullable
     private List<Block> mySubBlocks;
-
+    @NotNull
+    private Map<ASTNode, Alignment> myAlignmentMap;
 
     protected BallerinaBlock
-            (@NotNull ASTNode node, @Nullable Alignment alignment, @Nullable Indent indent,
-             @Nullable Wrap wrap, @NotNull CodeStyleSettings settings, SpacingBuilder spacingBuilder) {
+            (@NotNull ASTNode node, @Nullable Alignment alignment, @Nullable Indent indent, @Nullable Wrap wrap,
+             @NotNull CodeStyleSettings settings, @NotNull SpacingBuilder spacingBuilder,
+             @NotNull Map<ASTNode, Alignment> alignmentMap) {
         super(node, wrap, alignment);
 
         this.myNode = node;
@@ -70,6 +73,7 @@ public class BallerinaBlock extends AbstractBlock {
         this.myWrap = wrap;
         this.mySettings = settings;
         this.mySpacingBuilder = spacingBuilder;
+        this.myAlignmentMap = alignmentMap;
     }
 
     @Override
@@ -126,11 +130,45 @@ public class BallerinaBlock extends AbstractBlock {
             if (childType == TokenType.WHITE_SPACE) {
                 continue;
             }
-            Alignment alignment = null;
+            Alignment alignment = getAlignment(child);
             Indent indent = calculateIndent(child);
-            blocks.add(new BallerinaBlock(child, alignment, indent, null, mySettings, mySpacingBuilder));
+            blocks.add(new BallerinaBlock(child, alignment, indent, null, mySettings, mySpacingBuilder,
+                    myAlignmentMap));
         }
         return blocks;
+    }
+
+    private Alignment getAlignment(ASTNode child) {
+        Alignment alignment = null;
+        IElementType childElementType = child.getElementType();
+        IElementType parentElementType = myNode.getElementType();
+        if (childElementType == BallerinaTypes.PARAMETER
+                && parentElementType == BallerinaTypes.FORMAL_PARAMETER_LIST) {
+            if (myAlignmentMap.containsKey(myNode)) {
+                alignment = myAlignmentMap.get(myNode);
+            } else {
+                alignment = Alignment.createAlignment(true, Alignment.Anchor.LEFT);
+                myAlignmentMap.put(myNode, alignment);
+            }
+        } else if (childElementType == BallerinaTypes.ENDPOINT_PARAMETER
+                && parentElementType == BallerinaTypes.RESOURCE_PARAMETER_LIST) {
+            if (myAlignmentMap.containsKey(myNode)) {
+                alignment = myAlignmentMap.get(myNode);
+            } else {
+                alignment = Alignment.createAlignment(true, Alignment.Anchor.LEFT);
+                myAlignmentMap.put(myNode, alignment);
+            }
+        } else if (childElementType == BallerinaTypes.PARAMETER
+                && parentElementType == BallerinaTypes.PARAMETER_LIST) {
+            ASTNode treeParent = myNode.getTreeParent().getTreeParent();
+            if (myAlignmentMap.containsKey(treeParent)) {
+                alignment = myAlignmentMap.get(treeParent);
+            } else {
+                alignment = Alignment.createAlignment(true, Alignment.Anchor.LEFT);
+                myAlignmentMap.put(treeParent, alignment);
+            }
+        }
+        return alignment;
     }
 
     @NotNull
