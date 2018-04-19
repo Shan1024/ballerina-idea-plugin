@@ -14,6 +14,8 @@ plugins {
     id "de.undercouch.download" version "3.2.0"
 }
 
+version = ballerinaPluginVersion
+
 repositories {
     mavenCentral()
     maven { url 'http://dl.bintray.com/jetbrains/intellij-plugin-service' }
