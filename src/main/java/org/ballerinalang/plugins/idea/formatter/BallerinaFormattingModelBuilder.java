@@ -257,8 +257,6 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(DEPRECATED).spaceIf(true)
 
                 .around(VAR).spaceIf(true)
-                .before(NEW).spaceIf(true)
-                .after(NEW).spaceIf(false)
                 .around(IF).spaceIf(true)
                 .around(MATCH).spaceIf(true)
                 .around(ELSE).spaceIf(true)
@@ -361,6 +359,10 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .aroundInside(NAME_REFERENCE, FUNCTION_INVOCATION).spaceIf(false)
                 .around(INVOCATION_ARG_LIST).spaceIf(false)
                 .before(CALLABLE_UNIT_BODY).spaceIf(true)
+
+                .before(NEW).spaceIf(true)
+                .between(NEW, SEMICOLON).spaceIf(false)
+                .after(NEW).spaceIf(true)
 
                 // Record Literals
                 .aroundInside(COLON, RECORD_KEY_VALUE).spaceIf(false)
