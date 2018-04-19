@@ -90,7 +90,6 @@ public interface BallerinaTypes {
   IElementType EXPRESSION = new BallerinaCompositeElementType("EXPRESSION");
   IElementType EXPRESSION_LIST = new BallerinaCompositeElementType("EXPRESSION_LIST");
   IElementType EXPRESSION_STMT = new BallerinaCompositeElementType("EXPRESSION_STMT");
-  IElementType FAIL_STATEMENT = new BallerinaCompositeElementType("FAIL_STATEMENT");
   IElementType FIELD = new BallerinaCompositeElementType("FIELD");
   IElementType FIELD_DEFINITION = new BallerinaCompositeElementType("FIELD_DEFINITION");
   IElementType FIELD_DEFINITION_LIST = new BallerinaCompositeElementType("FIELD_DEFINITION_LIST");
@@ -199,6 +198,7 @@ public interface BallerinaTypes {
   IElementType REST_ARGS = new BallerinaCompositeElementType("REST_ARGS");
   IElementType REST_PARAMETER = new BallerinaCompositeElementType("REST_PARAMETER");
   IElementType RETRIES_STATEMENT = new BallerinaCompositeElementType("RETRIES_STATEMENT");
+  IElementType RETRY_STATEMENT = new BallerinaCompositeElementType("RETRY_STATEMENT");
   IElementType RETURN_PARAMETER = new BallerinaCompositeElementType("RETURN_PARAMETER");
   IElementType RETURN_STATEMENT = new BallerinaCompositeElementType("RETURN_STATEMENT");
   IElementType RETURN_TYPE = new BallerinaCompositeElementType("RETURN_TYPE");
@@ -424,6 +424,7 @@ public interface BallerinaTypes {
   IElementType RARROW = new BallerinaTokenType("->");
   IElementType RESOURCE = new BallerinaTokenType("resource");
   IElementType RETRIES = new BallerinaTokenType("retries");
+  IElementType RETRY = new BallerinaTokenType("retry");
   IElementType RETURN = new BallerinaTokenType("return");
   IElementType RETURNS = new BallerinaTokenType("returns");
   IElementType RIGHT = new BallerinaTokenType("right");
@@ -695,9 +696,6 @@ public interface BallerinaTypes {
       }
       else if (type == EXPRESSION_STMT) {
         return new BallerinaExpressionStmtImpl(node);
-      }
-      else if (type == FAIL_STATEMENT) {
-        return new BallerinaFailStatementImpl(node);
       }
       else if (type == FIELD) {
         return new BallerinaFieldImpl(node);
@@ -1022,6 +1020,9 @@ public interface BallerinaTypes {
       }
       else if (type == RETRIES_STATEMENT) {
         return new BallerinaRetriesStatementImpl(node);
+      }
+      else if (type == RETRY_STATEMENT) {
+        return new BallerinaRetryStatementImpl(node);
       }
       else if (type == RETURN_PARAMETER) {
         return new BallerinaReturnParameterImpl(node);

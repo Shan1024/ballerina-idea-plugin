@@ -21,27 +21,12 @@ import java.util.List;
 import org.jetbrains.annotations.*;
 import com.intellij.psi.PsiElement;
 
-public interface BallerinaStreamingAction extends BallerinaCompositeElement {
+public interface BallerinaRetryStatement extends BallerinaCompositeElement {
 
   @Nullable
-  BallerinaBlock getBlock();
-
-  @Nullable
-  BallerinaFormalParameterList getFormalParameterList();
+  PsiElement getSemicolon();
 
   @NotNull
-  PsiElement getEqualGt();
-
-  @Nullable
-  PsiElement getLeftBrace();
-
-  @Nullable
-  PsiElement getLeftParenthesis();
-
-  @Nullable
-  PsiElement getRightBrace();
-
-  @Nullable
-  PsiElement getRightParenthesis();
+  PsiElement getRetry();
 
 }

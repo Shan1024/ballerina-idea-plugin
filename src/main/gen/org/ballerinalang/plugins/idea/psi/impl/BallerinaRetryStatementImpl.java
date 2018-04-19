@@ -26,14 +26,14 @@ import com.intellij.psi.util.PsiTreeUtil;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.*;
 import org.ballerinalang.plugins.idea.psi.*;
 
-public class BallerinaFailStatementImpl extends BallerinaCompositeElementImpl implements BallerinaFailStatement {
+public class BallerinaRetryStatementImpl extends BallerinaCompositeElementImpl implements BallerinaRetryStatement {
 
-  public BallerinaFailStatementImpl(ASTNode node) {
+  public BallerinaRetryStatementImpl(ASTNode node) {
     super(node);
   }
 
   public void accept(@NotNull BallerinaVisitor visitor) {
-    visitor.visitFailStatement(this);
+    visitor.visitRetryStatement(this);
   }
 
   public void accept(@NotNull PsiElementVisitor visitor) {
@@ -49,8 +49,8 @@ public class BallerinaFailStatementImpl extends BallerinaCompositeElementImpl im
 
   @Override
   @NotNull
-  public PsiElement getFail() {
-    return notNullChild(findChildByType(FAIL));
+  public PsiElement getRetry() {
+    return notNullChild(findChildByType(RETRY));
   }
 
 }

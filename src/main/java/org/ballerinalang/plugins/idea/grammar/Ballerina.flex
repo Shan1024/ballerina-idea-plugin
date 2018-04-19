@@ -384,7 +384,6 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "else"                                      { return ELSE; }
     "endpoint"                                  { return ENDPOINT; }
 
-    "fail"                                      { return FAIL; }
     "finally"                                   { return FINALLY; }
     "float"                                     { return FLOAT; }
     "foreach"                                   { return FOREACH; }
@@ -422,6 +421,7 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "public"                                    { return PUBLIC; }
 
     "resource"                                  { return RESOURCE; }
+    "retry"                                     { return RETRY; }
     "retries"                                   { return RETRIES; }
     "return"                                    { return RETURN; }
     "returns"                                   { return RETURNS; }

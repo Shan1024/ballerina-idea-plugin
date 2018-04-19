@@ -1003,10 +1003,6 @@ public class BallerinaVisitor extends PsiElementVisitor {
     visitCompositeElement(o);
   }
 
-  public void visitFailStatement(@NotNull BallerinaFailStatement o) {
-    visitCompositeElement(o);
-  }
-
   public void visitFieldDefinition(@NotNull BallerinaFieldDefinition o) {
     visitCompositeElement(o);
   }
@@ -1044,6 +1040,10 @@ public class BallerinaVisitor extends PsiElementVisitor {
   }
 
   public void visitResourceParameterList(@NotNull BallerinaResourceParameterList o) {
+    visitCompositeElement(o);
+  }
+
+  public void visitRetryStatement(@NotNull BallerinaRetryStatement o) {
     visitCompositeElement(o);
   }
 

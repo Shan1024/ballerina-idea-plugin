@@ -87,10 +87,10 @@ public interface BallerinaStatement extends BallerinaCompositeElement {
   BallerinaWorkerInteractionStatement getWorkerInteractionStatement();
 
   @Nullable
-  BallerinaFailStatement getFailStatement();
+  BallerinaMatchStatement getMatchStatement();
 
   @Nullable
-  BallerinaMatchStatement getMatchStatement();
+  BallerinaRetryStatement getRetryStatement();
 
   @Nullable
   BallerinaTupleDestructuringStatement getTupleDestructuringStatement();

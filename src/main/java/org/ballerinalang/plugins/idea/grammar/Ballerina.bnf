@@ -399,7 +399,7 @@ Statement ::=
     |   ThrowStatement
     |   ReturnStatement
     |   AbortStatement
-    |   failStatement
+    |   retryStatement
     |   LockStatement
     |   NamespaceDeclarationStatement
     |   TransactionStatement
@@ -599,7 +599,7 @@ OnretryClause ::= onretry LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
 AbortStatement ::= abort SEMICOLON {pin=1}
 
-failStatement ::= fail SEMICOLON {pin=1}
+retryStatement ::= retry SEMICOLON {pin=1}
 
 RetriesStatement ::= retries ASSIGN Expression {pin=1}
 
@@ -839,7 +839,7 @@ GroupByClause ::= group by VariableReferenceList {pin=1}
 
 HavingClause ::= having Expression {pin=1}
 
-StreamingAction ::= EQUAL_GT LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS CallableUnitBody {pin=1}
+StreamingAction ::= EQUAL_GT LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS LEFT_BRACE Block RIGHT_BRACE {pin=1}
 
 SetClause ::= set SetAssignmentClause (COMMA SetAssignmentClause)* {pin=1}
 

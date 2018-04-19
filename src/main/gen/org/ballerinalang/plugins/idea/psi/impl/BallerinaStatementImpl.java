@@ -169,14 +169,14 @@ public class BallerinaStatementImpl extends BallerinaCompositeElementImpl implem
 
   @Override
   @Nullable
-  public BallerinaFailStatement getFailStatement() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaFailStatement.class);
+  public BallerinaMatchStatement getMatchStatement() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaMatchStatement.class);
   }
 
   @Override
   @Nullable
-  public BallerinaMatchStatement getMatchStatement() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaMatchStatement.class);
+  public BallerinaRetryStatement getRetryStatement() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaRetryStatement.class);
   }
 
   @Override

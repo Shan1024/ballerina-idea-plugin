@@ -639,9 +639,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     else if (t == ENDPOINT_PARAMETER) {
       r = endpointParameter(b, 0);
     }
-    else if (t == FAIL_STATEMENT) {
-      r = failStatement(b, 0);
-    }
     else if (t == FIELD_DEFINITION) {
       r = fieldDefinition(b, 0);
     }
@@ -671,6 +668,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     }
     else if (t == RESOURCE_PARAMETER_LIST) {
       r = resourceParameterList(b, 0);
+    }
+    else if (t == RETRY_STATEMENT) {
+      r = retryStatement(b, 0);
     }
     else if (t == SINGLE_BACK_TICK_DEPRECATED_INLINE_CODE) {
       r = singleBackTickDeprecatedInlineCode(b, 0);
@@ -5015,7 +5015,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   //     |   ThrowStatement
   //     |   ReturnStatement
   //     |   AbortStatement
-  //     |   failStatement
+  //     |   retryStatement
   //     |   LockStatement
   //     |   NamespaceDeclarationStatement
   //     |   TransactionStatement
@@ -5043,7 +5043,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = ThrowStatement(b, l + 1);
     if (!r) r = ReturnStatement(b, l + 1);
     if (!r) r = AbortStatement(b, l + 1);
-    if (!r) r = failStatement(b, l + 1);
+    if (!r) r = retryStatement(b, l + 1);
     if (!r) r = LockStatement(b, l + 1);
     if (!r) r = NamespaceDeclarationStatement(b, l + 1);
     if (!r) r = TransactionStatement(b, l + 1);
@@ -5161,7 +5161,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // EQUAL_GT LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS CallableUnitBody
+  // EQUAL_GT LEFT_PARENTHESIS FormalParameterList? RIGHT_PARENTHESIS LEFT_BRACE Block RIGHT_BRACE
   public static boolean StreamingAction(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "StreamingAction")) return false;
     if (!nextTokenIs(b, EQUAL_GT)) return false;
@@ -5170,8 +5170,9 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     r = consumeTokens(b, 1, EQUAL_GT, LEFT_PARENTHESIS);
     p = r; // pin = 1
     r = r && report_error_(b, StreamingAction_2(b, l + 1));
-    r = p && report_error_(b, consumeToken(b, RIGHT_PARENTHESIS)) && r;
-    r = p && CallableUnitBody(b, l + 1) && r;
+    r = p && report_error_(b, consumeTokens(b, -1, RIGHT_PARENTHESIS, LEFT_BRACE)) && r;
+    r = p && report_error_(b, Block(b, l + 1)) && r;
+    r = p && consumeToken(b, RIGHT_BRACE) && r;
     exit_section_(b, l, m, r, p, null);
     return r || p;
   }
@@ -6942,19 +6943,6 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // fail SEMICOLON
-  public static boolean failStatement(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "failStatement")) return false;
-    if (!nextTokenIs(b, FAIL)) return false;
-    boolean r, p;
-    Marker m = enter_section_(b, l, _NONE_, FAIL_STATEMENT, null);
-    r = consumeTokens(b, 1, FAIL, SEMICOLON);
-    p = r; // pin = 1
-    exit_section_(b, l, m, r, p, null);
-    return r || p;
-  }
-
-  /* ********************************************************** */
   // AnnotationAttachment* TypeName identifier (ASSIGN Expression)? (COMMA | SEMICOLON)
   public static boolean fieldDefinition(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "fieldDefinition")) return false;
@@ -7224,6 +7212,19 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     if (!r) r = ParameterList(b, l + 1);
     exit_section_(b, l, m, r, false, null);
     return r;
+  }
+
+  /* ********************************************************** */
+  // retry SEMICOLON
+  public static boolean retryStatement(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "retryStatement")) return false;
+    if (!nextTokenIs(b, RETRY)) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, RETRY_STATEMENT, null);
+    r = consumeTokens(b, 1, RETRY, SEMICOLON);
+    p = r; // pin = 1
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */
