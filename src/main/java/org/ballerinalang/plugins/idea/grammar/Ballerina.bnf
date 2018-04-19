@@ -881,35 +881,35 @@ TimeScale ::= second | minute | hour | day | month | year
 
 // Deprecated parsing.
 
-deprecatedAttachment ::= DEPRECATED_TEMPLATE_START deprecatedText? DEPRECATED_TEMPLATE_END
+deprecatedAttachment ::= DEPRECATED_TEMPLATE_START deprecatedText? DEPRECATED_TEMPLATE_END {pin=1}
 
 deprecatedText ::= deprecatedTemplateInlineCode (DEPRECATED_TEMPLATE_TEXT | deprecatedTemplateInlineCode)*
                    | DEPRECATED_TEMPLATE_TEXT (DEPRECATED_TEMPLATE_TEXT | deprecatedTemplateInlineCode)*
 
 deprecatedTemplateInlineCode ::= singleBackTickDeprecatedInlineCode | doubleBackTickDeprecatedInlineCode | tripleBackTickDeprecatedInlineCode
 
-singleBackTickDeprecatedInlineCode ::= SB_DEPRECATED_INLINE_CODE_START SINGLE_BACK_TICK_INLINE_CODE? SINGLE_BACK_TICK_INLINE_CODE_END
+singleBackTickDeprecatedInlineCode ::= SB_DEPRECATED_INLINE_CODE_START SINGLE_BACK_TICK_INLINE_CODE? SINGLE_BACK_TICK_INLINE_CODE_END {pin=1}
 
-doubleBackTickDeprecatedInlineCode ::= DB_DEPRECATED_INLINE_CODE_START DOUBLE_BACK_TICK_INLINE_CODE? DOUBLE_BACK_TICK_INLINE_CODE_END
+doubleBackTickDeprecatedInlineCode ::= DB_DEPRECATED_INLINE_CODE_START DOUBLE_BACK_TICK_INLINE_CODE? DOUBLE_BACK_TICK_INLINE_CODE_END {pin=1}
 
-tripleBackTickDeprecatedInlineCode ::= TB_DEPRECATED_INLINE_CODE_START TRIPLE_BACK_TICK_INLINE_CODE? TRIPLE_BACK_TICK_INLINE_CODE_END
+tripleBackTickDeprecatedInlineCode ::= TB_DEPRECATED_INLINE_CODE_START TRIPLE_BACK_TICK_INLINE_CODE? TRIPLE_BACK_TICK_INLINE_CODE_END {pin=1}
 
 
 // Documentation parsing.
 
-documentationAttachment ::= DOCUMENTATION_TEMPLATE_START documentationTemplateContent? DOCUMENTATION_TEMPLATE_END
+documentationAttachment ::= DOCUMENTATION_TEMPLATE_START documentationTemplateContent? DOCUMENTATION_TEMPLATE_END {pin=1}
 
 documentationTemplateContent ::= docText? documentationTemplateAttributeDescription+ | docText
 
-documentationTemplateAttributeDescription ::= DOCUMENTATION_TEMPLATE_ATTRIBUTE_START identifier DOCUMENTATION_TEMPLATE_ATTRIBUTE_END docText?
+documentationTemplateAttributeDescription ::= DOCUMENTATION_TEMPLATE_ATTRIBUTE_START identifier DOCUMENTATION_TEMPLATE_ATTRIBUTE_END docText? {pin=1}
 
 docText ::= documentationTemplateInlineCode (DOCUMENTATION_TEMPLATE_TEXT | documentationTemplateInlineCode)*
             | DOCUMENTATION_TEMPLATE_TEXT  (DOCUMENTATION_TEMPLATE_TEXT | documentationTemplateInlineCode)*
 
 documentationTemplateInlineCode ::= singleBackTickDocInlineCode | doubleBackTickDocInlineCode | tripleBackTickDocInlineCode
 
-singleBackTickDocInlineCode ::= SB_DOC_INLINE_CODE_START SINGLE_BACK_TICK_INLINE_CODE? SINGLE_BACK_TICK_INLINE_CODE_END
+singleBackTickDocInlineCode ::= SB_DOC_INLINE_CODE_START SINGLE_BACK_TICK_INLINE_CODE? SINGLE_BACK_TICK_INLINE_CODE_END {pin=1}
 
-doubleBackTickDocInlineCode ::= DB_DOC_INLINE_CODE_START DOUBLE_BACK_TICK_INLINE_CODE? DOUBLE_BACK_TICK_INLINE_CODE_END
+doubleBackTickDocInlineCode ::= DB_DOC_INLINE_CODE_START DOUBLE_BACK_TICK_INLINE_CODE? DOUBLE_BACK_TICK_INLINE_CODE_END {pin=1}
 
-tripleBackTickDocInlineCode ::= TB_DOC_INLINE_CODE_START TRIPLE_BACK_TICK_INLINE_CODE? TRIPLE_BACK_TICK_INLINE_CODE_END
+tripleBackTickDocInlineCode ::= TB_DOC_INLINE_CODE_START TRIPLE_BACK_TICK_INLINE_CODE? TRIPLE_BACK_TICK_INLINE_CODE_END {pin=1}

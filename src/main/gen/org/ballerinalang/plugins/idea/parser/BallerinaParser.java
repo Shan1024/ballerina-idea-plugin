@@ -6570,13 +6570,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean deprecatedAttachment(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "deprecatedAttachment")) return false;
     if (!nextTokenIs(b, DEPRECATED_TEMPLATE_START)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, DEPRECATED_ATTACHMENT, null);
     r = consumeToken(b, DEPRECATED_TEMPLATE_START);
-    r = r && deprecatedAttachment_1(b, l + 1);
-    r = r && consumeToken(b, DEPRECATED_TEMPLATE_END);
-    exit_section_(b, m, DEPRECATED_ATTACHMENT, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, deprecatedAttachment_1(b, l + 1));
+    r = p && consumeToken(b, DEPRECATED_TEMPLATE_END) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // deprecatedText?
@@ -6766,13 +6767,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean documentationAttachment(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "documentationAttachment")) return false;
     if (!nextTokenIs(b, DOCUMENTATION_TEMPLATE_START)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, DOCUMENTATION_ATTACHMENT, null);
     r = consumeToken(b, DOCUMENTATION_TEMPLATE_START);
-    r = r && documentationAttachment_1(b, l + 1);
-    r = r && consumeToken(b, DOCUMENTATION_TEMPLATE_END);
-    exit_section_(b, m, DOCUMENTATION_ATTACHMENT, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, documentationAttachment_1(b, l + 1));
+    r = p && consumeToken(b, DOCUMENTATION_TEMPLATE_END) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // documentationTemplateContent?
@@ -6787,12 +6789,13 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean documentationTemplateAttributeDescription(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "documentationTemplateAttributeDescription")) return false;
     if (!nextTokenIs(b, DOCUMENTATION_TEMPLATE_ATTRIBUTE_START)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, DOCUMENTATION_TEMPLATE_ATTRIBUTE_START, IDENTIFIER, DOCUMENTATION_TEMPLATE_ATTRIBUTE_END);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, DOCUMENTATION_TEMPLATE_ATTRIBUTE_DESCRIPTION, null);
+    r = consumeTokens(b, 1, DOCUMENTATION_TEMPLATE_ATTRIBUTE_START, IDENTIFIER, DOCUMENTATION_TEMPLATE_ATTRIBUTE_END);
+    p = r; // pin = 1
     r = r && documentationTemplateAttributeDescription_3(b, l + 1);
-    exit_section_(b, m, DOCUMENTATION_TEMPLATE_ATTRIBUTE_DESCRIPTION, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // docText?
@@ -6866,13 +6869,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean doubleBackTickDeprecatedInlineCode(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "doubleBackTickDeprecatedInlineCode")) return false;
     if (!nextTokenIs(b, DB_DEPRECATED_INLINE_CODE_START)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, DOUBLE_BACK_TICK_DEPRECATED_INLINE_CODE, null);
     r = consumeToken(b, DB_DEPRECATED_INLINE_CODE_START);
-    r = r && doubleBackTickDeprecatedInlineCode_1(b, l + 1);
-    r = r && consumeToken(b, DOUBLE_BACK_TICK_INLINE_CODE_END);
-    exit_section_(b, m, DOUBLE_BACK_TICK_DEPRECATED_INLINE_CODE, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, doubleBackTickDeprecatedInlineCode_1(b, l + 1));
+    r = p && consumeToken(b, DOUBLE_BACK_TICK_INLINE_CODE_END) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // DOUBLE_BACK_TICK_INLINE_CODE?
@@ -6887,13 +6891,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean doubleBackTickDocInlineCode(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "doubleBackTickDocInlineCode")) return false;
     if (!nextTokenIs(b, DB_DOC_INLINE_CODE_START)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, DOUBLE_BACK_TICK_DOC_INLINE_CODE, null);
     r = consumeToken(b, DB_DOC_INLINE_CODE_START);
-    r = r && doubleBackTickDocInlineCode_1(b, l + 1);
-    r = r && consumeToken(b, DOUBLE_BACK_TICK_INLINE_CODE_END);
-    exit_section_(b, m, DOUBLE_BACK_TICK_DOC_INLINE_CODE, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, doubleBackTickDocInlineCode_1(b, l + 1));
+    r = p && consumeToken(b, DOUBLE_BACK_TICK_INLINE_CODE_END) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // DOUBLE_BACK_TICK_INLINE_CODE?
@@ -7226,13 +7231,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean singleBackTickDeprecatedInlineCode(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "singleBackTickDeprecatedInlineCode")) return false;
     if (!nextTokenIs(b, SB_DEPRECATED_INLINE_CODE_START)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SINGLE_BACK_TICK_DEPRECATED_INLINE_CODE, null);
     r = consumeToken(b, SB_DEPRECATED_INLINE_CODE_START);
-    r = r && singleBackTickDeprecatedInlineCode_1(b, l + 1);
-    r = r && consumeToken(b, SINGLE_BACK_TICK_INLINE_CODE_END);
-    exit_section_(b, m, SINGLE_BACK_TICK_DEPRECATED_INLINE_CODE, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, singleBackTickDeprecatedInlineCode_1(b, l + 1));
+    r = p && consumeToken(b, SINGLE_BACK_TICK_INLINE_CODE_END) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // SINGLE_BACK_TICK_INLINE_CODE?
@@ -7247,13 +7253,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean singleBackTickDocInlineCode(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "singleBackTickDocInlineCode")) return false;
     if (!nextTokenIs(b, SB_DOC_INLINE_CODE_START)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, SINGLE_BACK_TICK_DOC_INLINE_CODE, null);
     r = consumeToken(b, SB_DOC_INLINE_CODE_START);
-    r = r && singleBackTickDocInlineCode_1(b, l + 1);
-    r = r && consumeToken(b, SINGLE_BACK_TICK_INLINE_CODE_END);
-    exit_section_(b, m, SINGLE_BACK_TICK_DOC_INLINE_CODE, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, singleBackTickDocInlineCode_1(b, l + 1));
+    r = p && consumeToken(b, SINGLE_BACK_TICK_INLINE_CODE_END) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // SINGLE_BACK_TICK_INLINE_CODE?
@@ -7268,13 +7275,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean tripleBackTickDeprecatedInlineCode(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "tripleBackTickDeprecatedInlineCode")) return false;
     if (!nextTokenIs(b, TB_DEPRECATED_INLINE_CODE_START)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, TRIPLE_BACK_TICK_DEPRECATED_INLINE_CODE, null);
     r = consumeToken(b, TB_DEPRECATED_INLINE_CODE_START);
-    r = r && tripleBackTickDeprecatedInlineCode_1(b, l + 1);
-    r = r && consumeToken(b, TRIPLE_BACK_TICK_INLINE_CODE_END);
-    exit_section_(b, m, TRIPLE_BACK_TICK_DEPRECATED_INLINE_CODE, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, tripleBackTickDeprecatedInlineCode_1(b, l + 1));
+    r = p && consumeToken(b, TRIPLE_BACK_TICK_INLINE_CODE_END) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // TRIPLE_BACK_TICK_INLINE_CODE?
@@ -7289,13 +7297,14 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   public static boolean tripleBackTickDocInlineCode(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "tripleBackTickDocInlineCode")) return false;
     if (!nextTokenIs(b, TB_DOC_INLINE_CODE_START)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, TRIPLE_BACK_TICK_DOC_INLINE_CODE, null);
     r = consumeToken(b, TB_DOC_INLINE_CODE_START);
-    r = r && tripleBackTickDocInlineCode_1(b, l + 1);
-    r = r && consumeToken(b, TRIPLE_BACK_TICK_INLINE_CODE_END);
-    exit_section_(b, m, TRIPLE_BACK_TICK_DOC_INLINE_CODE, r);
-    return r;
+    p = r; // pin = 1
+    r = r && report_error_(b, tripleBackTickDocInlineCode_1(b, l + 1));
+    r = p && consumeToken(b, TRIPLE_BACK_TICK_INLINE_CODE_END) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   // TRIPLE_BACK_TICK_INLINE_CODE?

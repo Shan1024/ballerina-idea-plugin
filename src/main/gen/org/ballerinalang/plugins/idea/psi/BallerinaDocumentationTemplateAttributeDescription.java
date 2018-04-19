@@ -26,13 +26,13 @@ public interface BallerinaDocumentationTemplateAttributeDescription extends Ball
   @Nullable
   BallerinaDocText getDocText();
 
-  @NotNull
+  @Nullable
   PsiElement getDocumentationTemplateAttributeEnd();
 
   @NotNull
   PsiElement getDocumentationTemplateAttributeStart();
 
-  @NotNull
+  @Nullable
   PsiElement getIdentifier();
 
 }

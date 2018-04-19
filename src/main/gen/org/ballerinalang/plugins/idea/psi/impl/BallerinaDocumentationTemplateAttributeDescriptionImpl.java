@@ -48,9 +48,9 @@ public class BallerinaDocumentationTemplateAttributeDescriptionImpl extends Ball
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getDocumentationTemplateAttributeEnd() {
-    return notNullChild(findChildByType(DOCUMENTATION_TEMPLATE_ATTRIBUTE_END));
+    return findChildByType(DOCUMENTATION_TEMPLATE_ATTRIBUTE_END);
   }
 
   @Override
@@ -60,9 +60,9 @@ public class BallerinaDocumentationTemplateAttributeDescriptionImpl extends Ball
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getIdentifier() {
-    return notNullChild(findChildByType(IDENTIFIER));
+    return findChildByType(IDENTIFIER);
   }
 
 }

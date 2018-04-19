@@ -54,9 +54,9 @@ public class BallerinaSingleBackTickDocInlineCodeImpl extends BallerinaComposite
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getSingleBackTickInlineCodeEnd() {
-    return notNullChild(findChildByType(SINGLE_BACK_TICK_INLINE_CODE_END));
+    return findChildByType(SINGLE_BACK_TICK_INLINE_CODE_END);
   }
 
 }

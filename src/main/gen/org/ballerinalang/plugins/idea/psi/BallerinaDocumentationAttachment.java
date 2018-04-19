@@ -26,7 +26,7 @@ public interface BallerinaDocumentationAttachment extends BallerinaCompositeElem
   @Nullable
   BallerinaDocumentationTemplateContent getDocumentationTemplateContent();
 
-  @NotNull
+  @Nullable
   PsiElement getDocumentationTemplateEnd();
 
   @NotNull

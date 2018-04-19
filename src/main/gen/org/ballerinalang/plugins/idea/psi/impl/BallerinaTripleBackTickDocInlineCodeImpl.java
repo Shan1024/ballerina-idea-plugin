@@ -54,9 +54,9 @@ public class BallerinaTripleBackTickDocInlineCodeImpl extends BallerinaComposite
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getTripleBackTickInlineCodeEnd() {
-    return notNullChild(findChildByType(TRIPLE_BACK_TICK_INLINE_CODE_END));
+    return findChildByType(TRIPLE_BACK_TICK_INLINE_CODE_END);
   }
 
 }

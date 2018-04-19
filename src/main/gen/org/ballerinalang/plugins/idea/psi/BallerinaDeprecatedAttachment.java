@@ -26,7 +26,7 @@ public interface BallerinaDeprecatedAttachment extends BallerinaCompositeElement
   @Nullable
   BallerinaDeprecatedText getDeprecatedText();
 
-  @NotNull
+  @Nullable
   PsiElement getDeprecatedTemplateEnd();
 
   @NotNull

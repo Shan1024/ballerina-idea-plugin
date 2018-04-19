@@ -48,9 +48,9 @@ public class BallerinaDeprecatedAttachmentImpl extends BallerinaCompositeElement
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getDeprecatedTemplateEnd() {
-    return notNullChild(findChildByType(DEPRECATED_TEMPLATE_END));
+    return findChildByType(DEPRECATED_TEMPLATE_END);
   }
 
   @Override

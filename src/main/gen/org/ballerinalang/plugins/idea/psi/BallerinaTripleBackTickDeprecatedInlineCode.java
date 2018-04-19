@@ -29,7 +29,7 @@ public interface BallerinaTripleBackTickDeprecatedInlineCode extends BallerinaCo
   @Nullable
   PsiElement getTripleBackTickInlineCode();
 
-  @NotNull
+  @Nullable
   PsiElement getTripleBackTickInlineCodeEnd();
 
 }

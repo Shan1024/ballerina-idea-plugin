@@ -29,7 +29,7 @@ public interface BallerinaDoubleBackTickDocInlineCode extends BallerinaComposite
   @Nullable
   PsiElement getDoubleBackTickInlineCode();
 
-  @NotNull
+  @Nullable
   PsiElement getDoubleBackTickInlineCodeEnd();
 
 }
