@@ -7,6 +7,7 @@ import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
 import org.ballerinalang.plugins.idea.completion.inserthandlers.ParenthesisInsertHandler;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnnotationAttachment;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnnotationDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaArrayTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
@@ -40,9 +41,24 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
     @Override
     public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
         if (accept(element)) {
+
+
             List<BallerinaDefinition> definitions = ((BallerinaFile) element).getDefinitions();
 
             if (myElement.getParent().getParent() instanceof BallerinaAnnotationAttachment) {
+                List<BallerinaAnnotationDefinition> annotationDefinitions =
+                        BallerinaPsiImplUtil.suggestBuiltInAnnotations(element);
+                for (BallerinaAnnotationDefinition definition : annotationDefinitions) {
+                    PsiElement identifier = definition.getIdentifier();
+                    if (identifier != null) {
+                        if (myResult != null) {
+                            myResult.addElement(BallerinaCompletionUtils.createAnnotationLookupElement(identifier));
+                        } else if (myElement.getText().equals(identifier.getText())) {
+                            add(identifier);
+                        }
+                    }
+                }
+
                 for (BallerinaDefinition definition : definitions) {
                     PsiElement lastChild = definition.getLastChild();
                     if (lastChild instanceof BallerinaAnnotationDefinition) {
@@ -57,6 +73,26 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                         }
                     }
                 }
+                if (isCompletion() && getResult() != null) {
+                    return false;
+                }
+                return true;
+            }
+
+            List<BallerinaTypeDefinition> ballerinaTypeDefinitions =
+                    BallerinaPsiImplUtil.suggestBuiltInTypes(element);
+            if (!ballerinaTypeDefinitions.isEmpty()) {
+                for (BallerinaTypeDefinition definition : ballerinaTypeDefinitions) {
+                    PsiElement identifier = definition.getIdentifier();
+                    if (identifier != null) {
+                        if (myResult != null) {
+                            myResult.addElement(BallerinaCompletionUtils.createTypeLookupElement(definition));
+                        } else if (myElement.getText().equals(identifier.getText())) {
+                            add(identifier);
+                        }
+                    }
+                }
+
                 if (isCompletion() && getResult() != null) {
                     return false;
                 }

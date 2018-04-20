@@ -44,6 +44,7 @@ import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
 import org.ballerinalang.plugins.idea.psi.BallerinaAlias;
+import org.ballerinalang.plugins.idea.psi.BallerinaAnnotationDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
 import org.ballerinalang.plugins.idea.psi.BallerinaArrayTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaAssignmentStatement;
@@ -121,21 +122,25 @@ public class BallerinaPsiImplUtil {
 
     private static final Key<SmartPsiElementPointer<PsiElement>> CONTEXT = Key.create("CONTEXT");
 
-    private static List<String> BUILTIN_TYPES = new LinkedList<>();
     private static List<String> BUILTIN_DIRECTORIES = new LinkedList<>();
-    private static Map<String, List<BallerinaFunctionDefinition>> BUILTIN_CACHE = new HashMap<>();
+
+    private static List<String> BUILTIN_VARIABLE_TYPES = new LinkedList<>();
+    private static Map<String, List<BallerinaFunctionDefinition>> BUILTIN_VARIABLE_TYPE_CACHE = new HashMap<>();
+
+    private static List<BallerinaAnnotationDefinition> BUILTIN_ANNOTATION_DEFINITION_CACHE = new LinkedList<>();
+    private static List<BallerinaTypeDefinition> BUILTIN_TYPE_DEFINITION_CACHE = new LinkedList<>();
 
     static {
         BUILTIN_DIRECTORIES.add("/builtin");
 
-        BUILTIN_TYPES.add("future"); //async
-        BUILTIN_TYPES.add("blob");
-        BUILTIN_TYPES.add("json");
-        BUILTIN_TYPES.add("map");
-        BUILTIN_TYPES.add("stream");
-        BUILTIN_TYPES.add("string");
-        BUILTIN_TYPES.add("table");
-        BUILTIN_TYPES.add("xml");
+        BUILTIN_VARIABLE_TYPES.add("future"); //async
+        BUILTIN_VARIABLE_TYPES.add("blob");
+        BUILTIN_VARIABLE_TYPES.add("json");
+        BUILTIN_VARIABLE_TYPES.add("map");
+        BUILTIN_VARIABLE_TYPES.add("stream");
+        BUILTIN_VARIABLE_TYPES.add("string");
+        BUILTIN_VARIABLE_TYPES.add("table");
+        BUILTIN_VARIABLE_TYPES.add("xml");
     }
 
     @Nullable
@@ -276,11 +281,11 @@ public class BallerinaPsiImplUtil {
     }
 
     public static boolean hasBuiltInDefinitions(@NotNull PsiElement type) {
-        return BUILTIN_TYPES.contains(type.getText());
+        return BUILTIN_VARIABLE_TYPES.contains(type.getText());
     }
 
     @NotNull
-    public static List<BallerinaFunctionDefinition> suggestNativeFunctions(@NotNull PsiElement type) {
+    public static List<BallerinaFunctionDefinition> suggestBuiltInFunctions(@NotNull PsiElement type) {
         if (!hasBuiltInDefinitions(type)) {
             return new LinkedList<>();
         }
@@ -290,8 +295,8 @@ public class BallerinaPsiImplUtil {
         if ("future".equals(key)) {
             key = "async";
         }
-        if (BUILTIN_CACHE.containsKey(key)) {
-            return BUILTIN_CACHE.get(key);
+        if (BUILTIN_VARIABLE_TYPE_CACHE.containsKey(key)) {
+            return BUILTIN_VARIABLE_TYPE_CACHE.get(key);
         }
         // Add elements from built-in packages
         for (String builtInDirectory : BUILTIN_DIRECTORIES) {
@@ -315,12 +320,74 @@ public class BallerinaPsiImplUtil {
                 List<BallerinaFunctionDefinition> functionDefinitions =
                         new ArrayList<>(PsiTreeUtil.findChildrenOfType(psiFile, BallerinaFunctionDefinition.class));
                 if (!functionDefinitions.isEmpty()) {
-                    BUILTIN_CACHE.put(key, functionDefinitions);
+                    BUILTIN_VARIABLE_TYPE_CACHE.put(key, functionDefinitions);
                     return functionDefinitions;
                 }
             }
         }
         return new LinkedList<>();
+    }
+
+    @NotNull
+    public static List<BallerinaAnnotationDefinition> suggestBuiltInAnnotations(@NotNull PsiElement element) {
+        if (!BUILTIN_ANNOTATION_DEFINITION_CACHE.isEmpty()) {
+            return BUILTIN_ANNOTATION_DEFINITION_CACHE;
+        }
+
+        // Add elements from built-in packages
+        for (String builtInDirectory : BUILTIN_DIRECTORIES) {
+
+            VirtualFile file = BallerinaPsiImplUtil.findFileInSDK(element, builtInDirectory);
+            if (file == null) {
+                return new LinkedList<>();
+            }
+            VirtualFile[] builtInFiles = file.getChildren();
+            for (VirtualFile builtInFile : builtInFiles) {
+                if (builtInFile.isDirectory() || !"bal".equals(builtInFile.getExtension())) {
+                    continue;
+                }
+                // Find the file.
+                Project project = element.getProject();
+                PsiFile psiFile = PsiManager.getInstance(project).findFile(builtInFile);
+                if (psiFile == null) {
+                    return new LinkedList<>();
+                }
+                BUILTIN_ANNOTATION_DEFINITION_CACHE.addAll(PsiTreeUtil.findChildrenOfType(psiFile,
+                        BallerinaAnnotationDefinition.class));
+            }
+        }
+        return BUILTIN_ANNOTATION_DEFINITION_CACHE;
+    }
+
+    @NotNull
+    public static List<BallerinaTypeDefinition> suggestBuiltInTypes(@NotNull PsiElement element) {
+        if (!BUILTIN_TYPE_DEFINITION_CACHE.isEmpty()) {
+            return BUILTIN_TYPE_DEFINITION_CACHE;
+        }
+
+        // Add elements from built-in packages
+        for (String builtInDirectory : BUILTIN_DIRECTORIES) {
+
+            VirtualFile file = BallerinaPsiImplUtil.findFileInSDK(element, builtInDirectory);
+            if (file == null) {
+                return new LinkedList<>();
+            }
+            VirtualFile[] builtInFiles = file.getChildren();
+            for (VirtualFile builtInFile : builtInFiles) {
+                if (builtInFile.isDirectory() || !"bal".equals(builtInFile.getExtension())) {
+                    continue;
+                }
+                // Find the file.
+                Project project = element.getProject();
+                PsiFile psiFile = PsiManager.getInstance(project).findFile(builtInFile);
+                if (psiFile == null) {
+                    return new LinkedList<>();
+                }
+                BUILTIN_TYPE_DEFINITION_CACHE.addAll(PsiTreeUtil.findChildrenOfType(psiFile,
+                        BallerinaTypeDefinition.class));
+            }
+        }
+        return BUILTIN_TYPE_DEFINITION_CACHE;
     }
 
     /**

@@ -61,7 +61,7 @@ public class BallerinaInvocationProcessor extends BallerinaScopeProcessorBase {
 
                         if (BallerinaPsiImplUtil.hasBuiltInDefinitions(type)) {
                             List<BallerinaFunctionDefinition> definitions =
-                                    BallerinaPsiImplUtil.suggestNativeFunctions(type);
+                                    BallerinaPsiImplUtil.suggestBuiltInFunctions(type);
                             for (BallerinaFunctionDefinition definition : definitions) {
                                 PsiElement identifier = definition.getIdentifier();
                                 if (identifier != null) {

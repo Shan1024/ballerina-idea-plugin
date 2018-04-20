@@ -13,8 +13,6 @@ import org.ballerinalang.plugins.idea.psi.BallerinaBuiltInReferenceTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaField;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaMapArrayVariableReference;
-import org.ballerinalang.plugins.idea.psi.BallerinaReferenceTypeName;
-import org.ballerinalang.plugins.idea.psi.BallerinaReturnType;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleVariableReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
@@ -111,7 +109,7 @@ public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
                     }
                 } else if (type instanceof BallerinaSimpleTypeName) {
                     List<BallerinaFunctionDefinition> functionDefinitions =
-                            BallerinaPsiImplUtil.suggestNativeFunctions(((BallerinaSimpleTypeName) type));
+                            BallerinaPsiImplUtil.suggestBuiltInFunctions(((BallerinaSimpleTypeName) type));
                     for (BallerinaFunctionDefinition functionDefinition : functionDefinitions) {
                         PsiElement identifier = functionDefinition.getIdentifier();
                         if (identifier != null) {
@@ -129,7 +127,7 @@ public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
                 } else if (type instanceof BallerinaArrayTypeName) {
                     if (element.getParent().getPrevSibling() instanceof BallerinaMapArrayVariableReference) {
                         List<BallerinaFunctionDefinition> functionDefinitions =
-                                BallerinaPsiImplUtil.suggestNativeFunctions(((BallerinaArrayTypeName) type)
+                                BallerinaPsiImplUtil.suggestBuiltInFunctions(((BallerinaArrayTypeName) type)
                                         .getTypeName());
 
                         for (BallerinaFunctionDefinition functionDefinition : functionDefinitions) {
@@ -149,7 +147,7 @@ public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
                     }
                 } else if (type.getParent().getParent() instanceof BallerinaBuiltInReferenceTypeName) {
                     List<BallerinaFunctionDefinition> functionDefinitions =
-                            BallerinaPsiImplUtil.suggestNativeFunctions(type);
+                            BallerinaPsiImplUtil.suggestBuiltInFunctions(type);
 
                     for (BallerinaFunctionDefinition functionDefinition : functionDefinitions) {
                         PsiElement identifier = functionDefinition.getIdentifier();
