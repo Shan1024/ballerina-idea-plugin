@@ -109,6 +109,9 @@ public class BallerinaAnnotator implements Annotator {
                     case 'V':
                         msg = "Variable";
                         break;
+                    case 'E':
+                        msg = "Endpoint";
+                        break;
                 }
                 // Highlight type
                 TextRange textRange = element.getTextRange();
