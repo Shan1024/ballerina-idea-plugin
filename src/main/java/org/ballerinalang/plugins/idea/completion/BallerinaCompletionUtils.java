@@ -511,13 +511,7 @@ public class BallerinaCompletionUtils {
     //        return PrioritizedLookupElement.withPriority(builder, UNIMPORTED_PACKAGE_PRIORITY);
     //    }
     //
-    //    @NotNull
-    //    private static LookupElement createAnnotationLookupElement(@NotNull PsiElement element) {
-    //        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(element.getText(), element)
-    //                .withTypeText("Annotation").withIcon(BallerinaIcons.ANNOTATION)
-    //                .withInsertHandler(BracesInsertHandler.INSTANCE_WITH_AUTO_POPUP);
-    //        return PrioritizedLookupElement.withPriority(builder, ANNOTATION_PRIORITY);
-    //    }
+
     //
     //    @NotNull
     //    public static List<LookupElement> createAnnotationLookupElements(@NotNull List<IdentifierPSINode>
@@ -705,6 +699,16 @@ public class BallerinaCompletionUtils {
             lookupElementBuilder = lookupElementBuilder.withIcon(BallerinaIcons.PRIVATE_FIELD);
         }
         return PrioritizedLookupElement.withPriority(lookupElementBuilder, VARIABLE_PRIORITY);
+    }
+
+    @NotNull
+    public static LookupElement createAnnotationLookupElement(@NotNull PsiElement identifier) {
+        // Todo - change insert handler depending on the type of the annotation.
+        LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(identifier.getText(), identifier)
+                .withTypeText("Annotation").withIcon(BallerinaIcons.ANNOTATION)
+                //                    .withInsertHandler(BracesInsertHandler.INSTANCE_WITH_AUTO_POPUP)
+                ;
+        return PrioritizedLookupElement.withPriority(builder, ANNOTATION_PRIORITY);
     }
 
     //    @NotNull

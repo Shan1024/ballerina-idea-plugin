@@ -20,6 +20,7 @@ package org.ballerinalang.plugins.idea.usage;
 import com.intellij.lang.cacheBuilder.WordsScanner;
 import com.intellij.lang.findUsages.FindUsagesProvider;
 import com.intellij.psi.PsiElement;
+import org.ballerinalang.plugins.idea.psi.BallerinaAnnotationDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
@@ -97,6 +98,8 @@ public class BallerinaFindUsageProvider implements FindUsagesProvider {
             return "Parameter";
         } else if (parent instanceof BallerinaWorkerDefinition) {
             return "Worker";
+        } else if (parent instanceof BallerinaAnnotationDefinition) {
+            return "Annotation";
         } else if (parent instanceof BallerinaFieldDefinition) {
             if (superParent instanceof BallerinaPublicObjectFields) {
                 return "Public Object Field";
@@ -108,7 +111,7 @@ public class BallerinaFindUsageProvider implements FindUsagesProvider {
         } else if (parent instanceof BallerinaObjectParameter) {
             return "Object Field";
         } else if (parent instanceof BallerinaNameReference) {
-//            return "Variable";
+            //            return "Variable";
         } else if (parent instanceof BallerinaVariableDefinitionStatement) {
             return "Variable";
         } else if (parent instanceof BallerinaNamedPattern) {

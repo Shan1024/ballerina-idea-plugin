@@ -44,14 +44,15 @@ public class BallerinaReferenceCompletionProvider extends CompletionProvider<Com
                 return;
             }
             nameReferenceReference.processResolveVariants(new BallerinaPackageNameProcessor(result, element, true));
-            if (!nameReferenceReference.processResolveVariants(new BallerinaStatementProcessor(result, element, true)
-            )) {
+            if (!nameReferenceReference.processResolveVariants(new BallerinaStatementProcessor(result, element,
+                    true))) {
                 return;
             }
             if (!nameReferenceReference.processResolveVariants(new BallerinaBlockProcessor(result, element, true))) {
                 return;
             }
             nameReferenceReference.processResolveVariants(new BallerinaTopLevelScopeProcessor(result, element, true));
+
         } else if (reference instanceof BallerinaTypeReference) {
             BallerinaTypeReference ballerinaTypeReference = (BallerinaTypeReference) reference;
             ballerinaTypeReference.processResolveVariants(new BallerinaTypeProcessor(result, element));

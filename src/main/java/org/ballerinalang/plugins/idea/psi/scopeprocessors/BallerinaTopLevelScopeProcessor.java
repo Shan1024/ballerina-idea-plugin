@@ -5,6 +5,8 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
 import org.ballerinalang.plugins.idea.completion.inserthandlers.ParenthesisInsertHandler;
+import org.ballerinalang.plugins.idea.psi.BallerinaAnnotationAttachment;
+import org.ballerinalang.plugins.idea.psi.BallerinaAnnotationDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
@@ -39,6 +41,28 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
     public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
         if (accept(element)) {
             List<BallerinaDefinition> definitions = ((BallerinaFile) element).getDefinitions();
+
+            if (myElement.getParent().getParent() instanceof BallerinaAnnotationAttachment) {
+                for (BallerinaDefinition definition : definitions) {
+                    PsiElement lastChild = definition.getLastChild();
+                    if (lastChild instanceof BallerinaAnnotationDefinition) {
+                        BallerinaAnnotationDefinition child = (BallerinaAnnotationDefinition) lastChild;
+                        PsiElement identifier = child.getIdentifier();
+                        if (identifier != null) {
+                            if (myResult != null) {
+                                myResult.addElement(BallerinaCompletionUtils.createAnnotationLookupElement(identifier));
+                            } else if (myElement.getText().equals(identifier.getText())) {
+                                add(identifier);
+                            }
+                        }
+                    }
+                }
+                if (isCompletion() && getResult() != null) {
+                    return false;
+                }
+                return true;
+            }
+
             for (BallerinaDefinition definition : definitions) {
                 PsiElement lastChild = definition.getLastChild();
                 if (lastChild instanceof BallerinaFunctionDefinition) {

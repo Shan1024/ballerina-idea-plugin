@@ -5,8 +5,10 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.ResolveState;
 import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
 import org.ballerinalang.plugins.idea.completion.inserthandlers.ColonInsertHandler;
+import org.ballerinalang.plugins.idea.psi.BallerinaAnnotationAttachment;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaImportDeclaration;
+import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -33,6 +35,10 @@ public class BallerinaPackageNameProcessor extends BallerinaScopeProcessorBase {
     @Override
     public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
         if (accept(element)) {
+            // If we are looking for annotations in a package, don't suggest packages.
+            if (myElement.getPrevSibling() instanceof BallerinaPackageReference) {
+                return true;
+            }
             List<BallerinaImportDeclaration> cachedImports = ((BallerinaFile) element).getCachedImports();
             for (BallerinaImportDeclaration cachedImport : cachedImports) {
                 PsiElement identifier = cachedImport.getShortPackageName();
