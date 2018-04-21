@@ -142,6 +142,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NULLABLE_TYPE_NA
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OBJECT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OBJECT_BODY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OBJECT_INITIALIZER;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OBJECT_INITIALIZER_PARAMETER_LIST;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ON;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONABORT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONCOMMIT;
@@ -362,7 +363,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
 
                 .before(NEW).spaceIf(true)
                 .between(NEW, SEMICOLON).spaceIf(false)
-                .between(NEW, LEFT_PARENTHESIS).spaceIf(false)
+                .between(NEW, OBJECT_INITIALIZER_PARAMETER_LIST).spaceIf(false)
                 .after(NEW).spaceIf(true)
 
                 // Record Literals
@@ -453,6 +454,8 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(FORK).spaceIf(true)
 
                 .between(IDENTIFIER, FINITE_TYPE).spaceIf(true)
+
+                .around(ARRAY_TYPE_NAME).spaceIf(false)
 
                 // Streaming
                 .before(WHERE_CLAUSE).spaceIf(true)
