@@ -96,7 +96,6 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                 if (isCompletion() && getResult() != null) {
                     return false;
                 }
-                return true;
             }
 
             for (BallerinaDefinition definition : definitions) {
