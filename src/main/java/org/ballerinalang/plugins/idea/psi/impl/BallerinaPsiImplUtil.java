@@ -290,11 +290,6 @@ public class BallerinaPsiImplUtil {
             return new LinkedList<>();
         }
         String key = type.getText();
-        // Todo - Use a map?
-        // File which contains functions for some types does not have the type as the prefix in the name.
-        if ("future".equals(key)) {
-            key = "async";
-        }
         if (BUILTIN_VARIABLE_TYPE_CACHE.containsKey(key)) {
             return BUILTIN_VARIABLE_TYPE_CACHE.get(key);
         }
@@ -352,8 +347,11 @@ public class BallerinaPsiImplUtil {
                 if (psiFile == null) {
                     return new LinkedList<>();
                 }
-                BUILTIN_ANNOTATION_DEFINITION_CACHE.addAll(PsiTreeUtil.findChildrenOfType(psiFile,
-                        BallerinaAnnotationDefinition.class));
+                Collection<BallerinaAnnotationDefinition> annotationDefinitions =
+                        PsiTreeUtil.findChildrenOfType(psiFile, BallerinaAnnotationDefinition.class);
+                if (!annotationDefinitions.isEmpty()) {
+                    BUILTIN_ANNOTATION_DEFINITION_CACHE.addAll(annotationDefinitions);
+                }
             }
         }
         return BUILTIN_ANNOTATION_DEFINITION_CACHE;
@@ -383,8 +381,11 @@ public class BallerinaPsiImplUtil {
                 if (psiFile == null) {
                     return new LinkedList<>();
                 }
-                BUILTIN_TYPE_DEFINITION_CACHE.addAll(PsiTreeUtil.findChildrenOfType(psiFile,
-                        BallerinaTypeDefinition.class));
+                Collection<BallerinaTypeDefinition> typeDefinitions =
+                        PsiTreeUtil.findChildrenOfType(psiFile, BallerinaTypeDefinition.class);
+                if (!typeDefinitions.isEmpty()) {
+                    BUILTIN_TYPE_DEFINITION_CACHE.addAll(typeDefinitions);
+                }
             }
         }
         return BUILTIN_TYPE_DEFINITION_CACHE;
