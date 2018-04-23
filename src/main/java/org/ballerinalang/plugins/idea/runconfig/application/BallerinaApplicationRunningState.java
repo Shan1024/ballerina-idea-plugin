@@ -24,6 +24,8 @@ import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.project.Project;
+import com.intellij.openapi.vfs.VirtualFile;
 import org.ballerinalang.plugins.idea.runconfig.BallerinaRunningState;
 import org.ballerinalang.plugins.idea.runconfig.RunConfigurationKind;
 import org.ballerinalang.plugins.idea.sdk.BallerinaSdkService;
@@ -31,6 +33,8 @@ import org.ballerinalang.plugins.idea.util.BallerinaExecutor;
 import org.ballerinalang.plugins.idea.util.BallerinaHistoryProcessListener;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.io.File;
 
 /**
  * Represents Ballerina application running state.
@@ -64,14 +68,33 @@ public class BallerinaApplicationRunningState extends BallerinaRunningState<Ball
     @Override
     protected BallerinaExecutor patchExecutor(@NotNull BallerinaExecutor executor) throws ExecutionException {
         RunConfigurationKind kind = getConfiguration().getRunKind();
-        String parameters = myConfiguration.getPackage();
-        if (parameters.isEmpty()) {
-            parameters = myConfiguration.getFilePath();
+        Project project = myConfiguration.getProject();
+        VirtualFile baseDir = project.getBaseDir();
+        String filePath = myConfiguration.getPackage();
+        if (filePath.isEmpty()) {
+            filePath = myConfiguration.getFilePath();
+            if (baseDir != null) {
+                filePath = filePath.replace(baseDir.getPath() + File.separator, "");
+            }
         }
-        BallerinaExecutor ballerinaExecutor = executor.withParameters("run")
-                .withBallerinaPath(BallerinaSdkService.getInstance(getConfiguration().getProject())
-                        .getSdkHomePath(null))
-                .withParameterString(myConfiguration.getBallerinaToolParams()).withParameters(parameters);
+        BallerinaExecutor ballerinaExecutor;
+
+        if (baseDir != null) {
+            ballerinaExecutor = executor
+                    .withParameters("run")
+                    .withParameters("--sourceroot")
+                    .withParameters(baseDir.getPath())
+                    .withBallerinaPath(BallerinaSdkService.getInstance(getConfiguration().getProject())
+                            .getSdkHomePath(null))
+                    .withParameterString(myConfiguration.getBallerinaToolParams()).withParameters(filePath);
+        } else {
+            ballerinaExecutor = executor
+                    .withParameters("run")
+                    .withBallerinaPath(BallerinaSdkService.getInstance(getConfiguration().getProject())
+                            .getSdkHomePath(null))
+                    .withParameterString(myConfiguration.getBallerinaToolParams()).withParameters(filePath);
+        }
+
         if (kind == RunConfigurationKind.SERVICE) {
             ballerinaExecutor.withParameters("-s");
         }
