@@ -170,8 +170,8 @@ public class BallerinaAnnotator implements Annotator {
             Annotation annotation = holder.createInfoAnnotation(element, null);
             annotation.setTextAttributes(BallerinaSyntaxHighlightingColors.STRING);
         } else if (element instanceof BallerinaRecordKey) {
-            Annotation annotation = holder.createInfoAnnotation(element, null);
-            annotation.setTextAttributes(BallerinaSyntaxHighlightingColors.RECORD_KEY);
+            //            Annotation annotation = holder.createInfoAnnotation(element, null);
+            //            annotation.setTextAttributes(BallerinaSyntaxHighlightingColors.RECORD_KEY);
         }
     }
 
