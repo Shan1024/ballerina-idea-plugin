@@ -83,6 +83,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FAIL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FIELD;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FIELD_DEFINITION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FINALLY;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FINALLY_CLAUSE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FINITE_TYPE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FIRST;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FLOATING_POINT_LITERAL;
@@ -95,6 +96,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FROM;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FULL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FUNCTION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FUNCTION_INVOCATION;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.FUTURE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.GROUP;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.GT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.GT_EQUAL;
@@ -405,21 +407,24 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
 
                 .afterInside(IDENTIFIER, RESOURCE_DEFINITION).spaceIf(false)
 
+                .between(ANNOTATION, LT).spaceIf(false)
                 .between(FUNCTION, LT).spaceIf(false)
+                .between(FUTURE, LT).spaceIf(false)
                 .between(JSON, LT).spaceIf(false)
                 .between(MAP, LT).spaceIf(false)
                 .between(STREAM, LT).spaceIf(false)
                 .between(TABLE, LT).spaceIf(false)
-                .between(ANNOTATION, LT).spaceIf(false)
 
                 .around(PIPE).spaceIf(false)
                 .between(NULLABLE_TYPE_NAME, IDENTIFIER).spaceIf(true)
+                .between(NULLABLE_TYPE_NAME, EQUAL_GT).spaceIf(true)
                 .around(NULLABLE_TYPE_NAME).spaceIf(false)
 
                 .around(PARAMETER_LIST).spaceIf(false)
 
                 .before(CATCH_CLAUSE).spaceIf(true)
                 .before(CATCH_CLAUSES).spaceIf(true)
+                .before(FINALLY_CLAUSE).spaceIf(true)
 
                 .before(ELSE_IF_CLAUSE).spaceIf(true)
                 .before(ELSE_CLAUSE).spaceIf(true)
