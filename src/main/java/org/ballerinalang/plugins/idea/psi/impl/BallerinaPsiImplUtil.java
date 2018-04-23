@@ -1190,9 +1190,21 @@ public class BallerinaPsiImplUtil {
         if (directory == null) {
             return false;
         }
+        Module module = ModuleUtilCore.findModuleForPsiElement(directory);
+        if (module == null) {
+            return false;
+        }
         VirtualFile[] contentRoots = ProjectRootManager.getInstance(directory.getProject()).getContentRoots();
         for (VirtualFile contentRoot : contentRoots) {
             if (contentRoot.equals(directory.getVirtualFile())) {
+                return true;
+            }
+        }
+
+        Sdk moduleSdk = ModuleRootManager.getInstance(module).getSdk();
+        if (moduleSdk != null) {
+            VirtualFile homeDirectory = moduleSdk.getHomeDirectory();
+            if (homeDirectory != null && homeDirectory.equals(directory.getVirtualFile())) {
                 return true;
             }
         }

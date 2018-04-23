@@ -40,8 +40,6 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
     @Override
     public boolean execute(@NotNull PsiElement element, @NotNull ResolveState state) {
         if (accept(element)) {
-
-
             List<BallerinaDefinition> definitions = ((BallerinaFile) element).getDefinitions();
 
             if (myElement.getParent().getParent() instanceof BallerinaAnnotationAttachment) {
