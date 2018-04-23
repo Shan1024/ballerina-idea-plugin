@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>org.ballerinalang</id>
     <name>Ballerina</name>
-    <version>0.970.0-beta4</version>
+    <version>0.970.0-beta11</version>
     <vendor email="ballerinalang@wso2.com" url="http://wso2.org">WSO2 Inc.</vendor>
 
     <description><![CDATA[
@@ -11,7 +11,7 @@
 
     <change-notes><![CDATA[
       <ul>
-        <li>Supports Ballerina v0.970.0-beta4 grammar.</li>
+        <li>Supports Ballerina v0.970.0-beta11 grammar.</li>
       </ul>
     ]]>
     </change-notes>
@@ -160,6 +160,12 @@
         <!--implementationClass="org.ballerinalang.plugins.idea.runconfig.BallerinaTestLineMarkerProvider"/>-->
 
         <console.folding implementation="org.ballerinalang.plugins.idea.runconfig.BallerinaConsoleFolding"/>
+
+        <!-- debugger -->
+        <programRunner id="ballerinaDebugger"
+                       implementation="org.ballerinalang.plugins.idea.runconfig.BallerinaDebugger"/>
+        <xdebugger.breakpointType
+                implementation="org.ballerinalang.plugins.idea.debugger.breakpoint.BallerinaBreakPointType"/>
 
         <codeInsight.template.postfixTemplateProvider language="Ballerina"
                                                       implementationClass="org.ballerinalang.plugins.idea.codeinsight.template.postfix.BallerinaPostfixTemplateProvider"/>
