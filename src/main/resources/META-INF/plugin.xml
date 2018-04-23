@@ -146,6 +146,9 @@
         <editorNotificationProvider
                 implementation="org.ballerinalang.plugins.idea.inspections.WrongModuleTypeNotificationProvider"/>
 
+        <!--project-->
+        <projectExtension implementation="org.ballerinalang.plugins.idea.project.BallerinaProjectExtension"/>
+
         <!-- run application -->
         <programRunner id="ballerinaRunner" implementation="org.ballerinalang.plugins.idea.runconfig.BallerinaRunner"/>
 

@@ -143,6 +143,12 @@ public class BallerinaPsiImplUtil {
         BUILTIN_VARIABLE_TYPES.add("xml");
     }
 
+    public static void clearBuiltInCaches() {
+        BUILTIN_VARIABLE_TYPE_CACHE.clear();
+        BUILTIN_ANNOTATION_DEFINITION_CACHE.clear();
+        BUILTIN_TYPE_DEFINITION_CACHE.clear();
+    }
+
     @Nullable
     public static String getName(@NotNull BallerinaPackageDeclaration packageClause) {
         BallerinaPackageDeclarationStub stub = packageClause.getStub();

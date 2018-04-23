@@ -29,6 +29,7 @@ import com.intellij.openapi.roots.ModuleRootModificationUtil;
 import com.intellij.openapi.roots.ProjectExtension;
 import com.intellij.openapi.util.AsyncResult;
 import org.ballerinalang.plugins.idea.BallerinaExternalAnnotator;
+import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.ballerinalang.plugins.idea.sdk.BallerinaSdkService;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;
@@ -65,6 +66,8 @@ public class BallerinaProjectExtension extends ProjectExtension {
         }
         // Reset Ballerina external annotator.
         BallerinaExternalAnnotator.reset();
+        // Reset the built-in caches.
+        BallerinaPsiImplUtil.clearBuiltInCaches();
     }
 
     @Override
