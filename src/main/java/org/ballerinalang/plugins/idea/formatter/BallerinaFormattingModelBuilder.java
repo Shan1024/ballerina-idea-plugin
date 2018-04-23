@@ -130,6 +130,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MAP;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MATCH;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MATCH_EXPRESSION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MATCH_EXPRESSION_PATTERN_CLAUSE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MATCH_STATEMENT_BODY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MINUTE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MOD;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MONTH;
@@ -441,6 +442,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
 
                 .before(MATCH_EXPRESSION).spaceIf(true)
                 .around(MATCH_EXPRESSION_PATTERN_CLAUSE).spaceIf(true)
+                .between(VARIABLE_REFERENCE_EXPRESSION, MATCH_STATEMENT_BODY).spaceIf(true)
 
                 .between(RETURN, SEMICOLON).spaceIf(false)
                 .after(RETURN).spaceIf(true)
