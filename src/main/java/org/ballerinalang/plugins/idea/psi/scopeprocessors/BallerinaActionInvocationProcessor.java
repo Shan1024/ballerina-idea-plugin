@@ -57,44 +57,50 @@ public class BallerinaActionInvocationProcessor extends BallerinaScopeProcessorB
                     if (!(resolvedElement.getParent() instanceof BallerinaEndpointParameter)) {
                         return true;
                     }
-
-                    BallerinaServiceDefinition ballerinaServiceDefinition = PsiTreeUtil.getParentOfType(resolvedElement,
-                            BallerinaServiceDefinition.class);
+                    BallerinaServiceDefinition ballerinaServiceDefinition =
+                            PsiTreeUtil.getParentOfType(resolvedElement, BallerinaServiceDefinition.class);
                     if (ballerinaServiceDefinition == null) {
                         return true;
                     }
+                    PsiElement parent = null;
 
-                    BallerinaServiceEndpointAttachments serviceEndpointAttachments = ballerinaServiceDefinition
-                            .getServiceEndpointAttachments();
-                    if (serviceEndpointAttachments == null) {
+                    BallerinaServiceEndpointAttachments serviceEndpointAttachments =
+                            ballerinaServiceDefinition.getServiceEndpointAttachments();
+                    if (serviceEndpointAttachments != null) {
+                        List<BallerinaNameReference> nameReferenceList =
+                                serviceEndpointAttachments.getNameReferenceList();
+                        BallerinaNameReference ballerinaNameReference = nameReferenceList.get(0);
+                        PsiElement type = BallerinaPsiImplUtil.getCachedType(ballerinaNameReference);
+                        if (type == null) {
+                            return true;
+                        }
+                        parent = type.getParent();
+
+                    } else {
+                        BallerinaNameReference nameReference = ballerinaServiceDefinition.getNameReference();
+                        if (nameReference == null) {
+                            return true;
+                        }
+                        PsiElement typeDefinition = BallerinaPsiImplUtil.getCachedType(nameReference);
+                        if (typeDefinition instanceof BallerinaTypeDefinition) {
+                            BallerinaTypeDefinition typeName = (BallerinaTypeDefinition) typeDefinition;
+                            parent = BallerinaPsiImplUtil.getMatchingFunctionFromObject(typeName, "getEndpoint");
+                        }
+                    }
+                    if (parent == null) {
                         return true;
                     }
-                    List<BallerinaNameReference> nameReferenceList = serviceEndpointAttachments.getNameReferenceList();
-
-
-                    BallerinaNameReference ballerinaNameReference = nameReferenceList.get(0);
-
-
-                    PsiElement type = BallerinaPsiImplUtil.getCachedType(ballerinaNameReference);
-
-                    if (type == null) {
-                        return true;
-                    }
-
-                    PsiElement parent = type.getParent();
                     if (parent instanceof BallerinaTypeDefinition) {
                         BallerinaTypeDefinition clientConnector =
-                                BallerinaPsiImplUtil.getClientConnector(((BallerinaTypeDefinition) parent));
-
+                                BallerinaPsiImplUtil.getMatchingFunctionFromObject((BallerinaTypeDefinition) parent,
+                                        "getCallerActions");
                         if (clientConnector != null) {
-
                             BallerinaObjectFunctionProcessor ballerinaObjectFunctionProcessor
                                     = new BallerinaObjectFunctionProcessor(myResult, myElement, isCompletion());
                             ballerinaObjectFunctionProcessor.execute(clientConnector, ResolveState.initial());
                             PsiElement result = ballerinaObjectFunctionProcessor.getResult();
                             if (!isCompletion() && result != null) {
                                 add(result);
-
                             }
                             return false;
                         }

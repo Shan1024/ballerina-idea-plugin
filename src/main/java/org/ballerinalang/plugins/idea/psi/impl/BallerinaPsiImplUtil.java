@@ -479,12 +479,16 @@ public class BallerinaPsiImplUtil {
                 return null;
             }
             return resolvedType;
+        } else if (parent instanceof BallerinaTypeDefinition) {
+            return parent;
         }
         return null;
     }
 
     @Nullable
-    public static BallerinaTypeDefinition getClientConnector(@NotNull BallerinaTypeDefinition ballerinaTypeDefinition) {
+    public static BallerinaTypeDefinition getMatchingFunctionFromObject(@NotNull BallerinaTypeDefinition
+                                                                                ballerinaTypeDefinition,
+                                                                        @NotNull String name) {
         Collection<BallerinaObjectFunctionDefinition> ballerinaObjectFunctionDefinitions =
                 PsiTreeUtil.findChildrenOfType(ballerinaTypeDefinition, BallerinaObjectFunctionDefinition.class);
         for (BallerinaObjectFunctionDefinition ballerinaObjectFunctionDefinition : ballerinaObjectFunctionDefinitions) {
@@ -494,7 +498,7 @@ public class BallerinaPsiImplUtil {
                 continue;
             }
             BallerinaAnyIdentifierName anyIdentifierName = objectCallableUnitSignature.getAnyIdentifierName();
-            if ("getCallerActions".equals(anyIdentifierName.getText())) {
+            if (name.equals(anyIdentifierName.getText())) {
                 return getClientFromReturnType(objectCallableUnitSignature);
             }
         }
