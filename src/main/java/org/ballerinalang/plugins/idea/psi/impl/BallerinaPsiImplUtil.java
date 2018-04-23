@@ -494,7 +494,7 @@ public class BallerinaPsiImplUtil {
                 continue;
             }
             BallerinaAnyIdentifierName anyIdentifierName = objectCallableUnitSignature.getAnyIdentifierName();
-            if ("getClient".equals(anyIdentifierName.getText())) {
+            if ("getCallerActions".equals(anyIdentifierName.getText())) {
                 return getClientFromReturnType(objectCallableUnitSignature);
             }
         }
