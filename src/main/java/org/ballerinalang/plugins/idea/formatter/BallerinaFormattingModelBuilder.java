@@ -364,6 +364,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .before(NEW).spaceIf(true)
                 .between(NEW, SEMICOLON).spaceIf(false)
                 .between(NEW, OBJECT_INITIALIZER_PARAMETER_LIST).spaceIf(false)
+                .between(NEW, LEFT_PARENTHESIS).spaceIf(false)
                 .after(NEW).spaceIf(true)
 
                 // Record Literals

@@ -17,6 +17,7 @@
 
 package org.ballerinalang.plugins.idea.highlighting;
 
+import com.intellij.ide.highlighter.custom.CustomHighlighterColors;
 import com.intellij.openapi.editor.DefaultLanguageHighlighterColors;
 import com.intellij.openapi.editor.HighlighterColors;
 import com.intellij.openapi.editor.colors.TextAttributesKey;
@@ -55,4 +56,6 @@ public class BallerinaSyntaxHighlightingColors {
             createTextAttributesKey("BALLERINA_DOCUMENTATION_INLINE_CODE", DOC_COMMENT_TAG_VALUE);
     public static final TextAttributesKey GLOBAL_VARIABLE = createTextAttributesKey("BALLERINA_GLOBAL_VARIABLE",
             DefaultLanguageHighlighterColors.INSTANCE_FIELD);
+    public static final TextAttributesKey RECORD_KEY = createTextAttributesKey("BALLERINA_RECORD_KEY3",
+            CustomHighlighterColors.CUSTOM_KEYWORD3_ATTRIBUTES);
 }

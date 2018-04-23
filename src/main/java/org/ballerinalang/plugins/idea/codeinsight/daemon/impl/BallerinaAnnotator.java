@@ -26,12 +26,16 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.highlighting.BallerinaSyntaxHighlightingColors;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnnotationAttachment;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
+import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaRecordKey;
+import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypes;
 import org.ballerinalang.plugins.idea.psi.BallerinaXmlItem;
 import org.jetbrains.annotations.NotNull;
@@ -141,6 +145,17 @@ public class BallerinaAnnotator implements Annotator {
                 } else if (parent instanceof BallerinaGlobalVariableDefinition) {
                     Annotation annotation = holder.createInfoAnnotation(element, null);
                     annotation.setTextAttributes(BallerinaSyntaxHighlightingColors.GLOBAL_VARIABLE);
+                } else if ("self".equals(element.getText())) {
+                    BallerinaTypeDefinition typeDefinition = PsiTreeUtil.getParentOfType(element,
+                            BallerinaTypeDefinition.class);
+                    BallerinaFunctionDefinition functionDefinition = PsiTreeUtil.getParentOfType(element,
+                            BallerinaFunctionDefinition.class);
+                    if (typeDefinition == null && (functionDefinition == null
+                            || functionDefinition.getAttachedObject() == null)) {
+                        return;
+                    }
+                    Annotation annotation = holder.createInfoAnnotation(element, null);
+                    annotation.setTextAttributes(BallerinaSyntaxHighlightingColors.KEYWORD);
                 }
             }
         } else if (element instanceof BallerinaPackageReference) {
@@ -154,6 +169,9 @@ public class BallerinaAnnotator implements Annotator {
         } else if (element instanceof BallerinaXmlItem) {
             Annotation annotation = holder.createInfoAnnotation(element, null);
             annotation.setTextAttributes(BallerinaSyntaxHighlightingColors.STRING);
+        } else if (element instanceof BallerinaRecordKey) {
+            Annotation annotation = holder.createInfoAnnotation(element, null);
+            annotation.setTextAttributes(BallerinaSyntaxHighlightingColors.RECORD_KEY);
         }
     }
 
