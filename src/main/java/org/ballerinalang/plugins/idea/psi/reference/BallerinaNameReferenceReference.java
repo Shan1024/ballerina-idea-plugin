@@ -183,14 +183,19 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
             if (!processor.execute(containingFile, ResolveState.initial())) {
                 return false;
             }
-            PsiFile originalFile = containingFile.getOriginalFile();
-            // Get suggestions from current file.
-            if (!processor.execute(originalFile, ResolveState.initial())) {
-                return false;
-            }
-            // Recursively find definitions in the project starting from the current directory.
-            if (originalFile.getContainingDirectory() != null) {
-                recursivelyFindOutwards(processor, originalFile.getContainingDirectory(), originalFile);
+            if (processor instanceof BallerinaTopLevelScopeProcessor) {
+                if (!((BallerinaTopLevelScopeProcessor) processor).isLookupElementsFound()) {
+                    PsiFile originalFile = containingFile.getOriginalFile();
+                    // Get suggestions from current file.
+                    if (!processor.execute(originalFile, ResolveState.initial())) {
+                        return false;
+                    }
+
+                    // Recursively find definitions in the project starting from the current directory.
+                    if (originalFile.getContainingDirectory() != null) {
+                        recursivelyFindOutwards(processor, originalFile.getContainingDirectory(), originalFile);
+                    }
+                }
             }
         } else {
             BallerinaPackageReference packageReference = null;

@@ -26,6 +26,8 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
     @NotNull
     private final PsiElement myElement;
 
+    private boolean lookupElementsFound;
+
     public BallerinaTopLevelScopeProcessor(@Nullable CompletionResultSet result, @NotNull PsiElement element,
                                            boolean isCompletion) {
         super(element, isCompletion);
@@ -50,6 +52,7 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                     if (identifier != null) {
                         if (myResult != null) {
                             myResult.addElement(BallerinaCompletionUtils.createAnnotationLookupElement(identifier));
+                            lookupElementsFound = true;
                         } else if (myElement.getText().equals(identifier.getText())) {
                             add(identifier);
                         }
@@ -64,6 +67,7 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                         if (identifier != null) {
                             if (myResult != null) {
                                 myResult.addElement(BallerinaCompletionUtils.createAnnotationLookupElement(identifier));
+                                lookupElementsFound = true;
                             } else if (myElement.getText().equals(identifier.getText())) {
                                 add(identifier);
                             }
@@ -84,6 +88,7 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                     if (identifier != null) {
                         if (myResult != null) {
                             myResult.addElement(BallerinaCompletionUtils.createTypeLookupElement(definition));
+                            lookupElementsFound = true;
                         } else if (myElement.getText().equals(identifier.getText())) {
                             add(identifier);
                         }
@@ -108,6 +113,7 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                                 // definition.
                                 myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(child,
                                         ParenthesisInsertHandler.INSTANCE));
+                                lookupElementsFound = true;
                             } else if (myElement.getText().equals(identifier.getText())) {
                                 add(identifier);
                             }
@@ -120,6 +126,7 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                         if (myResult != null) {
                             myResult.addElement(BallerinaCompletionUtils.createGlobalVariableLookupElement(child,
                                     BallerinaPsiImplUtil.formatBallerinaTypeName(child.getTypeName())));
+                            lookupElementsFound = true;
                         } else if (myElement.getText().equals(identifier.getText())) {
                             add(identifier);
                         }
@@ -130,6 +137,7 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                     if (identifier != null) {
                         if (myResult != null) {
                             myResult.addElement(BallerinaCompletionUtils.createGlobalEndpointLookupElement(child));
+                            lookupElementsFound = true;
                         } else if (myElement.getText().equals(identifier.getText())) {
                             add(identifier);
                         }
@@ -140,6 +148,7 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                     if (identifier != null) {
                         if (myResult != null) {
                             myResult.addElement(BallerinaCompletionUtils.createTypeLookupElement(child));
+                            lookupElementsFound = true;
                         } else if (myElement.getText().equals(identifier.getText())) {
                             add(identifier);
                         }
@@ -161,5 +170,9 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
     @Override
     protected boolean crossOff(@NotNull PsiElement e) {
         return false;
+    }
+
+    public boolean isLookupElementsFound() {
+        return lookupElementsFound;
     }
 }
