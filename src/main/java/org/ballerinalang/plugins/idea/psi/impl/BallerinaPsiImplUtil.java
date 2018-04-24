@@ -125,10 +125,6 @@ public class BallerinaPsiImplUtil {
     private static List<String> BUILTIN_DIRECTORIES = new LinkedList<>();
 
     private static List<String> BUILTIN_VARIABLE_TYPES = new LinkedList<>();
-    private static Map<String, List<BallerinaFunctionDefinition>> BUILTIN_VARIABLE_TYPE_CACHE = new HashMap<>();
-
-    private static List<BallerinaAnnotationDefinition> BUILTIN_ANNOTATION_DEFINITION_CACHE = new LinkedList<>();
-    private static List<BallerinaTypeDefinition> BUILTIN_TYPE_DEFINITION_CACHE = new LinkedList<>();
 
     static {
         BUILTIN_DIRECTORIES.add("/builtin");
@@ -141,12 +137,6 @@ public class BallerinaPsiImplUtil {
         BUILTIN_VARIABLE_TYPES.add("string");
         BUILTIN_VARIABLE_TYPES.add("table");
         BUILTIN_VARIABLE_TYPES.add("xml");
-    }
-
-    public static void clearBuiltInCaches() {
-        BUILTIN_VARIABLE_TYPE_CACHE.clear();
-        BUILTIN_ANNOTATION_DEFINITION_CACHE.clear();
-        BUILTIN_TYPE_DEFINITION_CACHE.clear();
     }
 
     @Nullable
@@ -296,17 +286,16 @@ public class BallerinaPsiImplUtil {
             return new LinkedList<>();
         }
         String key = type.getText();
-        // Todo - Add built-in caching?
-        if (BUILTIN_VARIABLE_TYPE_CACHE.containsKey(key)) {
-            if (BUILTIN_VARIABLE_TYPE_CACHE.get(key).get(0).isValid()) {
-                return BUILTIN_VARIABLE_TYPE_CACHE.get(key);
-            } else {
-                clearBuiltInCaches();
-            }
-        }
+        return CachedValuesManager.getCachedValue(type,
+                () -> CachedValueProvider.Result.create(getBuiltInFunctions(key, type),
+                        ProjectRootManager.getInstance(type.getProject())));
+    }
+
+    @NotNull
+    private static List<BallerinaFunctionDefinition> getBuiltInFunctions(@NotNull String key,
+                                                                         @NotNull PsiElement type) {
         // Add elements from built-in packages
         for (String builtInDirectory : BUILTIN_DIRECTORIES) {
-
             VirtualFile file = BallerinaPsiImplUtil.findFileInSDK(type, builtInDirectory);
             if (file == null) {
                 return new LinkedList<>();
@@ -326,7 +315,6 @@ public class BallerinaPsiImplUtil {
                 List<BallerinaFunctionDefinition> functionDefinitions =
                         new ArrayList<>(PsiTreeUtil.findChildrenOfType(psiFile, BallerinaFunctionDefinition.class));
                 if (!functionDefinitions.isEmpty()) {
-                    BUILTIN_VARIABLE_TYPE_CACHE.put(key, functionDefinitions);
                     return functionDefinitions;
                 }
             }
@@ -337,17 +325,16 @@ public class BallerinaPsiImplUtil {
     @NotNull
     public synchronized static List<BallerinaAnnotationDefinition> suggestBuiltInAnnotations(@NotNull PsiElement
                                                                                                      element) {
-        // Todo - Add built-in caching?
-        if (!BUILTIN_ANNOTATION_DEFINITION_CACHE.isEmpty()) {
-            if (BUILTIN_ANNOTATION_DEFINITION_CACHE.get(0).isValid()) {
-                return BUILTIN_ANNOTATION_DEFINITION_CACHE;
-            } else {
-                clearBuiltInCaches();
-            }
-        }
+        return CachedValuesManager.getCachedValue(element,
+                () -> CachedValueProvider.Result.create(getBuiltInAnnotations(element),
+                        ProjectRootManager.getInstance(element.getProject())));
+    }
+
+    @NotNull
+    private static List<BallerinaAnnotationDefinition> getBuiltInAnnotations(@NotNull PsiElement element) {
+        LinkedList<BallerinaAnnotationDefinition> results = new LinkedList<>();
         // Add elements from built-in packages
         for (String builtInDirectory : BUILTIN_DIRECTORIES) {
-
             VirtualFile file = BallerinaPsiImplUtil.findFileInSDK(element, builtInDirectory);
             if (file == null) {
                 return new LinkedList<>();
@@ -366,24 +353,23 @@ public class BallerinaPsiImplUtil {
                 Collection<BallerinaAnnotationDefinition> annotationDefinitions =
                         PsiTreeUtil.findChildrenOfType(psiFile, BallerinaAnnotationDefinition.class);
                 if (!annotationDefinitions.isEmpty()) {
-                    BUILTIN_ANNOTATION_DEFINITION_CACHE.addAll(annotationDefinitions);
+                    results.addAll(annotationDefinitions);
                 }
             }
         }
-        return BUILTIN_ANNOTATION_DEFINITION_CACHE;
+        return results;
     }
 
     @NotNull
     public synchronized static List<BallerinaTypeDefinition> suggestBuiltInTypes(@NotNull PsiElement element) {
-        // Todo - Add built-in caching?
-        if (!BUILTIN_TYPE_DEFINITION_CACHE.isEmpty()) {
-            if (BUILTIN_TYPE_DEFINITION_CACHE.get(0).isValid()) {
-                return BUILTIN_TYPE_DEFINITION_CACHE;
-            } else {
-                clearBuiltInCaches();
-            }
-        }
+        return CachedValuesManager.getCachedValue(element,
+                () -> CachedValueProvider.Result.create(getBuiltInTypes(element),
+                        ProjectRootManager.getInstance(element.getProject())));
+    }
 
+    @NotNull
+    private static List<BallerinaTypeDefinition> getBuiltInTypes(@NotNull PsiElement element) {
+        List<BallerinaTypeDefinition> results = new LinkedList<>();
         // Add elements from built-in packages
         for (String builtInDirectory : BUILTIN_DIRECTORIES) {
 
@@ -405,11 +391,11 @@ public class BallerinaPsiImplUtil {
                 Collection<BallerinaTypeDefinition> typeDefinitions =
                         PsiTreeUtil.findChildrenOfType(psiFile, BallerinaTypeDefinition.class);
                 if (!typeDefinitions.isEmpty()) {
-                    BUILTIN_TYPE_DEFINITION_CACHE.addAll(typeDefinitions);
+                    results.addAll(typeDefinitions);
                 }
             }
         }
-        return BUILTIN_TYPE_DEFINITION_CACHE;
+        return results;
     }
 
     /**

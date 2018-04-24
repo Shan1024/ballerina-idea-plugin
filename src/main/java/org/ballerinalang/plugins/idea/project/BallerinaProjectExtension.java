@@ -66,8 +66,6 @@ public class BallerinaProjectExtension extends ProjectExtension {
         }
         // Reset Ballerina external annotator.
         BallerinaExternalAnnotator.reset();
-        // Reset the built-in caches.
-        BallerinaPsiImplUtil.clearBuiltInCaches();
     }
 
     @Override
