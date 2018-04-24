@@ -296,8 +296,13 @@ public class BallerinaPsiImplUtil {
             return new LinkedList<>();
         }
         String key = type.getText();
+        // Todo - Add built-in caching?
         if (BUILTIN_VARIABLE_TYPE_CACHE.containsKey(key)) {
-            return BUILTIN_VARIABLE_TYPE_CACHE.get(key);
+            if (BUILTIN_VARIABLE_TYPE_CACHE.get(key).get(0).isValid()) {
+                return BUILTIN_VARIABLE_TYPE_CACHE.get(key);
+            } else {
+                clearBuiltInCaches();
+            }
         }
         // Add elements from built-in packages
         for (String builtInDirectory : BUILTIN_DIRECTORIES) {
@@ -330,11 +335,16 @@ public class BallerinaPsiImplUtil {
     }
 
     @NotNull
-    public synchronized static List<BallerinaAnnotationDefinition> suggestBuiltInAnnotations(@NotNull PsiElement element) {
+    public synchronized static List<BallerinaAnnotationDefinition> suggestBuiltInAnnotations(@NotNull PsiElement
+                                                                                                     element) {
+        // Todo - Add built-in caching?
         if (!BUILTIN_ANNOTATION_DEFINITION_CACHE.isEmpty()) {
-            return BUILTIN_ANNOTATION_DEFINITION_CACHE;
+            if (BUILTIN_ANNOTATION_DEFINITION_CACHE.get(0).isValid()) {
+                return BUILTIN_ANNOTATION_DEFINITION_CACHE;
+            } else {
+                clearBuiltInCaches();
+            }
         }
-
         // Add elements from built-in packages
         for (String builtInDirectory : BUILTIN_DIRECTORIES) {
 
@@ -365,8 +375,13 @@ public class BallerinaPsiImplUtil {
 
     @NotNull
     public synchronized static List<BallerinaTypeDefinition> suggestBuiltInTypes(@NotNull PsiElement element) {
+        // Todo - Add built-in caching?
         if (!BUILTIN_TYPE_DEFINITION_CACHE.isEmpty()) {
-            return BUILTIN_TYPE_DEFINITION_CACHE;
+            if (BUILTIN_TYPE_DEFINITION_CACHE.get(0).isValid()) {
+                return BUILTIN_TYPE_DEFINITION_CACHE;
+            } else {
+                clearBuiltInCaches();
+            }
         }
 
         // Add elements from built-in packages

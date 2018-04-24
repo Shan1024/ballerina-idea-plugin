@@ -45,7 +45,6 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BallerinaAnnotator implements Annotator {
 
-
     @Override
     public void annotate(@NotNull PsiElement element, @NotNull AnnotationHolder holder) {
         PsiElement parent = element.getParent();
