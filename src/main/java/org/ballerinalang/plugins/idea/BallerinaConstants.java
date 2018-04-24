@@ -41,6 +41,8 @@ public class BallerinaConstants {
 
     @NonNls
     public static final String BALLERINA_VERSION_FILE_PATH = "bin/version.txt";
+    @NonNls
+    public static final String BALLERINA_NEW_VERSION_FILE_PATH = "lib/version.txt";
 
     public static final NotificationGroup BALLERINA_NOTIFICATION_GROUP =
             NotificationGroup.balloonGroup("Ballerina plugin notifications");

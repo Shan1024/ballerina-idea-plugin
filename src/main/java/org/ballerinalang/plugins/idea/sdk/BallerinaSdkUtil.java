@@ -122,6 +122,10 @@ public class BallerinaSdkUtil {
 
                 VirtualFile versionFile = sdkRoot.findFileByRelativePath(
                         BallerinaConstants.BALLERINA_VERSION_FILE_PATH);
+                if (versionFile == null) {
+                    versionFile = sdkRoot.findFileByRelativePath(
+                            BallerinaConstants.BALLERINA_NEW_VERSION_FILE_PATH);
+                }
                 // Please note that if the above versionFile is null, we can check on other locations as well.
                 if (versionFile != null) {
                     String text = VfsUtilCore.loadText(versionFile);
