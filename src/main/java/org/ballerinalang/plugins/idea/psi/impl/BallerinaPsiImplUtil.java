@@ -291,7 +291,7 @@ public class BallerinaPsiImplUtil {
     }
 
     @NotNull
-    public static List<BallerinaFunctionDefinition> suggestBuiltInFunctions(@NotNull PsiElement type) {
+    public synchronized static List<BallerinaFunctionDefinition> suggestBuiltInFunctions(@NotNull PsiElement type) {
         if (!hasBuiltInDefinitions(type)) {
             return new LinkedList<>();
         }
@@ -330,7 +330,7 @@ public class BallerinaPsiImplUtil {
     }
 
     @NotNull
-    public static List<BallerinaAnnotationDefinition> suggestBuiltInAnnotations(@NotNull PsiElement element) {
+    public synchronized static List<BallerinaAnnotationDefinition> suggestBuiltInAnnotations(@NotNull PsiElement element) {
         if (!BUILTIN_ANNOTATION_DEFINITION_CACHE.isEmpty()) {
             return BUILTIN_ANNOTATION_DEFINITION_CACHE;
         }
@@ -364,7 +364,7 @@ public class BallerinaPsiImplUtil {
     }
 
     @NotNull
-    public static List<BallerinaTypeDefinition> suggestBuiltInTypes(@NotNull PsiElement element) {
+    public synchronized static List<BallerinaTypeDefinition> suggestBuiltInTypes(@NotNull PsiElement element) {
         if (!BUILTIN_TYPE_DEFINITION_CACHE.isEmpty()) {
             return BUILTIN_TYPE_DEFINITION_CACHE;
         }
@@ -1188,11 +1188,13 @@ public class BallerinaPsiImplUtil {
 
     public static boolean isAContentRoot(@Nullable PsiDirectory directory) {
         if (directory == null) {
-            return false;
+            return true;
         }
         Module module = ModuleUtilCore.findModuleForPsiElement(directory);
         if (module == null) {
-            return false;
+            // If we are trying to access a file which is not in the project, we should stop searching. Otherwise all
+            // files in the file system will be searched.
+            return true;
         }
         VirtualFile[] contentRoots = ProjectRootManager.getInstance(directory.getProject()).getContentRoots();
         for (VirtualFile contentRoot : contentRoots) {
@@ -1219,7 +1221,7 @@ public class BallerinaPsiImplUtil {
         return false;
     }
 
-    @Nullable
+    @NotNull
     public static String formatBallerinaFunctionParameters(@Nullable BallerinaFormalParameterList parameterList) {
         if (parameterList == null) {
             return "()";
