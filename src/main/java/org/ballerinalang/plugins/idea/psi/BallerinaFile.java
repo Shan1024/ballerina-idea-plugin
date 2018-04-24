@@ -77,9 +77,9 @@ public class BallerinaFile extends PsiFileBase {
         return CachedValuesManager.getCachedValue(this, () -> {
             BallerinaFileStub stub = getStub();
             if (stub != null) {
-                StubElement<BallerinaPackageDeclaration> packageClauseStub = stub.getPackageClauseStub();
-                return CachedValueProvider.Result.create(packageClauseStub != null ? packageClauseStub.getPsi() :
-                        null, this);
+//                StubElement<BallerinaPackageDeclaration> packageClauseStub = stub.getPackageClauseStub();
+//                return CachedValueProvider.Result.create(packageClauseStub != null ? packageClauseStub.getPsi() :
+//                        null, this);
             }
             return CachedValueProvider.Result.create(findChildByClass(BallerinaPackageDeclaration.class), this);
         });

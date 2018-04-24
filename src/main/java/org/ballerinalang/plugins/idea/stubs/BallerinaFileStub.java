@@ -18,12 +18,9 @@
 package org.ballerinalang.plugins.idea.stubs;
 
 import com.intellij.psi.stubs.PsiFileStubImpl;
-import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.tree.IStubFileElementType;
 import org.ballerinalang.plugins.idea.BallerinaFileElementType;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
-import org.ballerinalang.plugins.idea.psi.BallerinaPackageDeclaration;
-import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageDeclarationStubElementType;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,15 +36,15 @@ public class BallerinaFileStub extends PsiFileStubImpl<BallerinaFile> {
         return BallerinaFileElementType.INSTANCE;
     }
 
-    @Nullable
-    public StubElement<BallerinaPackageDeclaration> getPackageClauseStub() {
-        return findChildStubByType(BallerinaPackageDeclarationStubElementType.INSTANCE);
-    }
+//    @Nullable
+//    public StubElement<BallerinaPackageDeclaration> getPackageClauseStub() {
+//        return findChildStubByType(BallerinaPackageDeclarationStubElementType.INSTANCE);
+//    }
 
-    @Nullable
-    public String getPackageName() {
-        StubElement<BallerinaPackageDeclaration> stub = getPackageClauseStub();
-        return stub instanceof BallerinaPackageDeclarationStub ? ((BallerinaPackageDeclarationStub) stub).getName() :
-                null;
-    }
+//    @Nullable
+//    public String getPackageName() {
+//        StubElement<BallerinaPackageDeclaration> stub = getPackageClauseStub();
+//        return stub instanceof BallerinaPackageDeclarationStub ? ((BallerinaPackageDeclarationStub) stub).getName() :
+//                null;
+//    }
 }

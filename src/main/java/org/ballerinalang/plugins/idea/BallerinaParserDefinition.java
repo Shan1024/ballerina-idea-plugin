@@ -113,7 +113,6 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ONRETRY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ORDER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OUTER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OUTPUT;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PACKAGE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PARAMETER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PRIVATE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PUBLIC;
@@ -168,7 +167,7 @@ public class BallerinaParserDefinition implements ParserDefinition {
     public static final TokenSet KEYWORDS = TokenSet.create(ABORT, ALL, ANNOTATION, ANY, AS, AWAIT, BIND,
             BLOB, BOOLEAN, BREAK, BUT, CATCH, CHECK, DOCUMENTATION, DEPRECATED, ELSE, ENDPOINT, ENUM, FAIL,
             FINALLY, FLOAT, FOREACH, FORK, FUNCTION, FUTURE, IF, IMPORT, IN, INT, JOIN, JSON, LENGTHOF, LOCK, MAP,
-            MATCH, NATIVE, NEW, NEXT, OBJECT, ONABORT, ONCOMMIT, ONRETRY, PACKAGE, PARAMETER, PRIVATE, PUBLIC, RESOURCE,
+            MATCH, NATIVE, NEW, NEXT, OBJECT, ONABORT, ONCOMMIT, ONRETRY, PARAMETER, PRIVATE, PUBLIC, RESOURCE,
             RETRIES, RETURN, RETURNS, SERVICE, SOME, START, STREAM, STRING, TABLE, TIMEOUT, TRANSACTION, TRY, TYPE,
             TYPEDESC, THROW, UNTAINT, WHILE, WITH, WORKER, VAR, VERSION, XML, XMLNS, BOOLEAN_LITERAL,
             NULL_LITERAL,

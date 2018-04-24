@@ -48,6 +48,12 @@ public class BallerinaServiceBodyImpl extends BallerinaCompositeElementImpl impl
   }
 
   @Override
+  @Nullable
+  public BallerinaNamespaceDeclarationStatement getNamespaceDeclarationStatement() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaNamespaceDeclarationStatement.class);
+  }
+
+  @Override
   @NotNull
   public List<BallerinaResourceDefinition> getResourceDefinitionList() {
     return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaResourceDefinition.class);

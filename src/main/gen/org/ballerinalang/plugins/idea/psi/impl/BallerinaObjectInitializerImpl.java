@@ -66,12 +66,6 @@ public class BallerinaObjectInitializerImpl extends BallerinaCompositeElementImp
   }
 
   @Override
-  @Nullable
-  public PsiElement getNative() {
-    return findChildByType(NATIVE);
-  }
-
-  @Override
   @NotNull
   public PsiElement getNew() {
     return notNullChild(findChildByType(NEW));

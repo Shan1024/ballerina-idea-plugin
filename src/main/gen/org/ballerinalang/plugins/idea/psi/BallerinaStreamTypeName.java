@@ -24,7 +24,7 @@ import com.intellij.psi.PsiElement;
 public interface BallerinaStreamTypeName extends BallerinaCompositeElement {
 
   @Nullable
-  BallerinaNameReference getNameReference();
+  BallerinaTypeName getTypeName();
 
   @Nullable
   PsiElement getGt();

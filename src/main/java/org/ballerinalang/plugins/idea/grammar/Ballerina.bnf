@@ -129,10 +129,10 @@
     extends("(Function|Struct|GlobalVariable|Annotation|(.*Endpoint)|Action|Worker|Type)Definition") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaNamedElementImpl<?>"
 
     // Each stubbed element should have this element type factory.
-    elementTypeFactory("PackageDeclaration|(Function|Struct|GlobalVariable|Annotation|(.*Endpoint)|Action|Worker|Type)Definition") = "org.ballerinalang.plugins.idea.stubs.factory.BallerinaElementTypeFactory.stubFactory"
+    elementTypeFactory("(Function|Struct|GlobalVariable|Annotation|(.*Endpoint)|Action|Worker|Type)Definition") = "org.ballerinalang.plugins.idea.stubs.factory.BallerinaElementTypeFactory.stubFactory"
 
     // Each stub which is not a named definition should extend this class.
-    extends("PackageDeclaration") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaStubbedElementImpl<?>"
+//    extends("PackageDeclaration") = "org.ballerinalang.plugins.idea.psi.impl.BallerinaStubbedElementImpl<?>"
 
     // "|NamespaceDeclaration|ParameterList|ParameterTypeNameList|CallableUnitSignature|ParameterTypeNameList|ReturnParameters"
     // Todo - Add CatchClause, TriggerWorker, WorkerReply?
@@ -148,13 +148,13 @@
     generateTokenAccessors = true
 }
 
-CompilationUnit ::= PackageDeclaration? (ImportDeclaration | NamespaceDeclaration)* Definition* <<eof>>
+CompilationUnit ::= (ImportDeclaration | NamespaceDeclaration)* Definition* <<eof>>
 
-PackageDeclaration ::= package CompletePackageName PackageVersion? SEMICOLON {
-    pin=1
-    methods=[getName]
-    stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub"
-}
+//PackageDeclaration ::= package CompletePackageName PackageVersion? SEMICOLON {
+//    pin=1
+//    methods=[getName]
+//    stubClass="org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub"
+//}
 
 CompletePackageName ::= PackageName (DOT PackageName)* {
     pin(".*")=1
@@ -200,7 +200,7 @@ private TopLevelDefinitionRecover ::= !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_
 
 ServiceDefinition ::= service (LT NameReference GT)? identifier ServiceEndpointAttachments?  ServiceBody {pin=1}
 ServiceEndpointAttachments ::= bind (NameReference (COMMA NameReference)* | RecordLiteral) {pin=1}
-ServiceBody ::= LEFT_BRACE (/*ResourceDefinition+ | EndpointDefinition+ ResourceDefinition* |*/ EndpointDefinition* VariableDefinitionStatementInService* ResourceDefinition*) RIGHT_BRACE /*{pin=1}*/
+ServiceBody ::= LEFT_BRACE (/*ResourceDefinition+ | EndpointDefinition+ ResourceDefinition* |*/ EndpointDefinition* (VariableDefinitionStatementInService* | NamespaceDeclarationStatement) ResourceDefinition*) RIGHT_BRACE /*{pin=1}*/
 
 // Note - Always sync with VariableDefinitionStatement
 VariableDefinitionStatementInService ::= /*<<isNotAResourceDefinition>> VariableDefinitionStatement*/ TypeName identifier VariableAssignment? SEMICOLON {elementType=VariableDefinitionStatement}
@@ -246,7 +246,7 @@ PublicObjectFields ::= public LEFT_BRACE fieldDefinition* RIGHT_BRACE {pin=2}
 
 PrivateObjectFields ::= private LEFT_BRACE fieldDefinition* RIGHT_BRACE {pin=1}
 
-ObjectInitializer ::= AnnotationAttachment* documentationAttachment? (public)? (native)? new ObjectInitializerParameterList CallableUnitBody {pin=5}
+ObjectInitializer ::= AnnotationAttachment* documentationAttachment? (public)? new ObjectInitializerParameterList CallableUnitBody {pin=4}
 
 ObjectInitializerParameterList ::= LEFT_PARENTHESIS ObjectParameterList? RIGHT_PARENTHESIS {pin=1}
 
@@ -372,7 +372,7 @@ FutureTypeName ::= future (LT TypeName GT)? {pin=1}
 XmlTypeName ::= xml (LT (LEFT_BRACE XmlNamespaceName RIGHT_BRACE)? XmlLocalName GT)? {pin=1}
 JsonTypeName ::= json (LT NameReference GT)? {pin=1}
 TableTypeName ::= table (LT NameReference GT)? {pin=1}
-StreamTypeName ::= stream (LT NameReference GT)? {pin=1}
+StreamTypeName ::= stream (LT TypeName GT)? {pin=1}
 
 // Todo - Pin 1?
 FunctionTypeName ::= function LEFT_PARENTHESIS (ParameterList | ParameterTypeNameList)? RIGHT_PARENTHESIS ReturnParameter? {pin=3}

@@ -155,7 +155,6 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OR;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ORDER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OUTER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.OUTPUT;
-import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PACKAGE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PACKAGE_REFERENCE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PARAMETER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.PARAMETER_LIST;
@@ -241,7 +240,6 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
     private static SpacingBuilder createSpaceBuilder(CodeStyleSettings settings) {
         return new SpacingBuilder(settings, BallerinaLanguage.INSTANCE)
                 // Keywords
-                .around(PACKAGE).spaceIf(true)
                 .around(IMPORT).spaceIf(true)
                 .around(AS).spaceIf(true)
                 .around(PUBLIC).spaceIf(true)

@@ -168,7 +168,6 @@ public interface BallerinaTypes {
   IElementType ORDER_BY_VARIABLE = new BallerinaCompositeElementType("ORDER_BY_VARIABLE");
   IElementType ORG_NAME = BallerinaElementTypeFactory.stubFactory("ORG_NAME");
   IElementType OUTPUT_RATE_LIMIT = new BallerinaCompositeElementType("OUTPUT_RATE_LIMIT");
-  IElementType PACKAGE_DECLARATION = BallerinaElementTypeFactory.stubFactory("PACKAGE_DECLARATION");
   IElementType PACKAGE_NAME = BallerinaElementTypeFactory.stubFactory("PACKAGE_NAME");
   IElementType PACKAGE_REFERENCE = BallerinaElementTypeFactory.stubFactory("PACKAGE_REFERENCE");
   IElementType PACKAGE_VERSION = BallerinaElementTypeFactory.stubFactory("PACKAGE_VERSION");
@@ -412,7 +411,6 @@ public interface BallerinaTypes {
   IElementType ORDER = new BallerinaTokenType("order");
   IElementType OUTER = new BallerinaTokenType("outer");
   IElementType OUTPUT = new BallerinaTokenType("output");
-  IElementType PACKAGE = new BallerinaTokenType("package");
   IElementType PIPE = new BallerinaTokenType("|");
   IElementType POW = new BallerinaTokenType("^");
   IElementType PRIVATE = new BallerinaTokenType("private");
@@ -930,9 +928,6 @@ public interface BallerinaTypes {
       }
       else if (type == OUTPUT_RATE_LIMIT) {
         return new BallerinaOutputRateLimitImpl(node);
-      }
-      else if (type == PACKAGE_DECLARATION) {
-        return new BallerinaPackageDeclarationImpl(node);
       }
       else if (type == PACKAGE_NAME) {
         return new BallerinaPackageNameImpl(node);

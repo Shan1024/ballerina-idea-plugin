@@ -26,6 +26,9 @@ public interface BallerinaServiceBody extends BallerinaCompositeElement {
   @NotNull
   List<BallerinaEndpointDefinition> getEndpointDefinitionList();
 
+  @Nullable
+  BallerinaNamespaceDeclarationStatement getNamespaceDeclarationStatement();
+
   @NotNull
   List<BallerinaResourceDefinition> getResourceDefinitionList();
 

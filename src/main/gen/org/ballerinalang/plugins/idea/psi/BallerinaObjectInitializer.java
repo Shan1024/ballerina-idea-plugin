@@ -35,9 +35,6 @@ public interface BallerinaObjectInitializer extends BallerinaCompositeElement {
   @Nullable
   BallerinaDocumentationAttachment getDocumentationAttachment();
 
-  @Nullable
-  PsiElement getNative();
-
   @NotNull
   PsiElement getNew();
 

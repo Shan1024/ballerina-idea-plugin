@@ -28,7 +28,6 @@ import org.ballerinalang.plugins.idea.stubs.types.BallerinaGlobalVariableDefinit
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaNameReferenceStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaNamespaceDeclarationStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaOrgNameStubElementType;
-import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageDeclarationStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageNameStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageReferenceStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaPackageVersionStubElementType;
@@ -62,8 +61,8 @@ public class BallerinaElementTypeFactory {
     public static IStubElementType stubFactory(@NotNull String name) {
         // NOTE - If the element type is wrong, an error will occur while loading the lexer in syntax highlighting.
         switch (name) {
-            case "PACKAGE_DECLARATION":
-                return BallerinaPackageDeclarationStubElementType.INSTANCE;
+//            case "PACKAGE_DECLARATION":
+//                return BallerinaPackageDeclarationStubElementType.INSTANCE;
             case "FUNCTION_DEFINITION":
                 return new BallerinaFunctionDefinitionStubElementType(name);
             case "TYPE_DEFINITION":

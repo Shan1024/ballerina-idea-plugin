@@ -43,8 +43,8 @@ public class BallerinaStreamTypeNameImpl extends BallerinaCompositeElementImpl i
 
   @Override
   @Nullable
-  public BallerinaNameReference getNameReference() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaNameReference.class);
+  public BallerinaTypeName getTypeName() {
+    return PsiTreeUtil.getChildOfType(this, BallerinaTypeName.class);
   }
 
   @Override
