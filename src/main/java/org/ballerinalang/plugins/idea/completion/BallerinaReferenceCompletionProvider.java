@@ -39,11 +39,10 @@ public class BallerinaReferenceCompletionProvider extends CompletionProvider<Com
         // Todo - Refactor
         if (reference instanceof BallerinaNameReferenceReference) {
             BallerinaNameReferenceReference nameReferenceReference = (BallerinaNameReferenceReference) reference;
-            // Todo - Fix performance issue
-//            if (!nameReferenceReference.processResolveVariants(new BallerinaActionInvocationProcessor(result,
-//                    element, true))) {
-//                return;
-//            }
+            if (!nameReferenceReference.processResolveVariants(new BallerinaActionInvocationProcessor(result,
+                    element, true))) {
+                return;
+            }
             nameReferenceReference.processResolveVariants(new BallerinaPackageNameProcessor(result, element, true));
             if (!nameReferenceReference.processResolveVariants(new BallerinaStatementProcessor(result, element,
                     true))) {

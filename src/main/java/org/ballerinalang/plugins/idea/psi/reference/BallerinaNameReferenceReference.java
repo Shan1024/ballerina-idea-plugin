@@ -62,13 +62,13 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
     public PsiElement resolveInner() {
         BallerinaScopeProcessorBase processor;
         PsiElement result;
-        // Todo - Fix performance issue
-//        processor = new BallerinaActionInvocationProcessor(null, myElement, false);
-//        processResolveVariants(processor);
-//        result = processor.getResult();
-//        if (result != null) {
-//            return result;
-//        }
+
+        processor = new BallerinaActionInvocationProcessor(null, myElement, false);
+        processResolveVariants(processor);
+        result = processor.getResult();
+        if (result != null) {
+            return result;
+        }
 
         BallerinaRecordKey recordKey = PsiTreeUtil.getParentOfType(myElement, BallerinaRecordKey.class);
         if (recordKey == null) {
@@ -133,17 +133,17 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
         if (!(containingFile instanceof BallerinaFile)) {
             return false;
         }
-        // Todo - Fix performance issue
-//        if (processor instanceof BallerinaActionInvocationProcessor) {
-//            PsiElement prevVisibleLeaf = PsiTreeUtil.prevVisibleLeaf(myElement);
-//            if (prevVisibleLeaf != null && prevVisibleLeaf instanceof LeafPsiElement) {
-//                if (((LeafPsiElement) prevVisibleLeaf).getElementType() == BallerinaTypes.RARROW) {
-//                    if (!processor.execute(containingFile, ResolveState.initial())) {
-//                        return false;
-//                    }
-//                }
-//            }
-//        }
+
+        if (processor instanceof BallerinaActionInvocationProcessor) {
+            PsiElement prevVisibleLeaf = PsiTreeUtil.prevVisibleLeaf(myElement);
+            if (prevVisibleLeaf != null && prevVisibleLeaf instanceof LeafPsiElement) {
+                if (((LeafPsiElement) prevVisibleLeaf).getElementType() == BallerinaTypes.RARROW) {
+                    if (!processor.execute(containingFile, ResolveState.initial())) {
+                        return false;
+                    }
+                }
+            }
+        }
 
         if (processor instanceof BallerinaPackageNameProcessor) {
             if (!processor.execute(containingFile, ResolveState.initial())) {
