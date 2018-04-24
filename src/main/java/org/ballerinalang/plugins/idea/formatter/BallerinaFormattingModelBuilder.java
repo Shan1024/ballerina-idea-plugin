@@ -334,6 +334,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(SEMICOLON).spaceIf(false)
                 .after(LEFT_BRACKET).spaceIf(false)
                 .before(RIGHT_BRACKET).spaceIf(false)
+                .around(EQUAL_GT).spaceIf(true)
 
                 // Function signature
                 .between(LEFT_PARENTHESIS, RIGHT_PARENTHESIS).spaceIf(false)
@@ -347,6 +348,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .before(RETURN_TYPE).spaceIf(false)
                 .after(RETURN_TYPE).spaceIf(true)
                 .between(UNION_TYPE_NAME, IDENTIFIER).spaceIf(true)
+
                 .around(UNION_TYPE_NAME).spaceIf(false)
                 .between(TUPLE_TYPE_NAME, IDENTIFIER).spaceIf(true)
                 .around(TUPLE_TYPE_NAME).spaceIf(false)
@@ -500,7 +502,6 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(RARROW).spaceIf(false)
 
                 .around(LARROW).spaceIf(true)
-                .around(EQUAL_GT).spaceIf(true)
                 .around(ELVIS).spaceIf(true)
 
                 .around(COMPOUND_OPERATOR).spaceIf(true)
