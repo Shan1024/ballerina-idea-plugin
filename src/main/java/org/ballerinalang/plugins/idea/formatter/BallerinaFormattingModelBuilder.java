@@ -377,7 +377,7 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .afterInside(COMMA, RECORD_LITERAL).spaceIf(true)
                 .between(RECORD_KEY_VALUE, RIGHT_BRACE).spaceIf(false)
                 .between(LEFT_BRACE, RIGHT_BRACE).spaceIf(false)
-                .around(RECORD_LITERAL_BODY).spaceIf(false)
+                .around(RECORD_LITERAL_BODY).spaceIf(true)
 
                 // Statements
                 .between(LEFT_BRACE, RIGHT_BRACE).spaceIf(false)
