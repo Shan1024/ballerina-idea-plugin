@@ -31,7 +31,9 @@ import com.intellij.openapi.util.Iconable;
 import com.intellij.openapi.util.Key;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.BallerinaIcons;
+import org.ballerinalang.plugins.idea.completion.inserthandlers.BracesInsertHandler;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaFormalParameterList;
@@ -40,6 +42,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaObjectCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaReturnParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaReturnType;
+import org.ballerinalang.plugins.idea.psi.BallerinaUserDefineTypeName;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaTopLevelDefinition;
 import org.jetbrains.annotations.NotNull;
@@ -703,11 +706,12 @@ public class BallerinaCompletionUtils {
 
     @NotNull
     public static LookupElement createAnnotationLookupElement(@NotNull PsiElement identifier) {
-        // Todo - change insert handler depending on the type of the annotation.
+        BallerinaUserDefineTypeName userDefineTypeName = PsiTreeUtil.getNextSiblingOfType(identifier,
+                BallerinaUserDefineTypeName.class);
         LookupElementBuilder builder = LookupElementBuilder.createWithSmartPointer(identifier.getText(), identifier)
                 .withTypeText("Annotation").withIcon(BallerinaIcons.ANNOTATION)
-                //                    .withInsertHandler(BracesInsertHandler.INSTANCE_WITH_AUTO_POPUP)
-                ;
+                .withInsertHandler(userDefineTypeName != null ? BracesInsertHandler.INSTANCE_WITH_AUTO_POPUP
+                        : AddSpaceInsertHandler.INSTANCE);
         return PrioritizedLookupElement.withPriority(builder, ANNOTATION_PRIORITY);
     }
 
