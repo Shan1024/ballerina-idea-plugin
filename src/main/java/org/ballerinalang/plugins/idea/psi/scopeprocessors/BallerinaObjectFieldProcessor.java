@@ -66,15 +66,20 @@ public class BallerinaObjectFieldProcessor extends BallerinaScopeProcessorBase {
                         for (BallerinaFieldDefinition ballerinaFieldDefinition : fieldList) {
                             PsiElement identifier = ballerinaFieldDefinition.getIdentifier();
                             if (myResult != null) {
+                                BallerinaTypeName fieldTypeName = ballerinaFieldDefinition.getTypeName();
+                                String type;
+                                if (fieldTypeName instanceof BallerinaRecordTypeName) {
+                                    type = "record {}";
+                                } else {
+                                    type = fieldTypeName.getText();
+                                }
                                 myResult.addElement(BallerinaCompletionUtils.createFieldLookupElement(identifier, owner,
-                                        ballerinaFieldDefinition.getTypeName().getText(),
-                                        BallerinaPsiImplUtil.getObjectFieldDefaultValue(ballerinaFieldDefinition),
+                                        type, BallerinaPsiImplUtil.getObjectFieldDefaultValue(ballerinaFieldDefinition),
                                         false));
                             } else if (myElement.getText().equals(identifier.getText())) {
                                 add(identifier);
                             }
                         }
-
                     }
                 }
             }

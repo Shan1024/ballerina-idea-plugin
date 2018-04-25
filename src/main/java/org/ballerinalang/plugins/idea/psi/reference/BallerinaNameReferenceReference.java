@@ -28,11 +28,16 @@ import org.ballerinalang.plugins.idea.psi.BallerinaAnnotationAttachment;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
 import org.ballerinalang.plugins.idea.psi.BallerinaAssignmentStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaBlock;
+import org.ballerinalang.plugins.idea.psi.BallerinaExpression;
+import org.ballerinalang.plugins.idea.psi.BallerinaFieldDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaRecordKey;
+import org.ballerinalang.plugins.idea.psi.BallerinaRecordKeyValue;
+import org.ballerinalang.plugins.idea.psi.BallerinaRecordLiteralExpression;
+import org.ballerinalang.plugins.idea.psi.BallerinaRecordTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypes;
@@ -49,6 +54,7 @@ import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaTopLevelScope
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -99,6 +105,41 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
             processResolveVariants(processor);
             return processor.getResult();
         } else {
+            BallerinaRecordLiteralExpression recordLiteralExpression = PsiTreeUtil.getParentOfType(myElement,
+                    BallerinaRecordLiteralExpression.class);
+            if (recordLiteralExpression != null) {
+                BallerinaRecordKeyValue recordKeyValue = PsiTreeUtil.getParentOfType(recordLiteralExpression,
+                        BallerinaRecordKeyValue.class);
+                if (recordKeyValue != null) {
+                    recordKey = recordKeyValue.getRecordKey();
+                    BallerinaExpression expression = recordKey.getExpression();
+                    if (expression == null) {
+                        return null;
+                    }
+                    PsiReference reference = expression.findReferenceAt(expression.getTextLength());
+                    if (reference == null) {
+                        return null;
+                    }
+                    PsiElement resolvedElement = reference.resolve();
+                    if (resolvedElement == null || !(resolvedElement.getParent() instanceof BallerinaFieldDefinition)) {
+                        return null;
+                    }
+                    BallerinaFieldDefinition fieldDefinition = (BallerinaFieldDefinition) resolvedElement.getParent();
+                    PsiElement type = BallerinaPsiImplUtil.getTypeNameFromField(fieldDefinition);
+                    if (type instanceof BallerinaRecordTypeName) {
+                        Collection<BallerinaFieldDefinition> fieldDefinitions = PsiTreeUtil.findChildrenOfType(type,
+                                BallerinaFieldDefinition.class);
+                        for (BallerinaFieldDefinition definition : fieldDefinitions) {
+                            PsiElement definitionIdentifier = definition.getIdentifier();
+
+                            if (definitionIdentifier.getText().equals(myElement.getText())) {
+                                return definitionIdentifier;
+                            }
+                        }
+                    }
+                }
+            }
+
             BallerinaVariableDefinitionStatement definitionStatement = PsiTreeUtil.getParentOfType(recordKey,
                     BallerinaVariableDefinitionStatement.class);
             if (definitionStatement != null) {

@@ -25,7 +25,6 @@ import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Collection;
 import java.util.List;
 
 public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
@@ -115,7 +114,7 @@ public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
                                 // Note - Child is passed here instead of identifier because it is is top level
                                 // definition.
                                 myResult.addElement(BallerinaCompletionUtils.createFieldLookupElement(
-                                        definitionIdentifier, ownerName, typeName, null, true));
+                                        definitionIdentifier, ownerName, typeName, null, false));
                             } else if (myElement.getText().equals(definitionIdentifier.getText())) {
                                 add(definitionIdentifier);
                             }

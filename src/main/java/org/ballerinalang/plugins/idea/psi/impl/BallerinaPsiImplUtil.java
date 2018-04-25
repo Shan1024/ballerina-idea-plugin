@@ -86,6 +86,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaPackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageVersion;
 import org.ballerinalang.plugins.idea.psi.BallerinaParameterWithType;
+import org.ballerinalang.plugins.idea.psi.BallerinaRecordTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaReturnParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaReturnType;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleTypeName;
@@ -1013,6 +1014,8 @@ public class BallerinaPsiImplUtil {
             }
             return reference.resolve();
         } else if (typeName instanceof BallerinaArrayTypeName) {
+            return typeName;
+        } else if (typeName instanceof BallerinaRecordTypeName) {
             return typeName;
         }
         return null;
