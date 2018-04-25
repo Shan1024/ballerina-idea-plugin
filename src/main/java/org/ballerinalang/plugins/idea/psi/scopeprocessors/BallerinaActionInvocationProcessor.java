@@ -87,7 +87,7 @@ public class BallerinaActionInvocationProcessor extends BallerinaScopeProcessorB
                             PsiElement typeDefinition = BallerinaPsiImplUtil.getCachedType(nameReference);
                             if (typeDefinition instanceof BallerinaTypeDefinition) {
                                 BallerinaTypeDefinition typeName = (BallerinaTypeDefinition) typeDefinition;
-                                parent = BallerinaPsiImplUtil.getMatchingFunctionFromObject(typeName, "getEndpoint");
+                                parent = BallerinaPsiImplUtil.getReturnTypeFromObjectFunction(typeName, "getEndpoint");
                             }
                         }
                         if (parent == null) {
@@ -96,7 +96,7 @@ public class BallerinaActionInvocationProcessor extends BallerinaScopeProcessorB
                         if (parent instanceof BallerinaTypeDefinition) {
                             // Todo - Remove duplicate below
                             BallerinaTypeDefinition clientConnector =
-                                    BallerinaPsiImplUtil.getMatchingFunctionFromObject((BallerinaTypeDefinition) parent,
+                                    BallerinaPsiImplUtil.getReturnTypeFromObjectFunction((BallerinaTypeDefinition) parent,
                                             "getCallerActions");
                             if (clientConnector != null) {
                                 BallerinaObjectFunctionProcessor ballerinaObjectFunctionProcessor
@@ -127,7 +127,7 @@ public class BallerinaActionInvocationProcessor extends BallerinaScopeProcessorB
 
                         // Todo - Remove duplicate above
                         BallerinaTypeDefinition clientConnector =
-                                BallerinaPsiImplUtil.getMatchingFunctionFromObject((BallerinaTypeDefinition)
+                                BallerinaPsiImplUtil.getReturnTypeFromObjectFunction((BallerinaTypeDefinition)
                                         resolvedType.getParent(), "getCallerActions");
                         if (clientConnector != null) {
                             BallerinaObjectFunctionProcessor ballerinaObjectFunctionProcessor

@@ -494,9 +494,29 @@ public class BallerinaPsiImplUtil {
     }
 
     @Nullable
-    public static BallerinaTypeDefinition getMatchingFunctionFromObject(@NotNull BallerinaTypeDefinition
-                                                                                ballerinaTypeDefinition,
-                                                                        @NotNull String name) {
+    public static BallerinaFormalParameterList getParameterFromObjectFunction(@NotNull BallerinaTypeDefinition
+                                                                                      ballerinaTypeDefinition,
+                                                                              @NotNull String name) {
+        Collection<BallerinaObjectFunctionDefinition> ballerinaObjectFunctionDefinitions =
+                PsiTreeUtil.findChildrenOfType(ballerinaTypeDefinition, BallerinaObjectFunctionDefinition.class);
+        for (BallerinaObjectFunctionDefinition ballerinaObjectFunctionDefinition : ballerinaObjectFunctionDefinitions) {
+            BallerinaObjectCallableUnitSignature objectCallableUnitSignature = ballerinaObjectFunctionDefinition
+                    .getObjectCallableUnitSignature();
+            if (objectCallableUnitSignature == null) {
+                continue;
+            }
+            BallerinaAnyIdentifierName anyIdentifierName = objectCallableUnitSignature.getAnyIdentifierName();
+            if (name.equals(anyIdentifierName.getText())) {
+                return objectCallableUnitSignature.getFormalParameterList();
+            }
+        }
+        return null;
+    }
+
+    @Nullable
+    public static BallerinaTypeDefinition getReturnTypeFromObjectFunction(@NotNull BallerinaTypeDefinition
+                                                                                  ballerinaTypeDefinition,
+                                                                          @NotNull String name) {
         Collection<BallerinaObjectFunctionDefinition> ballerinaObjectFunctionDefinitions =
                 PsiTreeUtil.findChildrenOfType(ballerinaTypeDefinition, BallerinaObjectFunctionDefinition.class);
         for (BallerinaObjectFunctionDefinition ballerinaObjectFunctionDefinition : ballerinaObjectFunctionDefinitions) {

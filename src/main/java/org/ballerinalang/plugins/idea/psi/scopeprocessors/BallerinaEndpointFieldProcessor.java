@@ -6,38 +6,41 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
-import org.ballerinalang.plugins.idea.psi.BallerinaAnnotationAttachment;
-import org.ballerinalang.plugins.idea.psi.BallerinaAnnotationDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaEndpointType;
 import org.ballerinalang.plugins.idea.psi.BallerinaExpression;
 import org.ballerinalang.plugins.idea.psi.BallerinaFieldDefinition;
-import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaFormalParameterList;
+import org.ballerinalang.plugins.idea.psi.BallerinaParameter;
+import org.ballerinalang.plugins.idea.psi.BallerinaParameterWithType;
 import org.ballerinalang.plugins.idea.psi.BallerinaRecordKey;
 import org.ballerinalang.plugins.idea.psi.BallerinaRecordKeyValue;
 import org.ballerinalang.plugins.idea.psi.BallerinaRecordLiteralExpression;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
-import org.ballerinalang.plugins.idea.psi.BallerinaUserDefineTypeName;
+import org.ballerinalang.plugins.idea.psi.BallerinaTypeName;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.List;
 
-public class BallerinaAnnotationFieldProcessor extends BallerinaScopeProcessorBase {
+public class BallerinaEndpointFieldProcessor extends BallerinaScopeProcessorBase {
 
     @Nullable
     private final CompletionResultSet myResult;
     @NotNull
     private final PsiElement myElement;
 
-    public BallerinaAnnotationFieldProcessor(@Nullable CompletionResultSet result, @NotNull PsiElement element,
-                                             boolean isCompletion) {
+    public BallerinaEndpointFieldProcessor(@Nullable CompletionResultSet result, @NotNull PsiElement element,
+                                           boolean isCompletion) {
         super(element, element, isCompletion);
         myResult = result;
         myElement = element;
     }
 
     protected boolean accept(@NotNull PsiElement element) {
-        return element instanceof BallerinaAnnotationAttachment;
+        return element instanceof BallerinaEndpointDefinition;
     }
 
     @Override
@@ -87,23 +90,42 @@ public class BallerinaAnnotationFieldProcessor extends BallerinaScopeProcessorBa
                     }
                 }
             } else {
-                BallerinaNameReference nameReference = ((BallerinaAnnotationAttachment) element).getNameReference();
-                PsiReference reference = nameReference.getIdentifier().getReference();
-                if (reference == null) {
+                BallerinaEndpointType endpointType = ((BallerinaEndpointDefinition) element).getEndpointType();
+                if (endpointType == null) {
                     return true;
                 }
-                PsiElement resolvedElement = reference.resolve();
-                if (resolvedElement == null || !(resolvedElement.getParent() instanceof
-                        BallerinaAnnotationDefinition)) {
+                PsiElement endpointTypeIdentifier = endpointType.getNameReference().getIdentifier();
+                PsiReference endpointTypeReference = endpointTypeIdentifier.getReference();
+                if (endpointTypeReference == null) {
                     return true;
                 }
-                BallerinaUserDefineTypeName userDefineTypeName = PsiTreeUtil.getNextSiblingOfType(resolvedElement,
-                        BallerinaUserDefineTypeName.class);
-                if (userDefineTypeName == null) {
+                PsiElement resolvedElement = endpointTypeReference.resolve();
+                if (resolvedElement == null) {
                     return true;
                 }
-                PsiElement identifier = userDefineTypeName.getNameReference().getIdentifier();
-                reference = identifier.getReference();
+                PsiElement parent = resolvedElement.getParent();
+                if (!(parent instanceof BallerinaTypeDefinition)) {
+                    return true;
+                }
+
+                BallerinaFormalParameterList parameterListNode =
+                        BallerinaPsiImplUtil.getParameterFromObjectFunction(((BallerinaTypeDefinition) parent), "init");
+                if (parameterListNode == null || parameterListNode.getParameterList().isEmpty()) {
+                    return true;
+                }
+
+                BallerinaParameter firstParameter = parameterListNode.getParameterList().get(0);
+
+                List<BallerinaParameterWithType> parameterWithTypeList = firstParameter.getParameterWithTypeList();
+
+                if (parameterWithTypeList.isEmpty()) {
+                    return true;
+                }
+                BallerinaParameterWithType parameterWithType = parameterWithTypeList.get(0);
+
+                BallerinaTypeName typeName = parameterWithType.getTypeName();
+
+                PsiReference reference = typeName.findReferenceAt(typeName.getTextLength());
                 if (reference == null) {
                     return true;
                 }

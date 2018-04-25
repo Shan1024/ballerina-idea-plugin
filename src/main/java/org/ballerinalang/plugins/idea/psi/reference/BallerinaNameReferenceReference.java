@@ -28,6 +28,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaAnnotationAttachment;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
 import org.ballerinalang.plugins.idea.psi.BallerinaAssignmentStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaBlock;
+import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaExpression;
 import org.ballerinalang.plugins.idea.psi.BallerinaFieldDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
@@ -46,6 +47,7 @@ import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaActionInvocationProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaAnnotationFieldProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaBlockProcessor;
+import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaEndpointFieldProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaObjectFieldProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaPackageNameProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaScopeProcessorBase;
@@ -79,6 +81,13 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
         }
 
         processor = new BallerinaAnnotationFieldProcessor(null, myElement, false);
+        processResolveVariants(processor);
+        result = processor.getResult();
+        if (result != null) {
+            return result;
+        }
+
+        processor = new BallerinaEndpointFieldProcessor(null, myElement, false);
         processResolveVariants(processor);
         result = processor.getResult();
         if (result != null) {
@@ -201,6 +210,17 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
                     BallerinaAnnotationAttachment.class);
             if (recordKey != null && annotationAttachment != null) {
                 if (!processor.execute(annotationAttachment, ResolveState.initial())) {
+                    return false;
+                }
+            }
+        }
+
+        if (processor instanceof BallerinaEndpointFieldProcessor) {
+            BallerinaRecordKey recordKey = PsiTreeUtil.getParentOfType(myElement, BallerinaRecordKey.class);
+            BallerinaEndpointDefinition endpointDefinition = PsiTreeUtil.getParentOfType(myElement,
+                    BallerinaEndpointDefinition.class);
+            if (recordKey != null && endpointDefinition != null) {
+                if (!processor.execute(endpointDefinition, ResolveState.initial())) {
                     return false;
                 }
             }
