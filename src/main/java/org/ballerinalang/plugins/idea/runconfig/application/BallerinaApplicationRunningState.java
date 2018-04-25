@@ -114,9 +114,9 @@ public class BallerinaApplicationRunningState extends BallerinaRunningState<Ball
                     .withParameterString(myConfiguration.getBallerinaToolParams()).withParameters(filePath);
         }
 
-        if (kind == RunConfigurationKind.SERVICE) {
-            ballerinaExecutor.withParameters("-s");
-        }
+        //        if (kind == RunConfigurationKind.SERVICE) {
+        //            ballerinaExecutor.withParameters("-s");
+        //        }
 
         // If debugging mode is running, we need to add the debugging flag.
         if (isDebug()) {
