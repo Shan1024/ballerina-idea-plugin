@@ -11,8 +11,12 @@ import org.ballerinalang.plugins.idea.psi.BallerinaArrayTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaAttachedObject;
 import org.ballerinalang.plugins.idea.psi.BallerinaBuiltInReferenceTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaField;
+import org.ballerinalang.plugins.idea.psi.BallerinaFieldDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaFieldDefinitionList;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaMapArrayVariableReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaRecordTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleVariableReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
@@ -21,6 +25,7 @@ import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
 import java.util.List;
 
 public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
@@ -88,6 +93,36 @@ public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
 
             // Todo - Refactor and remove duplication in BallerinaInvocationProcessor
             if (type != null) {
+                // Anonymous objects.
+                if (type instanceof BallerinaRecordTypeName) {
+                    PsiElement definition = type.getParent();
+                    BallerinaIdentifier ownerName = PsiTreeUtil.getChildOfType(definition, BallerinaIdentifier.class);
+                    if (ownerName != null) {
+                        BallerinaFieldDefinitionList fieldDefinitionList = PsiTreeUtil.findChildOfType(type,
+                                BallerinaFieldDefinitionList.class);
+                        List<BallerinaFieldDefinition> fieldDefinitions =
+                                PsiTreeUtil.getChildrenOfTypeAsList(fieldDefinitionList,
+                                        BallerinaFieldDefinition.class);
+                        for (BallerinaFieldDefinition fieldDefinition : fieldDefinitions) {
+                            PsiElement definitionIdentifier = fieldDefinition.getIdentifier();
+                            String typeName = "Type";
+                            PsiElement typeNameFromField = BallerinaPsiImplUtil.getTypeNameFromField(fieldDefinition);
+                            if (typeNameFromField != null) {
+                                typeName = typeNameFromField.getText();
+                            }
+                            if (myResult != null) {
+                                // Todo - Conside oncommit, onabort, etc and set the insert handler
+                                // Note - Child is passed here instead of identifier because it is is top level
+                                // definition.
+                                myResult.addElement(BallerinaCompletionUtils.createFieldLookupElement(
+                                        definitionIdentifier, ownerName, typeName, null, true));
+                            } else if (myElement.getText().equals(definitionIdentifier.getText())) {
+                                add(definitionIdentifier);
+                            }
+                        }
+                    }
+                    return false;
+                }
                 PsiElement ballerinaTypeDefinition = type.getParent();
                 if (ballerinaTypeDefinition instanceof BallerinaTypeDefinition) {
                     BallerinaObjectFieldProcessor ballerinaFieldProcessor = new BallerinaObjectFieldProcessor(myResult,
@@ -109,7 +144,7 @@ public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
                     }
                 } else if (type instanceof BallerinaSimpleTypeName) {
                     List<BallerinaFunctionDefinition> functionDefinitions =
-                            BallerinaPsiImplUtil.suggestBuiltInFunctions(((BallerinaSimpleTypeName) type));
+                            BallerinaPsiImplUtil.suggestBuiltInFunctions(type);
                     for (BallerinaFunctionDefinition functionDefinition : functionDefinitions) {
                         PsiElement identifier = functionDefinition.getIdentifier();
                         if (identifier != null) {
