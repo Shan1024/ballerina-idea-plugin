@@ -92,7 +92,7 @@ public class BallerinaAnnotator implements Annotator {
             } else if (elementType == BallerinaTypes.DOCUMENTATION_TEMPLATE_START ||
                     elementType == BallerinaTypes.DEPRECATED_TEMPLATE_START) {
                 // This uses an overloaded method so that the color can be easily changeable if required.
-                annotateKeyword(element, holder, BallerinaSyntaxHighlightingColors.KEYWORD);
+                annotateKeyword(element, holder, BallerinaSyntaxHighlightingColors.DOCUMENTATION);
             } else if (elementType == BallerinaTypes.DOCUMENTATION_TEMPLATE_ATTRIBUTE_START) {
                 // Doc type.
                 String msg = null;
@@ -136,7 +136,8 @@ public class BallerinaAnnotator implements Annotator {
                 annotateInlineCode(element, holder);
             } else if (elementType == BallerinaTypes.DOCUMENTATION_TEMPLATE_TEXT
                     || elementType == BallerinaTypes.DEPRECATED_TEMPLATE_TEXT) {
-                annotateText(element, holder);
+                Annotation annotation = holder.createInfoAnnotation(element, null);
+                annotation.setTextAttributes(BallerinaSyntaxHighlightingColors.DOCUMENTATION);
             } else if (elementType == BallerinaTypes.IDENTIFIER) {
                 if (parent.getNode().getElementType() == BallerinaTypes.DOCUMENTATION_TEMPLATE_ATTRIBUTE_DESCRIPTION) {
                     Annotation annotation = holder.createInfoAnnotation(element, null);
