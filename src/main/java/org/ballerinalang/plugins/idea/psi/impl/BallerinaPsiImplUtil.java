@@ -40,6 +40,7 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
+import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
@@ -111,6 +112,7 @@ import org.ballerinalang.plugins.idea.stubs.BallerinaPackageVersionStub;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
@@ -1373,5 +1375,18 @@ public class BallerinaPsiImplUtil {
             return null;
         }
         return PsiManager.getInstance(project).findFile(virtualFile);
+    }
+
+    @NotNull
+    public static String getPackage(@NotNull PsiFile file) {
+        Project project = file.getProject();
+        String modulePath = project.getBasePath() + File.separator;
+        String filePath = file.getVirtualFile().getPath();
+        filePath = filePath.replace(modulePath, "");
+        if (!filePath.contains(File.separator)) {
+            return "";
+        }
+        int index = filePath.indexOf(File.separator);
+        return filePath.substring(0, index);
     }
 }
