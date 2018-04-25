@@ -65,6 +65,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DECIMAL_INTEGER_
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DEPRECATED;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DIV;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DOCUMENTATION;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DOCUMENTATION_TEMPLATE_ATTRIBUTE_DESCRIPTION;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DOT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DOUBLE_COLON;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ELLIPSIS;
@@ -505,6 +506,9 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(COMPOUND_OPERATOR).spaceIf(true)
 
                 .around(SAFE_ASSIGNMENT).spaceIf(true)
+
+                // Docs
+                .aroundInside(IDENTIFIER, DOCUMENTATION_TEMPLATE_ATTRIBUTE_DESCRIPTION).spaceIf(false)
                 ;
     }
 
