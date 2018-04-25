@@ -12,6 +12,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.jetbrains.annotations.NotNull;
@@ -44,21 +45,24 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
         if (accept(element)) {
             List<BallerinaDefinition> definitions = ((BallerinaFile) element).getDefinitions();
 
-            if (myElement.getParent().getParent() instanceof BallerinaAnnotationAttachment) {
-                List<BallerinaAnnotationDefinition> annotationDefinitions =
-                        BallerinaPsiImplUtil.suggestBuiltInAnnotations(element);
-                for (BallerinaAnnotationDefinition definition : annotationDefinitions) {
-                    PsiElement identifier = definition.getIdentifier();
-                    if (identifier != null) {
-                        if (myResult != null) {
-                            myResult.addElement(BallerinaCompletionUtils.createAnnotationLookupElement(identifier));
-                            lookupElementsFound = true;
-                        } else if (myElement.getText().equals(identifier.getText())) {
-                            add(identifier);
+            PsiElement parent = myElement.getParent();
+            PsiElement superParent = parent.getParent();
+            if (superParent instanceof BallerinaAnnotationAttachment) {
+                if (!(myElement.getPrevSibling() instanceof BallerinaPackageReference)) {
+                    List<BallerinaAnnotationDefinition> annotationDefinitions =
+                            BallerinaPsiImplUtil.suggestBuiltInAnnotations(element);
+                    for (BallerinaAnnotationDefinition definition : annotationDefinitions) {
+                        PsiElement identifier = definition.getIdentifier();
+                        if (identifier != null) {
+                            if (myResult != null) {
+                                myResult.addElement(BallerinaCompletionUtils.createAnnotationLookupElement(identifier));
+                                lookupElementsFound = true;
+                            } else if (myElement.getText().equals(identifier.getText())) {
+                                add(identifier);
+                            }
                         }
                     }
                 }
-
                 for (BallerinaDefinition definition : definitions) {
                     PsiElement lastChild = definition.getLastChild();
                     if (lastChild instanceof BallerinaAnnotationDefinition) {
