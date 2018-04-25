@@ -24,7 +24,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.BallerinaLanguage;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
-import org.ballerinalang.plugins.idea.psi.BallerinaPackageName;
+import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.jetbrains.annotations.NotNull;
 
 public class BallerinaElementFactory {
@@ -36,9 +36,11 @@ public class BallerinaElementFactory {
     }
 
     @NotNull
-    public static PsiElement createIdentifierFromText(@NotNull Project project, String text) {
-        BallerinaFile file = createFileFromText(project, "package " + text + ";");
-        return file.getPackage().getCompletePackageName().getPackageNameList().get(0).getIdentifier();
+    public static PsiElement createIdentifierFromText(@NotNull Project project, @NotNull String text) {
+        BallerinaFile file = createFileFromText(project, "function " + text + "(){}");
+        BallerinaFunctionDefinition functionDefinition = PsiTreeUtil.findChildOfType(file,
+                BallerinaFunctionDefinition.class);
+        return functionDefinition.getIdentifier();
     }
 
     //    @NotNull
@@ -51,7 +53,7 @@ public class BallerinaElementFactory {
     @NotNull
     public static BallerinaCompletePackageName createCompletePackageName(@NotNull Project project,
                                                                          @NotNull String packageName) {
-        BallerinaFile file = createFileFromText(project, "package " + packageName + ";");
+        BallerinaFile file = createFileFromText(project, "function " + packageName + "(){}");
         return PsiTreeUtil.findChildOfType(file, BallerinaCompletePackageName.class);
     }
 }

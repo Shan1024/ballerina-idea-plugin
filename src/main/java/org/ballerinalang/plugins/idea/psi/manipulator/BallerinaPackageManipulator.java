@@ -33,10 +33,13 @@ public class BallerinaPackageManipulator extends AbstractElementManipulator<Ball
     public BallerinaCompletePackageName handleContentChange(@NotNull BallerinaCompletePackageName packageName,
                                                             @NotNull TextRange range, String newPackagePath)
             throws IncorrectOperationException {
-        String newPackageName = range.replace(packageName.getText(), newPackagePath.replaceAll(File.separator, "."));
-        BallerinaCompletePackageName newCompletePackageName =
-                BallerinaElementFactory.createCompletePackageName(packageName.getProject(), newPackageName);
-        return (BallerinaCompletePackageName) packageName.replace(newCompletePackageName);
+        //        String newPackageName = range.replace(packageName.getText(), newPackagePath.replaceAll(File
+        // .separator, "."));
+        //        BallerinaCompletePackageName newCompletePackageName =
+        //                BallerinaElementFactory.createCompletePackageName(packageName.getProject(), newPackageName);
+        //        return (BallerinaCompletePackageName) packageName.replace(newCompletePackageName);
+        // Todo - Fix properly.
+        return packageName;
     }
 
     @NotNull
