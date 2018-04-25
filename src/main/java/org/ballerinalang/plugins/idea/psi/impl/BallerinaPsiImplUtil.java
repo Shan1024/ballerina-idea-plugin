@@ -1012,6 +1012,8 @@ public class BallerinaPsiImplUtil {
                 return null;
             }
             return reference.resolve();
+        } else if (typeName instanceof BallerinaArrayTypeName) {
+            return typeName;
         }
         return null;
     }

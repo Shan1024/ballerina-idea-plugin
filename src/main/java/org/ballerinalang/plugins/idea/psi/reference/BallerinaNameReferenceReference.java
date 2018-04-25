@@ -24,6 +24,7 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.ballerinalang.plugins.idea.psi.BallerinaAnnotationAttachment;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
 import org.ballerinalang.plugins.idea.psi.BallerinaAssignmentStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaBlock;
@@ -38,6 +39,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaTypes;
 import org.ballerinalang.plugins.idea.psi.BallerinaVariableDefinitionStatement;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaActionInvocationProcessor;
+import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaAnnotationFieldProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaBlockProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaObjectFieldProcessor;
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaPackageNameProcessor;
@@ -64,6 +66,13 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
         PsiElement result;
 
         processor = new BallerinaActionInvocationProcessor(null, myElement, false);
+        processResolveVariants(processor);
+        result = processor.getResult();
+        if (result != null) {
+            return result;
+        }
+
+        processor = new BallerinaAnnotationFieldProcessor(null, myElement, false);
         processResolveVariants(processor);
         result = processor.getResult();
         if (result != null) {
@@ -141,6 +150,17 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
                     if (!processor.execute(containingFile, ResolveState.initial())) {
                         return false;
                     }
+                }
+            }
+        }
+
+        if (processor instanceof BallerinaAnnotationFieldProcessor) {
+            BallerinaRecordKey recordKey = PsiTreeUtil.getParentOfType(myElement, BallerinaRecordKey.class);
+            BallerinaAnnotationAttachment annotationAttachment = PsiTreeUtil.getParentOfType(myElement,
+                    BallerinaAnnotationAttachment.class);
+            if (recordKey != null && annotationAttachment != null) {
+                if (!processor.execute(annotationAttachment, ResolveState.initial())) {
+                    return false;
                 }
             }
         }
