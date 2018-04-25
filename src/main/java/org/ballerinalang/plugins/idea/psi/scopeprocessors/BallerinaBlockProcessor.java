@@ -198,9 +198,10 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
                         }
 
                     } else if (firstChild instanceof BallerinaAssignmentStatement) {
-                        BallerinaVariableReference variableReference = ((BallerinaAssignmentStatement) firstChild)
-                                .getVariableReference();
-                        if (variableReference instanceof BallerinaSimpleVariableReference) {
+                        BallerinaAssignmentStatement assignmentStatement = (BallerinaAssignmentStatement) firstChild;
+                        BallerinaVariableReference variableReference = assignmentStatement.getVariableReference();
+                        if (variableReference instanceof BallerinaSimpleVariableReference
+                                && assignmentStatement.getVar() != null) {
                             BallerinaNameReference nameReference = ((BallerinaSimpleVariableReference)
                                     variableReference).getNameReference();
                             PsiElement identifier = nameReference.getIdentifier();
