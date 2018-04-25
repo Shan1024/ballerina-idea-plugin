@@ -58,6 +58,7 @@ import org.ballerinalang.plugins.idea.debugger.protocol.Command;
 import org.ballerinalang.plugins.idea.debugger.protocol.Response;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageDeclaration;
+import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -437,8 +438,18 @@ public class BallerinaDebugProcess extends XDebugProcess {
                         int line = breakpointPosition.getLine();
                         Project project = getSession().getProject();
 
-                        String name = file.getName();
-                        String packagePath = ".";
+                        // Get package path.
+                        String packagePath = BallerinaPsiImplUtil.getPackage(project, file);
+                        if (packagePath.isEmpty()) {
+                            packagePath = ".";
+                        }
+
+                        // Get relative file path in the package.
+                        String name = BallerinaPsiImplUtil.getFilePathInPackage(project, file);
+                        if (name.isEmpty()) {
+                            name = file.getName();
+                        }
+
                         // Only get relative path if a package declaration is present in the file.
                         PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
                         BallerinaPackageDeclaration packageDeclarationNode = PsiTreeUtil.findChildOfType(psiFile,

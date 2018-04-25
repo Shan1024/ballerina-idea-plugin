@@ -1389,4 +1389,28 @@ public class BallerinaPsiImplUtil {
         int index = filePath.indexOf(File.separator);
         return filePath.substring(0, index);
     }
+
+    @NotNull
+    public static String getPackage(@NotNull Project project, @NotNull VirtualFile virtualFile) {
+        String modulePath = project.getBasePath() + File.separator;
+        String filePath = virtualFile.getPath();
+        filePath = filePath.replace(modulePath, "");
+        if (!filePath.contains(File.separator)) {
+            return "";
+        }
+        int index = filePath.indexOf(File.separator);
+        return filePath.substring(0, index);
+    }
+
+    @NotNull
+    public static String getFilePathInPackage(@NotNull Project project, @NotNull VirtualFile virtualFile) {
+        String projectPath = project.getBasePath() + File.separator;
+        String filePath = virtualFile.getPath();
+        filePath = filePath.replace(projectPath, "");
+        if (!filePath.contains(File.separator)) {
+            return "";
+        }
+        int index = filePath.indexOf(File.separator);
+        return filePath.substring(index + 1);
+    }
 }

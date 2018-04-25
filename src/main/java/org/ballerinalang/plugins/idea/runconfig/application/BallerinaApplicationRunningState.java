@@ -82,16 +82,19 @@ public class BallerinaApplicationRunningState extends BallerinaRunningState<Ball
         if (file != null) {
             module = ModuleUtilCore.findModuleForPsiElement(file);
         }
+        if (module == null) {
+            throw new ExecutionException("Cannot find module for the file '" + file.getVirtualFile().getPath() + "'");
+        }
         if (filePath.isEmpty()) {
             filePath = myConfiguration.getFilePath();
             if (baseDir != null) {
                 filePath = filePath.replace(baseDir.getPath() + File.separator, "");
             }
 
-//            if (filePath.contains(File.separator)) {
-//                int index = filePath.indexOf(File.separator);
-//                filePath = filePath.substring(0, index);
-//            }
+            //            if (filePath.contains(File.separator)) {
+            //                int index = filePath.indexOf(File.separator);
+            //                filePath = filePath.substring(0, index);
+            //            }
         }
 
         BallerinaExecutor ballerinaExecutor;
