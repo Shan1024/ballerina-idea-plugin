@@ -87,6 +87,11 @@ public class BallerinaApplicationRunningState extends BallerinaRunningState<Ball
             if (baseDir != null) {
                 filePath = filePath.replace(baseDir.getPath() + File.separator, "");
             }
+
+            if (filePath.contains(File.separator)) {
+                int index = filePath.indexOf(File.separator);
+                filePath = filePath.substring(0, index);
+            }
         }
 
         BallerinaExecutor ballerinaExecutor;
