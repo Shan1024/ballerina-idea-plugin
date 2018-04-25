@@ -113,10 +113,8 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 public class BallerinaPsiImplUtil {
 
@@ -1359,5 +1357,21 @@ public class BallerinaPsiImplUtil {
             }
         }
         return null;
+    }
+
+    /**
+     * Find the specified file in the project and returns the corresponding {@link PsiFile}.
+     *
+     * @param project a project
+     * @param path    file path
+     * @return corresponding psi file
+     */
+    @Nullable
+    public static PsiFile findFileInProject(@NotNull Project project, @NotNull String path) {
+        VirtualFile virtualFile = LocalFileSystem.getInstance().findFileByPath(path);
+        if (virtualFile == null) {
+            return null;
+        }
+        return PsiManager.getInstance(project).findFile(virtualFile);
     }
 }

@@ -24,8 +24,11 @@ import com.intellij.execution.process.ProcessEvent;
 import com.intellij.execution.process.ProcessHandler;
 import com.intellij.execution.runners.ExecutionEnvironment;
 import com.intellij.openapi.module.Module;
+import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
+import com.intellij.psi.PsiFile;
+import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.ballerinalang.plugins.idea.runconfig.BallerinaRunningState;
 import org.ballerinalang.plugins.idea.runconfig.RunConfigurationKind;
 import org.ballerinalang.plugins.idea.sdk.BallerinaSdkService;
@@ -71,27 +74,35 @@ public class BallerinaApplicationRunningState extends BallerinaRunningState<Ball
         Project project = myConfiguration.getProject();
         VirtualFile baseDir = project.getBaseDir();
         String filePath = myConfiguration.getPackage();
+
+        // Find the file in the project. This is needed to find the module. Otherwise if the file is in a sub-module
+        // and the SDK for the project is not set, SDK home path will be null.
+        PsiFile file = BallerinaPsiImplUtil.findFileInProject(project, myConfiguration.getFilePath());
+        Module module = null;
+        if (file != null) {
+            module = ModuleUtilCore.findModuleForPsiElement(file);
+        }
         if (filePath.isEmpty()) {
             filePath = myConfiguration.getFilePath();
             if (baseDir != null) {
                 filePath = filePath.replace(baseDir.getPath() + File.separator, "");
             }
         }
-        BallerinaExecutor ballerinaExecutor;
 
+        BallerinaExecutor ballerinaExecutor;
         if (baseDir != null) {
             ballerinaExecutor = executor
                     .withParameters("run")
                     .withParameters("--sourceroot")
                     .withParameters(baseDir.getPath())
                     .withBallerinaPath(BallerinaSdkService.getInstance(getConfiguration().getProject())
-                            .getSdkHomePath(null))
+                            .getSdkHomePath(module))
                     .withParameterString(myConfiguration.getBallerinaToolParams()).withParameters(filePath);
         } else {
             ballerinaExecutor = executor
                     .withParameters("run")
                     .withBallerinaPath(BallerinaSdkService.getInstance(getConfiguration().getProject())
-                            .getSdkHomePath(null))
+                            .getSdkHomePath(module))
                     .withParameterString(myConfiguration.getBallerinaToolParams()).withParameters(filePath);
         }
 
