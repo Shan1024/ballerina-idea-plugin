@@ -6,7 +6,9 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.ballerinalang.plugins.idea.psi.BallerinaEndpointDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaEndpointParameter;
+import org.ballerinalang.plugins.idea.psi.BallerinaEndpointType;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaServiceDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaServiceEndpointAttachments;
@@ -54,46 +56,79 @@ public class BallerinaActionInvocationProcessor extends BallerinaScopeProcessorB
                     if (resolvedElement == null) {
                         return true;
                     }
-                    if (!(resolvedElement.getParent() instanceof BallerinaEndpointParameter)) {
-                        return true;
-                    }
-                    BallerinaServiceDefinition ballerinaServiceDefinition =
-                            PsiTreeUtil.getParentOfType(resolvedElement, BallerinaServiceDefinition.class);
-                    if (ballerinaServiceDefinition == null) {
-                        return true;
-                    }
-                    PsiElement parent = null;
-
-                    BallerinaServiceEndpointAttachments serviceEndpointAttachments =
-                            ballerinaServiceDefinition.getServiceEndpointAttachments();
-                    if (serviceEndpointAttachments != null) {
-                        List<BallerinaNameReference> nameReferenceList =
-                                serviceEndpointAttachments.getNameReferenceList();
-                        BallerinaNameReference ballerinaNameReference = nameReferenceList.get(0);
-                        PsiElement type = BallerinaPsiImplUtil.getCachedType(ballerinaNameReference);
-                        if (type == null) {
+                    PsiElement definition = resolvedElement.getParent();
+                    if (definition instanceof BallerinaEndpointParameter) {
+                        BallerinaServiceDefinition ballerinaServiceDefinition =
+                                PsiTreeUtil.getParentOfType(resolvedElement, BallerinaServiceDefinition.class);
+                        if (ballerinaServiceDefinition == null) {
                             return true;
                         }
-                        parent = type.getParent();
+                        PsiElement parent = null;
 
-                    } else {
-                        BallerinaNameReference nameReference = ballerinaServiceDefinition.getNameReference();
-                        if (nameReference == null) {
+                        BallerinaServiceEndpointAttachments serviceEndpointAttachments =
+                                ballerinaServiceDefinition.getServiceEndpointAttachments();
+                        if (serviceEndpointAttachments != null) {
+                            List<BallerinaNameReference> nameReferenceList =
+                                    serviceEndpointAttachments.getNameReferenceList();
+                            if (!nameReferenceList.isEmpty()) {
+                                BallerinaNameReference ballerinaNameReference = nameReferenceList.get(0);
+                                PsiElement type = BallerinaPsiImplUtil.getCachedType(ballerinaNameReference);
+                                if (type == null) {
+                                    return true;
+                                }
+                                parent = type.getParent();
+                            }
+                        }
+                        if (parent == null) {
+                            BallerinaNameReference nameReference = ballerinaServiceDefinition.getNameReference();
+                            if (nameReference == null) {
+                                return true;
+                            }
+                            PsiElement typeDefinition = BallerinaPsiImplUtil.getCachedType(nameReference);
+                            if (typeDefinition instanceof BallerinaTypeDefinition) {
+                                BallerinaTypeDefinition typeName = (BallerinaTypeDefinition) typeDefinition;
+                                parent = BallerinaPsiImplUtil.getMatchingFunctionFromObject(typeName, "getEndpoint");
+                            }
+                        }
+                        if (parent == null) {
                             return true;
                         }
-                        PsiElement typeDefinition = BallerinaPsiImplUtil.getCachedType(nameReference);
-                        if (typeDefinition instanceof BallerinaTypeDefinition) {
-                            BallerinaTypeDefinition typeName = (BallerinaTypeDefinition) typeDefinition;
-                            parent = BallerinaPsiImplUtil.getMatchingFunctionFromObject(typeName, "getEndpoint");
+                        if (parent instanceof BallerinaTypeDefinition) {
+                            // Todo - Remove duplicate below
+                            BallerinaTypeDefinition clientConnector =
+                                    BallerinaPsiImplUtil.getMatchingFunctionFromObject((BallerinaTypeDefinition) parent,
+                                            "getCallerActions");
+                            if (clientConnector != null) {
+                                BallerinaObjectFunctionProcessor ballerinaObjectFunctionProcessor
+                                        = new BallerinaObjectFunctionProcessor(myResult, myElement, isCompletion());
+                                ballerinaObjectFunctionProcessor.execute(clientConnector, ResolveState.initial());
+                                PsiElement result = ballerinaObjectFunctionProcessor.getResult();
+                                if (!isCompletion() && result != null) {
+                                    add(result);
+                                }
+                                return false;
+                            }
                         }
-                    }
-                    if (parent == null) {
-                        return true;
-                    }
-                    if (parent instanceof BallerinaTypeDefinition) {
+                    } else if (definition instanceof BallerinaEndpointDefinition) {
+                        BallerinaEndpointType endpointType = ((BallerinaEndpointDefinition) definition)
+                                .getEndpointType();
+                        if (endpointType == null) {
+                            return true;
+                        }
+                        PsiElement identifier = endpointType.getNameReference().getIdentifier();
+                        PsiReference identifierReference = identifier.getReference();
+                        if (identifierReference == null) {
+                            return true;
+                        }
+                        PsiElement resolvedType = identifierReference.resolve();
+                        if (resolvedType == null || !(resolvedType.getParent() instanceof BallerinaTypeDefinition)) {
+                            return true;
+                        }
+
+                        // Todo - Remove duplicate above
                         BallerinaTypeDefinition clientConnector =
-                                BallerinaPsiImplUtil.getMatchingFunctionFromObject((BallerinaTypeDefinition) parent,
-                                        "getCallerActions");
+                                BallerinaPsiImplUtil.getMatchingFunctionFromObject((BallerinaTypeDefinition)
+                                        resolvedType.getParent(), "getCallerActions");
                         if (clientConnector != null) {
                             BallerinaObjectFunctionProcessor ballerinaObjectFunctionProcessor
                                     = new BallerinaObjectFunctionProcessor(myResult, myElement, isCompletion());
@@ -104,6 +139,7 @@ public class BallerinaActionInvocationProcessor extends BallerinaScopeProcessorB
                             }
                             return false;
                         }
+                        return false;
                     }
                 }
             }
