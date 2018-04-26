@@ -43,6 +43,8 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
+import org.ballerinalang.plugins.idea.psi.BallerinaActionInvocation;
+import org.ballerinalang.plugins.idea.psi.BallerinaActionInvocationExpression;
 import org.ballerinalang.plugins.idea.psi.BallerinaAlias;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnnotationDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
@@ -448,7 +450,40 @@ public class BallerinaPsiImplUtil {
                         }
                     } else if (expression instanceof BallerinaTypeConversionExpression) {
                         result = ((BallerinaTypeConversionExpression) expression).getTypeName();
+                    } else if (expression instanceof BallerinaActionInvocationExpression) {
+                        BallerinaActionInvocation actionInvocation =
+                                ((BallerinaActionInvocationExpression) expression).getActionInvocation();
+                        BallerinaFunctionInvocation functionInvocation = actionInvocation.getFunctionInvocation();
+                        PsiElement identifier = functionInvocation.getFunctionNameReference().getAnyIdentifierName()
+                                .getIdentifier();
+                        if (identifier == null) {
+                            return CachedValueProvider.Result.create(null, ballerinaAssignmentStatement);
+                        }
+                        PsiReference reference = identifier.getReference();
+                        if (reference == null) {
+                            return CachedValueProvider.Result.create(null, ballerinaAssignmentStatement);
+                        }
+                        PsiElement resolvedElement = reference.resolve();
+                        if (resolvedElement == null
+                                || !(resolvedElement.getParent() instanceof BallerinaAnyIdentifierName)) {
+                            return CachedValueProvider.Result.create(null, ballerinaAssignmentStatement);
+                        }
+                        BallerinaObjectCallableUnitSignature signature = PsiTreeUtil.getParentOfType
+                                (resolvedElement, BallerinaObjectCallableUnitSignature.class);
+                        if (signature == null) {
+                            return CachedValueProvider.Result.create(null, ballerinaAssignmentStatement);
+                        }
+                        BallerinaReturnParameter returnParameter = signature.getReturnParameter();
+                        if (returnParameter == null) {
+                            return CachedValueProvider.Result.create(null, ballerinaAssignmentStatement);
+                        }
+                        BallerinaReturnType returnType = returnParameter.getReturnType();
+                        if (returnType == null) {
+                            return CachedValueProvider.Result.create(null, ballerinaAssignmentStatement);
+                        }
+                        result = returnType.getTypeName();
                     }
+                    // Todo - Add more types
                 }
             }
             return CachedValueProvider.Result.create(result, ballerinaAssignmentStatement);
@@ -692,7 +727,8 @@ public class BallerinaPsiImplUtil {
                             } else if (referenceList.size() == 2) {
                                 // This is used to get the type for the lookup element.
                                 if (referenceList.get(1).getText().equals(variableReference.getText())) {
-                                    return CachedValueProvider.Result.create(getType(foreachStatement), variableReference);
+                                    return CachedValueProvider.Result.create(getType(foreachStatement),
+                                            variableReference);
                                 }
                             }
                         }
@@ -714,7 +750,8 @@ public class BallerinaPsiImplUtil {
                 // Todo - Move to util
                 PsiElement parent = resolvedElement.getParent();
                 if (parent instanceof BallerinaVariableDefinitionStatement) {
-                    return CachedValueProvider.Result.create(resolveBallerinaType(((BallerinaVariableDefinitionStatement) parent)), variableReference);
+                    return CachedValueProvider.Result.create(resolveBallerinaType((
+                            (BallerinaVariableDefinitionStatement) parent)), variableReference);
                 } else if (parent instanceof BallerinaGlobalVariableDefinition) {
                     return CachedValueProvider.Result.create(
                             resolveBallerinaType(((BallerinaGlobalVariableDefinition) parent)), variableReference);
@@ -750,12 +787,14 @@ public class BallerinaPsiImplUtil {
                                             .getVariableReferenceList();
                                     // If there is only one element in the list, we resolve the type.
                                     if (referenceList.size() == 1) {
-                                        return CachedValueProvider.Result.create(getType(foreachStatement), variableReference);
+                                        return CachedValueProvider.Result.create(getType(foreachStatement),
+                                                variableReference);
                                     } else if (referenceList.size() == 2) {
                                         // If there are two items, the first one will be the index. So we only resolve
                                         // the second element.
                                         if (variableReference.getText().equals(referenceList.get(1).getText())) {
-                                            return CachedValueProvider.Result.create(getType(foreachStatement), variableReference);
+                                            return CachedValueProvider.Result.create(getType(foreachStatement),
+                                                    variableReference);
                                         }
                                     }
                                 }
@@ -773,7 +812,7 @@ public class BallerinaPsiImplUtil {
                             PsiTreeUtil.getParentOfType(parent, BallerinaTupleDestructuringStatement.class);
                     if (tupleDestructuringStatement != null) {
                         PsiElement type = getType(tupleDestructuringStatement, resolvedElement);
-                       int newIndex = getVariableIndex(resolvedElement);
+                        int newIndex = getVariableIndex(resolvedElement);
                         if (!(type instanceof BallerinaTupleTypeName) || newIndex == -1) {
                             return CachedValueProvider.Result.create(type, variableReference);
                         }
@@ -831,7 +870,8 @@ public class BallerinaPsiImplUtil {
                     return CachedValueProvider.Result.create(resolvedElement, variableReference);
                 }
             } else if (variableReference instanceof BallerinaInvocationReference) {
-                return CachedValueProvider.Result.create(getType((BallerinaInvocationReference) variableReference), variableReference);
+                return CachedValueProvider.Result.create(getType((BallerinaInvocationReference) variableReference),
+                        variableReference);
             }
             return CachedValueProvider.Result.create(null, variableReference);
         });
