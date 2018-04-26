@@ -228,8 +228,11 @@ public class BallerinaBlock extends AbstractBlock {
                 || parentElementType == BallerinaTypes.SERVICE_BODY
         )) {
             return Indent.getNormalIndent();
-        } else if (parentElementType == BallerinaTypes.CALLABLE_UNIT_SIGNATURE) {
-            return Indent.getNormalIndent();
+        } else if (parentElementType == BallerinaTypes.CALLABLE_UNIT_SIGNATURE||
+                parentElementType == BallerinaTypes.OBJECT_CALLABLE_UNIT_SIGNATURE) {
+            return Indent.getIndent(Indent.Type.NORMAL, true, true);
+        } else if (parentElementType == BallerinaTypes.OBJECT_INITIALIZER_PARAMETER_LIST) {
+            return Indent.getIndent(Indent.Type.NORMAL, true, true);
         } else if (childElementType == BallerinaTypes.RETURN_PARAMETER) {
             return Indent.getNormalIndent();
         } else if (childElementType == BallerinaTypes.RETURN_TYPE) {
