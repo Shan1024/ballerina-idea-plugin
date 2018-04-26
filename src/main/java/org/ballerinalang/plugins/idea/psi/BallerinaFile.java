@@ -19,11 +19,7 @@ package org.ballerinalang.plugins.idea.psi;
 
 import com.intellij.extapi.psi.PsiFileBase;
 import com.intellij.openapi.fileTypes.FileType;
-import com.intellij.openapi.module.Module;
-import com.intellij.openapi.module.ModuleUtilCore;
-import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.FileViewProvider;
-import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.stubs.StubElement;
 import com.intellij.psi.tree.IElementType;
@@ -41,10 +37,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 
-import javax.swing.Icon;
+import javax.swing.*;
 
 public class BallerinaFile extends PsiFileBase {
 
@@ -72,18 +67,18 @@ public class BallerinaFile extends PsiFileBase {
         return super.getIcon(flags);
     }
 
-    @Nullable
-    public BallerinaPackageDeclaration getPackage() {
-        return CachedValuesManager.getCachedValue(this, () -> {
-            BallerinaFileStub stub = getStub();
-            if (stub != null) {
-//                StubElement<BallerinaPackageDeclaration> packageClauseStub = stub.getPackageClauseStub();
-//                return CachedValueProvider.Result.create(packageClauseStub != null ? packageClauseStub.getPsi() :
-//                        null, this);
-            }
-            return CachedValueProvider.Result.create(findChildByClass(BallerinaPackageDeclaration.class), this);
-        });
-    }
+//    @Nullable
+//    public BallerinaPackageDeclaration getPackage() {
+//        return CachedValuesManager.getCachedValue(this, () -> {
+//            BallerinaFileStub stub = getStub();
+//            if (stub != null) {
+////                StubElement<BallerinaPackageDeclaration> packageClauseStub = stub.getPackageClauseStub();
+////                return CachedValueProvider.Result.create(packageClauseStub != null ? packageClauseStub.getPsi() :
+////                        null, this);
+//            }
+//            return CachedValueProvider.Result.create(findChildByClass(BallerinaPackageDeclaration.class), this);
+//        });
+//    }
 
     @Nullable
     @Override

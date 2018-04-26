@@ -40,7 +40,6 @@ import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.CachedValueProvider;
 import com.intellij.psi.util.CachedValuesManager;
 import com.intellij.psi.util.PsiTreeUtil;
-import com.intellij.psi.util.PsiUtilCore;
 import com.intellij.util.ArrayUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.util.containers.MultiMap;
@@ -81,7 +80,6 @@ import org.ballerinalang.plugins.idea.psi.BallerinaNullableTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaOrgName;
-import org.ballerinalang.plugins.idea.psi.BallerinaPackageDeclaration;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageVersion;
@@ -107,7 +105,6 @@ import org.ballerinalang.plugins.idea.psi.BallerinaXmlTypeName;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaCompletePackageNameReferenceSet;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaPackageNameReference;
 import org.ballerinalang.plugins.idea.sdk.BallerinaSdkService;
-import org.ballerinalang.plugins.idea.stubs.BallerinaPackageDeclarationStub;
 import org.ballerinalang.plugins.idea.stubs.BallerinaPackageReferenceStub;
 import org.ballerinalang.plugins.idea.stubs.BallerinaPackageVersionStub;
 import org.jetbrains.annotations.NotNull;
@@ -140,15 +137,15 @@ public class BallerinaPsiImplUtil {
         BUILTIN_VARIABLE_TYPES.add("xml");
     }
 
-    @Nullable
-    public static String getName(@NotNull BallerinaPackageDeclaration packageClause) {
-        BallerinaPackageDeclarationStub stub = packageClause.getStub();
-        if (stub != null) {
-            return stub.getName();
-        }
-        PsiElement identifier = packageClause.getCompletePackageName();
-        return identifier != null ? identifier.getText() : null;
-    }
+//    @Nullable
+//    public static String getName(@NotNull BallerinaPackageDeclaration packageClause) {
+//        BallerinaPackageDeclarationStub stub = packageClause.getStub();
+//        if (stub != null) {
+//            return stub.getName();
+//        }
+//        PsiElement identifier = packageClause.getCompletePackageName();
+//        return identifier != null ? identifier.getText() : null;
+//    }
 
     @Nullable
     public static String getName(@NotNull BallerinaPackageName ballerinaPackageName) {

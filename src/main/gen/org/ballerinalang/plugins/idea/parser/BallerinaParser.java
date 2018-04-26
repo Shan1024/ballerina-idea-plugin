@@ -4618,7 +4618,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // LEFT_BRACE (/*ResourceDefinition+ | EndpointDefinition+ ResourceDefinition* |*/ EndpointDefinition* (VariableDefinitionStatementInService* | NamespaceDeclarationStatement) ResourceDefinition*) RIGHT_BRACE
+  // LEFT_BRACE (/*ResourceDefinition+ | EndpointDefinition+ ResourceDefinition* |*/ EndpointDefinition* (VariableDefinitionStatementInService | NamespaceDeclarationStatement)* ResourceDefinition*) RIGHT_BRACE
   public static boolean ServiceBody(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ServiceBody")) return false;
     if (!nextTokenIs(b, LEFT_BRACE)) return false;
@@ -4631,7 +4631,7 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // EndpointDefinition* (VariableDefinitionStatementInService* | NamespaceDeclarationStatement) ResourceDefinition*
+  // EndpointDefinition* (VariableDefinitionStatementInService | NamespaceDeclarationStatement)* ResourceDefinition*
   private static boolean ServiceBody_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ServiceBody_1")) return false;
     boolean r;
@@ -4655,27 +4655,27 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return true;
   }
 
-  // VariableDefinitionStatementInService* | NamespaceDeclarationStatement
+  // (VariableDefinitionStatementInService | NamespaceDeclarationStatement)*
   private static boolean ServiceBody_1_1(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "ServiceBody_1_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = ServiceBody_1_1_0(b, l + 1);
-    if (!r) r = NamespaceDeclarationStatement(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // VariableDefinitionStatementInService*
-  private static boolean ServiceBody_1_1_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "ServiceBody_1_1_0")) return false;
     int c = current_position_(b);
     while (true) {
-      if (!VariableDefinitionStatementInService(b, l + 1)) break;
-      if (!empty_element_parsed_guard_(b, "ServiceBody_1_1_0", c)) break;
+      if (!ServiceBody_1_1_0(b, l + 1)) break;
+      if (!empty_element_parsed_guard_(b, "ServiceBody_1_1", c)) break;
       c = current_position_(b);
     }
     return true;
+  }
+
+  // VariableDefinitionStatementInService | NamespaceDeclarationStatement
+  private static boolean ServiceBody_1_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "ServiceBody_1_1_0")) return false;
+    boolean r;
+    Marker m = enter_section_(b);
+    r = VariableDefinitionStatementInService(b, l + 1);
+    if (!r) r = NamespaceDeclarationStatement(b, l + 1);
+    exit_section_(b, m, null, r);
+    return r;
   }
 
   // ResourceDefinition*

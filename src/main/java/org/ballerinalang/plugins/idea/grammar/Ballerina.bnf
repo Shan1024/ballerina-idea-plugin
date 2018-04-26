@@ -200,7 +200,7 @@ private TopLevelDefinitionRecover ::= !(DOCUMENTATION_TEMPLATE_START|DEPRECATED_
 
 ServiceDefinition ::= service (LT NameReference GT)? identifier ServiceEndpointAttachments?  ServiceBody {pin=1}
 ServiceEndpointAttachments ::= bind (NameReference (COMMA NameReference)* | RecordLiteral) {pin=1}
-ServiceBody ::= LEFT_BRACE (/*ResourceDefinition+ | EndpointDefinition+ ResourceDefinition* |*/ EndpointDefinition* (VariableDefinitionStatementInService* | NamespaceDeclarationStatement) ResourceDefinition*) RIGHT_BRACE /*{pin=1}*/
+ServiceBody ::= LEFT_BRACE (/*ResourceDefinition+ | EndpointDefinition+ ResourceDefinition* |*/ EndpointDefinition* (VariableDefinitionStatementInService | NamespaceDeclarationStatement)* ResourceDefinition*) RIGHT_BRACE /*{pin=1}*/
 
 // Note - Always sync with VariableDefinitionStatement
 VariableDefinitionStatementInService ::= /*<<isNotAResourceDefinition>> VariableDefinitionStatement*/ TypeName identifier VariableAssignment? SEMICOLON {elementType=VariableDefinitionStatement}

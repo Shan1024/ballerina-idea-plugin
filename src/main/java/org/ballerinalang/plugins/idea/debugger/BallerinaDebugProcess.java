@@ -32,9 +32,6 @@ import com.intellij.openapi.application.ReadAction;
 import com.intellij.openapi.diagnostic.Logger;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiManager;
-import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.containers.ContainerUtil;
 import com.intellij.xdebugger.XDebugProcess;
 import com.intellij.xdebugger.XDebugSession;
@@ -56,8 +53,6 @@ import org.ballerinalang.plugins.idea.debugger.dto.BreakPoint;
 import org.ballerinalang.plugins.idea.debugger.dto.Message;
 import org.ballerinalang.plugins.idea.debugger.protocol.Command;
 import org.ballerinalang.plugins.idea.debugger.protocol.Response;
-import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
-import org.ballerinalang.plugins.idea.psi.BallerinaPackageDeclaration;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -448,19 +443,6 @@ public class BallerinaDebugProcess extends XDebugProcess {
                         String name = BallerinaPsiImplUtil.getFilePathInPackage(project, file);
                         if (name.isEmpty()) {
                             name = file.getName();
-                        }
-
-                        // Only get relative path if a package declaration is present in the file.
-                        PsiFile psiFile = PsiManager.getInstance(project).findFile(file);
-                        BallerinaPackageDeclaration packageDeclarationNode = PsiTreeUtil.findChildOfType(psiFile,
-                                BallerinaPackageDeclaration.class);
-                        if (packageDeclarationNode != null) {
-                            BallerinaCompletePackageName packagePathNode =
-                                    PsiTreeUtil.getChildOfType(packageDeclarationNode,
-                                            BallerinaCompletePackageName.class);
-                            if (packagePathNode != null && !packagePathNode.getText().isEmpty()) {
-                                packagePath = packagePathNode.getText();
-                            }
                         }
 
                         stringBuilder.append("{\"packagePath\":\"").append(packagePath).append("\", ");

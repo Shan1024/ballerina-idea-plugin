@@ -48,9 +48,9 @@ public class BallerinaServiceBodyImpl extends BallerinaCompositeElementImpl impl
   }
 
   @Override
-  @Nullable
-  public BallerinaNamespaceDeclarationStatement getNamespaceDeclarationStatement() {
-    return PsiTreeUtil.getChildOfType(this, BallerinaNamespaceDeclarationStatement.class);
+  @NotNull
+  public List<BallerinaNamespaceDeclarationStatement> getNamespaceDeclarationStatementList() {
+    return PsiTreeUtil.getChildrenOfTypeAsList(this, BallerinaNamespaceDeclarationStatement.class);
   }
 
   @Override
