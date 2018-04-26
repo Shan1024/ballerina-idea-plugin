@@ -47,6 +47,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ASSIGN;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.ATTACHMENT_POINT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.AWAIT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BIND;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BLOCK;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BREAK;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BUT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BY;
@@ -136,6 +137,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MINUTE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MOD;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MONTH;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MUL;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NAMED_PATTERN;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NAME_REFERENCE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NATIVE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NEW;
@@ -192,6 +194,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SIMPLE_VARIABLE_
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SNAPSHOT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SOME;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.START;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.STATEMENT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.STREAM;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SUB;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.TABLE;
@@ -443,7 +446,6 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .before(INDEX).spaceIf(false)
 
                 .before(MATCH_EXPRESSION).spaceIf(true)
-                .around(MATCH_EXPRESSION_PATTERN_CLAUSE).spaceIf(true)
                 .between(VARIABLE_REFERENCE_EXPRESSION, MATCH_STATEMENT_BODY).spaceIf(true)
 
                 .between(RETURN, SEMICOLON).spaceIf(false)
@@ -506,6 +508,11 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(COMPOUND_OPERATOR).spaceIf(true)
 
                 .around(SAFE_ASSIGNMENT).spaceIf(true)
+
+                .around(STATEMENT).lineBreakOrForceSpace(true,true)
+                .between(MATCH_EXPRESSION_PATTERN_CLAUSE,COMMA).lineBreakOrForceSpace(false,false)
+                .around(MATCH_EXPRESSION_PATTERN_CLAUSE).lineBreakOrForceSpace(true,true)
+                .aroundInside(BLOCK,NAMED_PATTERN).lineBreakOrForceSpace(true,true)
 
                 // Docs
                 .aroundInside(IDENTIFIER, DOCUMENTATION_TEMPLATE_ATTRIBUTE_DESCRIPTION).spaceIf(false)
