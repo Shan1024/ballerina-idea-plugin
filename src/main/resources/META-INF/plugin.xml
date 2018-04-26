@@ -24,7 +24,6 @@
     <!-- uncomment to enable plugin in all products -->
     <depends>com.intellij.modules.lang</depends>
     <depends optional="true" config-file="java-deps.xml">com.intellij.modules.java</depends>
-    <!--<depends>org.toml.lang</depends>-->
 
     <extensions defaultExtensionNs="com.intellij">
 
@@ -38,18 +37,11 @@
 
         <lang.syntaxHighlighterFactory language="Ballerina"
                                        implementationClass="org.ballerinalang.plugins.idea.highlighting.BallerinaSyntaxHighlighterFactory"/>
-        <!--<stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaPackageIndex"/>-->
         <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaFunctionIndex"/>
-        <!--<stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaStructIndex"/>-->
         <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaGlobalVariableIndex"/>
-        <!--<stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaConnectorIndex"/>-->
-        <!--<stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaEnumIndex"/>-->
         <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaAnnotationIndex"/>
-        <!--<stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaTransformerIndex"/>-->
-        <!--<stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaConstantIndex"/>-->
         <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaGlobalEndpointIndex"/>
         <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaEndpointIndex"/>
-        <!--<stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaActionIndex"/>-->
         <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaWorkerIndex"/>
         <stubIndex implementation="org.ballerinalang.plugins.idea.stubs.index.BallerinaNamespaceIndex"/>
         <!--Add organization index-->
@@ -61,8 +53,6 @@
         <codeInsight.lineMarkerProvider language="Ballerina"
                                         implementationClass="org.ballerinalang.plugins.idea.marker.BallerinaTypeFunctionMarker"/>
 
-        <!--<completion.contributor language="Ballerina"-->
-        <!--implementationClass="org.ballerinalang.plugins.idea.completion.BallerinaReferenceCompletionContributor"/>-->
         <completion.contributor language="Ballerina"
                                 implementationClass="org.ballerinalang.plugins.idea.completion.BallerinaKeywordContributor"/>
         <completion.contributor language="Ballerina"
@@ -98,16 +88,8 @@
         <liveTemplateContext implementation="org.ballerinalang.plugins.idea.template.BallerinaEverywhereContextType"/>
         <liveTemplateContext implementation="org.ballerinalang.plugins.idea.template.BallerinaCodeContextType$File"/>
         <liveTemplateContext implementation="org.ballerinalang.plugins.idea.template.BallerinaCodeContextType$Service"/>
-        <!--<liveTemplateContext-->
-        <!--implementation="org.ballerinalang.plugins.idea.template.BallerinaCodeContextType$Resource"/>-->
-        <!--<liveTemplateContext-->
-        <!--implementation="org.ballerinalang.plugins.idea.template.BallerinaCodeContextType$Connector"/>-->
-        <!--<liveTemplateContext-->
-        <!--implementation="org.ballerinalang.plugins.idea.template.BallerinaCodeContextType$Action"/>-->
         <liveTemplateContext
                 implementation="org.ballerinalang.plugins.idea.template.BallerinaCodeContextType$Function"/>
-        <!--<liveTemplateContext-->
-        <!--implementation="org.ballerinalang.plugins.idea.template.BallerinaCodeContextType$ForkJoin"/>-->
 
         <!--formatter-->
         <lang.formatter language="Ballerina"
@@ -120,8 +102,8 @@
         <quoteHandler fileType="Ballerina file"
                       className="org.ballerinalang.plugins.idea.codeinsight.editoractions.BallerinaQuoteHandler"/>
 
-        <!--<enterHandlerDelegate/>-->
-        <!--implementation="org.ballerinalang.plugins.idea.formatter.BallerinaEnterBetweenBracesHandler"/>-->
+        <enterHandlerDelegate
+                implementation="org.ballerinalang.plugins.idea.formatter.BallerinaEnterBetweenBracesHandler"/>
 
         <!-- sdk -->
         <sdkType implementation="org.ballerinalang.plugins.idea.sdk.BallerinaSdkType"/>
