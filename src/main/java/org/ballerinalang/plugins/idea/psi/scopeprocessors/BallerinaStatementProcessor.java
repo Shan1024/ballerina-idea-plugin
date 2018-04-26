@@ -60,8 +60,10 @@ public class BallerinaStatementProcessor extends BallerinaScopeProcessorBase {
 
 
                     BallerinaExpression expression = parentRecordKey.getExpression();
+                    if (expression == null) {
+                        return true;
+                    }
                     PsiElement resolvedElement = BallerinaPsiImplUtil.getBallerinaTypeFromExpression(expression);
-
                     if (resolvedElement != null) {
                         PsiElement parent = resolvedElement.getParent();
                         if (resolvedElement instanceof BallerinaRecordTypeName) {
