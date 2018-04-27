@@ -96,7 +96,7 @@ public class BallerinaCompletionUtils {
     private static final LookupElementBuilder MAP;
     private static final LookupElementBuilder STREAM;
     private static final LookupElementBuilder TABLE;
-    private static final LookupElementBuilder TYPEDESC;
+    private static final LookupElementBuilder TYPE_DESC;
     private static final LookupElementBuilder XML;
 
     // Other types
@@ -105,15 +105,16 @@ public class BallerinaCompletionUtils {
     // Expression keywords
     private static final LookupElementBuilder AWAIT;
     private static final LookupElementBuilder CHECK;
+    private static final LookupElementBuilder LENGTH_OF;
     private static final LookupElementBuilder START;
+    private static final LookupElementBuilder UNTAINT;
 
     // Other keywords
-    private static final LookupElementBuilder TYPE_OF;
-    private static final LookupElementBuilder LENGTH_OF;
+
     private static final LookupElementBuilder RETURN;
     private static final LookupElementBuilder IF;
     private static final LookupElementBuilder ELSE;
-    private static final LookupElementBuilder CREATE;
+    private static final LookupElementBuilder MATCH;
     private static final LookupElementBuilder FORK;
     private static final LookupElementBuilder JOIN;
     private static final LookupElementBuilder ALL;
@@ -121,7 +122,7 @@ public class BallerinaCompletionUtils {
     private static final LookupElementBuilder TIMEOUT;
     private static final LookupElementBuilder WORKER;
     private static final LookupElementBuilder TRANSACTION;
-    private static final LookupElementBuilder FAILED;
+    private static final LookupElementBuilder RETRY;
     private static final LookupElementBuilder ABORT;
     private static final LookupElementBuilder TRY;
     private static final LookupElementBuilder CATCH;
@@ -159,29 +160,36 @@ public class BallerinaCompletionUtils {
         MAP = createLookupElement("map", AddSpaceInsertHandler.INSTANCE);
         STREAM = createLookupElement("stream", null);
         TABLE = createLookupElement("table", null);
-        TYPEDESC = createLookupElement("typedesc", AddSpaceInsertHandler.INSTANCE);
+        TYPE_DESC = createLookupElement("typedesc", AddSpaceInsertHandler.INSTANCE);
         XML = createLookupElement("xml", AddSpaceInsertHandler.INSTANCE);
 
         VAR = createLookupElement("var", AddSpaceInsertHandler.INSTANCE);
 
         AWAIT = createKeywordLookupElement("await");
         CHECK = createKeywordLookupElement("check");
-        START = createKeywordLookupElement("start");
-
-        TYPE_OF = createKeywordLookupElement("typeof");
         LENGTH_OF = createKeywordLookupElement("lengthof");
+        START = createKeywordLookupElement("start");
+        UNTAINT = createKeywordLookupElement("untaint");
+
+
         RETURN = createKeywordLookupElement("return");
+
         IF = createKeywordLookupElement("if");
         ELSE = createKeywordLookupElement("else");
-        CREATE = createKeywordLookupElement("create");
+
+        MATCH = createKeywordLookupElement("match");
+
         FORK = createKeywordLookupElement("fork");
         JOIN = createKeywordLookupElement("join");
         ALL = createKeywordLookupElement("all");
         SOME = createKeywordLookupElement("some");
         TIMEOUT = createKeywordLookupElement("timeout");
+
         WORKER = createKeywordLookupElement("worker");
+
         TRANSACTION = createKeywordLookupElement("transaction");
-        FAILED = createKeywordLookupElement("failed");
+
+        RETRY = createKeywordLookupElement("retry");
         ABORT = createKeywordLookupElement("abort");
         TRY = createKeywordLookupElement("try");
         CATCH = createKeywordLookupElement("catch");
@@ -303,6 +311,14 @@ public class BallerinaCompletionUtils {
         resultSet.addElement(PrioritizedLookupElement.withPriority(PUBLIC, KEYWORDS_PRIORITY));
     }
 
+    static void addReturnAsLookup(@NotNull CompletionResultSet resultSet) {
+        resultSet.addElement(PrioritizedLookupElement.withPriority(RETURN, KEYWORDS_PRIORITY));
+    }
+
+    static void addLockAsLookup(@NotNull CompletionResultSet resultSet) {
+        resultSet.addElement(PrioritizedLookupElement.withPriority(LOCK, KEYWORDS_PRIORITY));
+    }
+
     /**
      * Adds value types as lookups.
      *
@@ -328,14 +344,16 @@ public class BallerinaCompletionUtils {
         resultSet.addElement(PrioritizedLookupElement.withPriority(MAP, REFERENCE_TYPES_PRIORITY));
         resultSet.addElement(PrioritizedLookupElement.withPriority(STREAM, REFERENCE_TYPES_PRIORITY));
         resultSet.addElement(PrioritizedLookupElement.withPriority(TABLE, REFERENCE_TYPES_PRIORITY));
-        resultSet.addElement(PrioritizedLookupElement.withPriority(TYPEDESC, REFERENCE_TYPES_PRIORITY));
+        resultSet.addElement(PrioritizedLookupElement.withPriority(TYPE_DESC, REFERENCE_TYPES_PRIORITY));
         resultSet.addElement(PrioritizedLookupElement.withPriority(XML, REFERENCE_TYPES_PRIORITY));
     }
 
     static void addExpressionKeywordsAsLookups(@NotNull CompletionResultSet resultSet) {
         resultSet.addElement(PrioritizedLookupElement.withPriority(AWAIT, KEYWORDS_PRIORITY));
         resultSet.addElement(PrioritizedLookupElement.withPriority(CHECK, KEYWORDS_PRIORITY));
+        resultSet.addElement(PrioritizedLookupElement.withPriority(LENGTH_OF, KEYWORDS_PRIORITY));
         resultSet.addElement(PrioritizedLookupElement.withPriority(START, KEYWORDS_PRIORITY));
+        resultSet.addElement(PrioritizedLookupElement.withPriority(UNTAINT, KEYWORDS_PRIORITY));
     }
 
     @NotNull
@@ -378,28 +396,33 @@ public class BallerinaCompletionUtils {
     }
 
     @NotNull
-    static List<LookupElement> getCommonKeywords() {
-        List<LookupElement> lookupElements = new LinkedList<>();
-        lookupElements.add(createKeywordAsLookup(IF));
-        lookupElements.add(createKeywordAsLookup(ELSE));
-        lookupElements.add(createKeywordAsLookup(FORK));
-        lookupElements.add(createKeywordAsLookup(JOIN));
-        lookupElements.add(createKeywordAsLookup(TIMEOUT));
-        lookupElements.add(createKeywordAsLookup(WORKER));
-        lookupElements.add(createKeywordAsLookup(TRANSACTION));
-        lookupElements.add(createKeywordAsLookup(FAILED));
-        lookupElements.add(createKeywordAsLookup(ABORT));
-        lookupElements.add(createKeywordAsLookup(TRY));
-        lookupElements.add(createKeywordAsLookup(CATCH));
-        lookupElements.add(createKeywordAsLookup(FINALLY));
-        lookupElements.add(createKeywordAsLookup(WHILE));
-        lookupElements.add(createKeywordAsLookup(NEXT));
-        lookupElements.add(createKeywordAsLookup(BREAK));
-        lookupElements.add(createKeywordAsLookup(THROW));
-        lookupElements.add(createKeywordAsLookup(FOREACH));
-        lookupElements.add(createKeywordAsLookup(IN));
-        lookupElements.add(createKeywordAsLookup(LOCK));
-        return lookupElements;
+    static void addCommonKeywords(@NotNull CompletionResultSet resultSet) {
+        resultSet.addElement(createKeywordAsLookup(MATCH));
+        resultSet.addElement(createKeywordAsLookup(FOREACH));
+        resultSet.addElement(createKeywordAsLookup(WHILE));
+        resultSet.addElement(createKeywordAsLookup(WORKER));
+
+        resultSet.addElement(createKeywordAsLookup(TRANSACTION));
+
+        resultSet.addElement(createKeywordAsLookup(NEXT));
+        resultSet.addElement(createKeywordAsLookup(BREAK));
+
+        resultSet.addElement(createKeywordAsLookup(IF));
+        resultSet.addElement(createKeywordAsLookup(ELSE));
+
+        resultSet.addElement(createKeywordAsLookup(FORK));
+        resultSet.addElement(createKeywordAsLookup(JOIN));
+        resultSet.addElement(createKeywordAsLookup(TIMEOUT));
+        resultSet.addElement(createKeywordAsLookup(ABORT));
+        resultSet.addElement(createKeywordAsLookup(RETRY));
+
+        resultSet.addElement(createKeywordAsLookup(TRY));
+        resultSet.addElement(createKeywordAsLookup(CATCH));
+        resultSet.addElement(createKeywordAsLookup(FINALLY));
+
+        resultSet.addElement(createKeywordAsLookup(THROW));
+
+        resultSet.addElement(createKeywordAsLookup(IN));
     }
 
     @NotNull
@@ -418,21 +441,6 @@ public class BallerinaCompletionUtils {
         lookupElements.add(createKeywordAsLookup(ALL));
         lookupElements.add(createKeywordAsLookup(SOME));
         return lookupElements;
-    }
-
-    @NotNull
-    static LookupElement getCreateKeyword() {
-        return createKeywordAsLookup(CREATE);
-    }
-
-    @NotNull
-    static LookupElement getTypeOfKeyword() {
-        return createKeywordAsLookup(TYPE_OF);
-    }
-
-    @NotNull
-    static LookupElement getLengthOfKeyword() {
-        return createKeywordAsLookup(LENGTH_OF);
     }
 
 

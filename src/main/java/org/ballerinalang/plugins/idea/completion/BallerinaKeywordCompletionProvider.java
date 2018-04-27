@@ -46,6 +46,8 @@ public class BallerinaKeywordCompletionProvider extends CompletionProvider<Compl
                     }
                     parent = superParent;
                 }
+                // Todo - 'new' in Object initialization
+                // Todo - 'but' in matching
                 if (parent != null && parent.equals(expression)) {
                     BallerinaCompletionUtils.addExpressionKeywordsAsLookups(result);
                     return;
@@ -70,6 +72,9 @@ public class BallerinaKeywordCompletionProvider extends CompletionProvider<Compl
                     BallerinaCompletionUtils.addValueTypesAsLookups(result);
                     BallerinaCompletionUtils.addReferenceTypesAsLookups(result);
                     BallerinaCompletionUtils.addVarAsLookup(result);
+                    BallerinaCompletionUtils.addReturnAsLookup(result);
+                    BallerinaCompletionUtils.addLockAsLookup(result);
+                    BallerinaCompletionUtils.addCommonKeywords(result);
                     return;
                 }
             }
@@ -109,9 +114,6 @@ public class BallerinaKeywordCompletionProvider extends CompletionProvider<Compl
                 BallerinaCompletionUtils.addImportAsLookup(result);
                 return;
             }
-
-
         }
-
     }
 }

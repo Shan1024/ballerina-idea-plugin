@@ -16,6 +16,26 @@
 
 <templateSet group="BallerinaHidden">
 
+    <template description='Lock Statement' id='ballerina_lang_lock' name='ballerina_lang_lock'
+              toReformat='true' toShortenFQNames='true' value='lock {&#10;    $END$&#10;}'>
+        <!--<variable name="END" expression='complete()' defaultValue="" alwaysStopAt="true"/>-->
+        <!--<context>-->
+            <!--<option name="BALLERINA_RESOURCE" value="true"/>-->
+            <!--<option name="BALLERINA_FUNCTION" value="true"/>-->
+            <!--<option name="BALLERINA_ACTION" value="true"/>-->
+        <!--</context>-->
+    </template>
+
+    <template description='Match Statement' id='ballerina_lang_match' name='ballerina_lang_match'
+              toReformat='true' toShortenFQNames='true' value='match $EXPRESSION$ {&#10;    $END$&#10;}'>
+        <variable name="EXPRESSION" expression='complete()' defaultValue="" alwaysStopAt="true"/>
+        <!--<context>-->
+        <!--<option name="BALLERINA_RESOURCE" value="true"/>-->
+        <!--<option name="BALLERINA_FUNCTION" value="true"/>-->
+        <!--<option name="BALLERINA_ACTION" value="true"/>-->
+        <!--</context>-->
+    </template>
+
     <!--<template description='Import Declaration' id='ballerina_lang_import' name='ballerina_lang_import'-->
               <!--toReformat='false' toShortenFQNames='true' value='import $PATH$'>-->
         <!--<variable name="PATH" expression='complete()' defaultValue="" alwaysStopAt="true"/>-->
