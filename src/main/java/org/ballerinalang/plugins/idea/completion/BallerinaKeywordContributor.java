@@ -7,13 +7,16 @@ import com.intellij.patterns.PsiElementPattern;
 import com.intellij.psi.PsiElement;
 import org.ballerinalang.plugins.idea.psi.BallerinaDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
+import org.ballerinalang.plugins.idea.psi.reference.BallerinaNameReferenceReference;
 
 import static com.intellij.patterns.PlatformPatterns.*;
 
 public class BallerinaKeywordContributor extends CompletionContributor implements DumbAware{
 
     public BallerinaKeywordContributor() {
-//        extend(CompletionType.BASIC,importPattern(), new BallerinaKeywordCompletionProvider(BallerinaCompletionUtils
+        extend(CompletionType.BASIC, isBallerinaNameReference(), new BallerinaKeywordCompletionProvider());
+
+        //        extend(CompletionType.BASIC,importPattern(), new BallerinaKeywordCompletionProvider(BallerinaCompletionUtils
 //                .KEYWORDS_PRIORITY, "import"));
 //        extend(CompletionType.BASIC,importPattern(), new BallerinaKeywordCompletionProvider(BallerinaCompletionUtils
 //                .KEYWORDS_PRIORITY, "if"));
@@ -22,6 +25,10 @@ public class BallerinaKeywordContributor extends CompletionContributor implement
 //    public PsiElementPattern.Capture<PsiElement> importPattern() {
 //        return  psiElement().and(psiElement().inside(BallerinaGlobalVariableDefinition.class));
 //    }
+
+    public PsiElementPattern.Capture<PsiElement> isBallerinaNameReference() {
+        return psiElement().withReference(BallerinaNameReferenceReference.class);
+    }
 
     public PsiElementPattern.Capture<PsiElement> importPattern() {
         return  psiElement().inside(BallerinaDefinition.class);

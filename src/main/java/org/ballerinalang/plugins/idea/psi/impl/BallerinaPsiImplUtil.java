@@ -405,7 +405,8 @@ public class BallerinaPsiImplUtil {
      * @return Type of the definition.
      */
     @Nullable
-    public static PsiElement getType(BallerinaVariableDefinitionStatement ballerinaVariableDefinitionStatement) {
+    public static PsiElement getType(
+            BallerinaVariableDefinitionStatement ballerinaVariableDefinitionStatement) {
         return CachedValuesManager.getCachedValue(ballerinaVariableDefinitionStatement, () -> {
             PsiElement result = null;
             PsiElement type = ballerinaVariableDefinitionStatement.getTypeName();

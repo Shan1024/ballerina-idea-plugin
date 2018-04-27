@@ -74,41 +74,38 @@ public class BallerinaCompletionUtils {
     public static final Key<String> REQUIRE_PARAMETERS = Key.create("REQUIRE_PARAMETERS");
 
     // File level keywords
-    private static final LookupElementBuilder PUBLIC;
-    private static final LookupElementBuilder PACKAGE;
-    private static final LookupElementBuilder IMPORT;
-    private static final LookupElementBuilder CONST;
-    private static final LookupElementBuilder SERVICE;
-    private static final LookupElementBuilder RESOURCE;
-    private static final LookupElementBuilder FUNCTION;
-    private static final LookupElementBuilder CONNECTOR;
-    private static final LookupElementBuilder ACTION;
-    private static final LookupElementBuilder STRUCT;
     private static final LookupElementBuilder ANNOTATION;
-    private static final LookupElementBuilder ATTACH;
-    private static final LookupElementBuilder PARAMETER;
+    private static final LookupElementBuilder FUNCTION;
+    private static final LookupElementBuilder IMPORT;
+    private static final LookupElementBuilder PUBLIC;
+    private static final LookupElementBuilder SERVICE;
+    private static final LookupElementBuilder TYPE;
     private static final LookupElementBuilder XMLNS;
-    private static final LookupElementBuilder ENUM;
-    private static final LookupElementBuilder TRANSFORMER;
 
     // Simple types
-    private static final LookupElementBuilder BOOLEAN;
-    private static final LookupElementBuilder INT;
-    private static final LookupElementBuilder FLOAT;
-    private static final LookupElementBuilder STRING;
     private static final LookupElementBuilder BLOB;
+    private static final LookupElementBuilder BOOLEAN;
+    private static final LookupElementBuilder FLOAT;
+    private static final LookupElementBuilder INT;
+    private static final LookupElementBuilder STRING;
 
     // Reference types
-    private static final LookupElementBuilder MESSAGE;
-    private static final LookupElementBuilder MAP;
-    private static final LookupElementBuilder XML;
+    private static final LookupElementBuilder ANY;
+    private static final LookupElementBuilder FUTURE;
     private static final LookupElementBuilder JSON;
-    private static final LookupElementBuilder DATATABLE;
+    private static final LookupElementBuilder MAP;
+    private static final LookupElementBuilder STREAM;
+    private static final LookupElementBuilder TABLE;
+    private static final LookupElementBuilder TYPEDESC;
+    private static final LookupElementBuilder XML;
 
     // Other types
-    private static final LookupElementBuilder ANY;
     private static final LookupElementBuilder VAR;
-    private static final LookupElementBuilder TYPE;
+
+    // Expression keywords
+    private static final LookupElementBuilder AWAIT;
+    private static final LookupElementBuilder CHECK;
+    private static final LookupElementBuilder START;
 
     // Other keywords
     private static final LookupElementBuilder TYPE_OF;
@@ -139,42 +136,37 @@ public class BallerinaCompletionUtils {
 
     private static final LookupElementBuilder TRUE;
     private static final LookupElementBuilder FALSE;
-    private static final LookupElementBuilder NULL;
 
 
     static {
-        PUBLIC = createKeywordLookupElement("public");
-        PACKAGE = createKeywordLookupElement("package");
-        IMPORT = createKeywordLookupElement("import");
-        CONST = createKeywordLookupElement("const");
-        SERVICE = createKeywordLookupElement("service");
-        RESOURCE = createKeywordLookupElement("resource");
-        FUNCTION = createKeywordLookupElement("function");
-        CONNECTOR = createKeywordLookupElement("connector");
-        ACTION = createKeywordLookupElement("action");
-        STRUCT = createKeywordLookupElement("struct");
         ANNOTATION = createKeywordLookupElement("annotation");
-        ATTACH = createKeywordLookupElement("attach");
-        PARAMETER = createKeywordLookupElement("parameter");
+        FUNCTION = createKeywordLookupElement("function");
+        IMPORT = createKeywordLookupElement("import");
+        PUBLIC = createKeywordLookupElement("public");
+        SERVICE = createKeywordLookupElement("service");
+        TYPE = createKeywordLookupElement("type");
         XMLNS = createKeywordLookupElement("xmlns");
-        ENUM = createKeywordLookupElement("enum");
-        TRANSFORMER = createKeywordLookupElement("transformer");
 
-        BOOLEAN = createTypeLookupElement("boolean", AddSpaceInsertHandler.INSTANCE);
-        INT = createTypeLookupElement("int", AddSpaceInsertHandler.INSTANCE);
-        FLOAT = createTypeLookupElement("float", AddSpaceInsertHandler.INSTANCE);
-        STRING = createTypeLookupElement("string", AddSpaceInsertHandler.INSTANCE);
-        BLOB = createTypeLookupElement("blob", AddSpaceInsertHandler.INSTANCE);
+        BLOB = createLookupElement("blob", AddSpaceInsertHandler.INSTANCE);
+        BOOLEAN = createLookupElement("boolean", AddSpaceInsertHandler.INSTANCE);
+        FLOAT = createLookupElement("float", AddSpaceInsertHandler.INSTANCE);
+        INT = createLookupElement("int", AddSpaceInsertHandler.INSTANCE);
+        STRING = createLookupElement("string", AddSpaceInsertHandler.INSTANCE);
 
-        MESSAGE = createTypeLookupElement("message", AddSpaceInsertHandler.INSTANCE);
-        MAP = createTypeLookupElement("map", AddSpaceInsertHandler.INSTANCE);
-        XML = createTypeLookupElement("xml", AddSpaceInsertHandler.INSTANCE);
-        JSON = createTypeLookupElement("json", AddSpaceInsertHandler.INSTANCE);
-        DATATABLE = createTypeLookupElement("datatable", AddSpaceInsertHandler.INSTANCE);
+        ANY = createLookupElement("any", AddSpaceInsertHandler.INSTANCE);
+        FUTURE = createLookupElement("future", AddSpaceInsertHandler.INSTANCE);
+        JSON = createLookupElement("json", AddSpaceInsertHandler.INSTANCE);
+        MAP = createLookupElement("map", AddSpaceInsertHandler.INSTANCE);
+        STREAM = createLookupElement("stream", null);
+        TABLE = createLookupElement("table", null);
+        TYPEDESC = createLookupElement("typedesc", AddSpaceInsertHandler.INSTANCE);
+        XML = createLookupElement("xml", AddSpaceInsertHandler.INSTANCE);
 
-        ANY = createTypeLookupElement("any", AddSpaceInsertHandler.INSTANCE);
-        VAR = createTypeLookupElement("var", AddSpaceInsertHandler.INSTANCE);
-        TYPE = createTypeLookupElement("type", AddSpaceInsertHandler.INSTANCE);
+        VAR = createLookupElement("var", AddSpaceInsertHandler.INSTANCE);
+
+        AWAIT = createKeywordLookupElement("await");
+        CHECK = createKeywordLookupElement("check");
+        START = createKeywordLookupElement("start");
 
         TYPE_OF = createKeywordLookupElement("typeof");
         LENGTH_OF = createKeywordLookupElement("lengthof");
@@ -204,7 +196,6 @@ public class BallerinaCompletionUtils {
 
         TRUE = createKeywordLookupElement("true", null);
         FALSE = createKeywordLookupElement("false", null);
-        NULL = createKeywordLookupElement("null", null);
     }
 
     private BallerinaCompletionUtils() {
@@ -276,7 +267,7 @@ public class BallerinaCompletionUtils {
     @NotNull
     private static LookupElementBuilder createTypeLookupElement(@NotNull String name,
                                                                 @Nullable InsertHandler<LookupElement> insertHandler) {
-        return createLookupElement(name, insertHandler).withTypeText("Type");
+        return createLookupElement(name, insertHandler);
     }
 
     /**
@@ -285,7 +276,7 @@ public class BallerinaCompletionUtils {
      * @param resultSet result list which is used to add lookups
      */
     static void addTypeNamesAsLookups(@NotNull CompletionResultSet resultSet) {
-        addOtherTypeAsLookup(resultSet);
+        addVarAsLookup(resultSet);
         addXmlnsAsLookup(resultSet);
         addValueTypesAsLookups(resultSet);
         addReferenceTypesAsLookups(resultSet);
@@ -296,14 +287,20 @@ public class BallerinaCompletionUtils {
      *
      * @param resultSet result list which is used to add lookups
      */
-    static void addOtherTypeAsLookup(@NotNull CompletionResultSet resultSet) {
-        resultSet.addElement(PrioritizedLookupElement.withPriority(ANY, VALUE_TYPES_PRIORITY));
+    static void addVarAsLookup(@NotNull CompletionResultSet resultSet) {
         resultSet.addElement(PrioritizedLookupElement.withPriority(VAR, VALUE_TYPES_PRIORITY));
-        resultSet.addElement(PrioritizedLookupElement.withPriority(TYPE, VALUE_TYPES_PRIORITY));
     }
 
     static void addXmlnsAsLookup(@NotNull CompletionResultSet resultSet) {
         resultSet.addElement(PrioritizedLookupElement.withPriority(XMLNS, VALUE_TYPES_PRIORITY));
+    }
+
+    static void addImportAsLookup(@NotNull CompletionResultSet resultSet) {
+        resultSet.addElement(PrioritizedLookupElement.withPriority(IMPORT, KEYWORDS_PRIORITY));
+    }
+
+    static void addPublicAsLookup(@NotNull CompletionResultSet resultSet) {
+        resultSet.addElement(PrioritizedLookupElement.withPriority(PUBLIC, KEYWORDS_PRIORITY));
     }
 
     /**
@@ -313,10 +310,10 @@ public class BallerinaCompletionUtils {
      */
     static void addValueTypesAsLookups(@NotNull CompletionResultSet resultSet) {
         resultSet.addElement(PrioritizedLookupElement.withPriority(BOOLEAN, VALUE_TYPES_PRIORITY));
-        resultSet.addElement(PrioritizedLookupElement.withPriority(INT, VALUE_TYPES_PRIORITY));
-        resultSet.addElement(PrioritizedLookupElement.withPriority(FLOAT, VALUE_TYPES_PRIORITY));
-        resultSet.addElement(PrioritizedLookupElement.withPriority(STRING, VALUE_TYPES_PRIORITY));
         resultSet.addElement(PrioritizedLookupElement.withPriority(BLOB, VALUE_TYPES_PRIORITY));
+        resultSet.addElement(PrioritizedLookupElement.withPriority(FLOAT, VALUE_TYPES_PRIORITY));
+        resultSet.addElement(PrioritizedLookupElement.withPriority(INT, VALUE_TYPES_PRIORITY));
+        resultSet.addElement(PrioritizedLookupElement.withPriority(STRING, VALUE_TYPES_PRIORITY));
     }
 
     /**
@@ -325,11 +322,20 @@ public class BallerinaCompletionUtils {
      * @param resultSet result list which is used to add lookups
      */
     static void addReferenceTypesAsLookups(@NotNull CompletionResultSet resultSet) {
-        resultSet.addElement(PrioritizedLookupElement.withPriority(MESSAGE, REFERENCE_TYPES_PRIORITY));
-        resultSet.addElement(PrioritizedLookupElement.withPriority(MAP, REFERENCE_TYPES_PRIORITY));
-        resultSet.addElement(PrioritizedLookupElement.withPriority(XML, REFERENCE_TYPES_PRIORITY));
+        resultSet.addElement(PrioritizedLookupElement.withPriority(ANY, REFERENCE_TYPES_PRIORITY));
+        resultSet.addElement(PrioritizedLookupElement.withPriority(FUTURE, REFERENCE_TYPES_PRIORITY));
         resultSet.addElement(PrioritizedLookupElement.withPriority(JSON, REFERENCE_TYPES_PRIORITY));
-        resultSet.addElement(PrioritizedLookupElement.withPriority(DATATABLE, REFERENCE_TYPES_PRIORITY));
+        resultSet.addElement(PrioritizedLookupElement.withPriority(MAP, REFERENCE_TYPES_PRIORITY));
+        resultSet.addElement(PrioritizedLookupElement.withPriority(STREAM, REFERENCE_TYPES_PRIORITY));
+        resultSet.addElement(PrioritizedLookupElement.withPriority(TABLE, REFERENCE_TYPES_PRIORITY));
+        resultSet.addElement(PrioritizedLookupElement.withPriority(TYPEDESC, REFERENCE_TYPES_PRIORITY));
+        resultSet.addElement(PrioritizedLookupElement.withPriority(XML, REFERENCE_TYPES_PRIORITY));
+    }
+
+    static void addExpressionKeywordsAsLookups(@NotNull CompletionResultSet resultSet) {
+        resultSet.addElement(PrioritizedLookupElement.withPriority(AWAIT, KEYWORDS_PRIORITY));
+        resultSet.addElement(PrioritizedLookupElement.withPriority(CHECK, KEYWORDS_PRIORITY));
+        resultSet.addElement(PrioritizedLookupElement.withPriority(START, KEYWORDS_PRIORITY));
     }
 
     @NotNull
@@ -339,34 +345,22 @@ public class BallerinaCompletionUtils {
         if (withPublic) {
             lookupElements.add(PrioritizedLookupElement.withPriority(PUBLIC, KEYWORDS_PRIORITY));
         }
-        if (withPackage) {
-            lookupElements.add(PrioritizedLookupElement.withPriority(PACKAGE, KEYWORDS_PRIORITY));
-        }
+
         if (withImport) {
             lookupElements.add(PrioritizedLookupElement.withPriority(IMPORT, KEYWORDS_PRIORITY));
         }
-        lookupElements.add(PrioritizedLookupElement.withPriority(CONST, KEYWORDS_PRIORITY));
         lookupElements.add(PrioritizedLookupElement.withPriority(SERVICE, KEYWORDS_PRIORITY));
         lookupElements.add(PrioritizedLookupElement.withPriority(FUNCTION, KEYWORDS_PRIORITY));
-        lookupElements.add(PrioritizedLookupElement.withPriority(CONNECTOR, KEYWORDS_PRIORITY));
-        lookupElements.add(PrioritizedLookupElement.withPriority(STRUCT, KEYWORDS_PRIORITY));
         lookupElements.add(PrioritizedLookupElement.withPriority(ANNOTATION, KEYWORDS_PRIORITY));
         lookupElements.add(PrioritizedLookupElement.withPriority(XMLNS, KEYWORDS_PRIORITY));
-        lookupElements.add(PrioritizedLookupElement.withPriority(ENUM, KEYWORDS_PRIORITY));
-        lookupElements.add(PrioritizedLookupElement.withPriority(TRANSFORMER, KEYWORDS_PRIORITY));
+        lookupElements.add(PrioritizedLookupElement.withPriority(TYPE, VALUE_TYPES_PRIORITY));
         return lookupElements;
     }
 
     public static List<LookupElement> createAttachmentPointsAsLookups() {
         List<LookupElement> lookupElements = new LinkedList<>();
         lookupElements.add(createKeywordAsLookup(SERVICE));
-        lookupElements.add(createKeywordAsLookup(RESOURCE));
-        lookupElements.add(createKeywordAsLookup(CONNECTOR));
-        lookupElements.add(createKeywordAsLookup(ACTION));
         lookupElements.add(createKeywordAsLookup(FUNCTION));
-        lookupElements.add(createKeywordAsLookup(STRUCT));
-        lookupElements.add(createKeywordAsLookup(CONST));
-        lookupElements.add(createKeywordAsLookup(PARAMETER));
         lookupElements.add(createKeywordAsLookup(ANNOTATION));
         return lookupElements;
     }
@@ -413,7 +407,6 @@ public class BallerinaCompletionUtils {
         List<LookupElement> lookupElements = new LinkedList<>();
         lookupElements.add(createKeywordAsLookup(TRUE));
         lookupElements.add(createKeywordAsLookup(FALSE));
-        lookupElements.add(createKeywordAsLookup(NULL));
         return lookupElements;
     }
 
@@ -442,10 +435,6 @@ public class BallerinaCompletionUtils {
         return createKeywordAsLookup(LENGTH_OF);
     }
 
-    @NotNull
-    static LookupElement getAttachKeyword() {
-        return createKeywordAsLookup(ATTACH);
-    }
 
     @NotNull
     static List<LookupElement> getFunctionSpecificKeywords() {
@@ -457,20 +446,6 @@ public class BallerinaCompletionUtils {
     @NotNull
     static List<LookupElement> getResourceSpecificKeywords() {
         List<LookupElement> lookupElements = new LinkedList<>();
-        return lookupElements;
-    }
-
-    @NotNull
-    static List<LookupElement> getServiceSpecificKeywords() {
-        List<LookupElement> lookupElements = new LinkedList<>();
-        lookupElements.add(createKeywordAsLookup(RESOURCE));
-        return lookupElements;
-    }
-
-    @NotNull
-    static List<LookupElement> getConnectorSpecificKeywords() {
-        List<LookupElement> lookupElements = new LinkedList<>();
-        lookupElements.add(createKeywordAsLookup(ACTION));
         return lookupElements;
     }
 
