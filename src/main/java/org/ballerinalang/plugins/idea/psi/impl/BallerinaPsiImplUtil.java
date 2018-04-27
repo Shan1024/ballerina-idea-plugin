@@ -81,6 +81,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaNamedPattern;
 import org.ballerinalang.plugins.idea.psi.BallerinaNullableTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaObjectInitializer;
 import org.ballerinalang.plugins.idea.psi.BallerinaOrgName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
@@ -1371,6 +1372,11 @@ public class BallerinaPsiImplUtil {
         }
         BallerinaExpression expression = ballerinaFieldDefinition.getExpression();
         return formatParameterDefaultValue(expression);
+    }
+
+    @Nullable
+    public static BallerinaObjectInitializer getInitializer(@NotNull BallerinaTypeDefinition typeDefinition) {
+        return PsiTreeUtil.findChildOfType(typeDefinition, BallerinaObjectInitializer.class);
     }
 
     /**

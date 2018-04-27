@@ -63,11 +63,11 @@ public class BallerinaKeywordCompletionProvider extends CompletionProvider<Compl
                 if (parent != null && parent.equals(expression)) {
 
                     PsiElement superParent = parent.getParent();
-                    if(superParent!=null && superParent instanceof BallerinaVariableDefinitionStatement){
+                    if (superParent != null && superParent instanceof BallerinaVariableDefinitionStatement) {
                         PsiElement type = BallerinaPsiImplUtil.getType(((BallerinaVariableDefinitionStatement)
                                 superParent));
-                        if(type!=null && type.getParent() instanceof BallerinaTypeDefinition){
-                            BallerinaCompletionUtils.addNewAsLookup(result,type);
+                        if (type != null && type.getParent() instanceof BallerinaTypeDefinition) {
+                            BallerinaCompletionUtils.addNewAsLookup(result, (BallerinaTypeDefinition) type.getParent());
                             return;
                         }
                     }

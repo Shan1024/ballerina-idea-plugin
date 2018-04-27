@@ -26,24 +26,28 @@ import com.intellij.openapi.editor.EditorModificationUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDocumentManager;
+import com.intellij.psi.PsiElement;
+
+import static org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils.HAS_A_RETURN_VALUE;
+import static org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils.REQUIRE_PARAMETERS;
 
 /**
- * Provides colon completion support.
+ * Provides parenthesis with semicolon completion support.
  */
-public class ColonInsertHandler implements InsertHandler<LookupElement> {
+public class ParenthesisWithSemicolonInsertHandler implements InsertHandler<LookupElement> {
 
-    public static final InsertHandler<LookupElement> INSTANCE = new ColonInsertHandler(false);
+    public static final InsertHandler<LookupElement> INSTANCE = new ParenthesisWithSemicolonInsertHandler(false);
     public static final InsertHandler<LookupElement> INSTANCE_WITH_AUTO_POPUP =
-            new ColonInsertHandler(true);
+            new ParenthesisWithSemicolonInsertHandler(true);
 
     private final String myIgnoreOnChars;
     private final boolean myTriggerAutoPopup;
 
-    public ColonInsertHandler(boolean triggerAutoPopup) {
+    public ParenthesisWithSemicolonInsertHandler(boolean triggerAutoPopup) {
         this("", triggerAutoPopup);
     }
 
-    public ColonInsertHandler(String ignoreOnChars, boolean triggerAutoPopup) {
+    public ParenthesisWithSemicolonInsertHandler(String ignoreOnChars, boolean triggerAutoPopup) {
         myIgnoreOnChars = ignoreOnChars;
         myTriggerAutoPopup = triggerAutoPopup;
     }
@@ -58,7 +62,7 @@ public class ColonInsertHandler implements InsertHandler<LookupElement> {
         if (project != null) {
             int completionCharOffset = getCompletionCharOffset(editor);
             if (completionCharOffset == -1) {
-                EditorModificationUtil.insertStringAtCaret(editor, ":", false, 1);
+                EditorModificationUtil.insertStringAtCaret(editor, "();", false, 1);
                 PsiDocumentManager.getInstance(project).commitDocument(editor.getDocument());
             } else {
                 editor.getCaretModel().moveToOffset(editor.getCaretModel().getOffset() + completionCharOffset + 1);
@@ -78,7 +82,7 @@ public class ColonInsertHandler implements InsertHandler<LookupElement> {
         char c;
         for (int i = startOffset; i < textLength; i++) {
             c = charsSequence.charAt(i);
-            if (c == ':') {
+            if (c == '(') {
                 return i - startOffset;
             } else if (!Character.isSpaceChar(c)) {
                 break;

@@ -34,12 +34,17 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.BallerinaIcons;
 import org.ballerinalang.plugins.idea.completion.inserthandlers.BracesInsertHandler;
+import org.ballerinalang.plugins.idea.completion.inserthandlers.ParenthesisWithSemicolonInsertHandler;
+import org.ballerinalang.plugins.idea.completion.inserthandlers.SemiolonInsertHandler;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
 import org.ballerinalang.plugins.idea.psi.BallerinaCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaFormalParameterList;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectFunctionDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaObjectInitializer;
+import org.ballerinalang.plugins.idea.psi.BallerinaObjectInitializerParameterList;
+import org.ballerinalang.plugins.idea.psi.BallerinaObjectParameterList;
 import org.ballerinalang.plugins.idea.psi.BallerinaReturnParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaReturnType;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
@@ -332,8 +337,22 @@ public class BallerinaCompletionUtils {
         resultSet.addElement(PrioritizedLookupElement.withPriority(BIND, KEYWORDS_PRIORITY));
     }
 
-    static void addNewAsLookup(@NotNull CompletionResultSet resultSet, PsiElement type) {
-        resultSet.addElement(PrioritizedLookupElement.withPriority(NEW, KEYWORDS_PRIORITY));
+    static void addNewAsLookup(@NotNull CompletionResultSet resultSet,
+                               @NotNull BallerinaTypeDefinition typeDefinition) {
+        LookupElementBuilder builder = NEW.withInsertHandler(SemiolonInsertHandler.INSTANCE);
+        BallerinaObjectInitializer initializer = BallerinaPsiImplUtil.getInitializer(typeDefinition);
+        if (initializer != null) {
+            BallerinaObjectInitializerParameterList parameterList =
+                    initializer.getObjectInitializerParameterList();
+            if (parameterList != null) {
+                BallerinaObjectParameterList objectParameterList = parameterList.getObjectParameterList();
+                if (objectParameterList != null) {
+                    // Todo - parenthesis with semicolon
+                    builder = NEW.withInsertHandler(ParenthesisWithSemicolonInsertHandler.INSTANCE);
+                }
+            }
+        }
+        resultSet.addElement(PrioritizedLookupElement.withPriority(builder, KEYWORDS_PRIORITY));
     }
 
     /**
