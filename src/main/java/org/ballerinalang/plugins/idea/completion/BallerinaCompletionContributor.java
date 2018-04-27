@@ -70,6 +70,6 @@ public class BallerinaCompletionContributor extends CompletionContributor {
                 return true;
             }
         }
-        return typeChar == '@';
+        return typeChar == ':' || typeChar == '@';
     }
 }
