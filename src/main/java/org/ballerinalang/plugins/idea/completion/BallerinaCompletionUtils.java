@@ -42,6 +42,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaObjectCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectFunctionDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaReturnParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaReturnType;
+import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaUserDefineTypeName;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaTopLevelDefinition;
@@ -108,6 +109,10 @@ public class BallerinaCompletionUtils {
     private static final LookupElementBuilder LENGTH_OF;
     private static final LookupElementBuilder START;
     private static final LookupElementBuilder UNTAINT;
+
+    private static final LookupElementBuilder BIND;
+
+    private static final LookupElementBuilder NEW;
 
     // Other keywords
 
@@ -201,6 +206,10 @@ public class BallerinaCompletionUtils {
         FOREACH = createKeywordLookupElement("foreach");
         IN = createKeywordLookupElement("in");
         LOCK = createKeywordLookupElement("lock");
+
+        BIND = createKeywordLookupElement("bind");
+
+        NEW = createKeywordLookupElement("new");
 
         TRUE = createKeywordLookupElement("true", null);
         FALSE = createKeywordLookupElement("false", null);
@@ -317,6 +326,14 @@ public class BallerinaCompletionUtils {
 
     static void addLockAsLookup(@NotNull CompletionResultSet resultSet) {
         resultSet.addElement(PrioritizedLookupElement.withPriority(LOCK, KEYWORDS_PRIORITY));
+    }
+
+    static void addBindAsLookup(@NotNull CompletionResultSet resultSet) {
+        resultSet.addElement(PrioritizedLookupElement.withPriority(BIND, KEYWORDS_PRIORITY));
+    }
+
+    static void addNewAsLookup(@NotNull CompletionResultSet resultSet, PsiElement type) {
+        resultSet.addElement(PrioritizedLookupElement.withPriority(NEW, KEYWORDS_PRIORITY));
     }
 
     /**

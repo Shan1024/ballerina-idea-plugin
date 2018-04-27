@@ -61,6 +61,8 @@ public class BallerinaASTFactory extends CoreASTFactory {
             //
             // TODO: try not to create one for IDs under def subtree roots like vardef, function
             return new BallerinaIdentifier(type, text);
+        } else if (type == BallerinaTypes.NEW) {
+            return new BallerinaIdentifier(type, text);
         }
         return super.createLeaf(type, text);
     }

@@ -1,17 +1,16 @@
 <idea-plugin>
     <id>org.ballerinalang</id>
     <name>Ballerina</name>
-    <version>0.970.0-beta17</version>
+    <version>0.970.0</version>
     <vendor email="ballerinalang@wso2.com" url="http://wso2.org">WSO2 Inc.</vendor>
 
     <description><![CDATA[
-      <a href="http://ballerinalang.org">Ballerina</a> is a general purpose, concurrent and strongly typed programming language with both textual and graphical syntax, optimized for integration. This plugin supports development of Ballerina programs with IntelliJ IDEA.
-      Please note that the graphical syntax of Ballerina is not yet supported by this plugin. For that, you can use  <a href="http://ballerinalang.org/downloads/">Ballerina Composer</a> which is available in Ballerina Tools distribution.<br>
+      <a href="https://ballerina.io/">Ballerina</a> is a simple programming language whose syntax and runtime address the hard problems of integration. As a Turing complete language, Ballerina enables agility with edit, build, and run cycles. Ballerina code is compiled into services that include transactions, embedded brokers and gateway runtimes.
     ]]></description>
 
     <change-notes><![CDATA[
       <ul>
-        <li>Supports Ballerina v0.970.0-beta17 grammar.</li>
+        <li>Supports Ballerina v0.970.0 grammar.</li>
       </ul>
     ]]>
     </change-notes>
