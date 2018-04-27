@@ -1374,6 +1374,16 @@ public class BallerinaPsiImplUtil {
         return formatParameterDefaultValue(expression);
     }
 
+    public static boolean isObjectInitializer(@NotNull PsiElement element) {
+        if (element instanceof BallerinaVariableDefinitionStatement) {
+            PsiElement type = BallerinaPsiImplUtil.getType(((BallerinaVariableDefinitionStatement) element));
+            if (type != null && type.getParent() instanceof BallerinaTypeDefinition) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Nullable
     public static BallerinaObjectInitializer getInitializer(@NotNull BallerinaTypeDefinition typeDefinition) {
         return PsiTreeUtil.findChildOfType(typeDefinition, BallerinaObjectInitializer.class);

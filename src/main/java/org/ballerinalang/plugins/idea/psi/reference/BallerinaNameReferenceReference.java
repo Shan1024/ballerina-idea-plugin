@@ -34,6 +34,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaFieldDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
+import org.ballerinalang.plugins.idea.psi.BallerinaObjectInitializer;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaRecordKey;
 import org.ballerinalang.plugins.idea.psi.BallerinaRecordKeyValue;
@@ -41,6 +42,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaRecordLiteralExpression;
 import org.ballerinalang.plugins.idea.psi.BallerinaRecordTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaTypeInitExpr;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypes;
 import org.ballerinalang.plugins.idea.psi.BallerinaVariableDefinitionStatement;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
@@ -72,6 +74,25 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
     public PsiElement resolveInner() {
         BallerinaScopeProcessorBase processor;
         PsiElement result;
+
+        BallerinaTypeInitExpr typeInitExpr = PsiTreeUtil.getParentOfType(myElement, BallerinaTypeInitExpr.class);
+        if (typeInitExpr != null) {
+            BallerinaVariableDefinitionStatement variableDefinitionStatement = PsiTreeUtil.getParentOfType(typeInitExpr,
+                    BallerinaVariableDefinitionStatement.class);
+            if (variableDefinitionStatement != null) {
+                if (BallerinaPsiImplUtil.isObjectInitializer(variableDefinitionStatement)) {
+                    PsiElement type = BallerinaPsiImplUtil.getType(variableDefinitionStatement);
+                    if (type != null && type.getParent() instanceof BallerinaTypeDefinition) {
+                        BallerinaObjectInitializer initializer =
+                                BallerinaPsiImplUtil.getInitializer(((BallerinaTypeDefinition) type.getParent()));
+                        if (initializer != null) {
+                            return initializer.getNew();
+                        }
+                    }
+                    return null;
+                }
+            }
+        }
 
         processor = new BallerinaActionInvocationProcessor(null, myElement, false);
         processResolveVariants(processor);

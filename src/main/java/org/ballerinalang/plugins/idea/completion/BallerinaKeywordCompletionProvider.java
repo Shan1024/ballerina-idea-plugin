@@ -9,7 +9,6 @@ import com.intellij.util.ProcessingContext;
 import org.ballerinalang.plugins.idea.psi.BallerinaDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaExpression;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
-import org.ballerinalang.plugins.idea.psi.BallerinaServiceEndpointAttachments;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleVariableReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
@@ -58,15 +57,14 @@ public class BallerinaKeywordCompletionProvider extends CompletionProvider<Compl
                     }
                     parent = superParent;
                 }
-                // Todo - 'new' keyword in Object initialization
+
                 // Todo - 'but' keyword in matching
                 if (parent != null && parent.equals(expression)) {
-
                     PsiElement superParent = parent.getParent();
-                    if (superParent != null && superParent instanceof BallerinaVariableDefinitionStatement) {
-                        PsiElement type = BallerinaPsiImplUtil.getType(((BallerinaVariableDefinitionStatement)
-                                superParent));
-                        if (type != null && type.getParent() instanceof BallerinaTypeDefinition) {
+                    if (BallerinaPsiImplUtil.isObjectInitializer(superParent)) {
+                        PsiElement type =
+                                BallerinaPsiImplUtil.getType((BallerinaVariableDefinitionStatement) superParent);
+                        if (type != null) {
                             BallerinaCompletionUtils.addNewAsLookup(result, (BallerinaTypeDefinition) type.getParent());
                             return;
                         }

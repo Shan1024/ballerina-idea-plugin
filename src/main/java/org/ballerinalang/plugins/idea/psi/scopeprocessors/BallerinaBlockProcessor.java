@@ -152,7 +152,6 @@ public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
 
                             if (ballerinaVariableReference instanceof BallerinaSimpleVariableReference) {
 
-
                                 PsiElement ballerinaVariableReferenceType = ballerinaVariableReference.getType();
                                 if (ballerinaVariableReferenceType != null) {
                                     type = ballerinaVariableReferenceType.getText();

@@ -32,6 +32,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaNamedPattern;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectCallableUnitSignature;
+import org.ballerinalang.plugins.idea.psi.BallerinaObjectInitializer;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaOrgName;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageReference;
@@ -120,6 +121,8 @@ public class BallerinaFindUsageProvider implements FindUsagesProvider {
             return "Parameter";
         } else if (parent instanceof BallerinaEndpointParameter) {
             return "Endpoint Parameter";
+        } else if (parent instanceof BallerinaObjectInitializer) {
+            return "Object Initializer";
         }
         return "";
     }
