@@ -50,17 +50,18 @@ public class BallerinaKeywordCompletionProvider extends CompletionProvider<Compl
             BallerinaSimpleVariableReference simpleVariableReference = PsiTreeUtil.getParentOfType(position,
                     BallerinaSimpleVariableReference.class);
             if (simpleVariableReference != null) {
-                while (parent != null) {
-                    PsiElement superParent = parent.getParent();
-                    if (!superParent.getFirstChild().equals(parent)) {
+                PsiElement tempParent = parent;
+                while (tempParent != null) {
+                    PsiElement superParent = tempParent.getParent();
+                    if (!superParent.getFirstChild().equals(tempParent)) {
                         break;
                     }
-                    parent = superParent;
+                    tempParent = superParent;
                 }
 
                 // Todo - 'but' keyword in matching
-                if (parent != null && parent.equals(expression)) {
-                    PsiElement superParent = parent.getParent();
+                if (tempParent != null && tempParent.equals(expression)) {
+                    PsiElement superParent = tempParent.getParent();
                     if (BallerinaPsiImplUtil.isObjectInitializer(superParent)) {
                         PsiElement type =
                                 BallerinaPsiImplUtil.getType((BallerinaVariableDefinitionStatement) superParent);
@@ -80,14 +81,15 @@ public class BallerinaKeywordCompletionProvider extends CompletionProvider<Compl
             BallerinaSimpleVariableReference simpleVariableReference = PsiTreeUtil.getParentOfType(position,
                     BallerinaSimpleVariableReference.class);
             if (simpleVariableReference != null) {
-                while (parent != null) {
-                    PsiElement superParent = parent.getParent();
-                    if (!superParent.getFirstChild().equals(parent)) {
+                PsiElement tempParent = parent;
+                while (tempParent != null && !tempParent.equals(statement)) {
+                    PsiElement superParent = tempParent.getParent();
+                    if (!superParent.getFirstChild().equals(tempParent)) {
                         break;
                     }
-                    parent = superParent;
+                    tempParent = superParent;
                 }
-                if (parent != null && parent.equals(statement)) {
+                if (tempParent != null && tempParent.equals(statement)) {
                     BallerinaCompletionUtils.addValueTypesAsLookups(result);
                     BallerinaCompletionUtils.addReferenceTypesAsLookups(result);
                     BallerinaCompletionUtils.addVarAsLookup(result);
@@ -107,18 +109,19 @@ public class BallerinaKeywordCompletionProvider extends CompletionProvider<Compl
             BallerinaUserDefineTypeName userDefineTypeName = PsiTreeUtil.getParentOfType(position,
                     BallerinaUserDefineTypeName.class);
             if (userDefineTypeName != null) {
-                while (parent != null) {
-                    PsiElement superParent = parent.getParent();
-                    if (!superParent.getFirstChild().equals(parent)) {
+                PsiElement tempParent = parent;
+                while (tempParent != null) {
+                    PsiElement superParent = tempParent.getParent();
+                    if (!superParent.getFirstChild().equals(tempParent)) {
                         break;
                     }
-                    parent = superParent;
+                    tempParent = superParent;
                     if (superParent.equals(globalVariableDefinition)) {
                         break;
                     }
                 }
 
-                if (parent != null && parent.equals(globalVariableDefinition)) {
+                if (tempParent != null && tempParent.equals(globalVariableDefinition)) {
                     BallerinaCompletionUtils.addValueTypesAsLookups(result);
                     BallerinaCompletionUtils.addReferenceTypesAsLookups(result);
                 }
