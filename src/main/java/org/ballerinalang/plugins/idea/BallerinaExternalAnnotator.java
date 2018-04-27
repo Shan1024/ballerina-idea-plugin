@@ -149,7 +149,7 @@ public class BallerinaExternalAnnotator extends ExternalAnnotator<BallerinaExter
             try {
                 // Get the list of diagnostics.
                 return (List<Diagnostic>) method.invoke(null, urlClassLoader, sourceRoot, fileName);
-            } catch (IllegalAccessException | InvocationTargetException e) {
+            } catch (Exception e) {
                 LOGGER.debug(e.getMessage(), e);
             }
         }
