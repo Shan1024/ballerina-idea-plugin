@@ -63,6 +63,9 @@
         <lang.elementManipulator forClass="org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName"
                                  implementationClass="org.ballerinalang.plugins.idea.psi.manipulator.BallerinaPackageManipulator"/>
 
+        <codeInsight.parameterInfo language="Ballerina"
+                                   implementationClass="org.ballerinalang.plugins.idea.editor.BallerinaParameterInfoHandler"/>
+
         <externalAnnotator language="Ballerina"
                            implementationClass="org.ballerinalang.plugins.idea.BallerinaExternalAnnotator"/>
 

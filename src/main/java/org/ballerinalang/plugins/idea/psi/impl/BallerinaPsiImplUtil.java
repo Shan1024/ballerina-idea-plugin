@@ -399,6 +399,23 @@ public class BallerinaPsiImplUtil {
         return results;
     }
 
+    @Nullable
+    public static BallerinaCallableUnitSignature getCallableUnitSignature(
+            @NotNull BallerinaFunctionInvocation functionInvocation) {
+        BallerinaFunctionNameReference functionNameReference = functionInvocation.getFunctionNameReference();
+        PsiElement identifier = functionNameReference.getAnyIdentifierName().getIdentifier();
+        if (identifier != null) {
+            PsiReference reference = identifier.getReference();
+            if (reference != null) {
+                PsiElement resolvedElement = reference.resolve();
+                if (resolvedElement != null) {
+                    return PsiTreeUtil.getParentOfType(resolvedElement, BallerinaCallableUnitSignature.class);
+                }
+            }
+        }
+        return null;
+    }
+
     /**
      * Used to retrieve the type from a {@link BallerinaVariableDefinitionStatement}.
      *
