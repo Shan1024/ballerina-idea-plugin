@@ -25,6 +25,7 @@ import com.intellij.lang.parameterInfo.ParameterInfoUIContext;
 import com.intellij.lang.parameterInfo.UpdateParameterInfoContext;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.tree.IElementType;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ArrayUtil;
@@ -176,6 +177,24 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
                     TextRange textRange = arg.getTextRange();
                     if (textRange.getStartOffset() <= offset && offset <= textRange.getEndOffset()) {
                         return index;
+                    }
+                    PsiElement prevSibling = PsiTreeUtil.prevVisibleLeaf(arg);
+                    if (prevSibling instanceof LeafPsiElement) {
+                        IElementType elementType = ((LeafPsiElement) prevSibling).getElementType();
+                        if (elementType == BallerinaTypes.COMMA || elementType == BallerinaTypes.LEFT_PARENTHESIS) {
+                            if (prevSibling.getTextOffset() < offset && offset < textRange.getStartOffset()) {
+                                return index;
+                            }
+                        }
+                    }
+                    PsiElement nextSibling = PsiTreeUtil.nextVisibleLeaf(arg);
+                    if (nextSibling instanceof LeafPsiElement) {
+                        IElementType elementType = ((LeafPsiElement) nextSibling).getElementType();
+                        if (elementType == BallerinaTypes.COMMA || elementType == BallerinaTypes.RIGHT_PARENTHESIS) {
+                            if (nextSibling.getTextOffset() >= offset) {
+                                return index;
+                            }
+                        }
                     }
                     index++;
                 }
