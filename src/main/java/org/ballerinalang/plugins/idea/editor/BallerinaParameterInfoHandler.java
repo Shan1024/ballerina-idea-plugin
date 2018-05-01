@@ -35,6 +35,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaDefaultableParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaExpressionList;
 import org.ballerinalang.plugins.idea.psi.BallerinaFormalParameterList;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionInvocation;
+import org.ballerinalang.plugins.idea.psi.BallerinaInvocation;
 import org.ballerinalang.plugins.idea.psi.BallerinaInvocationArg;
 import org.ballerinalang.plugins.idea.psi.BallerinaInvocationArgList;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectDefaultableParameter;
@@ -131,6 +132,8 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
         // Return the element in the same file. Otherwise the parameter info will not be shown properly.
         BallerinaInvocationArgList ballerinaInvocationArgList = PsiTreeUtil.getParentOfType(element,
                 BallerinaInvocationArgList.class);
+
+        // Check for function invocation.
         BallerinaFunctionInvocation functionInvocation;
         if (element instanceof LeafPsiElement) {
             functionInvocation = PsiTreeUtil.getParentOfType(element, BallerinaFunctionInvocation.class);
@@ -141,8 +144,9 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
         if (functionInvocation != null) {
             return functionInvocation;
         }
-        BallerinaTypeInitExpr ballerinaTypeInitExpr;
 
+        // Check for type init expression.
+        BallerinaTypeInitExpr ballerinaTypeInitExpr;
         if (element instanceof LeafPsiElement) {
             ballerinaTypeInitExpr = PsiTreeUtil.getParentOfType(element, BallerinaTypeInitExpr.class);
         } else {
@@ -151,6 +155,18 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
         }
         if (ballerinaTypeInitExpr != null) {
             return ballerinaTypeInitExpr;
+        }
+
+        // Check for invocations.
+        BallerinaInvocation ballerinaInvocation;
+        if (element instanceof LeafPsiElement) {
+            ballerinaInvocation = PsiTreeUtil.getParentOfType(element, BallerinaInvocation.class);
+        } else {
+            ballerinaInvocation = PsiTreeUtil.getParentOfType(ballerinaInvocationArgList,
+                    BallerinaInvocation.class);
+        }
+        if (ballerinaInvocation != null) {
+            return ballerinaInvocation;
         }
         return null;
     }
@@ -189,6 +205,22 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
                 }
                 context.showHint(ballerinaTypeInitExpr, ballerinaTypeInitExpr.getTextOffset(), this);
             }
+        } else if (element instanceof BallerinaInvocation) {
+            BallerinaInvocation ballerinaTypeInitExpr = (BallerinaInvocation) element;
+            BallerinaCallableUnitSignature callableUnitSignature =
+                    BallerinaPsiImplUtil.getCallableUnitSignature(ballerinaTypeInitExpr);
+            if (callableUnitSignature != null) {
+                BallerinaFormalParameterList formalParameterList = callableUnitSignature.getFormalParameterList();
+                if (formalParameterList != null) {
+                    // Note - We can set multiple object if we need to show overloaded function parameters.
+                    context.setItemsToShow(new Object[]{formalParameterList});
+                } else {
+                    // If no parameters are required, we set an empty string. Otherwise we wont be able to show
+                    // "no param" message.
+                    context.setItemsToShow(new Object[]{""});
+                }
+                context.showHint(ballerinaTypeInitExpr, ballerinaTypeInitExpr.getTextOffset(), this);
+            }
         }
     }
 
@@ -216,13 +248,17 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
             BallerinaTypeInitExpr ballerinaTypeInitExpr = (BallerinaTypeInitExpr) o;
             BallerinaInvocationArgList invocationArgList = ballerinaTypeInitExpr.getInvocationArgList();
             return getIndex(invocationArgList, offset);
+        } else if (o instanceof BallerinaInvocation) {
+            BallerinaInvocation ballerinaTypeInitExpr = (BallerinaInvocation) o;
+            BallerinaInvocationArgList invocationArgList = ballerinaTypeInitExpr.getInvocationArgList();
+            return getIndex(invocationArgList, offset);
         }
         return -1;
     }
 
     private static int getIndex(@Nullable BallerinaInvocationArgList invocationArgs, int offset) {
         if (invocationArgs == null) {
-            return -1;
+            return 0;
         }
         int index = 0;
         List<BallerinaInvocationArg> invocationArgList = invocationArgs.getInvocationArgList();
@@ -258,7 +294,7 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
             }
             index++;
         }
-        return -1;
+        return invocationArgList.size();
     }
 
     @Nullable
@@ -304,8 +340,7 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
     }
 
     public static String updatePresentation(@NotNull ParameterInfoUIContext context,
-                                            @NotNull List<String> parameterPresentations,
-                                            int parameterListSize) {
+                                            @NotNull List<String> parameterPresentations, int parameterListSize) {
         // These will be used to identify which parameter is selected. This will be highlighted in the popup.
         int start = 0;
         int end = 0;
