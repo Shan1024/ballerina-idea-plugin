@@ -38,6 +38,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaFunctionInvocation;
 import org.ballerinalang.plugins.idea.psi.BallerinaInvocation;
 import org.ballerinalang.plugins.idea.psi.BallerinaInvocationArg;
 import org.ballerinalang.plugins.idea.psi.BallerinaInvocationArgList;
+import org.ballerinalang.plugins.idea.psi.BallerinaObjectCallableUnitSignature;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectDefaultableParameter;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectInitializerParameterList;
 import org.ballerinalang.plugins.idea.psi.BallerinaObjectParameter;
@@ -175,19 +176,34 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
     public void showParameterInfo(@NotNull Object element, @NotNull CreateParameterInfoContext context) {
         if (element instanceof BallerinaFunctionInvocation) {
             BallerinaFunctionInvocation functionInvocation = (BallerinaFunctionInvocation) element;
-            BallerinaCallableUnitSignature callableUnitSignature =
+            PsiElement signature =
                     BallerinaPsiImplUtil.getCallableUnitSignature(functionInvocation);
-            if (callableUnitSignature != null) {
-                BallerinaFormalParameterList formalParameterList = callableUnitSignature.getFormalParameterList();
-                if (formalParameterList != null) {
-                    // Note - We can set multiple object if we need to show overloaded function parameters.
-                    context.setItemsToShow(new Object[]{formalParameterList});
-                } else {
-                    // If no parameters are required, we set an empty string. Otherwise we wont be able to show
-                    // "no param" message.
-                    context.setItemsToShow(new Object[]{""});
+            if (signature != null) {
+                if (signature instanceof BallerinaCallableUnitSignature) {
+                    BallerinaFormalParameterList formalParameterList =
+                            ((BallerinaCallableUnitSignature) signature).getFormalParameterList();
+                    if (formalParameterList != null) {
+                        // Note - We can set multiple object if we need to show overloaded function parameters.
+                        context.setItemsToShow(new Object[]{formalParameterList});
+                    } else {
+                        // If no parameters are required, we set an empty string. Otherwise we wont be able to show
+                        // "no param" message.
+                        context.setItemsToShow(new Object[]{""});
+                    }
+                    context.showHint(functionInvocation, functionInvocation.getTextOffset(), this);
+                } else if (signature instanceof BallerinaObjectCallableUnitSignature) {
+                    BallerinaFormalParameterList formalParameterList =
+                            ((BallerinaObjectCallableUnitSignature) signature).getFormalParameterList();
+                    if (formalParameterList != null) {
+                        // Note - We can set multiple object if we need to show overloaded function parameters.
+                        context.setItemsToShow(new Object[]{formalParameterList});
+                    } else {
+                        // If no parameters are required, we set an empty string. Otherwise we wont be able to show
+                        // "no param" message.
+                        context.setItemsToShow(new Object[]{""});
+                    }
+                    context.showHint(functionInvocation, functionInvocation.getTextOffset(), this);
                 }
-                context.showHint(functionInvocation, functionInvocation.getTextOffset(), this);
             }
         } else if (element instanceof BallerinaTypeInitExpr) {
             BallerinaTypeInitExpr ballerinaTypeInitExpr = (BallerinaTypeInitExpr) element;

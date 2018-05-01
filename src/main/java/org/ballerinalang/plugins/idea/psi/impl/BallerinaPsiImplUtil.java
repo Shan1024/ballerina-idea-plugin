@@ -403,8 +403,8 @@ public class BallerinaPsiImplUtil {
     }
 
     @Nullable
-    public static BallerinaCallableUnitSignature getCallableUnitSignature(@NotNull BallerinaFunctionInvocation
-                                                                                      functionInvocation) {
+    public static PsiElement getCallableUnitSignature(@NotNull BallerinaFunctionInvocation
+                                                              functionInvocation) {
         return CachedValuesManager.getCachedValue(functionInvocation, () -> {
             BallerinaFunctionNameReference functionNameReference = functionInvocation.getFunctionNameReference();
             PsiElement identifier = functionNameReference.getAnyIdentifierName().getIdentifier();
@@ -417,11 +417,19 @@ public class BallerinaPsiImplUtil {
             }
             PsiElement resolvedElement = reference.resolve();
             if (resolvedElement == null) {
-                return CachedValueProvider.Result.create(PsiTreeUtil.getParentOfType(null,
-                        BallerinaCallableUnitSignature.class), functionInvocation);
+                return CachedValueProvider.Result.create(null, functionInvocation);
             }
-            return CachedValueProvider.Result.create(PsiTreeUtil.getParentOfType(resolvedElement,
-                    BallerinaCallableUnitSignature.class), functionInvocation);
+            BallerinaCallableUnitSignature callableUnitSignature = PsiTreeUtil.getParentOfType(resolvedElement,
+                    BallerinaCallableUnitSignature.class);
+            if (callableUnitSignature != null) {
+                return CachedValueProvider.Result.create(callableUnitSignature, functionInvocation);
+            }
+            BallerinaObjectCallableUnitSignature objectCallableUnitSignature =
+                    PsiTreeUtil.getParentOfType(resolvedElement, BallerinaObjectCallableUnitSignature.class);
+            if (objectCallableUnitSignature != null) {
+                return CachedValueProvider.Result.create(objectCallableUnitSignature, functionInvocation);
+            }
+            return CachedValueProvider.Result.create(null, functionInvocation);
         });
     }
 
@@ -445,21 +453,23 @@ public class BallerinaPsiImplUtil {
 
     @Nullable
     public static BallerinaCallableUnitSignature getCallableUnitSignature(@NotNull BallerinaInvocation
-                                                                                      ballerinaInvocation) {
-        // Todo - Add caching
-        PsiElement identifier = ballerinaInvocation.getAnyIdentifierName().getIdentifier();
-        if (identifier == null) {
-            return null;
-        }
-        PsiReference reference = identifier.getReference();
-        if (reference == null) {
-            return null;
-        }
-        PsiElement resolvedElement = reference.resolve();
-        if (resolvedElement == null) {
-            return null;
-        }
-        return PsiTreeUtil.getParentOfType(resolvedElement, BallerinaCallableUnitSignature.class);
+                                                                                  ballerinaInvocation) {
+        return CachedValuesManager.getCachedValue(ballerinaInvocation, () -> {
+            PsiElement identifier = ballerinaInvocation.getAnyIdentifierName().getIdentifier();
+            if (identifier == null) {
+                return CachedValueProvider.Result.create(null, ballerinaInvocation);
+            }
+            PsiReference reference = identifier.getReference();
+            if (reference == null) {
+                return CachedValueProvider.Result.create(null, ballerinaInvocation);
+            }
+            PsiElement resolvedElement = reference.resolve();
+            if (resolvedElement == null) {
+                return CachedValueProvider.Result.create(null, ballerinaInvocation);
+            }
+            return CachedValueProvider.Result.create(PsiTreeUtil.getParentOfType(resolvedElement,
+                    BallerinaCallableUnitSignature.class), ballerinaInvocation);
+        });
     }
 
     /**
