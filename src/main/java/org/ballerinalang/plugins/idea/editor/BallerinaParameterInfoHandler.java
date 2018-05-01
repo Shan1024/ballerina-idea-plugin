@@ -118,13 +118,12 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
         if (element == null) {
             return null;
         }
-        PsiElement prevElement = context.getFile().findElementAt(context.getOffset() - 1);
-        return findElement(element, prevElement);
+        return findElement(element);
     }
 
     @Nullable
-    public static Object findElement(@NotNull PsiElement element, @Nullable PsiElement prevElement) {
-        // Return the element in the same file. Otherwise the hit will not be shown.
+    public static Object findElement(@NotNull PsiElement element) {
+        // Return the element in the same file. Otherwise the parameter info will not be shown properly.
         BallerinaFunctionInvocation functionInvocation = PsiTreeUtil.getParentOfType(element,
                 BallerinaFunctionInvocation.class);
         if (functionInvocation != null) {
@@ -141,9 +140,8 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
                     BallerinaPsiImplUtil.getCallableUnitSignature(functionInvocation);
             if (callableUnitSignature != null) {
                 BallerinaFormalParameterList formalParameterList = callableUnitSignature.getFormalParameterList();
-                if (formalParameterList == null) {
-                    context.setItemsToShow(new Object[]{"Empty"});
-                } else {
+                if (formalParameterList != null) {
+                    // Note - We can set multiple object if we need to show overloaded function parameters.
                     context.setItemsToShow(new Object[]{formalParameterList});
                 }
                 context.showHint(functionInvocation, functionInvocation.getTextOffset(), this);
@@ -175,22 +173,29 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
                 List<BallerinaInvocationArg> invocationArgList = invocationArgs.getInvocationArgList();
                 for (BallerinaInvocationArg arg : invocationArgList) {
                     TextRange textRange = arg.getTextRange();
+                    // If the caret is within the argument, we return the current arg index.
                     if (textRange.getStartOffset() <= offset && offset <= textRange.getEndOffset()) {
                         return index;
                     }
+                    // If the caret is not within the arg, it might be between the leading "," or "(" and arg.
+                    // Eg - test ( | arg1, arg2);
                     PsiElement prevSibling = PsiTreeUtil.prevVisibleLeaf(arg);
                     if (prevSibling instanceof LeafPsiElement) {
                         IElementType elementType = ((LeafPsiElement) prevSibling).getElementType();
                         if (elementType == BallerinaTypes.COMMA || elementType == BallerinaTypes.LEFT_PARENTHESIS) {
+                            // In here, the caret should be between the leading "," or "(" and the arg.
                             if (prevSibling.getTextOffset() < offset && offset < textRange.getStartOffset()) {
                                 return index;
                             }
                         }
                     }
+                    // If the caret is not within the arg, it might be between the trailering "," or ")" and arg.
+                    // Eg - test (arg1,   |   arg2);
                     PsiElement nextSibling = PsiTreeUtil.nextVisibleLeaf(arg);
                     if (nextSibling instanceof LeafPsiElement) {
                         IElementType elementType = ((LeafPsiElement) nextSibling).getElementType();
                         if (elementType == BallerinaTypes.COMMA || elementType == BallerinaTypes.RIGHT_PARENTHESIS) {
+                            // In here, the caret should be between the trailering "," or ")" and the arg.
                             if (nextSibling.getTextOffset() >= offset) {
                                 return index;
                             }
@@ -220,22 +225,11 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
     }
 
     public static String updatePresentation(Object p, @NotNull ParameterInfoUIContext context) {
-
-        System.out.println("x");
-
-        //        // This method contains the logic which we use to show the parameters in the popup.
-        //        // The object should be of type ParameterListNode. This method will be called for each element we
-        // set using the
-        //        // context.getItemsToShow() in showParameterInfo method.
+        // This method contains the logic which we use to show the parameters in the popup.
         if (p instanceof BallerinaFormalParameterList) {
-            // Caste the object.
+            // Get the parameter list. We highlight defaultable and rest parameters together since they can be mixed.
             BallerinaFormalParameterList formalParameterList = (BallerinaFormalParameterList) p;
-
             List<BallerinaParameter> parameterList = formalParameterList.getParameterList();
-            List<BallerinaDefaultableParameter> defaultableParameterList =
-                    formalParameterList.getDefaultableParameterList();
-            BallerinaRestParameter restParameter = formalParameterList.getRestParameter();
-
             // Get the parameter presentations.
             List<String> parameterPresentations = getParameterPresentations(formalParameterList);
             // These will be used to identify which parameter is selected. This will be highlighted in the popup.
@@ -251,35 +245,27 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
                 int selected = context.getCurrentParameterIndex();
                 // Iterate through each parameter presentation.
                 for (int i = 0; i < parameterPresentations.size(); i++) {
-                    // If i != 0, we need to add the , between parameters.
+                    // If i != 0, we need to add the "," between parameters.
                     if (i != 0) {
                         builder.append(", ");
                     }
-
-                    //                    if (i < parameterList.size()) {
-                    //                        if (i == selected) {
-                    //                            start = builder.length();
-                    //                        }
-                    //                    } else {
-                    if (i == selected || (!paramFound && i >= parameterList.size())) {
+                    // In here, we need to check whether the current parameter is selected and it is not a
+                    // defualtable or rest parameter.
+                    // We also need to prevent updating the
+                    if ((i == selected && i < parameterList.size()) || (!paramFound && i >= parameterList.size())) {
                         start = builder.length();
                         paramFound = true;
                     }
-                    //                    }
-                    //                    // If the current parameter is the selected parameter, get the start index.
-                    //                    if (i == selected && i < parameterList.size()) {
-                    //                        start = builder.length();
-                    //                    } else if (start == 0 && i > parameterList.size()) {
-                    //                        start = builder.length();
-                    //                    }
                     // Append the parameter.
                     builder.append(parameterPresentations.get(i));
                     // If the current parameter is the selected parameter, get the end index.
-                    if (i == selected) {
+                    if (i == selected && i < parameterList.size()) {
                         end = builder.length();
                     }
                 }
             }
+            // If the end is 0, that means the caret is now at defaultable or rest parameters. So we get the total
+            // length as the end.
             if (end == 0) {
                 end = builder.length();
             }
@@ -288,8 +274,7 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
                     context.getDefaultParameterColor());
         }
         return context.setupUIComponentPresentation(CodeInsightBundle.message("parameter.info.no.parameters"), 0, 0,
-                false, false, false,
-                context.getDefaultParameterColor());
+                false, false, false, context.getDefaultParameterColor());
     }
 
     /**
@@ -303,17 +288,17 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
         if (node == null) {
             return params;
         }
-        // Get parameter nodes.
+        // Add parameters.
         List<BallerinaParameter> parameterList = node.getParameterList();
         for (BallerinaParameter parameter : parameterList) {
             params.add(formatParameter(parameter.getText()));
         }
-
+        // Add defaultable parameters.
         List<BallerinaDefaultableParameter> defaultableParameterList = node.getDefaultableParameterList();
         for (BallerinaDefaultableParameter parameter : defaultableParameterList) {
             params.add(formatParameter(parameter.getText()));
         }
-
+        // Add test parameter.
         BallerinaRestParameter restParameter = node.getRestParameter();
         if (restParameter != null) {
             params.add(formatParameter(restParameter.getText()));
