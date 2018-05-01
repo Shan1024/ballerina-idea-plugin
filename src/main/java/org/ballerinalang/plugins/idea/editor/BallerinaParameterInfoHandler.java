@@ -131,13 +131,24 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
         // Return the element in the same file. Otherwise the parameter info will not be shown properly.
         BallerinaInvocationArgList ballerinaInvocationArgList = PsiTreeUtil.getParentOfType(element,
                 BallerinaInvocationArgList.class);
-        BallerinaFunctionInvocation functionInvocation = PsiTreeUtil.getParentOfType(ballerinaInvocationArgList,
-                BallerinaFunctionInvocation.class);
+        BallerinaFunctionInvocation functionInvocation;
+        if (element instanceof LeafPsiElement) {
+            functionInvocation = PsiTreeUtil.getParentOfType(element, BallerinaFunctionInvocation.class);
+        } else {
+            functionInvocation = PsiTreeUtil.getParentOfType(ballerinaInvocationArgList,
+                    BallerinaFunctionInvocation.class);
+        }
         if (functionInvocation != null) {
             return functionInvocation;
         }
-        BallerinaTypeInitExpr ballerinaTypeInitExpr = PsiTreeUtil.getParentOfType(ballerinaInvocationArgList,
-                BallerinaTypeInitExpr.class);
+        BallerinaTypeInitExpr ballerinaTypeInitExpr;
+
+        if (element instanceof LeafPsiElement) {
+            ballerinaTypeInitExpr = PsiTreeUtil.getParentOfType(element, BallerinaTypeInitExpr.class);
+        } else {
+            ballerinaTypeInitExpr = PsiTreeUtil.getParentOfType(ballerinaInvocationArgList,
+                    BallerinaTypeInitExpr.class);
+        }
         if (ballerinaTypeInitExpr != null) {
             return ballerinaTypeInitExpr;
         }
