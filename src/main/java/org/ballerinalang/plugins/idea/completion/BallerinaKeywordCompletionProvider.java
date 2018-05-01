@@ -4,6 +4,7 @@ import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionProvider;
 import com.intellij.codeInsight.completion.CompletionResultSet;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import org.ballerinalang.plugins.idea.psi.BallerinaDefinition;
@@ -12,6 +13,7 @@ import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleVariableReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaTypes;
 import org.ballerinalang.plugins.idea.psi.BallerinaUserDefineTypeName;
 import org.ballerinalang.plugins.idea.psi.BallerinaVariableDefinitionStatement;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
@@ -90,13 +92,17 @@ public class BallerinaKeywordCompletionProvider extends CompletionProvider<Compl
                     tempParent = superParent;
                 }
                 if (tempParent != null && tempParent.equals(statement)) {
-                    BallerinaCompletionUtils.addValueTypesAsLookups(result);
-                    BallerinaCompletionUtils.addReferenceTypesAsLookups(result);
-                    BallerinaCompletionUtils.addVarAsLookup(result);
-                    BallerinaCompletionUtils.addReturnAsLookup(result);
-                    BallerinaCompletionUtils.addLockAsLookup(result);
-                    BallerinaCompletionUtils.addCommonKeywords(result);
-                    return;
+                    PsiElement prevVisibleLeaf = PsiTreeUtil.prevVisibleLeaf(position);
+                    if (!(prevVisibleLeaf instanceof LeafPsiElement
+                            && ((LeafPsiElement) prevVisibleLeaf).getElementType() == BallerinaTypes.RARROW)) {
+                        BallerinaCompletionUtils.addValueTypesAsLookups(result);
+                        BallerinaCompletionUtils.addReferenceTypesAsLookups(result);
+                        BallerinaCompletionUtils.addVarAsLookup(result);
+                        BallerinaCompletionUtils.addReturnAsLookup(result);
+                        BallerinaCompletionUtils.addLockAsLookup(result);
+                        BallerinaCompletionUtils.addCommonKeywords(result);
+                        return;
+                    }
                 }
             }
         }
