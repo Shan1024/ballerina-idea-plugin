@@ -94,7 +94,9 @@ public class BallerinaKeywordCompletionProvider extends CompletionProvider<Compl
                 if (tempParent != null && tempParent.equals(statement)) {
                     PsiElement prevVisibleLeaf = PsiTreeUtil.prevVisibleLeaf(position);
                     if (!(prevVisibleLeaf instanceof LeafPsiElement
-                            && ((LeafPsiElement) prevVisibleLeaf).getElementType() == BallerinaTypes.RARROW)) {
+                            && (((LeafPsiElement) prevVisibleLeaf).getElementType() == BallerinaTypes.RARROW
+                            ||((LeafPsiElement) prevVisibleLeaf).getElementType() ==
+                            BallerinaTypes.DECIMAL_INTEGER_LITERAL))) {
                         BallerinaCompletionUtils.addValueTypesAsLookups(result);
                         BallerinaCompletionUtils.addReferenceTypesAsLookups(result);
                         BallerinaCompletionUtils.addVarAsLookup(result);
@@ -128,9 +130,13 @@ public class BallerinaKeywordCompletionProvider extends CompletionProvider<Compl
                 }
 
                 if (tempParent != null && tempParent.equals(globalVariableDefinition)) {
+                    PsiElement prevVisibleLeaf = PsiTreeUtil.prevVisibleLeaf(position);
+                    if (!(prevVisibleLeaf instanceof LeafPsiElement
+                            && (((LeafPsiElement) prevVisibleLeaf).getElementType() ==
+                            BallerinaTypes.DECIMAL_INTEGER_LITERAL))) {
                     BallerinaCompletionUtils.addValueTypesAsLookups(result);
                     BallerinaCompletionUtils.addReferenceTypesAsLookups(result);
-                }
+                }}
             }
 
             BallerinaDefinition prevDefinition = PsiTreeUtil.getPrevSiblingOfType(globalVariableDefinition.getParent(),

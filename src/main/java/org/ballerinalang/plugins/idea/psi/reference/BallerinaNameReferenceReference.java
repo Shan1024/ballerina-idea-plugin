@@ -213,9 +213,14 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
         if (!(containingFile instanceof BallerinaFile)) {
             return false;
         }
+        PsiElement prevVisibleLeaf = PsiTreeUtil.prevVisibleLeaf(myElement);
+        if (prevVisibleLeaf instanceof LeafPsiElement) {
+            if (((LeafPsiElement) prevVisibleLeaf).getElementType() == BallerinaTypes.DECIMAL_INTEGER_LITERAL) {
+                return false;
+            }
+        }
 
         if (processor instanceof BallerinaActionInvocationProcessor) {
-            PsiElement prevVisibleLeaf = PsiTreeUtil.prevVisibleLeaf(myElement);
             if (prevVisibleLeaf != null && prevVisibleLeaf instanceof LeafPsiElement) {
                 if (((LeafPsiElement) prevVisibleLeaf).getElementType() == BallerinaTypes.RARROW) {
                     if (!processor.execute(containingFile, ResolveState.initial())) {
