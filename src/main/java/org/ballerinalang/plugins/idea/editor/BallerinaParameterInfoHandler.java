@@ -124,7 +124,9 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
     @Nullable
     public static Object findElement(@NotNull PsiElement element) {
         // Return the element in the same file. Otherwise the parameter info will not be shown properly.
-        BallerinaFunctionInvocation functionInvocation = PsiTreeUtil.getParentOfType(element,
+        BallerinaInvocationArgList ballerinaInvocationArgList = PsiTreeUtil.getParentOfType(element,
+                BallerinaInvocationArgList.class);
+        BallerinaFunctionInvocation functionInvocation = PsiTreeUtil.getParentOfType(ballerinaInvocationArgList,
                 BallerinaFunctionInvocation.class);
         if (functionInvocation != null) {
             return functionInvocation;
@@ -143,6 +145,10 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
                 if (formalParameterList != null) {
                     // Note - We can set multiple object if we need to show overloaded function parameters.
                     context.setItemsToShow(new Object[]{formalParameterList});
+                } else {
+                    // If no parameters are required, we set an empty string. Otherwise we wont be able to show
+                    // "no param" message.
+                    context.setItemsToShow(new Object[]{""});
                 }
                 context.showHint(functionInvocation, functionInvocation.getTextOffset(), this);
             }
@@ -272,6 +278,12 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
             // Call setupUIComponentPresentation with necessary arguments.
             return context.setupUIComponentPresentation(builder.toString(), start, end, false, false, false,
                     context.getDefaultParameterColor());
+        } else if (p instanceof String) {
+            // Handle empty parameter scenario.
+            if (((String) p).isEmpty()) {
+                return context.setupUIComponentPresentation(CodeInsightBundle.message("parameter.info.no.parameters"),
+                        0, 0, false, false, false, context.getDefaultParameterColor());
+            }
         }
         return context.setupUIComponentPresentation(CodeInsightBundle.message("parameter.info.no.parameters"), 0, 0,
                 false, false, false, context.getDefaultParameterColor());
