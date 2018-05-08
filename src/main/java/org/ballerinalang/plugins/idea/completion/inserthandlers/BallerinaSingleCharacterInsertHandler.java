@@ -15,7 +15,7 @@
  *
  */
 
-package org.ballerinalang.plugins.idea.completion;
+package org.ballerinalang.plugins.idea.completion.inserthandlers;
 
 import com.intellij.codeInsight.AutoPopupController;
 import com.intellij.codeInsight.completion.BasicInsertHandler;
@@ -25,6 +25,9 @@ import com.intellij.openapi.editor.Document;
 import com.intellij.openapi.editor.Editor;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Provides support to insert a single character.
+ */
 public class BallerinaSingleCharacterInsertHandler extends BasicInsertHandler<LookupElement> {
 
     private final char myCharacter;

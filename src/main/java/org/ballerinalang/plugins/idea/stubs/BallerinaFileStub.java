@@ -24,6 +24,9 @@ import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Stub for file.
+ */
 public class BallerinaFileStub extends PsiFileStubImpl<BallerinaFile> {
 
     public BallerinaFileStub(@Nullable BallerinaFile file) {

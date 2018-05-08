@@ -23,6 +23,9 @@ import com.intellij.util.IncorrectOperationException;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Used for package renaming.
+ */
 public class BallerinaPackageManipulator extends AbstractElementManipulator<BallerinaCompletePackageName> {
 
     @NotNull

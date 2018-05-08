@@ -28,6 +28,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Provides support to mark object type functions.
+ */
 public class BallerinaTypeFunctionMarker extends LineMarkerProviderDescriptor {
 
     @Nullable

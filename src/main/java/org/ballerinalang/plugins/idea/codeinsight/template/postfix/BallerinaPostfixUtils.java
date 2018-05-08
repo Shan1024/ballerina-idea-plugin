@@ -22,6 +22,9 @@ import java.util.List;
 
 import static com.intellij.openapi.util.Conditions.and;
 
+/**
+ * Util methods for postfix completion.
+ */
 public class BallerinaPostfixUtils {
 
     public static PostfixTemplateExpressionSelector selectorTopmost(Condition<PsiElement> additionalFilter) {
@@ -74,7 +77,9 @@ public class BallerinaPostfixUtils {
         return statement != null ? statement.getExpression() : null;
     }
 
-
+    /**
+     * Render helper class.
+     */
     public static class RenderFunction implements Function<BallerinaExpression, String> {
         @Override
         public String fun(BallerinaExpression psiExpression) {

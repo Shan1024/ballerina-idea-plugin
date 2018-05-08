@@ -21,6 +21,9 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Represents a reference expression base.
+ */
 public interface BallerinaReferenceExpressionBase extends BallerinaCompositeElement {
 
   @NotNull

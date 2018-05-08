@@ -35,6 +35,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Represents function definition stub element.
+ */
 public class BallerinaFunctionDefinitionStubElementType extends
         BallerinaNamedStubElementType<BallerinaFunctionDefinitionStub, BallerinaFunctionDefinition> {
 

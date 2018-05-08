@@ -22,6 +22,9 @@ import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
 import org.ballerinalang.plugins.idea.psi.BallerinaNameReference;
 
+/**
+ * Stub for named reference.
+ */
 public class BallerinaNameReferenceStub extends BallerinaNamedStub<BallerinaNameReference> {
 
     public BallerinaNameReferenceStub(StubElement parent, IStubElementType elementType, StringRef name,

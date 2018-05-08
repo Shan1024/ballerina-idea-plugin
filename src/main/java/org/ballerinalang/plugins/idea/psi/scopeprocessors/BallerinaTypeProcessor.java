@@ -12,6 +12,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * Responsible for resolving and completing types.
+ */
 public class BallerinaTypeProcessor extends BallerinaScopeProcessorBase {
 
     @Nullable

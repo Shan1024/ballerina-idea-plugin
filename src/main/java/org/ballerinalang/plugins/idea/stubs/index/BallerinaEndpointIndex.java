@@ -31,6 +31,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
+/**
+ * Provides endpoint index support.
+ */
 public class BallerinaEndpointIndex extends StringStubIndexExtension<BallerinaEndpointDefinition> {
 
     public static final StubIndexKey<String, BallerinaEndpointDefinition> KEY =

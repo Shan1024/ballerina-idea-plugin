@@ -50,6 +50,11 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.Icon;
 
+/**
+ * Implementation class of the named element class.
+ *
+ * @param <T> stub type
+ */
 public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>> extends BallerinaStubbedElementImpl<T>
         implements BallerinaCompositeElement, BallerinaNamedElement {
 

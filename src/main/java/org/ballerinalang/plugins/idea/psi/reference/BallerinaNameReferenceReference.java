@@ -62,6 +62,9 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Responsible for resolving name references.
+ */
 // Note - Name is not a typo :)
 public class BallerinaNameReferenceReference extends BallerinaCachedReference<BallerinaIdentifier> {
 

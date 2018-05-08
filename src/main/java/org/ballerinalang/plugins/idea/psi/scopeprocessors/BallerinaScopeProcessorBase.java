@@ -26,6 +26,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * Base class for scope processors.
+ */
 public abstract class BallerinaScopeProcessorBase extends BallerinaScopeProcessor {
 
     @NotNull

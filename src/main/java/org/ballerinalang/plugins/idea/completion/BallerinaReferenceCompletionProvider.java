@@ -26,6 +26,9 @@ import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaTopLevelScope
 import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaTypeProcessor;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Ballerina reference provider which provides completions.
+ */
 public class BallerinaReferenceCompletionProvider extends CompletionProvider<CompletionParameters> {
 
     @Override

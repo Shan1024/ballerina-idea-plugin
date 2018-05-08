@@ -27,6 +27,9 @@ import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Index patter builder.
+ */
 public class BallerinaIndexPatternBuilder implements IndexPatternBuilder {
 
     @Nullable

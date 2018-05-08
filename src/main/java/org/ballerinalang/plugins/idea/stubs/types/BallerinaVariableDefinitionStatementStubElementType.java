@@ -27,6 +27,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
+/**
+ * Represents variable definition stub element.
+ */
 public class BallerinaVariableDefinitionStatementStubElementType extends
         BallerinaNamedStubElementType<BallerinaVariableDefinitionStatementStub, BallerinaVariableDefinitionStatement> {
 

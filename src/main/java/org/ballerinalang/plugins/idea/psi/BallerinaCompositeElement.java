@@ -19,6 +19,9 @@ package org.ballerinalang.plugins.idea.psi;
 
 import com.intellij.psi.PsiElement;
 
+/**
+ * Represents a composite element in the PSI tree.
+ */
 public interface BallerinaCompositeElement extends PsiElement {
 
     boolean shouldGoDeeper();

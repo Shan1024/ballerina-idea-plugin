@@ -22,6 +22,9 @@ import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalEndpointDefinition;
 
+/**
+ * Stub for global endpoint definition.
+ */
 public class BallerinaGlobalEndpointDefinitionStub extends BallerinaNamedStub<BallerinaGlobalEndpointDefinition> {
 
     public BallerinaGlobalEndpointDefinitionStub(StubElement parent, IStubElementType elementType, StringRef name,

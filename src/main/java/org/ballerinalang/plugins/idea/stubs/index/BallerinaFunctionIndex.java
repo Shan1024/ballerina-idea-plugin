@@ -31,6 +31,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
+/**
+ * Provides function index support.
+ */
 public class BallerinaFunctionIndex extends StringStubIndexExtension<BallerinaFunctionDefinition> {
 
     public static final StubIndexKey<String, BallerinaFunctionDefinition> KEY =

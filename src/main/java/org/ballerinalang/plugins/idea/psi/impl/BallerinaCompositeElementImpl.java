@@ -27,6 +27,9 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Implementation of composite element class.
+ */
 public class BallerinaCompositeElementImpl extends ASTWrapperPsiElement implements BallerinaCompositeElement {
 
     public BallerinaCompositeElementImpl(@NotNull ASTNode node) {

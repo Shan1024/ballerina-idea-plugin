@@ -28,6 +28,9 @@ import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaScopeProcesso
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Responsible for resolving object fields.
+ */
 public class BallerinaObjectFieldReference extends BallerinaCachedReference<BallerinaIdentifier> {
 
     public BallerinaObjectFieldReference(@NotNull BallerinaIdentifier element) {

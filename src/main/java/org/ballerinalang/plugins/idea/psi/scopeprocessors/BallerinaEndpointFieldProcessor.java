@@ -25,6 +25,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Responsible for resolving and completing endpoint fields.
+ */
 public class BallerinaEndpointFieldProcessor extends BallerinaScopeProcessorBase {
 
     @Nullable

@@ -22,6 +22,9 @@ import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnnotationDefinition;
 
+/**
+ * Stub for annotation definition.
+ */
 public class BallerinaAnnotationDefinitionStub extends BallerinaNamedStub<BallerinaAnnotationDefinition> {
 
     public BallerinaAnnotationDefinitionStub(StubElement parent, IStubElementType elementType, StringRef name,

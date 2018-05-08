@@ -27,6 +27,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
+/**
+ * Represents package name stub element.
+ */
 public class BallerinaPackageNameStubElementType extends
         BallerinaNamedStubElementType<BallerinaPackageNameStub, BallerinaPackageName> {
 

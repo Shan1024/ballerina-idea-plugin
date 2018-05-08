@@ -152,6 +152,9 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.XML;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.XMLNS;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.YEAR;
 
+/**
+ * Parser definition.
+ */
 public class BallerinaParserDefinition implements ParserDefinition {
 
     public static final TokenSet WHITE_SPACES = TokenSet.create(TokenType.WHITE_SPACE);

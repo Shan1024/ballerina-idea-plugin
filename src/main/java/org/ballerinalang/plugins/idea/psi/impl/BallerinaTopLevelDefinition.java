@@ -22,6 +22,9 @@ import org.jetbrains.annotations.Nullable;
 
 import javax.swing.Icon;
 
+/**
+ * Represents a top level definition in PSI tree. E.g.- function.
+ */
 public interface BallerinaTopLevelDefinition extends PsiElement {
 
     @Nullable

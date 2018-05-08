@@ -44,6 +44,9 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.LinkedHashSet;
 
+/**
+ * Reference set used to resolve packages.
+ */
 public class BallerinaCompletePackageNameReferenceSet extends FileReferenceSet {
 
     public BallerinaCompletePackageNameReferenceSet(String str, @NotNull PsiElement element, int startInElement,

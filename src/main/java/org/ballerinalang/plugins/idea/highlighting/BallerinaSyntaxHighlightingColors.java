@@ -30,6 +30,9 @@ import static com.intellij.openapi.editor.DefaultLanguageHighlighterColors.INSTA
 import static com.intellij.openapi.editor.DefaultLanguageHighlighterColors.METADATA;
 import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAttributesKey;
 
+/**
+ * Syntax highlighting colors.
+ */
 public class BallerinaSyntaxHighlightingColors {
 
     public static final TextAttributesKey BAD_CHARACTER = createTextAttributesKey("BALLERINA_BAD_TOKEN",
@@ -56,6 +59,6 @@ public class BallerinaSyntaxHighlightingColors {
             createTextAttributesKey("BALLERINA_DOCUMENTATION_INLINE_CODE", DOC_COMMENT_TAG_VALUE);
     public static final TextAttributesKey GLOBAL_VARIABLE = createTextAttributesKey("BALLERINA_GLOBAL_VARIABLE",
             DefaultLanguageHighlighterColors.INSTANCE_FIELD);
-    public static final TextAttributesKey RECORD_KEY = createTextAttributesKey("BALLERINA_RECORD_KEY3",
+    public static final TextAttributesKey RECORD_KEY = createTextAttributesKey("BALLERINA_RECORD_KEY",
             CustomHighlighterColors.CUSTOM_KEYWORD3_ATTRIBUTES);
 }

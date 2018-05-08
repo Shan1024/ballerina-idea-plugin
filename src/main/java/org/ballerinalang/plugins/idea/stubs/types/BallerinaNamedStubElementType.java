@@ -29,6 +29,12 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Collection;
 import java.util.Collections;
 
+/**
+ * Named stub element parent class.
+ *
+ * @param <S> stub type
+ * @param <T> definition type
+ */
 public abstract class BallerinaNamedStubElementType<S extends BallerinaNamedStub<T>, T extends BallerinaNamedElement>
         extends BallerinaStubElementType<S, T> {
 

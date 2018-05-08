@@ -19,6 +19,9 @@ import org.jetbrains.annotations.NotNull;
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
+/**
+ * Completion contributor which is responsible for code completion suggestions.
+ */
 public class BallerinaCompletionContributor extends CompletionContributor {
 
     public BallerinaCompletionContributor() {

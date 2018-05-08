@@ -31,6 +31,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
+/**
+ * Represent a BallerinaFileElementType.
+ */
 public class BallerinaFileElementType extends IStubFileElementType<BallerinaFileStub> {
 
     public static final IStubFileElementType INSTANCE = new BallerinaFileElementType();
@@ -64,10 +67,6 @@ public class BallerinaFileElementType extends IStubFileElementType<BallerinaFile
     @Override
     public void indexStub(@NotNull BallerinaFileStub stub, @NotNull IndexSink sink) {
         super.indexStub(stub, sink);
-//        String packageName = stub.getPackageName();
-//        if (StringUtil.isNotEmpty(packageName)) {
-//            sink.occurrence(BallerinaPackageIndex.KEY, packageName);
-//        }
     }
 
     @Override

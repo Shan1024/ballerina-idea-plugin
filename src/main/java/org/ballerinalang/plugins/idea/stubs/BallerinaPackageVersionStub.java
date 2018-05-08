@@ -22,6 +22,9 @@ import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
 import org.ballerinalang.plugins.idea.psi.BallerinaPackageVersion;
 
+/**
+ * Stub for package version.
+ */
 public class BallerinaPackageVersionStub extends BallerinaNamedStub<BallerinaPackageVersion> {
 
     public BallerinaPackageVersionStub(StubElement parent, IStubElementType elementType, StringRef name,

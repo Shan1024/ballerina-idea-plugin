@@ -13,6 +13,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * Responsible for resolving and completing package names.
+ */
 public class BallerinaPackageNameProcessor extends BallerinaScopeProcessorBase {
 
     @Nullable

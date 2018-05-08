@@ -22,6 +22,9 @@ import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 
+/**
+ * Stub for function definition.
+ */
 public class BallerinaFunctionDefinitionStub extends BallerinaNamedStub<BallerinaFunctionDefinition> {
 
     public BallerinaFunctionDefinitionStub(StubElement parent, IStubElementType elementType, StringRef name,

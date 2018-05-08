@@ -19,6 +19,9 @@ package org.ballerinalang.plugins.idea.lexer;
 
 import com.intellij.lexer.FlexAdapter;
 
+/**
+ * Lexer adaptor.
+ */
 public class BallerinaLexerAdapter extends FlexAdapter {
 
     public BallerinaLexerAdapter() {

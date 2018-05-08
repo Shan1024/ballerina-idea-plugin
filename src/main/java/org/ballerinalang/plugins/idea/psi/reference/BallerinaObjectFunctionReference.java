@@ -30,6 +30,9 @@ import org.ballerinalang.plugins.idea.psi.scopeprocessors.BallerinaScopeProcesso
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Responsible for resolving object functions.
+ */
 public class BallerinaObjectFunctionReference extends BallerinaCachedReference<BallerinaIdentifier> {
 
     public BallerinaObjectFunctionReference(@NotNull BallerinaIdentifier element) {

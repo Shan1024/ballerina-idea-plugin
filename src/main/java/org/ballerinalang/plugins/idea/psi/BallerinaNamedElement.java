@@ -23,6 +23,9 @@ import com.intellij.psi.PsiNameIdentifierOwner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Represents a named element.
+ */
 public interface BallerinaNamedElement extends BallerinaCompositeElement, BallerinaTypeOwner, PsiNameIdentifierOwner,
         NavigationItem {
 

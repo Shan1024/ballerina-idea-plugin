@@ -45,6 +45,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * Responsible for resolving and completing definitions in code blocks.
+ */
 public class BallerinaBlockProcessor extends BallerinaScopeProcessorBase {
 
     @Nullable

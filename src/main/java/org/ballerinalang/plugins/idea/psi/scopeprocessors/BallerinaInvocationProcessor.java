@@ -21,6 +21,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * Responsible for resolving and completing invocations.
+ */
 public class BallerinaInvocationProcessor extends BallerinaScopeProcessorBase {
 
     @Nullable

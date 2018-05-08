@@ -23,6 +23,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VirtualFile;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Syntax highlighting factory.
+ */
 public class BallerinaSyntaxHighlighterFactory extends SyntaxHighlighterFactory {
 
     @NotNull

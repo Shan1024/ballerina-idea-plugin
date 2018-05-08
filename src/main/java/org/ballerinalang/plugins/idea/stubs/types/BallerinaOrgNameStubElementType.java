@@ -27,6 +27,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
+
+/**
+ * Represents organization name stub element.
+ */
 public class BallerinaOrgNameStubElementType extends
         BallerinaNamedStubElementType<BallerinaOrgNameStub, BallerinaOrgName> {
 

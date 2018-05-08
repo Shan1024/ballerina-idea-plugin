@@ -31,6 +31,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
+/**
+ * Provides annotation index support.
+ */
 public class BallerinaAnnotationIndex extends StringStubIndexExtension<BallerinaAnnotationDefinition> {
 
     public static final StubIndexKey<String, BallerinaAnnotationDefinition> KEY =

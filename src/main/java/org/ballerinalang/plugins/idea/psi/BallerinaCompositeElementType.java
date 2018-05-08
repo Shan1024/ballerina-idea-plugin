@@ -22,6 +22,9 @@ import org.ballerinalang.plugins.idea.BallerinaLanguage;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Represents a composite element.
+ */
 public class BallerinaCompositeElementType extends IElementType {
 
     public BallerinaCompositeElementType(@NotNull @NonNls String debugName) {

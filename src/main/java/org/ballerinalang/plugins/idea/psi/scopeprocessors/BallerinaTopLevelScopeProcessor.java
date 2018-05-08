@@ -20,6 +20,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * Responsible for resolving and completing definitions in top level scopes.
+ */
 public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase {
 
     @Nullable

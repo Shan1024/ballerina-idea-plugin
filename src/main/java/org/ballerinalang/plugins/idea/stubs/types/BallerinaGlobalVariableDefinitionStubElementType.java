@@ -35,6 +35,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Represents global variable stub element.
+ */
 public class BallerinaGlobalVariableDefinitionStubElementType extends
         BallerinaNamedStubElementType<BallerinaGlobalVariableDefinitionStub, BallerinaGlobalVariableDefinition> {
 

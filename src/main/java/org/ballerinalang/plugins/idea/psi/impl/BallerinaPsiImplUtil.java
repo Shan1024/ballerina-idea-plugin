@@ -122,6 +122,9 @@ import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Util class which contains methods related to PSI manipulation.
+ */
 public class BallerinaPsiImplUtil {
 
     private static final Key<SmartPsiElementPointer<PsiElement>> CONTEXT = Key.create("CONTEXT");

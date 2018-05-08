@@ -27,6 +27,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
+/**
+ * Represents alias stub element.
+ */
 public class BallerinaAliasStubElementType extends
         BallerinaNamedStubElementType<BallerinaAliasStub, BallerinaAlias> {
 

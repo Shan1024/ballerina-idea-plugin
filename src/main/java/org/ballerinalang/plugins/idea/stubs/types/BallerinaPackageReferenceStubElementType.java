@@ -27,6 +27,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
+/**
+ * Represents package reference stub element.
+ */
 public class BallerinaPackageReferenceStubElementType extends
         BallerinaNamedStubElementType<BallerinaPackageReferenceStub, BallerinaPackageReference> {
 

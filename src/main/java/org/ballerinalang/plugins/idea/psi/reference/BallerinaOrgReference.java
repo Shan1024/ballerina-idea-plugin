@@ -22,6 +22,9 @@ import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Responsible for resolving organizations in imports.
+ */
 public class BallerinaOrgReference extends BallerinaCachedReference<BallerinaIdentifier> {
 
     public BallerinaOrgReference(@NotNull BallerinaIdentifier element) {

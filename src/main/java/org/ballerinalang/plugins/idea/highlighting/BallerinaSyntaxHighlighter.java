@@ -34,6 +34,9 @@ import static org.ballerinalang.plugins.idea.highlighting.BallerinaSyntaxHighlig
 import static org.ballerinalang.plugins.idea.highlighting.BallerinaSyntaxHighlightingColors.NUMBER;
 import static org.ballerinalang.plugins.idea.highlighting.BallerinaSyntaxHighlightingColors.STRING;
 
+/**
+ * Provides syntax highlighting support.
+ */
 public class BallerinaSyntaxHighlighter extends SyntaxHighlighterBase {
 
     private static final Map<IElementType, TextAttributesKey> ATTRIBUTES = new HashMap<>();

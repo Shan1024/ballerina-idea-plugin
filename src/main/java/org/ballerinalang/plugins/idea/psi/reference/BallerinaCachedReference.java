@@ -29,6 +29,11 @@ import org.jetbrains.annotations.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Used for reference resolving.
+ *
+ * @param <T> reference type
+ */
 public abstract class BallerinaCachedReference<T extends PsiElement> extends PsiReferenceBase<T> {
 
     private static final ResolveCache.AbstractResolver<BallerinaCachedReference, PsiElement> MY_RESOLVER =
@@ -54,7 +59,7 @@ public abstract class BallerinaCachedReference<T extends PsiElement> extends Psi
                 : null;
     }
 
-//    public abstract boolean processResolveVariants(@NotNull BallerinaScopeProcessor processor);
+    //    public abstract boolean processResolveVariants(@NotNull BallerinaScopeProcessor processor);
 
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {

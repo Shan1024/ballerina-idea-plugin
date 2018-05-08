@@ -25,6 +25,9 @@ import org.ballerinalang.plugins.idea.psi.impl.BallerinaElementFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Responsible for resolving package names.
+ */
 public class BallerinaPackageNameReference extends BallerinaCachedReference<BallerinaIdentifier> {
 
     private PsiReference reference;

@@ -22,6 +22,9 @@ import org.ballerinalang.plugins.idea.BallerinaLanguage;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Represents a token type in PSI tree.
+ */
 public class BallerinaTokenType extends IElementType {
 
     public BallerinaTokenType(@NotNull @NonNls String debugName) {

@@ -35,6 +35,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Represents namespace declaration stub element.
+ */
 public class BallerinaNamespaceDeclarationStubElementType extends
         BallerinaNamedStubElementType<BallerinaNamespaceDeclarationStub, BallerinaNamespaceDeclaration> {
 

@@ -19,6 +19,9 @@ import org.ballerinalang.plugins.idea.psi.BallerinaVariableDefinitionStatement;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Keyword completion provider.
+ */
 public class BallerinaKeywordCompletionProvider extends CompletionProvider<CompletionParameters> {
 
     public BallerinaKeywordCompletionProvider() {

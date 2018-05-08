@@ -41,6 +41,9 @@ import java.util.List;
 
 import javax.swing.Icon;
 
+/**
+ * Represents a ballerina file.
+ */
 public class BallerinaFile extends PsiFileBase {
 
     public static final BallerinaImportDeclaration[] EMPTY_ARRAY = new BallerinaImportDeclaration[0];

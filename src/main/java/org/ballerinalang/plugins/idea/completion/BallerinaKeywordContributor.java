@@ -9,6 +9,9 @@ import org.ballerinalang.plugins.idea.psi.reference.BallerinaNameReferenceRefere
 
 import static com.intellij.patterns.PlatformPatterns.psiElement;
 
+/**
+ * Keyword contributor which is responsible for keyword completion.
+ */
 public class BallerinaKeywordContributor extends CompletionContributor implements DumbAware {
 
     public BallerinaKeywordContributor() {

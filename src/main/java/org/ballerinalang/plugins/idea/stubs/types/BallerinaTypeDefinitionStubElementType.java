@@ -29,6 +29,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
+/**
+ * Represents type definition stub element.
+ */
 public class BallerinaTypeDefinitionStubElementType extends
         BallerinaNamedStubElementType<BallerinaTypeDefinitionStub, BallerinaTypeDefinition> {
 

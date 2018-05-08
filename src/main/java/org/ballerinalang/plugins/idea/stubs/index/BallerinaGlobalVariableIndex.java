@@ -31,6 +31,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
+/**
+ * Provides global variable index support.
+ */
 public class BallerinaGlobalVariableIndex extends StringStubIndexExtension<BallerinaGlobalVariableDefinition> {
 
     public static final StubIndexKey<String, BallerinaGlobalVariableDefinition> KEY =

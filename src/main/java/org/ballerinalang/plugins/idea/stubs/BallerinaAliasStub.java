@@ -22,6 +22,9 @@ import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
 import org.ballerinalang.plugins.idea.psi.BallerinaAlias;
 
+/**
+ * Stub for alias.
+ */
 public class BallerinaAliasStub extends BallerinaNamedStub<BallerinaAlias> {
 
     public BallerinaAliasStub(StubElement parent, IStubElementType elementType, StringRef name,

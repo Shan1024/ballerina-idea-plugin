@@ -19,6 +19,9 @@ package org.ballerinalang.plugins.idea;
 
 import com.intellij.lang.Language;
 
+/**
+ * Represents Ballerina language.
+ */
 public class BallerinaLanguage extends Language {
 
     public static final BallerinaLanguage INSTANCE = new BallerinaLanguage();

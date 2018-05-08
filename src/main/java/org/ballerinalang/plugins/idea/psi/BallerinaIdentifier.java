@@ -35,6 +35,9 @@ import org.ballerinalang.plugins.idea.psi.reference.BallerinaTypeReference;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Represents an identifier.
+ */
 public class BallerinaIdentifier extends LeafPsiElement implements PsiNameIdentifierOwner, NavigatablePsiElement {
 
     public BallerinaIdentifier(@NotNull IElementType type, CharSequence text) {

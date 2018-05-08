@@ -20,6 +20,11 @@ package org.ballerinalang.plugins.idea.psi;
 import com.intellij.psi.ResolveState;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Represents a type owner.
+ *
+ * Todo - Remove?
+ */
 public interface BallerinaTypeOwner extends BallerinaCompositeElement {
 
     @Nullable

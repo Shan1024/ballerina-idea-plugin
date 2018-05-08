@@ -22,6 +22,9 @@ import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 
+/**
+ * Stub for global variable definition.
+ */
 public class BallerinaGlobalVariableDefinitionStub extends BallerinaNamedStub<BallerinaGlobalVariableDefinition> {
 
     public BallerinaGlobalVariableDefinitionStub(StubElement parent, IStubElementType elementType, StringRef name,

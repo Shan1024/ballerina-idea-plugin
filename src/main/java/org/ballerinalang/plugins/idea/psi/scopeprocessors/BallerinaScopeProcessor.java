@@ -19,6 +19,9 @@ package org.ballerinalang.plugins.idea.psi.scopeprocessors;
 
 import com.intellij.psi.scope.BaseScopeProcessor;
 
+/**
+ * Parent class for scope processors.
+ */
 public abstract class BallerinaScopeProcessor extends BaseScopeProcessor {
 
     public boolean isCompletion() {

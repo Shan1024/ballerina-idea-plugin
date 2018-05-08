@@ -27,6 +27,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * Responsible for resolving and completing object fields.
+ */
 public class BallerinaFieldProcessor extends BallerinaScopeProcessorBase {
 
     @Nullable

@@ -35,6 +35,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Represents worker definition stub element.
+ */
 public class BallerinaWorkerDefinitionStubElementType extends
         BallerinaNamedStubElementType<BallerinaWorkerDefinitionStub, BallerinaWorkerDefinition> {
 

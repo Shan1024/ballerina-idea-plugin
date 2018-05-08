@@ -22,6 +22,9 @@ import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
 import org.ballerinalang.plugins.idea.psi.BallerinaWorkerDefinition;
 
+/**
+ * Stub for worker definition.
+ */
 public class BallerinaWorkerDefinitionStub extends BallerinaNamedStub<BallerinaWorkerDefinition> {
 
     public BallerinaWorkerDefinitionStub(StubElement parent, IStubElementType elementType, StringRef name,

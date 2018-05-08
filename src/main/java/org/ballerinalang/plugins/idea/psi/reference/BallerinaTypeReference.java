@@ -33,6 +33,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Responsible for resolving types.
+ */
 public class BallerinaTypeReference extends BallerinaCachedReference<BallerinaIdentifier> {
 
     public BallerinaTypeReference(@NotNull BallerinaIdentifier element) {

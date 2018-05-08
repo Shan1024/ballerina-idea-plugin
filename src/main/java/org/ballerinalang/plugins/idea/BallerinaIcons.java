@@ -26,6 +26,9 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.swing.Icon;
 
+/**
+ * Contains icons used for completion, etc.
+ */
 public class BallerinaIcons {
 
     public static final Icon FILE = IconLoader.getIcon("/icons/ballerina.png");

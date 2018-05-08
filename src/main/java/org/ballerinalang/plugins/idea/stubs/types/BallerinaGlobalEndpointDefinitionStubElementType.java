@@ -35,6 +35,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Represents global endpoint stub element.
+ */
 public class BallerinaGlobalEndpointDefinitionStubElementType extends
         BallerinaNamedStubElementType<BallerinaGlobalEndpointDefinitionStub, BallerinaGlobalEndpointDefinition> {
 

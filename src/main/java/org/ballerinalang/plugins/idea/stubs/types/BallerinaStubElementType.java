@@ -25,6 +25,13 @@ import org.ballerinalang.plugins.idea.psi.BallerinaCompositeElement;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 
+
+/**
+ * Parent class of stub elements.
+ *
+ * @param <S> stub type
+ * @param <T> definition type
+ */
 public abstract class BallerinaStubElementType<S extends StubBase<T>, T extends BallerinaCompositeElement>
         extends IStubElementType<S, T> {
 

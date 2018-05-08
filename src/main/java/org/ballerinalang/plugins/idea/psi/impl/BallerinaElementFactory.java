@@ -22,11 +22,13 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFileFactory;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.BallerinaLanguage;
-import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
 import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.ballerinalang.plugins.idea.psi.BallerinaFunctionDefinition;
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * Element factory which creates PSI nodes.
+ */
 public class BallerinaElementFactory {
 
     @NotNull
@@ -41,19 +43,5 @@ public class BallerinaElementFactory {
         BallerinaFunctionDefinition functionDefinition = PsiTreeUtil.findChildOfType(file,
                 BallerinaFunctionDefinition.class);
         return functionDefinition.getIdentifier();
-    }
-
-    //    @NotNull
-    //    public static BallerinaCompletePackageName createImportString(@NotNull Project project, @NotNull String
-    // importString) {
-    //        GoImportSpec importSpec = createCompletePackageName(project, packageName);
-    //        return importSpec.getImportString();
-    //    }
-
-    @NotNull
-    public static BallerinaCompletePackageName createCompletePackageName(@NotNull Project project,
-                                                                         @NotNull String packageName) {
-        BallerinaFile file = createFileFromText(project, "function " + packageName + "(){}");
-        return PsiTreeUtil.findChildOfType(file, BallerinaCompletePackageName.class);
     }
 }

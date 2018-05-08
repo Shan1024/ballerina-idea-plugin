@@ -31,6 +31,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
+/**
+ * Provides namespace index support.
+ */
 public class BallerinaNamespaceIndex extends StringStubIndexExtension<BallerinaNamespaceDeclaration> {
 
     public static final StubIndexKey<String, BallerinaNamespaceDeclaration> KEY =

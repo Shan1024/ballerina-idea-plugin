@@ -33,6 +33,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
+/**
+ * Responsible for resolving packages.
+ */
 public class BallerinaCompletePackageNameReference extends FileReference {
 
     public static final String PACKAGE_VERSION_REGEX = "v\\d+\\.\\d+\\.\\d+";

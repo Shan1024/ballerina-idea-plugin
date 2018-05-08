@@ -14,6 +14,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
+/**
+ * Responsible for resolving and completing object functions.
+ */
 public class BallerinaObjectFunctionProcessor extends BallerinaScopeProcessorBase {
 
     @Nullable

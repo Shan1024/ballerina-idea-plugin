@@ -19,6 +19,9 @@ import static org.ballerinalang.plugins.idea.codeinsight.template.postfix.Baller
 import static org.ballerinalang.plugins.idea.codeinsight.template.postfix.BallerinaPostfixUtils.getType;
 import static org.ballerinalang.plugins.idea.codeinsight.template.postfix.BallerinaPostfixUtils.selectorTopmost;
 
+/**
+ * Match postfix template.
+ */
 public class MatchPostfixTemplate extends StringBasedPostfixTemplate {
 
     public MatchPostfixTemplate(String name) {
@@ -87,9 +90,8 @@ public class MatchPostfixTemplate extends StringBasedPostfixTemplate {
                 // Todo - Consider package as well.
                 if (typeName instanceof BallerinaSimpleTypeName) {
                     template.append("    ").append(typeName.getText()).append(" $name").append(0)
-                            .append("$ => {\n").append("$value").append(0).append("$").append("\n}");
-                    template.append("\n");
-                    template.append("    ").append("()").append(" $name").append(1)
+                            .append("$ => {\n").append("$value").append(0).append("$").append("\n}").append("\n")
+                            .append("    ").append("()").append(" $name").append(1)
                             .append("$ => {\n").append("$value").append(1).append("$").append("\n}");
                 } else if (typeName instanceof BallerinaUnionTypeName) {
                     BallerinaUnionTypeName ballerinaUnionTypeName = (BallerinaUnionTypeName) typeName;

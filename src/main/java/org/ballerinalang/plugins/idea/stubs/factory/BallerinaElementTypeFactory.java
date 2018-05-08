@@ -38,6 +38,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
+/**
+ * Responsible for creating stub elements.
+ */
 public class BallerinaElementTypeFactory {
     private static final Map<String, Class> TYPES = new HashMap<String, Class>() {
         {

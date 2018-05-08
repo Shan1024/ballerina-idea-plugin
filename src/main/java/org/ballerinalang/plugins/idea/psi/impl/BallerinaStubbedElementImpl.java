@@ -29,6 +29,11 @@ import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Implementation class of the stubbed element class.
+ *
+ * @param <T> stub base
+ */
 public abstract class BallerinaStubbedElementImpl<T extends StubBase<?>> extends StubBasedPsiElementBase<T>
         implements BallerinaCompositeElement {
 

@@ -31,6 +31,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
+/**
+ * Provides worker index support.
+ */
 public class BallerinaWorkerIndex extends StringStubIndexExtension<BallerinaWorkerDefinition> {
 
     public static final StubIndexKey<String, BallerinaWorkerDefinition> KEY =

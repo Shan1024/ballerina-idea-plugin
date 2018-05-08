@@ -27,6 +27,10 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 
+
+/**
+ * Represents package version stub element.
+ */
 public class BallerinaPackageVersionStubElementType extends
         BallerinaNamedStubElementType<BallerinaPackageVersionStub, BallerinaPackageVersion> {
 

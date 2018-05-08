@@ -35,6 +35,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
+/**
+ * Represents annotation definition stub element.
+ */
 public class BallerinaAnnotationDefinitionStubElementType extends
         BallerinaNamedStubElementType<BallerinaAnnotationDefinitionStub, BallerinaAnnotationDefinition> {
 

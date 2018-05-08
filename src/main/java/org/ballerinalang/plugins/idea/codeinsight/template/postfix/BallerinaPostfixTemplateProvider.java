@@ -9,6 +9,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
+/**
+ * Postfix template provider.
+ */
 public class BallerinaPostfixTemplateProvider implements PostfixTemplateProvider {
 
     private final Set<PostfixTemplate> templates;
