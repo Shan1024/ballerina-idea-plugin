@@ -397,8 +397,10 @@ public class BallerinaPsiImplUtil {
                 }
                 Collection<BallerinaTypeDefinition> typeDefinitions =
                         PsiTreeUtil.findChildrenOfType(psiFile, BallerinaTypeDefinition.class);
-                if (!typeDefinitions.isEmpty()) {
-                    results.addAll(typeDefinitions);
+                for (BallerinaTypeDefinition typeDefinition : typeDefinitions) {
+                    if (typeDefinition.isPublic()) {
+                        results.add(typeDefinition);
+                    }
                 }
             }
         }
