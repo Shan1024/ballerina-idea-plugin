@@ -123,9 +123,9 @@ public class BallerinaStackFrame extends XStackFrame {
      */
     @Override
     public void computeChildren(@NotNull XCompositeNode node) {
-        // We categorize variables according to the scopeprocessors. But we get all the variables in the stack. So we need to
-        // distinguish values in each scopeprocessors. In this Map, key will be the scopeprocessors name. Value will be the list of
-        // variables in that scopeprocessors.
+        // We categorize variables according to the scopeprocessors. But we get all the variables in the stack.
+        // So we need to distinguish values in each scopeprocessors. In this Map, key will be the scopeprocessors
+        // name. Value will be the list of variables in that scopeprocessors.
         Map<String, List<Variable>> scopeMap = new HashMap<>();
         // Iterate through each variable.
         List<Variable> variables = myFrame.getVariables();

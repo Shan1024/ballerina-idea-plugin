@@ -19,17 +19,11 @@ package org.ballerinalang.plugins.idea.actions;
 
 import com.intellij.ide.actions.CreateFileFromTemplateAction;
 import com.intellij.ide.actions.CreateFileFromTemplateDialog;
-import com.intellij.openapi.editor.Editor;
-import com.intellij.openapi.fileEditor.FileDocumentManager;
-import com.intellij.openapi.fileEditor.FileEditorManager;
 import com.intellij.openapi.project.DumbAware;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import org.ballerinalang.plugins.idea.BallerinaIcons;
-import org.ballerinalang.plugins.idea.psi.BallerinaFile;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -43,9 +37,6 @@ public class BallerinaCreateFileAction extends CreateFileFromTemplateAction impl
     private static final String BALLERINA_EMPTY_FILE = "Ballerina File";
     private static final String BALLERINA_MAIN = "Ballerina Main";
     private static final String BALLERINA_SERVICE = "Ballerina Service";
-//    private static final String BALLERINA_CONNECTOR = "Ballerina Connector";
-//    private static final String BALLERINA_WEBSOCKET = "Ballerina WebSocket";
-//    private static final String BALLERINA_TEST = "Ballerina Test";
 
     private static final String NEW_BALLERINA_FILE = "New Ballerina File";
     private static final String DEFAULT_BALLERINA_TEMPLATE_PROPERTY = "Empty file";
@@ -59,9 +50,6 @@ public class BallerinaCreateFileAction extends CreateFileFromTemplateAction impl
                                @NotNull CreateFileFromTemplateDialog.Builder builder) {
         builder.setTitle(NEW_BALLERINA_FILE).addKind(BALLERINA_MAIN, BallerinaIcons.ICON, BALLERINA_MAIN)
                 .addKind(BALLERINA_SERVICE, BallerinaIcons.ICON, BALLERINA_SERVICE)
-//                .addKind(BALLERINA_CONNECTOR, BallerinaIcons.ICON, BALLERINA_CONNECTOR)
-//                .addKind(BALLERINA_WEBSOCKET, BallerinaIcons.ICON, BALLERINA_WEBSOCKET)
-//                .addKind(BALLERINA_TEST, BallerinaIcons.ICON, BALLERINA_TEST)
                 .addKind(BALLERINA_EMPTY_FILE, BallerinaIcons.ICON, BALLERINA_EMPTY_FILE);
     }
 
@@ -80,22 +68,7 @@ public class BallerinaCreateFileAction extends CreateFileFromTemplateAction impl
 
     @Override
     protected void postProcess(PsiFile createdElement, String templateName, Map<String, String> customProperties) {
-        if (createdElement instanceof BallerinaFile) {
-            // Moving the caret to the end of the file.
-//            Project project = createdElement.getProject();
-//            Editor editor = FileEditorManager.getInstance(project).getSelectedTextEditor();
-//            if (editor == null) {
-//                return;
-//            }
-//            VirtualFile virtualFile = createdElement.getContainingFile().getVirtualFile();
-//            if (virtualFile == null) {
-//                return;
-//            }
-//            PsiElement lastChild = createdElement.getLastChild();
-//            if (FileDocumentManager.getInstance().getDocument(virtualFile) == editor.getDocument()) {
-//                editor.getCaretModel().moveToOffset(lastChild.getTextRange().getEndOffset());
-//            }
-        }
+
     }
 
     @Override

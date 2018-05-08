@@ -29,7 +29,6 @@ import com.intellij.openapi.roots.ModuleRootModificationUtil;
 import com.intellij.openapi.roots.ProjectExtension;
 import com.intellij.openapi.util.AsyncResult;
 import org.ballerinalang.plugins.idea.BallerinaExternalAnnotator;
-import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.ballerinalang.plugins.idea.sdk.BallerinaSdkService;
 import org.jdom.Element;
 import org.jetbrains.annotations.NotNull;

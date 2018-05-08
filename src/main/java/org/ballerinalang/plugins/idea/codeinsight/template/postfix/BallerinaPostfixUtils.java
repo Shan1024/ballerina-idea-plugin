@@ -56,16 +56,6 @@ public class BallerinaPostfixUtils {
         return type instanceof BallerinaUnionTypeName || type instanceof BallerinaNullableTypeName;
     };
 
-    //    @Contract("null -> false")
-    //    public static boolean isIterable(@Nullable PsiType type) {
-    //        return type != null && InheritanceUtil.isInheritor(type, CommonClassNames.JAVA_LANG_ITERABLE);
-    //    }
-    //
-    //    @Contract("null -> false")
-    //    public static boolean isArray(@Nullable PsiType type) {
-    //        return type != null && type instanceof PsiArrayType;
-    //    }
-
     @Nullable
     public static PsiElement getType(PsiElement context) {
         return CachedValuesManager.getCachedValue(context, () -> {
@@ -97,13 +87,6 @@ public class BallerinaPostfixUtils {
     }
 
     public static String render(BallerinaExpression expression, int maxLength) {
-        //        StringBuilder buf = new StringBuilder();
-        //        expression.accept(new PsiExpressionTrimRenderer(buf));
-        //        final String text = buf.toString();
-        //        int firstNewLinePos = text.indexOf('\n');
-        //        String trimmedText = text.substring(0, firstNewLinePos != -1 ? firstNewLinePos : Math.min
-        // (maxLength, text.length()));
-        //        if (trimmedText.length() != text.length()) trimmedText += " ...";
         return expression.getText();
     }
 }

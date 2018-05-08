@@ -24,7 +24,7 @@ import com.intellij.psi.stubs.StubElement;
 import com.intellij.util.io.StringRef;
 import org.ballerinalang.plugins.idea.psi.BallerinaNamedElement;
 
-abstract public class BallerinaNamedStub<T extends BallerinaNamedElement> extends NamedStubBase<T> {
+public abstract class BallerinaNamedStub<T extends BallerinaNamedElement> extends NamedStubBase<T> {
 
     private final boolean myIsPublic;
 

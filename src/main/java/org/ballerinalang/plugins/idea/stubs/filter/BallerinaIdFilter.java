@@ -98,7 +98,9 @@ public class BallerinaIdFilter extends IdFilter {
     private static void addToBitSet(@NotNull BitSet set, @NotNull VirtualFile file) {
         if (file instanceof VirtualFileWithId) {
             int id = ((VirtualFileWithId) file).getId();
-            if (id < 0) id = -id; // workaround for encountering invalid files, see EA-49915, EA-50599
+            if (id < 0) {
+                id = -id; // workaround for encountering invalid files, see EA-49915, EA-50599
+            }
             set.set(id);
         }
     }

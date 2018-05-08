@@ -21,16 +21,8 @@ import org.jetbrains.annotations.NotNull;
 
 public class BallerinaKeywordCompletionProvider extends CompletionProvider<CompletionParameters> {
 
-    private int myPriority;
-    private String[] myKeywords;
-
     public BallerinaKeywordCompletionProvider() {
 
-    }
-
-    public BallerinaKeywordCompletionProvider(int myPriority, String... myKeywords) {
-        this.myPriority = myPriority;
-        this.myKeywords = myKeywords;
     }
 
     @Override
@@ -95,7 +87,7 @@ public class BallerinaKeywordCompletionProvider extends CompletionProvider<Compl
                     PsiElement prevVisibleLeaf = PsiTreeUtil.prevVisibleLeaf(position);
                     if (!(prevVisibleLeaf instanceof LeafPsiElement
                             && (((LeafPsiElement) prevVisibleLeaf).getElementType() == BallerinaTypes.RARROW
-                            ||((LeafPsiElement) prevVisibleLeaf).getElementType() ==
+                            || ((LeafPsiElement) prevVisibleLeaf).getElementType() ==
                             BallerinaTypes.DECIMAL_INTEGER_LITERAL))) {
                         BallerinaCompletionUtils.addValueTypesAsLookups(result);
                         BallerinaCompletionUtils.addReferenceTypesAsLookups(result);
@@ -134,9 +126,10 @@ public class BallerinaKeywordCompletionProvider extends CompletionProvider<Compl
                     if (!(prevVisibleLeaf instanceof LeafPsiElement
                             && (((LeafPsiElement) prevVisibleLeaf).getElementType() ==
                             BallerinaTypes.DECIMAL_INTEGER_LITERAL))) {
-                    BallerinaCompletionUtils.addValueTypesAsLookups(result);
-                    BallerinaCompletionUtils.addReferenceTypesAsLookups(result);
-                }}
+                        BallerinaCompletionUtils.addValueTypesAsLookups(result);
+                        BallerinaCompletionUtils.addReferenceTypesAsLookups(result);
+                    }
+                }
             }
 
             BallerinaDefinition prevDefinition = PsiTreeUtil.getPrevSiblingOfType(globalVariableDefinition.getParent(),

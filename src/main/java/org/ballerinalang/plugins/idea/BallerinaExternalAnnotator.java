@@ -46,7 +46,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -171,7 +170,7 @@ public class BallerinaExternalAnnotator extends ExternalAnnotator<BallerinaExter
     private String getPackageName(PsiFile file) {
         PsiDirectory parent = file.getParent();
 
-        if(BallerinaPsiImplUtil.isAContentRoot(parent)){
+        if (BallerinaPsiImplUtil.isAContentRoot(parent)) {
             return file.getName();
         }
         while (parent != null && parent.getParent() != null &&

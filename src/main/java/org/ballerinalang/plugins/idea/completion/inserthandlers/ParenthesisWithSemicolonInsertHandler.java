@@ -26,10 +26,6 @@ import com.intellij.openapi.editor.EditorModificationUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.psi.PsiDocumentManager;
-import com.intellij.psi.PsiElement;
-
-import static org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils.HAS_A_RETURN_VALUE;
-import static org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils.REQUIRE_PARAMETERS;
 
 /**
  * Provides parenthesis with semicolon completion support.

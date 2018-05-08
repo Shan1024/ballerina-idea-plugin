@@ -509,10 +509,10 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
 
                 .around(SAFE_ASSIGNMENT).spaceIf(true)
 
-                .around(STATEMENT).lineBreakOrForceSpace(true,true)
-                .between(MATCH_EXPRESSION_PATTERN_CLAUSE,COMMA).lineBreakOrForceSpace(false,false)
-                .around(MATCH_EXPRESSION_PATTERN_CLAUSE).lineBreakOrForceSpace(true,true)
-                .aroundInside(BLOCK,NAMED_PATTERN).lineBreakOrForceSpace(true,true)
+                .around(STATEMENT).lineBreakOrForceSpace(true, true)
+                .between(MATCH_EXPRESSION_PATTERN_CLAUSE, COMMA).lineBreakOrForceSpace(false, false)
+                .around(MATCH_EXPRESSION_PATTERN_CLAUSE).lineBreakOrForceSpace(true, true)
+                .aroundInside(BLOCK, NAMED_PATTERN).lineBreakOrForceSpace(true, true)
 
                 // Docs
                 .aroundInside(IDENTIFIER, DOCUMENTATION_TEMPLATE_ATTRIBUTE_DESCRIPTION).spaceIf(false)

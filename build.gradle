@@ -67,9 +67,11 @@ checkstyle {
     configDir new File("src/main/resources/checkstyle")
     checkstyleMain {
         source "src/main/java"
+//        exclude {'gens/org/ballerinalang/plugins'}
     }
     checkstyleTest {
         source "src/test/java"
+//        exclude {'*/gens/org/ballerinalang/plugins/'}
     }
 }
 

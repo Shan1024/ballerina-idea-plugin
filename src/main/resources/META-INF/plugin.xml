@@ -71,8 +71,8 @@
 
         <!--<spellchecker.support language="Ballerina"-->
         <!--implementationClass="org.ballerinalang.plugins.idea.spellchecker.BallerinaSpellcheckingStrategy"/>-->
-        <defaultTemplatePropertiesProvider
-                implementation="org.ballerinalang.plugins.idea.actions.BallerinaTemplatePropertiesProvider"/>
+        <!--<defaultTemplatePropertiesProvider-->
+                <!--implementation="org.ballerinalang.plugins.idea.actions.BallerinaTemplatePropertiesProvider"/>-->
 
         <annotator language="Ballerina"
                    implementationClass="org.ballerinalang.plugins.idea.codeinsight.daemon.impl.BallerinaAnnotator"/>
