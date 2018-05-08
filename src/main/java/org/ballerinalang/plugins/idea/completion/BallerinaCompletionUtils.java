@@ -79,6 +79,8 @@ public class BallerinaCompletionUtils {
     public static final Key<String> HAS_A_RETURN_VALUE = Key.create("HAS_A_RETURN_VALUE");
     public static final Key<String> REQUIRE_PARAMETERS = Key.create("REQUIRE_PARAMETERS");
 
+    public static final Key<String> PUBLIC_DEFINITIONS_ONLY = Key.create("PUBLIC_DEFINITIONS_ONLY");
+
     // File level keywords
     private static final LookupElementBuilder ANNOTATION;
     private static final LookupElementBuilder ENDPOINT;

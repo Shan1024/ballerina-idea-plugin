@@ -94,8 +94,16 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                     PsiElement identifier = definition.getIdentifier();
                     if (identifier != null) {
                         if (myResult != null) {
-                            myResult.addElement(BallerinaCompletionUtils.createTypeLookupElement(definition));
-                            lookupElementsFound = true;
+                            String publicFieldsOnly = state.get(BallerinaCompletionUtils.PUBLIC_DEFINITIONS_ONLY);
+                            if (publicFieldsOnly != null) {
+                                if (definition.isPublic()) {
+                                    myResult.addElement(BallerinaCompletionUtils.createTypeLookupElement(definition));
+                                    lookupElementsFound = true;
+                                }
+                            } else {
+                                myResult.addElement(BallerinaCompletionUtils.createTypeLookupElement(definition));
+                                lookupElementsFound = true;
+                            }
                         } else if (myElement.getText().equals(identifier.getText())) {
                             add(identifier);
                         }
@@ -118,9 +126,18 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                                 // Todo - Conside oncommit, onabort, etc and set the insert handler
                                 // Note - Child is passed here instead of identifier because it is is top level
                                 // definition.
-                                myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(child,
-                                        ParenthesisInsertHandler.INSTANCE));
-                                lookupElementsFound = true;
+                                String publicFieldsOnly = state.get(BallerinaCompletionUtils.PUBLIC_DEFINITIONS_ONLY);
+                                if (publicFieldsOnly != null) {
+                                    if (child.isPublic()) {
+                                        myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(child,
+                                                ParenthesisInsertHandler.INSTANCE));
+                                        lookupElementsFound = true;
+                                    }
+                                } else {
+                                    myResult.addElement(BallerinaCompletionUtils.createFunctionLookupElement(child,
+                                            ParenthesisInsertHandler.INSTANCE));
+                                    lookupElementsFound = true;
+                                }
                             } else if (myElement.getText().equals(identifier.getText())) {
                                 add(identifier);
                             }
@@ -131,9 +148,18 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                     PsiElement identifier = child.getIdentifier();
                     if (identifier != null) {
                         if (myResult != null) {
-                            myResult.addElement(BallerinaCompletionUtils.createGlobalVariableLookupElement(child,
-                                    BallerinaPsiImplUtil.formatBallerinaTypeName(child.getTypeName())));
-                            lookupElementsFound = true;
+                            String publicFieldsOnly = state.get(BallerinaCompletionUtils.PUBLIC_DEFINITIONS_ONLY);
+                            if (publicFieldsOnly != null) {
+                                if (child.isPublic()) {
+                                    myResult.addElement(BallerinaCompletionUtils.createGlobalVariableLookupElement
+                                            (child, BallerinaPsiImplUtil.formatBallerinaTypeName(child.getTypeName())));
+                                    lookupElementsFound = true;
+                                }
+                            } else {
+                                myResult.addElement(BallerinaCompletionUtils.createGlobalVariableLookupElement(child,
+                                        BallerinaPsiImplUtil.formatBallerinaTypeName(child.getTypeName())));
+                                lookupElementsFound = true;
+                            }
                         } else if (myElement.getText().equals(identifier.getText())) {
                             add(identifier);
                         }
@@ -143,8 +169,17 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                     PsiElement identifier = child.getIdentifier();
                     if (identifier != null) {
                         if (myResult != null) {
-                            myResult.addElement(BallerinaCompletionUtils.createGlobalEndpointLookupElement(child));
-                            lookupElementsFound = true;
+                            String publicFieldsOnly = state.get(BallerinaCompletionUtils.PUBLIC_DEFINITIONS_ONLY);
+                            if (publicFieldsOnly != null) {
+                                if (child.isPublic()) {
+                                    myResult.addElement(BallerinaCompletionUtils.createGlobalEndpointLookupElement
+                                            (child));
+                                    lookupElementsFound = true;
+                                }
+                            } else {
+                                myResult.addElement(BallerinaCompletionUtils.createGlobalEndpointLookupElement(child));
+                                lookupElementsFound = true;
+                            }
                         } else if (myElement.getText().equals(identifier.getText())) {
                             add(identifier);
                         }
@@ -154,8 +189,16 @@ public class BallerinaTopLevelScopeProcessor extends BallerinaScopeProcessorBase
                     PsiElement identifier = child.getIdentifier();
                     if (identifier != null) {
                         if (myResult != null) {
-                            myResult.addElement(BallerinaCompletionUtils.createTypeLookupElement(child));
-                            lookupElementsFound = true;
+                            String publicFieldsOnly = state.get(BallerinaCompletionUtils.PUBLIC_DEFINITIONS_ONLY);
+                            if (publicFieldsOnly != null) {
+                                if (child.isPublic()) {
+                                    myResult.addElement(BallerinaCompletionUtils.createTypeLookupElement(child));
+                                    lookupElementsFound = true;
+                                }
+                            } else {
+                                myResult.addElement(BallerinaCompletionUtils.createTypeLookupElement(child));
+                                lookupElementsFound = true;
+                            }
                         } else if (myElement.getText().equals(identifier.getText())) {
                             add(identifier);
                         }

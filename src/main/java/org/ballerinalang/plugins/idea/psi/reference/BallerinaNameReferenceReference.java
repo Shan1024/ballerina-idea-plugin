@@ -24,6 +24,7 @@ import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
 import com.intellij.psi.impl.source.tree.LeafPsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
+import org.ballerinalang.plugins.idea.completion.BallerinaCompletionUtils;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnnotationAttachment;
 import org.ballerinalang.plugins.idea.psi.BallerinaAnyIdentifierName;
 import org.ballerinalang.plugins.idea.psi.BallerinaAssignmentStatement;
@@ -223,10 +224,11 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
             }
         }
 
+        ResolveState resolveState = ResolveState.initial();
         if (processor instanceof BallerinaActionInvocationProcessor) {
             if (prevVisibleLeaf != null && prevVisibleLeaf instanceof LeafPsiElement) {
                 if (((LeafPsiElement) prevVisibleLeaf).getElementType() == BallerinaTypes.RARROW) {
-                    if (!processor.execute(containingFile, ResolveState.initial())) {
+                    if (!processor.execute(containingFile, resolveState)) {
                         return false;
                     }
                 }
@@ -238,7 +240,7 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
             BallerinaAnnotationAttachment annotationAttachment = PsiTreeUtil.getParentOfType(myElement,
                     BallerinaAnnotationAttachment.class);
             if (recordKey != null && annotationAttachment != null) {
-                if (!processor.execute(annotationAttachment, ResolveState.initial())) {
+                if (!processor.execute(annotationAttachment, resolveState)) {
                     return false;
                 }
             }
@@ -249,14 +251,14 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
             BallerinaEndpointDefinition endpointDefinition = PsiTreeUtil.getParentOfType(myElement,
                     BallerinaEndpointDefinition.class);
             if (recordKey != null && endpointDefinition != null) {
-                if (!processor.execute(endpointDefinition, ResolveState.initial())) {
+                if (!processor.execute(endpointDefinition, resolveState)) {
                     return false;
                 }
             }
         }
 
         if (processor instanceof BallerinaPackageNameProcessor) {
-            if (!processor.execute(containingFile, ResolveState.initial())) {
+            if (!processor.execute(containingFile, resolveState)) {
                 return false;
             }
         }
@@ -277,27 +279,27 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
             // Note - Execute BallerinaStatementProcessor first.
             BallerinaStatement ballerinaStatement = PsiTreeUtil.getParentOfType(myElement, BallerinaStatement.class);
             if (ballerinaStatement != null && processor instanceof BallerinaStatementProcessor) {
-                if (!processor.execute(ballerinaStatement, ResolveState.initial())) {
+                if (!processor.execute(ballerinaStatement, resolveState)) {
                     return false;
                 }
             }
             BallerinaBlock ballerinaBlock = PsiTreeUtil.getParentOfType(myElement, BallerinaBlock.class);
             if (ballerinaBlock != null && processor instanceof BallerinaBlockProcessor) {
-                if (!processor.execute(ballerinaBlock, ResolveState.initial())) {
+                if (!processor.execute(ballerinaBlock, resolveState)) {
                     return false;
                 }
             }
 
             // Get suggestions from current file. This is needed sometimes because without the dummy identifier inserted
             // by the IDEA, the file might not generate the PSI tree correctly.
-            if (!processor.execute(containingFile, ResolveState.initial())) {
+            if (!processor.execute(containingFile, resolveState)) {
                 return false;
             }
             if (processor instanceof BallerinaTopLevelScopeProcessor) {
                 if (!((BallerinaTopLevelScopeProcessor) processor).isLookupElementsFound()) {
                     PsiFile originalFile = containingFile.getOriginalFile();
                     // Get suggestions from current file.
-                    if (!processor.execute(originalFile, ResolveState.initial())) {
+                    if (!processor.execute(originalFile, resolveState)) {
                         return false;
                     }
 
@@ -410,7 +412,10 @@ public class BallerinaNameReferenceReference extends BallerinaCachedReference<Ba
                 directories.add(((PsiDirectory) child));
             } else if (child instanceof BallerinaFile) {
                 // If the child is a Ballerina file, process the file.
-                if (!processor.execute(child, ResolveState.initial())) {
+                ResolveState resolveState = ResolveState.initial();
+                resolveState = resolveState.put(BallerinaCompletionUtils.PUBLIC_DEFINITIONS_ONLY,
+                        "PUBLIC_DEFINITIONS_ONLY");
+                if (!processor.execute(child, resolveState)) {
                     return false;
                 }
             }
