@@ -81,6 +81,7 @@ public class BallerinaCompletionUtils {
 
     // File level keywords
     private static final LookupElementBuilder ANNOTATION;
+    private static final LookupElementBuilder ENDPOINT;
     private static final LookupElementBuilder FUNCTION;
     private static final LookupElementBuilder IMPORT;
     private static final LookupElementBuilder PUBLIC;
@@ -151,6 +152,7 @@ public class BallerinaCompletionUtils {
 
     static {
         ANNOTATION = createKeywordLookupElement("annotation");
+        ENDPOINT = createKeywordLookupElement("endpoint");
         FUNCTION = createKeywordLookupElement("function");
         IMPORT = createKeywordLookupElement("import");
         PUBLIC = createKeywordLookupElement("public");
@@ -336,7 +338,9 @@ public class BallerinaCompletionUtils {
     static void addBindAsLookup(@NotNull CompletionResultSet resultSet) {
         resultSet.addElement(PrioritizedLookupElement.withPriority(BIND, KEYWORDS_PRIORITY));
     }
-
+    static void addEndpointAsLookup(@NotNull CompletionResultSet resultSet) {
+        resultSet.addElement(PrioritizedLookupElement.withPriority(ENDPOINT, KEYWORDS_PRIORITY));
+    }
     static void addNewAsLookup(@NotNull CompletionResultSet resultSet,
                                @NotNull BallerinaTypeDefinition typeDefinition) {
         LookupElementBuilder builder = NEW.withInsertHandler(SemiolonInsertHandler.INSTANCE);

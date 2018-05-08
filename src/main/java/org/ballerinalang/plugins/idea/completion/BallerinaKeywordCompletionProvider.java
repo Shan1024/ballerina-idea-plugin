@@ -10,6 +10,7 @@ import com.intellij.util.ProcessingContext;
 import org.ballerinalang.plugins.idea.psi.BallerinaDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaExpression;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
+import org.ballerinalang.plugins.idea.psi.BallerinaResourceDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleVariableReference;
 import org.ballerinalang.plugins.idea.psi.BallerinaStatement;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypeDefinition;
@@ -142,6 +143,16 @@ public class BallerinaKeywordCompletionProvider extends CompletionProvider<Compl
                 BallerinaCompletionUtils.addPublicAsLookup(result);
                 BallerinaCompletionUtils.addImportAsLookup(result);
                 return;
+            }
+        }
+
+        if (parent instanceof BallerinaResourceDefinition) {
+            PsiElement prevVisibleLeaf = PsiTreeUtil.prevVisibleLeaf(position);
+            if (prevVisibleLeaf instanceof LeafPsiElement) {
+                if (((LeafPsiElement) prevVisibleLeaf).getElementType() == BallerinaTypes.LEFT_PARENTHESIS) {
+                    BallerinaCompletionUtils.addEndpointAsLookup(result);
+                    return;
+                }
             }
         }
     }
