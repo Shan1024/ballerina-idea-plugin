@@ -248,7 +248,6 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
 
     @Override
     public void updateParameterInfo(@NotNull Object o, @NotNull UpdateParameterInfoContext context) {
-        context.setPreservedOnHintHidden(false);
         int index = getCurrentParameterIndex(o, context.getOffset());
         if (index != -1) {
             context.setCurrentParameter(index);
