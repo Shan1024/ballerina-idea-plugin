@@ -65,14 +65,16 @@ public class BallerinaPackageNameReference extends BallerinaCachedReference<Ball
         //            List<VirtualFile> virtualFiles = Arrays.asList(parent.getVirtualFile().getChildren());
         //
         //            GlobalSearchScope scopeprocessors = GlobalSearchScope.filesScope(project, virtualFiles);
-        //            elements = StubIndex.getElements(BallerinaFunctionIndex.KEY, myElement.getText(), project, scopeprocessors,
+        //            elements = StubIndex.getElements(BallerinaFunctionIndex.KEY, myElement.getText(), project,
+        // scopeprocessors,
         //                    BallerinaFunctionDefinition.class);
         //        } else {
         //            // Todo - Get files in the corresponding package.
         //            // Todo - Filter public elements? Or show a warning?
         //            // Todo - Consider package version.
         //            GlobalSearchScope scopeprocessors = GlobalSearchScope.fileScope(myElement.getContainingFile());
-        //            elements = StubIndex.getElements(BallerinaFunctionIndex.KEY, myElement.getText(), project, scopeprocessors,
+        //            elements = StubIndex.getElements(BallerinaFunctionIndex.KEY, myElement.getText(), project,
+        // scopeprocessors,
         //                    BallerinaFunctionDefinition.class);
         //        }
         //        BallerinaFunctionDefinition firstItem = ContainerUtil.getFirstItem(elements);
@@ -83,13 +85,13 @@ public class BallerinaPackageNameReference extends BallerinaCachedReference<Ball
 
 
         return reference.resolve();
-//        return null;
+        //        return null;
     }
 
-//    @Override
-//    public boolean isReferenceTo(PsiElement element) {
-//        return true;
-//    }
+    //    @Override
+    //    public boolean isReferenceTo(PsiElement element) {
+    //        return true;
+    //    }
 
     @NotNull
     @Override

@@ -48,7 +48,7 @@ import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.swing.*;
+import javax.swing.Icon;
 
 public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>> extends BallerinaStubbedElementImpl<T>
         implements BallerinaCompositeElement, BallerinaNamedElement {
@@ -63,7 +63,6 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
 
     @Override
     public boolean isPublic() {
-        //        if (GoPsiImplUtil.builtin(this)) return true;
         T stub = getStub();
         if (stub != null && stub.isPublic()) {
             return true;
@@ -93,9 +92,9 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
     @Override
     public String getQualifiedName() {
         String name = getName();
-        if (name == null) return null;
-        //        String packageName = getContainingFile().getPackageName();
-        //        return GoPsiImplUtil.getFqn(packageName, name);
+        if (name == null) {
+            return null;
+        }
         return "";
     }
 

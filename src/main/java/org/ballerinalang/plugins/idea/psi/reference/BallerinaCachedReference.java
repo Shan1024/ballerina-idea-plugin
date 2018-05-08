@@ -22,7 +22,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReferenceBase;
 import com.intellij.psi.impl.source.resolve.ResolveCache;
 import com.intellij.util.IncorrectOperationException;
-import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaElementFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -35,7 +34,7 @@ public abstract class BallerinaCachedReference<T extends PsiElement> extends Psi
     private static final ResolveCache.AbstractResolver<BallerinaCachedReference, PsiElement> MY_RESOLVER =
             (r, b) -> r.resolveInner();
 
-    protected final List<String> IGNORED_DIRECTORIES = new LinkedList<>();
+    protected static final List<String> IGNORED_DIRECTORIES = new LinkedList<>();
 
     public BallerinaCachedReference(@NotNull T element) {
         super(element, TextRange.from(0, element.getTextLength()));

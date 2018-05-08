@@ -96,7 +96,8 @@ public class BallerinaActionInvocationProcessor extends BallerinaScopeProcessorB
                         if (parent instanceof BallerinaTypeDefinition) {
                             // Todo - Remove duplicate below
                             BallerinaTypeDefinition clientConnector =
-                                    BallerinaPsiImplUtil.getReturnTypeFromObjectFunction((BallerinaTypeDefinition) parent,
+                                    BallerinaPsiImplUtil.getReturnTypeFromObjectFunction((BallerinaTypeDefinition)
+                                                    parent,
                                             "getCallerActions");
                             if (clientConnector != null) {
                                 BallerinaObjectFunctionProcessor ballerinaObjectFunctionProcessor

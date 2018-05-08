@@ -21,10 +21,7 @@ import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.AbstractElementManipulator;
 import com.intellij.util.IncorrectOperationException;
 import org.ballerinalang.plugins.idea.psi.BallerinaCompletePackageName;
-import org.ballerinalang.plugins.idea.psi.impl.BallerinaElementFactory;
 import org.jetbrains.annotations.NotNull;
-
-import java.io.File;
 
 public class BallerinaPackageManipulator extends AbstractElementManipulator<BallerinaCompletePackageName> {
 

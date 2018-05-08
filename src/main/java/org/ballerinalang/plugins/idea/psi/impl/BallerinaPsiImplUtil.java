@@ -126,9 +126,9 @@ public class BallerinaPsiImplUtil {
 
     private static final Key<SmartPsiElementPointer<PsiElement>> CONTEXT = Key.create("CONTEXT");
 
-    private static List<String> BUILTIN_DIRECTORIES = new LinkedList<>();
+    private static final List<String> BUILTIN_DIRECTORIES = new LinkedList<>();
 
-    private static List<String> BUILTIN_VARIABLE_TYPES = new LinkedList<>();
+    private static final List<String> BUILTIN_VARIABLE_TYPES = new LinkedList<>();
 
     static {
         BUILTIN_DIRECTORIES.add("/builtin");
@@ -285,7 +285,7 @@ public class BallerinaPsiImplUtil {
     }
 
     @NotNull
-    public synchronized static List<BallerinaFunctionDefinition> suggestBuiltInFunctions(@NotNull PsiElement type) {
+    public static synchronized List<BallerinaFunctionDefinition> suggestBuiltInFunctions(@NotNull PsiElement type) {
         if (!hasBuiltInDefinitions(type)) {
             return new LinkedList<>();
         }
@@ -327,7 +327,7 @@ public class BallerinaPsiImplUtil {
     }
 
     @NotNull
-    public synchronized static List<BallerinaAnnotationDefinition> suggestBuiltInAnnotations(@NotNull PsiElement
+    public static synchronized List<BallerinaAnnotationDefinition> suggestBuiltInAnnotations(@NotNull PsiElement
                                                                                                      element) {
         return CachedValuesManager.getCachedValue(element,
                 () -> CachedValueProvider.Result.create(getBuiltInAnnotations(element),
@@ -365,7 +365,7 @@ public class BallerinaPsiImplUtil {
     }
 
     @NotNull
-    public synchronized static List<BallerinaTypeDefinition> suggestBuiltInTypes(@NotNull PsiElement element) {
+    public static synchronized List<BallerinaTypeDefinition> suggestBuiltInTypes(@NotNull PsiElement element) {
         return CachedValuesManager.getCachedValue(element,
                 () -> CachedValueProvider.Result.create(getBuiltInTypes(element),
                         ProjectRootManager.getInstance(element.getProject())));

@@ -39,7 +39,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.*;
+import javax.swing.Icon;
 
 public class BallerinaFile extends PsiFileBase {
 

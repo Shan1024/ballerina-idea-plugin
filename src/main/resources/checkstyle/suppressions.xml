@@ -21,10 +21,5 @@
         "http://checkstyle.sourceforge.net/dtds/suppressions_1_1.dtd">
 
 <suppressions>
-    <suppress checks="." files="org/ballerinalang/plugins/idea/lexer"/>
-    <suppress checks="." files="org/ballerinalang/plugins/idea/parser"/>
-    <suppress checks="." files="org/ballerinalang/plugins/idea/psi"/>
-
-    <suppress checks="." files="org/ballerinalang/plugins/idea/grammar/BallerinaParser.g4"/>
-    <suppress checks="." files="org/ballerinalang/plugins/idea/grammar/CopyrightHeader.txt"/>
+    <suppress checks="." files="gen/org/ballerinalang/plugins/idea"/>
 </suppressions>

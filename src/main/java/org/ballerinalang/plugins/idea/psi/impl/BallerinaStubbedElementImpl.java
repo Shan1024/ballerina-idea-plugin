@@ -32,51 +32,51 @@ import org.jetbrains.annotations.Nullable;
 public abstract class BallerinaStubbedElementImpl<T extends StubBase<?>> extends StubBasedPsiElementBase<T>
         implements BallerinaCompositeElement {
 
-  public BallerinaStubbedElementImpl(@NotNull T stub, @NotNull IStubElementType nodeType) {
-    super(stub, nodeType);
-  }
+    public BallerinaStubbedElementImpl(@NotNull T stub, @NotNull IStubElementType nodeType) {
+        super(stub, nodeType);
+    }
 
-  public BallerinaStubbedElementImpl(@NotNull ASTNode node) {
-    super(node);
-  }
+    public BallerinaStubbedElementImpl(@NotNull ASTNode node) {
+        super(node);
+    }
 
-  @Override
-  public String toString() {
-    return getElementType().toString();
-  }
+    @Override
+    public String toString() {
+        return getElementType().toString();
+    }
 
-  @Nullable
-  @Override
-  public String getText() {
-//    T stub = getStub();
-//    if (stub instanceof TextHolder) {
-//      String text = ((TextHolder)stub).getText();
-//      if (text != null) return text;
-//    }
-    return super.getText();
-  }
+    @Nullable
+    @Override
+    public String getText() {
+        //    T stub = getStub();
+        //    if (stub instanceof TextHolder) {
+        //      String text = ((TextHolder)stub).getText();
+        //      if (text != null) return text;
+        //    }
+        return super.getText();
+    }
 
-  @Override
-  public PsiElement getParent() {
-    return getParentByStub();
-  }
+    @Override
+    public PsiElement getParent() {
+        return getParentByStub();
+    }
 
-  @Override
-  public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
-                                     @NotNull ResolveState state,
-                                     PsiElement lastParent,
-                                     @NotNull PsiElement place) {
-    return BallerinaCompositeElementImpl.processDeclarationsDefault(this, processor, state, lastParent, place);
-  }
+    @Override
+    public boolean processDeclarations(@NotNull PsiScopeProcessor processor,
+                                       @NotNull ResolveState state,
+                                       PsiElement lastParent,
+                                       @NotNull PsiElement place) {
+        return BallerinaCompositeElementImpl.processDeclarationsDefault(this, processor, state, lastParent, place);
+    }
 
-  @NotNull
-  @Override
-  public BallerinaFile getContainingFile() {
-    return (BallerinaFile)super.getContainingFile();
-  }
+    @NotNull
+    @Override
+    public BallerinaFile getContainingFile() {
+        return (BallerinaFile) super.getContainingFile();
+    }
 
-  @Override
-  public boolean shouldGoDeeper() {
-    return true;
-  }
+    @Override
+    public boolean shouldGoDeeper() {
+        return true;
+    }
 }
