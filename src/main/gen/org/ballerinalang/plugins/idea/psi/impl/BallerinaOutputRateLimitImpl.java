@@ -48,9 +48,9 @@ public class BallerinaOutputRateLimitImpl extends BallerinaCompositeElementImpl 
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getDecimalIntegerLiteral() {
-    return notNullChild(findChildByType(DECIMAL_INTEGER_LITERAL));
+    return findChildByType(DECIMAL_INTEGER_LITERAL);
   }
 
   @Override
@@ -66,9 +66,9 @@ public class BallerinaOutputRateLimitImpl extends BallerinaCompositeElementImpl 
   }
 
   @Override
-  @NotNull
+  @Nullable
   public PsiElement getEvery() {
-    return notNullChild(findChildByType(EVERY));
+    return findChildByType(EVERY);
   }
 
   @Override

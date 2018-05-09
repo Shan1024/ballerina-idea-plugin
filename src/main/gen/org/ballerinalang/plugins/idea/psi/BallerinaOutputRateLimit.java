@@ -26,7 +26,7 @@ public interface BallerinaOutputRateLimit extends BallerinaCompositeElement {
   @Nullable
   BallerinaTimeScale getTimeScale();
 
-  @NotNull
+  @Nullable
   PsiElement getDecimalIntegerLiteral();
 
   @Nullable
@@ -35,7 +35,7 @@ public interface BallerinaOutputRateLimit extends BallerinaCompositeElement {
   @Nullable
   PsiElement getEvents();
 
-  @NotNull
+  @Nullable
   PsiElement getEvery();
 
   @Nullable

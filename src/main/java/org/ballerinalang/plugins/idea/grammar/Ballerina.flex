@@ -515,8 +515,8 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "events"                                    { if(inSiddhiInsertQuery) { inSiddhiInsertQuery = false; return EVENTS; } return IDENTIFIER; }
     "every"                                     { return EVERY; }
     "within"                                    { return WITHIN; }
-    "last"                                      { if(inSiddhiOutputRateLimit) { inSiddhiTimeScaleQuery = false; return LAST; } return IDENTIFIER; }
-    "first"                                     { if(inSiddhiOutputRateLimit) { inSiddhiTimeScaleQuery = false; return FIRST; } return IDENTIFIER; }
+    "last"                                      { if(inSiddhiOutputRateLimit) { inSiddhiOutputRateLimit = false; return LAST; } return IDENTIFIER; }
+    "first"                                     { if(inSiddhiOutputRateLimit) { inSiddhiOutputRateLimit = false; return FIRST; } return IDENTIFIER; }
     "snapshot"                                  { return SNAPSHOT; }
     "output"                                    { if(inSiddhiOutputRateLimit) { inSiddhiTimeScaleQuery = true; return OUTPUT; } return IDENTIFIER; }
     "inner"                                     { return INNER; }

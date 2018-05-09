@@ -2874,7 +2874,7 @@ public class BallerinaLexer implements FlexLexer {
             // fall through
           case 352: break;
           case 130: 
-            { if(inSiddhiOutputRateLimit) { inSiddhiTimeScaleQuery = false; return LAST; } return IDENTIFIER;
+            { if(inSiddhiOutputRateLimit) { inSiddhiOutputRateLimit = false; return LAST; } return IDENTIFIER;
             } 
             // fall through
           case 353: break;
@@ -2989,7 +2989,7 @@ public class BallerinaLexer implements FlexLexer {
             // fall through
           case 375: break;
           case 153: 
-            { if(inSiddhiOutputRateLimit) { inSiddhiTimeScaleQuery = false; return FIRST; } return IDENTIFIER;
+            { if(inSiddhiOutputRateLimit) { inSiddhiOutputRateLimit = false; return FIRST; } return IDENTIFIER;
             } 
             // fall through
           case 376: break;

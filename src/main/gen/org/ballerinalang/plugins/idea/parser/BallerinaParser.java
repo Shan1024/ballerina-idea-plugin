@@ -3701,35 +3701,48 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // output (all | last | first) every (DECIMAL_INTEGER_LITERAL TimeScale | DECIMAL_INTEGER_LITERAL events)
-  //     | output snapshot every DECIMAL_INTEGER_LITERAL TimeScale
+  // output ((all | last | first) every DECIMAL_INTEGER_LITERAL (TimeScale | events)
+  //     | snapshot every DECIMAL_INTEGER_LITERAL TimeScale)
   public static boolean OutputRateLimit(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "OutputRateLimit")) return false;
     if (!nextTokenIs(b, OUTPUT)) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = OutputRateLimit_0(b, l + 1);
-    if (!r) r = OutputRateLimit_1(b, l + 1);
-    exit_section_(b, m, OUTPUT_RATE_LIMIT, r);
-    return r;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_, OUTPUT_RATE_LIMIT, null);
+    r = consumeToken(b, OUTPUT);
+    p = r; // pin = 1
+    r = r && OutputRateLimit_1(b, l + 1);
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
-  // output (all | last | first) every (DECIMAL_INTEGER_LITERAL TimeScale | DECIMAL_INTEGER_LITERAL events)
-  private static boolean OutputRateLimit_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "OutputRateLimit_0")) return false;
+  // (all | last | first) every DECIMAL_INTEGER_LITERAL (TimeScale | events)
+  //     | snapshot every DECIMAL_INTEGER_LITERAL TimeScale
+  private static boolean OutputRateLimit_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "OutputRateLimit_1")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = consumeToken(b, OUTPUT);
-    r = r && OutputRateLimit_0_1(b, l + 1);
-    r = r && consumeToken(b, EVERY);
-    r = r && OutputRateLimit_0_3(b, l + 1);
+    r = OutputRateLimit_1_0(b, l + 1);
+    if (!r) r = OutputRateLimit_1_1(b, l + 1);
     exit_section_(b, m, null, r);
     return r;
   }
 
+  // (all | last | first) every DECIMAL_INTEGER_LITERAL (TimeScale | events)
+  private static boolean OutputRateLimit_1_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "OutputRateLimit_1_0")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = OutputRateLimit_1_0_0(b, l + 1);
+    p = r; // pin = 1
+    r = r && report_error_(b, consumeTokens(b, -1, EVERY, DECIMAL_INTEGER_LITERAL));
+    r = p && OutputRateLimit_1_0_3(b, l + 1) && r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
+  }
+
   // all | last | first
-  private static boolean OutputRateLimit_0_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "OutputRateLimit_0_1")) return false;
+  private static boolean OutputRateLimit_1_0_0(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "OutputRateLimit_1_0_0")) return false;
     boolean r;
     Marker m = enter_section_(b);
     r = consumeToken(b, ALL);
@@ -3739,37 +3752,27 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
     return r;
   }
 
-  // DECIMAL_INTEGER_LITERAL TimeScale | DECIMAL_INTEGER_LITERAL events
-  private static boolean OutputRateLimit_0_3(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "OutputRateLimit_0_3")) return false;
+  // TimeScale | events
+  private static boolean OutputRateLimit_1_0_3(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "OutputRateLimit_1_0_3")) return false;
     boolean r;
     Marker m = enter_section_(b);
-    r = OutputRateLimit_0_3_0(b, l + 1);
-    if (!r) r = parseTokens(b, 0, DECIMAL_INTEGER_LITERAL, EVENTS);
+    r = TimeScale(b, l + 1);
+    if (!r) r = consumeToken(b, EVENTS);
     exit_section_(b, m, null, r);
     return r;
   }
 
-  // DECIMAL_INTEGER_LITERAL TimeScale
-  private static boolean OutputRateLimit_0_3_0(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "OutputRateLimit_0_3_0")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeToken(b, DECIMAL_INTEGER_LITERAL);
+  // snapshot every DECIMAL_INTEGER_LITERAL TimeScale
+  private static boolean OutputRateLimit_1_1(PsiBuilder b, int l) {
+    if (!recursion_guard_(b, l, "OutputRateLimit_1_1")) return false;
+    boolean r, p;
+    Marker m = enter_section_(b, l, _NONE_);
+    r = consumeTokens(b, 1, SNAPSHOT, EVERY, DECIMAL_INTEGER_LITERAL);
+    p = r; // pin = 1
     r = r && TimeScale(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
-  }
-
-  // output snapshot every DECIMAL_INTEGER_LITERAL TimeScale
-  private static boolean OutputRateLimit_1(PsiBuilder b, int l) {
-    if (!recursion_guard_(b, l, "OutputRateLimit_1")) return false;
-    boolean r;
-    Marker m = enter_section_(b);
-    r = consumeTokens(b, 0, OUTPUT, SNAPSHOT, EVERY, DECIMAL_INTEGER_LITERAL);
-    r = r && TimeScale(b, l + 1);
-    exit_section_(b, m, null, r);
-    return r;
+    exit_section_(b, l, m, r, p, null);
+    return r || p;
   }
 
   /* ********************************************************** */

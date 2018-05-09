@@ -52,6 +52,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.BY;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CATCH;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.CHECK;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DAY;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DAYS;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DECIMAL_INTEGER_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DEPRECATED;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.DESCENDING;
@@ -81,6 +82,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.GROUP;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.HAVING;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.HEX_INTEGER_LITERAL;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.HOUR;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.HOURS;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IF;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IMPORT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.IN;
@@ -98,7 +100,9 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.LOCK;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MAP;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MATCH;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MINUTE;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MINUTES;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MONTH;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.MONTHS;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NATIVE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NEW;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.NEXT;
@@ -123,6 +127,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETURN;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RETURNS;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.RIGHT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SECOND;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SECONDS;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SELECT;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SERVICE;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.SET;
@@ -151,6 +156,7 @@ import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.WORKER;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.XML;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.XMLNS;
 import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.YEAR;
+import static org.ballerinalang.plugins.idea.psi.BallerinaTypes.YEARS;
 
 /**
  * Parser definition.
@@ -175,8 +181,8 @@ public class BallerinaParserDefinition implements ParserDefinition {
             NULL_LITERAL,
 
             FROM, ON, SELECT, GROUP, BY, HAVING, ORDER, WHERE, FOLLOWED, SET, FOR, WINDOW, EVENTS, EVERY, WITHIN,
-            LAST, FIRST, SNAPSHOT, OUTPUT, INNER, OUTER, RIGHT, LEFT, FULL, UNIDIRECTIONAL, SECOND, MINUTE, HOUR,
-            DAY, MONTH, YEAR, FOREVER, LIMIT, ASCENDING, DESCENDING
+            LAST, FIRST, SNAPSHOT, OUTPUT, INNER, OUTER, RIGHT, LEFT, FULL, UNIDIRECTIONAL, SECOND, SECONDS, MINUTE,
+            MINUTES, HOUR, HOURS, DAY, DAYS, MONTH, MONTHS, YEAR, YEARS, FOREVER, LIMIT, ASCENDING, DESCENDING
     );
 
     public static final TokenSet OPERATORS = TokenSet.create(DOUBLE_COLON, ELVIS, EQUAL_GT, LARROW, RARROW);

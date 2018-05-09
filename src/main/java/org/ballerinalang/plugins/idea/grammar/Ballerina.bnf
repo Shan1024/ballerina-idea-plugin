@@ -101,9 +101,11 @@
 
         WHITE_SPACE = 'regexp:\s+'
         identifier = 'regexp:[a-zA-Z_][a-zA-Z0-9_]*'
+        DECIMAL_INTEGER_LITERAL = "regexp:\d+"
 
         //        QUOTED_STRING_LITERAL = "regexp:\"(.*?)\""
         //        INTEGER_LITERAL = "regexp:\d+"
+
 
         //    string_template_literal_start = "regexp:string\s*`"
         //    string_template_literal_end = "`"
@@ -849,8 +851,8 @@ StreamingInput ::= VariableReference WhereClause? WindowClause? WhereClause? (as
 
 JoinStreamingInput ::= (unidirectional JoinType | JoinType unidirectional | JoinType) StreamingInput on Expression
 
-OutputRateLimit ::= output (all | last | first) every (DECIMAL_INTEGER_LITERAL TimeScale | DECIMAL_INTEGER_LITERAL events)
-    | output snapshot every DECIMAL_INTEGER_LITERAL TimeScale {pin=1}
+OutputRateLimit ::= output ((all | last | first) every DECIMAL_INTEGER_LITERAL (TimeScale | events)
+    | snapshot every DECIMAL_INTEGER_LITERAL TimeScale){pin(".*")=1}
 
 PatternStreamingInput ::=
         Pattern4
