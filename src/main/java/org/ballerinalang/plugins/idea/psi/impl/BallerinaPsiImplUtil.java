@@ -1406,7 +1406,7 @@ public class BallerinaPsiImplUtil {
         }
         // Todo - Update formatting logic.
         // Todo - Format anonymous structs correctly.
-        return "(" + parameterList.getText() + ")";
+        return "(" + parameterList.getText().replaceAll("\n","").replaceAll("\\s+"," ") + ")";
     }
 
     @Nullable
