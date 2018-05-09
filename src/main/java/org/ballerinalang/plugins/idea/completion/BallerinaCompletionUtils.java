@@ -393,6 +393,14 @@ public class BallerinaCompletionUtils {
         resultSet.addElement(PrioritizedLookupElement.withPriority(XML, REFERENCE_TYPES_PRIORITY));
     }
 
+    static void addTopLevelDefinitionsAsLookups(@NotNull CompletionResultSet resultSet) {
+        resultSet.addElement(PrioritizedLookupElement.withPriority(ANNOTATION, REFERENCE_TYPES_PRIORITY));
+        resultSet.addElement(PrioritizedLookupElement.withPriority(ENDPOINT, REFERENCE_TYPES_PRIORITY));
+        resultSet.addElement(PrioritizedLookupElement.withPriority(FUNCTION, REFERENCE_TYPES_PRIORITY));
+        resultSet.addElement(PrioritizedLookupElement.withPriority(SERVICE, REFERENCE_TYPES_PRIORITY));
+        resultSet.addElement(PrioritizedLookupElement.withPriority(TYPE, REFERENCE_TYPES_PRIORITY));
+    }
+
     static void addExpressionKeywordsAsLookups(@NotNull CompletionResultSet resultSet) {
         resultSet.addElement(PrioritizedLookupElement.withPriority(AWAIT, KEYWORDS_PRIORITY));
         resultSet.addElement(PrioritizedLookupElement.withPriority(CHECK, KEYWORDS_PRIORITY));

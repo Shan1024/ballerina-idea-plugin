@@ -133,6 +133,7 @@ public class BallerinaKeywordCompletionProvider extends CompletionProvider<Compl
                             BallerinaTypes.DECIMAL_INTEGER_LITERAL))) {
                         BallerinaCompletionUtils.addValueTypesAsLookups(result);
                         BallerinaCompletionUtils.addReferenceTypesAsLookups(result);
+                        BallerinaCompletionUtils.addTopLevelDefinitionsAsLookups(result);
                     }
                 }
             }
