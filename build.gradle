@@ -74,6 +74,9 @@ checkstyle {
     }
 }
 
+runIde.dependsOn check
+build.dependsOn check
+
 // Todo - Uncomment after implementing mixin classes
 //configurations {
 //    bnf

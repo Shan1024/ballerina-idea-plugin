@@ -315,6 +315,7 @@ public interface BallerinaTypes {
   IElementType COMPOUND_MUL = new BallerinaTokenType("*=");
   IElementType COMPOUND_SUB = new BallerinaTokenType("-=");
   IElementType DAY = new BallerinaTokenType("day");
+  IElementType DAYS = new BallerinaTokenType("days");
   IElementType DB_DEPRECATED_INLINE_CODE_START = new BallerinaTokenType("DB_DEPRECATED_INLINE_CODE_START");
   IElementType DB_DOC_INLINE_CODE_START = new BallerinaTokenType("DB_DOC_INLINE_CODE_START");
   IElementType DECIMAL_INTEGER_LITERAL = new BallerinaTokenType("DECIMAL_INTEGER_LITERAL");
@@ -368,6 +369,7 @@ public interface BallerinaTypes {
   IElementType HAVING = new BallerinaTokenType("having");
   IElementType HEX_INTEGER_LITERAL = new BallerinaTokenType("HEX_INTEGER_LITERAL");
   IElementType HOUR = new BallerinaTokenType("hour");
+  IElementType HOURS = new BallerinaTokenType("hours");
   IElementType IDENTIFIER = new BallerinaTokenType("identifier");
   IElementType IF = new BallerinaTokenType("if");
   IElementType IMPORT = new BallerinaTokenType("import");
@@ -392,8 +394,10 @@ public interface BallerinaTypes {
   IElementType MAP = new BallerinaTokenType("map");
   IElementType MATCH = new BallerinaTokenType("match");
   IElementType MINUTE = new BallerinaTokenType("minute");
+  IElementType MINUTES = new BallerinaTokenType("minutes");
   IElementType MOD = new BallerinaTokenType("%");
   IElementType MONTH = new BallerinaTokenType("month");
+  IElementType MONTHS = new BallerinaTokenType("months");
   IElementType MUL = new BallerinaTokenType("*");
   IElementType NATIVE = new BallerinaTokenType("native");
   IElementType NEW = new BallerinaTokenType("new");
@@ -433,6 +437,7 @@ public interface BallerinaTypes {
   IElementType SB_DEPRECATED_INLINE_CODE_START = new BallerinaTokenType("SB_DEPRECATED_INLINE_CODE_START");
   IElementType SB_DOC_INLINE_CODE_START = new BallerinaTokenType("SB_DOC_INLINE_CODE_START");
   IElementType SECOND = new BallerinaTokenType("second");
+  IElementType SECONDS = new BallerinaTokenType("seconds");
   IElementType SELECT = new BallerinaTokenType("select");
   IElementType SEMICOLON = new BallerinaTokenType(";");
   IElementType SERVICE = new BallerinaTokenType("service");
@@ -496,6 +501,7 @@ public interface BallerinaTypes {
   IElementType XML_TEMPLATE_TEXT = new BallerinaTokenType("XML_TEMPLATE_TEXT");
   IElementType XML_TEXT_SEQUENCE = new BallerinaTokenType("XML_TEXT_SEQUENCE");
   IElementType YEAR = new BallerinaTokenType("year");
+  IElementType YEARS = new BallerinaTokenType("years");
 
   class Factory {
     public static PsiElement createElement(ASTNode node) {

@@ -876,8 +876,12 @@ OrderByType ::= ascending | descending
 
 JoinType ::= left outer join | right outer join | full outer join | outer join | inner? join
 
-TimeScale ::= second | minute | hour | day | month | year
-
+TimeScale ::= second | seconds
+            | minute | minutes
+            | hour | hours
+            | day | days
+            | month | months
+            | year | years
 
 // Deprecated parsing.
 

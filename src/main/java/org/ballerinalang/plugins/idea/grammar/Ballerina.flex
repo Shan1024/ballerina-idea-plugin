@@ -509,16 +509,9 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "order"                                     { return ORDER; }
     "where"                                     { return WHERE; }
     "followed"                                  { return FOLLOWED; }
-//    "insert"                                    { if(inSiddhi) { inSiddhi = false; return INSERT; }; }
-//    "into"                                      { return INTO; }
-//    "update"                                    { if(inSiddhi) { inSiddhi = false; return UPDATE; }; }
-//    "delete"                                    { if(inSiddhi) { inSiddhi = false; return DELETE; }; }
     "set"                                       { return SET; }
     "for"                                       { return FOR; }
     "window"                                    { return WINDOW; }
-//    "query"                                     { return QUERY; }
-//    "expired"                                   { return EXPIRED; }
-//    "current"                                   { return CURRENT; }
     "events"                                    { if(inSiddhiInsertQuery) { inSiddhiInsertQuery = false; return EVENTS; } return IDENTIFIER; }
     "every"                                     { return EVERY; }
     "within"                                    { return WITHIN; }
@@ -532,13 +525,18 @@ STRING_TEMPLATE_TEXT = {STRING_TEMPLATE_VALID_CHAR_SEQUENCE}? ({STRING_TEMPLATE_
     "left"                                      { return LEFT; }
     "full"                                      { return FULL; }
     "unidirectional"                            { return UNIDIRECTIONAL; }
-//    "reduce"                                    { return REDUCE; }
     "second"                                    { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return SECOND; } return IDENTIFIER; }
     "minute"                                    { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return MINUTE; } return IDENTIFIER; }
     "hour"                                      { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return HOUR; } return IDENTIFIER; }
     "day"                                       { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return DAY; } return IDENTIFIER; }
     "month"                                     { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return MONTH; } return IDENTIFIER; }
     "year"                                      { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return YEAR; } return IDENTIFIER; }
+    "seconds"                                   { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return SECONDS; } return IDENTIFIER; }
+    "minutes"                                   { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return MINUTES; } return IDENTIFIER; }
+    "hours"                                     { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return HOURS; } return IDENTIFIER; }
+    "days"                                      { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return DAYS; } return IDENTIFIER; }
+    "months"                                    { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return MONTHS; } return IDENTIFIER; }
+    "years"                                     { if(inSiddhiTimeScaleQuery) { inSiddhiTimeScaleQuery = false; return YEARS; } return IDENTIFIER; }
     "forever"                                   { return FOREVER; }
 
     {WHITE_SPACE}                               { return WHITE_SPACE; }

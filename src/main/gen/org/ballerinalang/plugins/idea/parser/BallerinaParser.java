@@ -5502,17 +5502,28 @@ public class BallerinaParser implements PsiParser, LightPsiParser {
   }
 
   /* ********************************************************** */
-  // second | minute | hour | day | month | year
+  // second | seconds
+  //             | minute | minutes
+  //             | hour | hours
+  //             | day | days
+  //             | month | months
+  //             | year | years
   public static boolean TimeScale(PsiBuilder b, int l) {
     if (!recursion_guard_(b, l, "TimeScale")) return false;
     boolean r;
     Marker m = enter_section_(b, l, _NONE_, TIME_SCALE, "<time scale>");
     r = consumeToken(b, SECOND);
+    if (!r) r = consumeToken(b, SECONDS);
     if (!r) r = consumeToken(b, MINUTE);
+    if (!r) r = consumeToken(b, MINUTES);
     if (!r) r = consumeToken(b, HOUR);
+    if (!r) r = consumeToken(b, HOURS);
     if (!r) r = consumeToken(b, DAY);
+    if (!r) r = consumeToken(b, DAYS);
     if (!r) r = consumeToken(b, MONTH);
+    if (!r) r = consumeToken(b, MONTHS);
     if (!r) r = consumeToken(b, YEAR);
+    if (!r) r = consumeToken(b, YEARS);
     exit_section_(b, l, m, r, false, null);
     return r;
   }

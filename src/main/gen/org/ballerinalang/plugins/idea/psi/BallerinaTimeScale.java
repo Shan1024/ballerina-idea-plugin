@@ -27,18 +27,36 @@ public interface BallerinaTimeScale extends BallerinaCompositeElement {
   PsiElement getDay();
 
   @Nullable
+  PsiElement getDays();
+
+  @Nullable
   PsiElement getHour();
+
+  @Nullable
+  PsiElement getHours();
 
   @Nullable
   PsiElement getMinute();
 
   @Nullable
+  PsiElement getMinutes();
+
+  @Nullable
   PsiElement getMonth();
+
+  @Nullable
+  PsiElement getMonths();
 
   @Nullable
   PsiElement getSecond();
 
   @Nullable
+  PsiElement getSeconds();
+
+  @Nullable
   PsiElement getYear();
+
+  @Nullable
+  PsiElement getYears();
 
 }

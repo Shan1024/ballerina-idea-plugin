@@ -49,8 +49,20 @@ public class BallerinaTimeScaleImpl extends BallerinaCompositeElementImpl implem
 
   @Override
   @Nullable
+  public PsiElement getDays() {
+    return findChildByType(DAYS);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getHour() {
     return findChildByType(HOUR);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getHours() {
+    return findChildByType(HOURS);
   }
 
   @Override
@@ -61,8 +73,20 @@ public class BallerinaTimeScaleImpl extends BallerinaCompositeElementImpl implem
 
   @Override
   @Nullable
+  public PsiElement getMinutes() {
+    return findChildByType(MINUTES);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getMonth() {
     return findChildByType(MONTH);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getMonths() {
+    return findChildByType(MONTHS);
   }
 
   @Override
@@ -73,8 +97,20 @@ public class BallerinaTimeScaleImpl extends BallerinaCompositeElementImpl implem
 
   @Override
   @Nullable
+  public PsiElement getSeconds() {
+    return findChildByType(SECONDS);
+  }
+
+  @Override
+  @Nullable
   public PsiElement getYear() {
     return findChildByType(YEAR);
+  }
+
+  @Override
+  @Nullable
+  public PsiElement getYears() {
+    return findChildByType(YEARS);
   }
 
 }

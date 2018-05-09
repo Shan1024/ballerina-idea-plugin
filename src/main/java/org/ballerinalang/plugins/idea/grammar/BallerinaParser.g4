@@ -1,3 +1,7 @@
+/*
+ * NOTE - Do not modify.
+ */
+
 parser grammar BallerinaParser;
 
 options {
@@ -902,12 +906,12 @@ joinType
     ;
 
 timeScale
-    : SECOND
-    | MINUTE
-    | HOUR
-    | DAY
-    | MONTH
-    | YEAR
+    : SECOND | SECONDS
+    | MINUTE | MINUTES
+    | HOUR | HOURS
+    | DAY | DAYS
+    | MONTH | MONTHS
+    | YEAR | YEARS
     ;
 
 // Deprecated parsing.
