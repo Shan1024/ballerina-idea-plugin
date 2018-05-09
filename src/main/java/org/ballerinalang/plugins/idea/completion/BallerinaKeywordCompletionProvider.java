@@ -92,7 +92,8 @@ public class BallerinaKeywordCompletionProvider extends CompletionProvider<Compl
                     if (!(prevVisibleLeaf instanceof LeafPsiElement
                             && (((LeafPsiElement) prevVisibleLeaf).getElementType() == BallerinaTypes.RARROW
                             || ((LeafPsiElement) prevVisibleLeaf).getElementType() ==
-                            BallerinaTypes.DECIMAL_INTEGER_LITERAL))) {
+                            BallerinaTypes.DECIMAL_INTEGER_LITERAL
+                            || ((LeafPsiElement) prevVisibleLeaf).getElementType() == BallerinaTypes.COLON))) {
                         BallerinaCompletionUtils.addValueTypesAsLookups(result);
                         BallerinaCompletionUtils.addReferenceTypesAsLookups(result);
                         BallerinaCompletionUtils.addVarAsLookup(result);
