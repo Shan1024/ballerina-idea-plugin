@@ -223,10 +223,17 @@ public class BallerinaParameterInfoHandler implements ParameterInfoHandlerWithTa
             }
         } else if (element instanceof BallerinaInvocation) {
             BallerinaInvocation ballerinaTypeInitExpr = (BallerinaInvocation) element;
-            BallerinaCallableUnitSignature callableUnitSignature =
-                    BallerinaPsiImplUtil.getCallableUnitSignature(ballerinaTypeInitExpr);
+            PsiElement callableUnitSignature = BallerinaPsiImplUtil.getCallableUnitSignature(ballerinaTypeInitExpr);
             if (callableUnitSignature != null) {
-                BallerinaFormalParameterList formalParameterList = callableUnitSignature.getFormalParameterList();
+                BallerinaFormalParameterList formalParameterList = null;
+                if (callableUnitSignature instanceof BallerinaCallableUnitSignature) {
+                    formalParameterList =
+                            ((BallerinaCallableUnitSignature) callableUnitSignature).getFormalParameterList();
+                } else if (callableUnitSignature instanceof BallerinaObjectCallableUnitSignature) {
+                    formalParameterList =
+                            ((BallerinaObjectCallableUnitSignature) callableUnitSignature).getFormalParameterList();
+                }
+
                 if (formalParameterList != null) {
                     // Note - We can set multiple object if we need to show overloaded function parameters.
                     context.setItemsToShow(new Object[]{formalParameterList});
