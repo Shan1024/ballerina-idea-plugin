@@ -64,9 +64,10 @@ public class BallerinaCompletionUtils {
 
     private static final int VARIABLE_PRIORITY = 20;
     private static final int FUNCTION_PRIORITY = VARIABLE_PRIORITY - 1;
-    private static final int VALUE_TYPES_PRIORITY = VARIABLE_PRIORITY - 1;
-    private static final int REFERENCE_TYPES_PRIORITY = VARIABLE_PRIORITY - 1;
-    private static final int TYPE_PRIORITY = VARIABLE_PRIORITY - 1;
+    private static final int GLOBAL_VARIABLE_PRIORITY = FUNCTION_PRIORITY - 1;
+    private static final int VALUE_TYPES_PRIORITY = VARIABLE_PRIORITY - 2;
+    private static final int REFERENCE_TYPES_PRIORITY = VARIABLE_PRIORITY - 2;
+    private static final int TYPE_PRIORITY = VARIABLE_PRIORITY - 2;
     private static final int PACKAGE_PRIORITY = VALUE_TYPES_PRIORITY - 1;
     private static final int UNIMPORTED_PACKAGE_PRIORITY = PACKAGE_PRIORITY - 1;
     private static final int CONNECTOR_PRIORITY = VALUE_TYPES_PRIORITY - 1;
@@ -340,9 +341,11 @@ public class BallerinaCompletionUtils {
     static void addBindAsLookup(@NotNull CompletionResultSet resultSet) {
         resultSet.addElement(PrioritizedLookupElement.withPriority(BIND, KEYWORDS_PRIORITY));
     }
+
     static void addEndpointAsLookup(@NotNull CompletionResultSet resultSet) {
         resultSet.addElement(PrioritizedLookupElement.withPriority(ENDPOINT, KEYWORDS_PRIORITY));
     }
+
     static void addNewAsLookup(@NotNull CompletionResultSet resultSet,
                                @NotNull BallerinaTypeDefinition typeDefinition) {
         LookupElementBuilder builder = NEW.withInsertHandler(SemiolonInsertHandler.INSTANCE);
@@ -596,7 +599,7 @@ public class BallerinaCompletionUtils {
             builder = builder.withTypeText(type);
         }
 
-        return PrioritizedLookupElement.withPriority(builder, VARIABLE_PRIORITY);
+        return PrioritizedLookupElement.withPriority(builder, GLOBAL_VARIABLE_PRIORITY);
     }
 
     @NotNull
