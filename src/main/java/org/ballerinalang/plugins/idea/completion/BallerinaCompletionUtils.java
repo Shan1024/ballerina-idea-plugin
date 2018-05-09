@@ -121,6 +121,8 @@ public class BallerinaCompletionUtils {
 
     private static final LookupElementBuilder BIND;
 
+    private static final LookupElementBuilder OBJECT;
+
     private static final LookupElementBuilder NEW;
 
     // Other keywords
@@ -218,6 +220,8 @@ public class BallerinaCompletionUtils {
         LOCK = createKeywordLookupElement("lock");
 
         BIND = createKeywordLookupElement("bind");
+
+        OBJECT = createKeywordLookupElement("object");
 
         NEW = createKeywordLookupElement("new");
 
@@ -344,6 +348,10 @@ public class BallerinaCompletionUtils {
 
     static void addEndpointAsLookup(@NotNull CompletionResultSet resultSet) {
         resultSet.addElement(PrioritizedLookupElement.withPriority(ENDPOINT, KEYWORDS_PRIORITY));
+    }
+
+    static void addEObjectAsLookup(@NotNull CompletionResultSet resultSet) {
+        resultSet.addElement(PrioritizedLookupElement.withPriority(OBJECT, KEYWORDS_PRIORITY));
     }
 
     static void addNewAsLookup(@NotNull CompletionResultSet resultSet,

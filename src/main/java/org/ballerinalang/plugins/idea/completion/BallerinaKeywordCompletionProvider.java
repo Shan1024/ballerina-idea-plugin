@@ -9,6 +9,7 @@ import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.ProcessingContext;
 import org.ballerinalang.plugins.idea.psi.BallerinaDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaExpression;
+import org.ballerinalang.plugins.idea.psi.BallerinaFiniteType;
 import org.ballerinalang.plugins.idea.psi.BallerinaGlobalVariableDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaResourceDefinition;
 import org.ballerinalang.plugins.idea.psi.BallerinaSimpleVariableReference;
@@ -145,6 +146,31 @@ public class BallerinaKeywordCompletionProvider extends CompletionProvider<Compl
                 BallerinaCompletionUtils.addPublicAsLookup(result);
                 BallerinaCompletionUtils.addImportAsLookup(result);
                 return;
+            }
+        }
+
+        BallerinaFiniteType ballerinaFiniteType = PsiTreeUtil.getParentOfType(position, BallerinaFiniteType.class);
+        if (ballerinaFiniteType != null) {
+            BallerinaUserDefineTypeName userDefineTypeName = PsiTreeUtil.getParentOfType(position,
+                    BallerinaUserDefineTypeName.class);
+            if (userDefineTypeName != null) {
+                PsiElement tempParent = parent;
+                while (tempParent != null) {
+                    PsiElement superParent = tempParent.getParent();
+                    if (!superParent.getFirstChild().equals(tempParent)) {
+                        break;
+                    }
+                    tempParent = superParent;
+                    if (superParent.equals(ballerinaFiniteType)) {
+                        break;
+                    }
+                }
+
+                if (tempParent != null && tempParent.equals(ballerinaFiniteType)) {
+                    BallerinaCompletionUtils.addEObjectAsLookup(result);
+                    result.stopHere();
+                    return;
+                }
             }
         }
 
