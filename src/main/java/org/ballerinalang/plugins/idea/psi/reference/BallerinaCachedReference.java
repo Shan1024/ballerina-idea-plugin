@@ -59,25 +59,11 @@ public abstract class BallerinaCachedReference<T extends PsiElement> extends Psi
                 : null;
     }
 
-    //    public abstract boolean processResolveVariants(@NotNull BallerinaScopeProcessor processor);
-
     @Override
     public PsiElement handleElementRename(String newElementName) throws IncorrectOperationException {
         myElement.replace(BallerinaElementFactory.createIdentifierFromText(myElement.getProject(), newElementName));
         return myElement;
     }
-
-    //    @Override
-    //    public boolean isReferenceTo(PsiElement element) {
-    //        //    return GoUtil.couldBeReferenceTo(element, myElement) && super.isReferenceTo(element);
-    //        return false;
-    //    }
-
-    //    @NotNull
-    //    @Override
-    //    public Object[] getVariants() {
-    //        return ArrayUtil.EMPTY_OBJECT_ARRAY;
-    //    }
 
     @Override
     public boolean equals(Object o) {

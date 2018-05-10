@@ -34,7 +34,6 @@ import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiManager;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.ResolveState;
-import com.intellij.psi.SmartPointerManager;
 import com.intellij.psi.SmartPsiElementPointer;
 import com.intellij.psi.scope.PsiScopeProcessor;
 import com.intellij.psi.util.CachedValueProvider;
@@ -111,7 +110,6 @@ import org.ballerinalang.plugins.idea.psi.BallerinaXmlTypeName;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaCompletePackageNameReferenceSet;
 import org.ballerinalang.plugins.idea.psi.reference.BallerinaPackageNameReference;
 import org.ballerinalang.plugins.idea.sdk.BallerinaSdkService;
-import org.ballerinalang.plugins.idea.stubs.BallerinaPackageReferenceStub;
 import org.ballerinalang.plugins.idea.stubs.BallerinaPackageVersionStub;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -146,16 +144,6 @@ public class BallerinaPsiImplUtil {
         BUILTIN_VARIABLE_TYPES.add("xml");
     }
 
-    //    @Nullable
-    //    public static String getName(@NotNull BallerinaPackageDeclaration packageClause) {
-    //        BallerinaPackageDeclarationStub stub = packageClause.getStub();
-    //        if (stub != null) {
-    //            return stub.getName();
-    //        }
-    //        PsiElement identifier = packageClause.getCompletePackageName();
-    //        return identifier != null ? identifier.getText() : null;
-    //    }
-
     @Nullable
     public static String getName(@NotNull BallerinaPackageName ballerinaPackageName) {
         PsiElement identifier = ballerinaPackageName.getIdentifier();
@@ -186,10 +174,6 @@ public class BallerinaPsiImplUtil {
 
     @Nullable
     public static PsiElement getIdentifier(BallerinaFunctionDefinition ballerinaFunctionDefinition) {
-        //        BallerinaAttachedObject attachedObject = ballerinaFunctionDefinition.getAttachedObject();
-        //        if (attachedObject != null) {
-        //            return attachedObject.getIdentifier();
-        //        }
         BallerinaCallableUnitSignature callableUnitSignature = ballerinaFunctionDefinition.getCallableUnitSignature();
         return callableUnitSignature != null ? callableUnitSignature.getAnyIdentifierName().getIdentifier() : null;
     }
@@ -211,13 +195,6 @@ public class BallerinaPsiImplUtil {
         }
     }
 
-    //    @Nullable
-    //    public static PsiElement getIdentifier(BallerinaActionDefinition ballerinaActionDefinition) {
-    //        BallerinaCallableUnitSignature callableUnitSignature = ballerinaActionDefinition
-    // .getCallableUnitSignature();
-    //        return callableUnitSignature != null ? callableUnitSignature.getIdentifier() : null;
-    //    }
-
     @Nullable
     public static String getName(BallerinaFunctionDefinition ballerinaFunctionDefinition) {
         BallerinaCallableUnitSignature callableUnitSignature = ballerinaFunctionDefinition.getCallableUnitSignature();
@@ -225,19 +202,8 @@ public class BallerinaPsiImplUtil {
                 callableUnitSignature.getAnyIdentifierName().getIdentifier().getText() : "";
     }
 
-    //    @NotNull
-    //    public static PsiReference getReference(@NotNull BallerinaNameReference ballerinaNameReference) {
-    //        // Todo
-    //        if (ballerinaNameReference.getParent() instanceof BallerinaFunctionInvocation) {
-    //            return new BallerinaNameReferenceReference(ballerinaNameReference.getIdentifier());
-    //        }
-    //        return new BallerinaReference(ballerinaNameReference);
-    //    }
-
     @Nullable
     public static BallerinaNameReference getQualifier(@NotNull BallerinaNameReference ballerinaNameReference) {
-        // Todo
-        //        return PsiTreeUtil.getChildOfType(ballerinaNameReference, BallerinaNameReference.class);
         return null;
     }
 
@@ -248,39 +214,15 @@ public class BallerinaPsiImplUtil {
 
     @Nullable
     public static BallerinaTypeName resolveType(@NotNull BallerinaNameReference ballerinaNameReference) {
-        //        PsiElement resolve = ballerinaNameReference.resolve();
-        //        if (resolve instanceof GoTypeSpec) return ((GoTypeSpec) resolve).getSpecType();
-        //        // hacky C resolve
-        //        return resolve == ballerinaNameReference ? new GoCType(ballerinaNameReference) : null;
         return null;
     }
 
     public static boolean isInLocalPackage(@NotNull BallerinaNameReference ballerinaNameReference) {
-        //        PsiElement resolve = ballerinaNameReference.resolve();
-        //        if (resolve instanceof GoTypeSpec) return ((GoTypeSpec) resolve).getSpecType();
-        //        // hacky C resolve
-        //        return resolve == ballerinaNameReference ? new GoCType(ballerinaNameReference) : null;
         return ballerinaNameReference.getPackageReference() == null;
     }
 
     public static boolean isInLocalPackage(@NotNull BallerinaFunctionNameReference nameReference) {
-        //        PsiElement resolve = ballerinaNameReference.resolve();
-        //        if (resolve instanceof GoTypeSpec) return ((GoTypeSpec) resolve).getSpecType();
-        //        // hacky C resolve
-        //        return resolve == ballerinaNameReference ? new GoCType(ballerinaNameReference) : null;
         return nameReference.getPackageReference() == null;
-    }
-
-    @Nullable
-    public static PsiElement getContextElement(@Nullable ResolveState state) {
-        SmartPsiElementPointer<PsiElement> context = state != null ? state.get(CONTEXT) : null;
-        return context != null ? context.getElement() : null;
-    }
-
-    @NotNull
-    public static ResolveState createContextOnElement(@NotNull PsiElement element) {
-        return ResolveState.initial().put(CONTEXT, SmartPointerManager.getInstance(element.getProject())
-                .createSmartPsiElementPointer(element));
     }
 
     public static boolean hasBuiltInDefinitions(@NotNull PsiElement type) {
@@ -408,8 +350,7 @@ public class BallerinaPsiImplUtil {
     }
 
     @Nullable
-    public static PsiElement getCallableUnitSignature(@NotNull BallerinaFunctionInvocation
-                                                              functionInvocation) {
+    public static PsiElement getCallableUnitSignature(@NotNull BallerinaFunctionInvocation functionInvocation) {
         return CachedValuesManager.getCachedValue(functionInvocation, () -> {
             BallerinaFunctionNameReference functionNameReference = functionInvocation.getFunctionNameReference();
             PsiElement identifier = functionNameReference.getAnyIdentifierName().getIdentifier();
@@ -1275,25 +1216,6 @@ public class BallerinaPsiImplUtil {
                                               @NotNull ResolveState state,
                                               PsiElement lastParent,
                                               @NotNull PsiElement place) {
-        //        boolean isAncestor = PsiTreeUtil.isAncestor(o, place, false);
-        //        if (o instanceof GoVarSpec) {
-        //            return isAncestor || GoCompositeElementImpl.processDeclarationsDefault(o, processor, state,
-        // lastParent,
-        //                    place);
-        //        }
-        //
-        //        if (isAncestor) {
-        //            return GoCompositeElementImpl.processDeclarationsDefault(o, processor, state, lastParent, place);
-        //        }
-        //        if (o instanceof GoBlock ||
-        //                o instanceof GoIfStatement ||
-        //                o instanceof GoForStatement ||
-        //                o instanceof GoCommClause ||
-        //                o instanceof GoFunctionLit ||
-        //                o instanceof GoTypeCaseClause ||
-        //                o instanceof GoExprCaseClause) {
-        //            return processor.execute(o, state);
-        //        }
         return BallerinaCompositeElementImpl.processDeclarationsDefault(o, processor, state, lastParent, place);
     }
 
@@ -1305,21 +1227,8 @@ public class BallerinaPsiImplUtil {
         return new BallerinaCompletePackageNameReferenceSet(o).getAllReferences();
     }
 
-
-    @NotNull
-    public static PsiReference[] getReferences(@NotNull BallerinaPackageName o) {
-        if (o.getTextLength() < 2) {
-            return PsiReference.EMPTY_ARRAY;
-        }
-        return new BallerinaCompletePackageNameReferenceSet(o).getAllReferences();
-    }
-
     @Nullable
     public static PsiReference getReference(@NotNull BallerinaPackageReference ballerinaPackageReference) {
-        BallerinaPackageReferenceStub stub = ballerinaPackageReference.getStub();
-
-        //        return new BallerinaCompletePackageNameReferenceSet(ballerinaPackageReference).getAllReferences();
-
         BallerinaFile containingFile = ballerinaPackageReference.getContainingFile();
         MultiMap<String, BallerinaImportDeclaration> importMap = containingFile.getImportMap();
 

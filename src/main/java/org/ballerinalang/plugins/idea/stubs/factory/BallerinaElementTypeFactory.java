@@ -18,7 +18,6 @@
 package org.ballerinalang.plugins.idea.stubs.factory;
 
 import com.intellij.psi.stubs.IStubElementType;
-import com.intellij.util.containers.HashMap;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaAliasStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaAnnotationDefinitionStubElementType;
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaEndpointDefinitionStubElementType;
@@ -36,27 +35,10 @@ import org.ballerinalang.plugins.idea.stubs.types.BallerinaVariableDefinitionSta
 import org.ballerinalang.plugins.idea.stubs.types.BallerinaWorkerDefinitionStubElementType;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Map;
-
 /**
  * Responsible for creating stub elements.
  */
 public class BallerinaElementTypeFactory {
-    private static final Map<String, Class> TYPES = new HashMap<String, Class>() {
-        {
-            //      put("ARRAY_OR_SLICE_TYPE", GoArrayOrSliceTypeImpl.class);
-            //      put("CHANNEL_TYPE", GoChannelTypeImpl.class);
-            //      put("FUNCTION_TYPE", GoFunctionTypeImpl.class);
-            //      put("INTERFACE_TYPE", GoInterfaceTypeImpl.class);
-            //      put("MAP_TYPE", GoMapTypeImpl.class);
-            //      put("POINTER_TYPE", GoPointerTypeImpl.class);
-            //      put("STRUCT_TYPE", GoStructTypeImpl.class);
-            //      put("TYPE", GoTypeImpl.class);
-            //      put("PAR_TYPE", GoParTypeImpl.class);
-            //      put("SPEC_TYPE", GoSpecTypeImpl.class);
-            //      put("TYPE_LIST", GoTypeListImpl.class);
-        }
-    };
 
     private BallerinaElementTypeFactory() {
     }
@@ -64,24 +46,14 @@ public class BallerinaElementTypeFactory {
     public static IStubElementType stubFactory(@NotNull String name) {
         // NOTE - If the element type is wrong, an error will occur while loading the lexer in syntax highlighting.
         switch (name) {
-//            case "PACKAGE_DECLARATION":
-//                return BallerinaPackageDeclarationStubElementType.INSTANCE;
             case "FUNCTION_DEFINITION":
                 return new BallerinaFunctionDefinitionStubElementType(name);
             case "TYPE_DEFINITION":
                 return new BallerinaTypeDefinitionStubElementType(name);
-            //            case "STRUCT_DEFINITION":
-            //                return new BallerinaStructDefinitionStubElementType(name);
             case "GLOBAL_VARIABLE_DEFINITION":
                 return new BallerinaGlobalVariableDefinitionStubElementType(name);
-            //            case "ENUM_DEFINITION":
-            //                return new BallerinaEnumDefinitionStubElementType(name);
             case "ANNOTATION_DEFINITION":
                 return new BallerinaAnnotationDefinitionStubElementType(name);
-            //            case "TRANSFORMER_DEFINITION":
-            //                return new BallerinaTransformerDefinitionStubElementType(name);
-            //            case "CONSTANT_DEFINITION":
-            //                return new BallerinaConstantDefinitionStubElementType(name);
             case "GLOBAL_ENDPOINT_DEFINITION":
                 return new BallerinaGlobalEndpointDefinitionStubElementType(name);
             case "ENDPOINT_DEFINITION":
@@ -96,73 +68,15 @@ public class BallerinaElementTypeFactory {
                 return new BallerinaPackageVersionStubElementType(name);
             case "ALIAS":
                 return new BallerinaAliasStubElementType(name);
-            //            case "ENUMERATOR":
-            //                return new BallerinaEnumeratorStubElementType(name);
             case "VARIABLE_DEFINITION_STATEMENT":
                 return new BallerinaVariableDefinitionStatementStubElementType(name);
-            //            case "PARAMETER":
-            //                return new BallerinaParameterStubElementType(name);
-            //            case "FIELD_DEFINITION":
-            //                return new BallerinaFieldDefinitionStubElementType(name);
             case "NAME_REFERENCE":
                 return new BallerinaNameReferenceStubElementType(name);
             case "PACKAGE_REFERENCE":
                 return new BallerinaPackageReferenceStubElementType(name);
-            //            case "FIELD":
-            //                return new BallerinaFieldStubElementType(name);
             case "NAMESPACE_DECLARATION":
                 return new BallerinaNamespaceDeclarationStubElementType(name);
         }
-
-        //    if ("CONST_SPEC".equals(name)) return new GoConstSpecStubElementType(name);
-        //        if ("PACKAGE_CLAUSE".equals(name)) {
-        //            return BallerinaPackageDeclarationStubElementType.INSTANCE;
-        //        }
-        //    if ("VAR_SPEC".equals(name)) return new GoVarSpecStubElementType(name);
-        //        if ("SHORT_VAR_DECLARATION".equals(name)) return new GoVarSpecStubElementType(name) {
-        //            @NotNull
-        //            @Override
-        //            public GoVarSpec createPsi(@NotNull GoVarSpecStub stub) {
-        //                return new GoShortVarDeclarationImpl(stub, this);
-        //            }
-        //        };
-        //        if ("RECV_STATEMENT".equals(name)) return new GoVarSpecStubElementType(name) {
-        //            @NotNull
-        //            @Override
-        //            public GoVarSpec createPsi(@NotNull GoVarSpecStub stub) {
-        //                return new GoRecvStatementImpl(stub, this);
-        //            }
-        //        };
-        //        if ("RANGE_CLAUSE".equals(name)) return new GoVarSpecStubElementType(name) {
-        //            @NotNull
-        //            @Override
-        //            public GoVarSpec createPsi(@NotNull GoVarSpecStub stub) {
-        //                return new GoRangeClauseImpl(stub, this);
-        //            }
-        //        };
-        //        if ("VAR_DEFINITION".equals(name)) return new GoVarDefinitionStubElementType(name);
-        //        if ("LABEL_DEFINITION".equals(name)) return new GoLabelDefinitionStubElementType(name);
-        //        if ("PARAMETERS".equals(name)) return new GoParametersStubElementType(name);
-        //        if ("SIGNATURE".equals(name)) return new GoSignatureStubElementType(name);
-        //        if ("PARAMETER_DECLARATION".equals(name)) return new GoParameterDeclarationStubElementType(name);
-        //        if ("RESULT".equals(name)) return new GoResultStubElementType(name);
-        //
-        //        Class c = TYPES.get(name);
-        //        if (c != null) {
-        //            return new GoTypeStubElementType(name) {
-        //                @NotNull
-        //                @Override
-        //                public GoType createPsi(@NotNull GoTypeStub stub) {
-        //                    try {
-        //                        //noinspection unchecked
-        //                        return (GoType) ReflectionUtil.createInstance(c.getConstructor(stub.getClass(),
-        // IStubElementType.class), stub, this);
-        //                    } catch (NoSuchMethodException e) {
-        //                        throw new RuntimeException(e);
-        //                    }
-        //                }
-        //            };
-        //        }
         throw new RuntimeException("Unknown element type: " + name);
     }
 }

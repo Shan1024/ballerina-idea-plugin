@@ -70,19 +70,6 @@ public class BallerinaFile extends PsiFileBase {
         return super.getIcon(flags);
     }
 
-//    @Nullable
-//    public BallerinaPackageDeclaration getPackage() {
-//        return CachedValuesManager.getCachedValue(this, () -> {
-//            BallerinaFileStub stub = getStub();
-//            if (stub != null) {
-////                StubElement<BallerinaPackageDeclaration> packageClauseStub = stub.getPackageClauseStub();
-////                return CachedValueProvider.Result.create(packageClauseStub != null ? packageClauseStub.getPsi() :
-////                        null, this);
-//            }
-//            return CachedValueProvider.Result.create(findChildByClass(BallerinaPackageDeclaration.class), this);
-//        });
-//    }
-
     @Nullable
     @Override
     public BallerinaFileStub getStub() {
@@ -117,32 +104,11 @@ public class BallerinaFile extends PsiFileBase {
         return CachedValuesManager.getCachedValue(this, () -> {
             MultiMap<String, BallerinaImportDeclaration> map = MultiMap.createLinked();
             List<Object> dependencies = ContainerUtil.newArrayList(this);
-            //            Module module = ModuleUtilCore.findModuleForPsiElement(this);
             for (BallerinaImportDeclaration importDeclaration : getCachedImports()) {
                 PsiElement shortPackageName = importDeclaration.getShortPackageName();
                 if (shortPackageName != null) {
                     map.putValue(shortPackageName.getText(), importDeclaration);
                 }
-
-                //                GoImportString string = importDeclaration.getImportString();
-                //                PsiDirectory dir = string.resolve();
-                //                ContainerUtil.addIfNotNull(dependencies, dir);
-                //                Collection<String> packagesInDirectory = GoPackageUtil.getAllPackagesInDirectory
-                // (dir, module, true);
-                //                if (!packagesInDirectory.isEmpty()) {
-                //                    for (String packageNames : packagesInDirectory) {
-                //                        if (!StringUtil.isEmpty(packageNames)) {
-                //                            map.putValue(packageNames, importDeclaration);
-                //                        }
-                //                    }
-                //                } else {
-                //                    String key = importDeclaration.getLocalPackageName();
-                //                    if (!StringUtil.isEmpty(key)) {
-                //                        map.putValue(key, importDeclaration);
-                //                    }
-                //                }
-
-
             }
             return CachedValueProvider.Result.create(map, ArrayUtil.toObjectArray(dependencies));
         });

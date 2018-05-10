@@ -53,43 +53,8 @@ public class BallerinaCompositeElementImpl extends ASTWrapperPsiElement implemen
                                                      @NotNull ResolveState state,
                                                      @Nullable PsiElement lastParent,
                                                      @NotNull PsiElement place) {
-        //    if (o instanceof GoLeftHandExprList || o instanceof GoExpression) return true;
-        //
-        //    if (!o.shouldGoDeeper()) return processor.execute(o, state);
-        //    if (!processor.execute(o, state)) return false;
-        //    if ((
-        //          o instanceof GoSwitchStatement ||
-        //          o instanceof GoIfStatement ||
-        //          o instanceof GoForStatement ||
-        //          o instanceof GoCommClause ||
-        //          o instanceof GoBlock ||
-        //          o instanceof GoCaseClause
-        //        )
-        //        && processor instanceof GoScopeProcessorBase) {
-        //      if (!PsiTreeUtil.isAncestor(o, ((GoScopeProcessorBase)processor).myOrigin, false)) return true;
-        //    }
-        //
-        //    return o instanceof GoBlock
-        //           ? processBlock((GoBlock)o, processor, state, lastParent, place)
-        //           : ResolveUtil.processChildren(o, processor, state, lastParent, place);
         return false;
     }
-
-    //    private static boolean processBlock(@NotNull GoBlock o,
-    //                                        @NotNull PsiScopeProcessor processor,
-    //                                        @NotNull ResolveState state,
-    //                                        @Nullable PsiElement lastParent, @NotNull PsiElement place) {
-    //        return ResolveUtil.processChildrenFromTop(o, processor, state, lastParent, place) && processParameters(o,
-    //                processor);
-    //    }
-    //
-    //    private static boolean processParameters(@NotNull GoBlock b, @NotNull PsiScopeProcessor processor) {
-    //        if (processor instanceof GoScopeProcessorBase && b.getParent() instanceof GoSignatureOwner) {
-    //            return GoPsiImplUtil.processSignatureOwner((GoSignatureOwner) b.getParent(), (GoScopeProcessorBase)
-    // processor);
-    //        }
-    //        return true;
-    //    }
 
     @Override
     public boolean shouldGoDeeper() {

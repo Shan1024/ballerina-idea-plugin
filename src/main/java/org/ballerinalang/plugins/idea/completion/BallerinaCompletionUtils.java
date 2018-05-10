@@ -29,7 +29,6 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.editor.EditorModificationUtil;
 import com.intellij.openapi.util.Iconable;
 import com.intellij.openapi.util.Key;
-import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
 import org.ballerinalang.plugins.idea.BallerinaIcons;
@@ -53,9 +52,6 @@ import org.ballerinalang.plugins.idea.psi.impl.BallerinaPsiImplUtil;
 import org.ballerinalang.plugins.idea.psi.impl.BallerinaTopLevelDefinition;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * Util methods and constants related to code completion.
@@ -289,31 +285,6 @@ public class BallerinaCompletionUtils {
     }
 
     /**
-     * Creates a <b>Type</b> lookup element.
-     *
-     * @param name          name of the lookup
-     * @param insertHandler insert handler of the lookup
-     * @return {@link LookupElementBuilder} which will be used to create the lookup element.
-     */
-    @NotNull
-    private static LookupElementBuilder createTypeLookupElement(@NotNull String name,
-                                                                @Nullable InsertHandler<LookupElement> insertHandler) {
-        return createLookupElement(name, insertHandler);
-    }
-
-    /**
-     * Add type names as lookups. Types include <b>any, simple types, reference types</b>.
-     *
-     * @param resultSet result list which is used to add lookups
-     */
-    static void addTypeNamesAsLookups(@NotNull CompletionResultSet resultSet) {
-        addVarAsLookup(resultSet);
-        addXmlnsAsLookup(resultSet);
-        addValueTypesAsLookups(resultSet);
-        addReferenceTypesAsLookups(resultSet);
-    }
-
-    /**
      * Adds any type as a lookup.
      *
      * @param resultSet result list which is used to add lookups
@@ -417,41 +388,6 @@ public class BallerinaCompletionUtils {
         resultSet.addElement(PrioritizedLookupElement.withPriority(UNTAINT, KEYWORDS_PRIORITY));
     }
 
-    @NotNull
-    static List<LookupElement> getFileLevelKeywordsAsLookups(boolean withPublic, boolean withPackage,
-                                                             boolean withImport) {
-        List<LookupElement> lookupElements = new LinkedList<>();
-        if (withPublic) {
-            lookupElements.add(PrioritizedLookupElement.withPriority(PUBLIC, KEYWORDS_PRIORITY));
-        }
-
-        if (withImport) {
-            lookupElements.add(PrioritizedLookupElement.withPriority(IMPORT, KEYWORDS_PRIORITY));
-        }
-        lookupElements.add(PrioritizedLookupElement.withPriority(SERVICE, KEYWORDS_PRIORITY));
-        lookupElements.add(PrioritizedLookupElement.withPriority(FUNCTION, KEYWORDS_PRIORITY));
-        lookupElements.add(PrioritizedLookupElement.withPriority(ANNOTATION, KEYWORDS_PRIORITY));
-        lookupElements.add(PrioritizedLookupElement.withPriority(XMLNS, KEYWORDS_PRIORITY));
-        lookupElements.add(PrioritizedLookupElement.withPriority(TYPE, VALUE_TYPES_PRIORITY));
-        return lookupElements;
-    }
-
-    public static List<LookupElement> createAttachmentPointsAsLookups() {
-        List<LookupElement> lookupElements = new LinkedList<>();
-        lookupElements.add(createKeywordAsLookup(SERVICE));
-        lookupElements.add(createKeywordAsLookup(FUNCTION));
-        lookupElements.add(createKeywordAsLookup(ANNOTATION));
-        return lookupElements;
-    }
-
-    @NotNull
-    static List<LookupElement> getWorkerInteractionKeywords() {
-        List<LookupElement> keywords = new LinkedList<>();
-        keywords.add(createLookupElement("fork", null));
-        keywords.add(createLookupElement("default", null));
-        return keywords;
-    }
-
     private static LookupElement createKeywordAsLookup(@NotNull LookupElement lookupElement) {
         return PrioritizedLookupElement.withPriority(lookupElement, KEYWORDS_PRIORITY);
     }
@@ -484,50 +420,6 @@ public class BallerinaCompletionUtils {
         resultSet.addElement(createKeywordAsLookup(THROW));
 
         resultSet.addElement(createKeywordAsLookup(IN));
-    }
-
-    @NotNull
-    public static List<LookupElement> getValueKeywords() {
-        List<LookupElement> lookupElements = new LinkedList<>();
-        lookupElements.add(createKeywordAsLookup(TRUE));
-        lookupElements.add(createKeywordAsLookup(FALSE));
-        return lookupElements;
-    }
-
-    /**
-     * Returns keywords used in join conditions.
-     */
-    static List<LookupElement> getJoinConditionKeywords() {
-        List<LookupElement> lookupElements = new LinkedList<>();
-        lookupElements.add(createKeywordAsLookup(ALL));
-        lookupElements.add(createKeywordAsLookup(SOME));
-        return lookupElements;
-    }
-
-
-    @NotNull
-    static List<LookupElement> getFunctionSpecificKeywords() {
-        List<LookupElement> lookupElements = new LinkedList<>();
-        lookupElements.add(createKeywordAsLookup(RETURN));
-        return lookupElements;
-    }
-
-    @NotNull
-    static List<LookupElement> getResourceSpecificKeywords() {
-        List<LookupElement> lookupElements = new LinkedList<>();
-        return lookupElements;
-    }
-
-    public static LookupElement createPackageLookup(@NotNull PsiDirectory directory,
-                                                    @Nullable InsertHandler<LookupElement> insertHandler) {
-        return LookupElementBuilder.create(directory.getName()).withTypeText("Package")
-                .withIcon(BallerinaIcons.PACKAGE).withInsertHandler(insertHandler);
-    }
-
-    public static LookupElement createPackageLookup(@NotNull String packageName,
-                                                    @Nullable InsertHandler<LookupElement> insertHandler) {
-        return LookupElementBuilder.create(packageName).withTypeText("Package")
-                .withIcon(BallerinaIcons.PACKAGE).withInsertHandler(insertHandler);
     }
 
     public static LookupElement createPackageLookup(@NotNull PsiElement identifier,

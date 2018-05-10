@@ -251,7 +251,6 @@ public class BallerinaFormattingModelBuilder implements FormattingModelBuilder {
                 .around(NATIVE).spaceIf(true)
                 .around(RESOURCE).spaceIf(true)
                 .around(OBJECT).spaceIf(true)
-                //                .around(ANNOTATION).spaceIf(true)
                 .around(ENUM).spaceIf(true)
                 .around(WORKER).spaceIf(true)
                 .around(ENDPOINT).spaceIf(true)

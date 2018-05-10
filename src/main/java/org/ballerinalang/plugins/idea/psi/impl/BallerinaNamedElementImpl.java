@@ -122,25 +122,15 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
     @Nullable
     @Override
     public BallerinaTypeName getBallerinaType(@Nullable ResolveState context) {
-        //        if (context != null) return getGoTypeInner(context);
-        //        return CachedValuesManager.getCachedValue(this,
-        //                () -> CachedValueProvider.Result
-        //                        .create(getGoTypeInner(GoPsiImplUtil.createContextOnElement(this)),
-        //                                PsiModificationTracker.MODIFICATION_COUNT));
         return null;
     }
-    //
-    //    @Nullable
-    //    protected GoType getGoTypeInner(@Nullable ResolveState context) {
-    //        return findSiblingType();
-    //    }
 
     @Nullable
     @Override
     public BallerinaTypeName findSiblingType() {
         T stub = getStub();
         if (stub != null) {
-            //            return GoPsiTreeUtil.getStubChildOfType(getParentByStub(), BallerinaTypeName.class);
+            // Todo - Need this method?
         }
         return PsiTreeUtil.getNextSiblingOfType(this, BallerinaTypeName.class);
     }
@@ -151,6 +141,7 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
         return BallerinaCompositeElementImpl.processDeclarationsDefault(this, processor, state, lastParent, place);
     }
 
+    // Todo - Remove?
     @Override
     public ItemPresentation getPresentation() {
         // Todo - Update presentation
@@ -167,11 +158,6 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
                 @Override
                 public String getLocationString() {
                     BallerinaFile file = getContainingFile();
-                    String fileName = file.getName();
-                    //                    String importPath = ObjectUtils.chooseNotNull(file.getImportPath
-                    // (vendoringEnabled), file
-                    //                            .getPackageName());
-                    //                    return "in " + (importPath != null ? importPath + "/" + fileName : fileName);
                     return "";
                 }
 
@@ -213,29 +199,12 @@ public abstract class BallerinaNamedElementImpl<T extends BallerinaNamedStub<?>>
     @NotNull
     @Override
     public GlobalSearchScope getResolveScope() {
-        //        return isPublic() ? GoUtil.goPathResolveScope(this) : GoPackageUtil.packageScope(getContainingFile());
         return GlobalSearchScope.EMPTY_SCOPE;
     }
 
     @NotNull
     @Override
     public SearchScope getUseScope() {
-        //        if (this instanceof GoVarDefinition || this instanceof GoConstDefinition || this instanceof
-        // GoLabelDefinition) {
-        //            GoBlock block = PsiTreeUtil.getParentOfType(this, GoBlock.class);
-        //            if (block != null) return new LocalSearchScope(block);
-        //        }
-        //        if (!isPublic()) {
-        //            return GoPackageUtil.packageScope(getContainingFile());
-        //        }
-        //        GoSpecType parentType = PsiTreeUtil.getStubOrPsiParentOfType(this, GoSpecType.class);
-        //        if (parentType != null) {
-        //            GoTypeSpec typeSpec = GoPsiImplUtil.getTypeSpecSafe(parentType);
-        //            if (typeSpec != null && !StringUtil.isCapitalized(typeSpec.getName())) {
-        //                return GoPackageUtil.packageScope(getContainingFile());
-        //            }
-        //        }
-        //        return GoUtil.goPathUseScope(this, !(this instanceof GoMethodDeclaration));
         return GlobalSearchScope.allScope(getProject());
     }
 

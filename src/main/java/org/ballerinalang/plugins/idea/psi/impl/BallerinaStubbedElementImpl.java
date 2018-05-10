@@ -53,11 +53,6 @@ public abstract class BallerinaStubbedElementImpl<T extends StubBase<?>> extends
     @Nullable
     @Override
     public String getText() {
-        //    T stub = getStub();
-        //    if (stub instanceof TextHolder) {
-        //      String text = ((TextHolder)stub).getText();
-        //      if (text != null) return text;
-        //    }
         return super.getText();
     }
 

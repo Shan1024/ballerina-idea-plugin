@@ -47,64 +47,12 @@ public class BallerinaPackageNameReference extends BallerinaCachedReference<Ball
     @Nullable
     @Override
     public PsiElement resolveInner() {
-        //        Project project = myElement.getProject();
-        //
-        //        BallerinaNameReference nameReference = PsiTreeUtil.getParentOfType(myElement,
-        // BallerinaNameReference.class);
-        //
-        //        if (nameReference == null) {
-        //            return null;
-        //        }
-        //
-        //        Collection<BallerinaFunctionDefinition> elements;
-        //
-        //        if (nameReference.isInLocalPackage()) {
-        //
-        //            PsiFile originalFile = myElement.getContainingFile().getOriginalFile();
-        //            PsiDirectory parent = originalFile.getParent();
-        //            if (parent == null) {
-        //                return null;
-        //            }
-        //            List<VirtualFile> virtualFiles = Arrays.asList(parent.getVirtualFile().getChildren());
-        //
-        //            GlobalSearchScope scopeprocessors = GlobalSearchScope.filesScope(project, virtualFiles);
-        //            elements = StubIndex.getElements(BallerinaFunctionIndex.KEY, myElement.getText(), project,
-        // scopeprocessors,
-        //                    BallerinaFunctionDefinition.class);
-        //        } else {
-        //            // Todo - Get files in the corresponding package.
-        //            // Todo - Filter public elements? Or show a warning?
-        //            // Todo - Consider package version.
-        //            GlobalSearchScope scopeprocessors = GlobalSearchScope.fileScope(myElement.getContainingFile());
-        //            elements = StubIndex.getElements(BallerinaFunctionIndex.KEY, myElement.getText(), project,
-        // scopeprocessors,
-        //                    BallerinaFunctionDefinition.class);
-        //        }
-        //        BallerinaFunctionDefinition firstItem = ContainerUtil.getFirstItem(elements);
-        //        if (elements.isEmpty() || firstItem == null) {
-        //            return null;
-        //        }
-        //        return firstItem.getIdentifier();
-
-
         return reference.resolve();
-        //        return null;
     }
-
-    //    @Override
-    //    public boolean isReferenceTo(PsiElement element) {
-    //        return true;
-    //    }
 
     @NotNull
     @Override
     public Object[] getVariants() {
-        //        Project project = myElement.getProject();
-        //        GlobalSearchScope scopeprocessors = GlobalSearchScope.fileScope(myElement.getContainingFile());
-        //
-        //        Collection<String> keys = StubIndex.getInstance().getAllKeys(BallerinaFunctionIndex.KEY, project);
-
-        //        return keys.toArray(new String[keys.size()]);
         return new Object[0];
     }
 }

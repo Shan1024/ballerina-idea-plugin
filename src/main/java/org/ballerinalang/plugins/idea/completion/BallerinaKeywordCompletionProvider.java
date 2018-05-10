@@ -26,7 +26,7 @@ import org.jetbrains.annotations.NotNull;
  */
 public class BallerinaKeywordCompletionProvider extends CompletionProvider<CompletionParameters> {
 
-    public BallerinaKeywordCompletionProvider() {
+    BallerinaKeywordCompletionProvider() {
 
     }
 

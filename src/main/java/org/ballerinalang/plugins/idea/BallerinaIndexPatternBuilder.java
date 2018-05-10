@@ -54,7 +54,6 @@ public class BallerinaIndexPatternBuilder implements IndexPatternBuilder {
 
     @Override
     public int getCommentEndDelta(IElementType tokenType) {
-        //    return tokenType == GoParserDefinition.MULTILINE_COMMENT ? 2 : 0;
         return 0;
     }
 }

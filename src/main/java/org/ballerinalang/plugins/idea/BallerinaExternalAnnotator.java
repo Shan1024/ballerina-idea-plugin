@@ -54,10 +54,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 /**
- * An external annotator is an object that analyzes code in a document
- * and annotates the PSI elements with errors or warnings. Because such
- * analysis can be expensive, we don't want it in the GUI event loop. Jetbrains
- * provides this external annotator mechanism to run these analyzers out of band.
+ * External annotator is used to get diagnostics from an external tool and annotate the code. These operations can be
+ * time consuming. So this is executed after all the pending tasks are completed.
  */
 public class BallerinaExternalAnnotator extends ExternalAnnotator<BallerinaExternalAnnotator.Data, List<Diagnostic>> {
 
@@ -68,7 +66,7 @@ public class BallerinaExternalAnnotator extends ExternalAnnotator<BallerinaExter
     private static final Logger LOGGER = LoggerFactory.getLogger(BallerinaExternalAnnotator.class);
 
     /**
-     * Called first.
+     * This is called first to collect information.
      */
     @Override
     @Nullable
@@ -116,7 +114,7 @@ public class BallerinaExternalAnnotator extends ExternalAnnotator<BallerinaExter
     }
 
     /**
-     * Called 2nd. Look for trouble in file and return list of issues.
+     * This is called 2nd. This will retrieve diagnostics from the external tool.
      */
     @Nullable
     @Override
@@ -181,60 +179,11 @@ public class BallerinaExternalAnnotator extends ExternalAnnotator<BallerinaExter
         if (parent != null) {
             return parent.getName();
         }
-
-        //        // Get the package name specified in the file.
-        //        PackageDeclarationNode packageDeclarationNode = PsiTreeUtil.findChildOfType(file,
-        // PackageDeclarationNode.class);
-        //        if (packageDeclarationNode == null) {
-        //            return null;
-        //        }
-        //        FullyQualifiedPackageNameNode packageNameNode = PsiTreeUtil.getChildOfType(packageDeclarationNode,
-        //                FullyQualifiedPackageNameNode.class);
-        //        if (packageNameNode == null) {
-        //            return null;
-        //        }
-        //        String packageNameInFile = packageNameNode.getText();
-        //
-        //        // Get the parent directory.
-        //        PsiDirectory psiDirectory = file.getParent();
-        //        if (psiDirectory == null) {
-        //            return packageNameInFile;
-        //        }
-        //
-        //        // Package declaration might have an incorrect package declaration. So need to validate against
-        // directory name.
-        //        if (packageNameInFile.endsWith(psiDirectory.getName())) {
-        //            return packageNameInFile;
-        //        }
-        //
-        //        // Get the current module.
-        //        Module module = ModuleUtilCore.findModuleForPsiElement(file);
-        //        // Calculate the source root. This is used to get the relative directory path.
-        //        String sourceRoot = file.getProject().getBasePath();
-        //        if (module != null && FileUtil.exists(module.getModuleFilePath())) {
-        //            sourceRoot = StringUtil.trimEnd(PathUtil.getParentPath(module.getModuleFilePath()),
-        //                    BallerinaConstants.IDEA_CONFIG_DIRECTORY);
-        //        }
-        //
-        //        // Get the package according to the directory structure.
-        //        String directoryPath = psiDirectory.getVirtualFile().getPath();
-        //        if (sourceRoot == null) {
-        //            return packageNameInFile;
-        //        }
-        //        String packageName = directoryPath.replace(sourceRoot, "").replaceAll("[/\\\\]", "\\.");
-        //
-        //        // If the package name is empty, that means the file is in the project root.
-        //        if (packageName.isEmpty()) {
-        //            return null;
-        //        }
-        //
-        //        // Otherwise return the calculated package path.
-        //        return packageName;
         return ".";
     }
 
     /**
-     * Called 3rd to actually annotate the editor window.
+     * This is called 3rd to annotate the code in editor.
      */
     @Override
     public void apply(@NotNull PsiFile file, List<Diagnostic> diagnostics, @NotNull AnnotationHolder holder) {
@@ -310,13 +259,13 @@ public class BallerinaExternalAnnotator extends ExternalAnnotator<BallerinaExter
     /**
      * Helper class which contains data.
      */
-    public static class Data {
+    static class Data {
 
         Editor editor;
         PsiFile psiFile;
         String packageNameNode;
 
-        public Data(@NotNull Editor editor, @NotNull PsiFile psiFile, @Nullable String packageNameNode) {
+        Data(@NotNull Editor editor, @NotNull PsiFile psiFile, @Nullable String packageNameNode) {
             this.editor = editor;
             this.psiFile = psiFile;
             this.packageNameNode = packageNameNode;

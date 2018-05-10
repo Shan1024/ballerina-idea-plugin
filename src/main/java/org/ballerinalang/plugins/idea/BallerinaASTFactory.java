@@ -18,26 +18,18 @@
 package org.ballerinalang.plugins.idea;
 
 import com.intellij.core.CoreASTFactory;
-import com.intellij.lang.ParserDefinition;
 import com.intellij.psi.impl.source.tree.CompositeElement;
 import com.intellij.psi.impl.source.tree.LeafElement;
-import com.intellij.psi.impl.source.tree.LeafPsiElement;
-import com.intellij.psi.impl.source.tree.PsiCoreCommentImpl;
 import com.intellij.psi.tree.IElementType;
 import org.ballerinalang.plugins.idea.psi.BallerinaIdentifier;
 import org.ballerinalang.plugins.idea.psi.BallerinaTypes;
 import org.jetbrains.annotations.NotNull;
 
 /**
- * Ballerina AST factory which is responsible for creating leaf elements in the PSI tree.
+ * Responsible for creating leaf elements in the PSI tree.
  */
 public class BallerinaASTFactory extends CoreASTFactory {
-    /**
-     * Create an internal parse tree node. FileElement for root or a parse tree CompositeElement (not
-     * PSI) for the token.
-     * The FileElement is a parse tree node, which is converted to a PsiFile
-     * by {@link ParserDefinition#createFile}.
-     */
+
     @NotNull
     @Override
     public CompositeElement createComposite(IElementType type) {
@@ -45,21 +37,12 @@ public class BallerinaASTFactory extends CoreASTFactory {
     }
 
     /**
-     * Create a parse tree (AST) leaf node from a token. Doubles as a PSI leaf node.
-     * Does not see whitespace tokens.  Default impl makes {@link LeafPsiElement}
-     * or {@link PsiCoreCommentImpl} depending on {@link ParserDefinition#getCommentTokens()}.
+     * Create a Leaf node for the given element type.
      */
     @NotNull
     @Override
     public LeafElement createLeaf(@NotNull IElementType type, @NotNull CharSequence text) {
         if (type == BallerinaTypes.IDENTIFIER) {
-            // found an ID node; here we do not distinguish between definitions and references
-            // because we have no context information here. All we know is that
-            // we have an identifier node that will be connected somewhere in a tree.
-            //
-            // You can only rename, find usages, etc... on leaves implementing PsiNamedElement
-            //
-            // TODO: try not to create one for IDs under def subtree roots like vardef, function
             return new BallerinaIdentifier(type, text);
         } else if (type == BallerinaTypes.NEW) {
             return new BallerinaIdentifier(type, text);

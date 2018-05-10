@@ -17,7 +17,6 @@
 
 package org.ballerinalang.plugins.idea.psi.reference;
 
-import com.intellij.codeInsight.completion.CompletionUtil;
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiDirectory;
 import com.intellij.psi.PsiElement;
@@ -29,7 +28,6 @@ import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferen
 import com.intellij.util.IncorrectOperationException;
 import com.intellij.util.containers.ContainerUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Set;
 
@@ -38,43 +36,14 @@ import java.util.Set;
  */
 public class BallerinaCompletePackageNameReference extends FileReference {
 
-    public static final String PACKAGE_VERSION_REGEX = "v\\d+\\.\\d+\\.\\d+";
-
     public BallerinaCompletePackageNameReference(@NotNull FileReferenceSet fileReferenceSet, TextRange range, int index,
                                                  String text) {
         super(fileReferenceSet, range, index, text);
     }
 
-    public BallerinaCompletePackageNameReference(FileReference original) {
-        super(original);
-    }
-
-
-    //    @Override
-    //    protected Object createLookupItem(PsiElement candidate) {
-    //        if (candidate instanceof PsiDirectory) {
-    //            return BallerinaCompletionUtil.createPackageLookupElement((PsiDirectory) candidate);
-    //        }
-    //        return null;
-    //    }
-
     @NotNull
     @Override
     protected ResolveResult[] innerResolve(boolean caseSensitive, @NotNull PsiFile containingFile) {
-        //        if (isFirst()) {
-        //            if (".".equals(getCanonicalText())) {
-        //                PsiDirectory directory = getDirectory();
-        //                return directory != null ? new PsiElementResolveResult[]{new PsiElementResolveResult
-        // (directory)} : ResolveResult.EMPTY_ARRAY;
-        //            }
-        //            else if ("..".equals(getCanonicalText())) {
-        //                PsiDirectory directory = getDirectory();
-        //                PsiDirectory grandParent = directory != null ? directory.getParentDirectory() : null;
-        //                return grandParent != null ? new PsiElementResolveResult[]{new PsiElementResolveResult
-        // (grandParent)} : ResolveResult.EMPTY_ARRAY;
-        //            }
-        //        }
-
         String referenceText = getText();
         Set<ResolveResult> result = ContainerUtil.newLinkedHashSet();
         Set<ResolveResult> innerResult = ContainerUtil.newLinkedHashSet();
@@ -121,37 +90,9 @@ public class BallerinaCompletePackageNameReference extends FileReference {
         return super.handleElementRename(newElementName);
     }
 
-    private boolean isFirst() {
-        return getIndex() <= 0;
-    }
-
-    @Nullable
-    private PsiDirectory getDirectory() {
-        PsiElement originalElement = CompletionUtil.getOriginalElement(getElement());
-        PsiFile file = originalElement != null ? originalElement.getContainingFile() : getElement().getContainingFile();
-        return file.getParent();
-    }
-
     @NotNull
     @Override
     public Object[] getVariants() {
-
         return super.getVariants();
-        //        LinkedList<LookupElement> results = new LinkedList<>();
-        //
-        //        Collection<PsiFileSystemItem> contexts = getContexts();
-        //
-        //        for (PsiFileSystemItem context : contexts) {
-        //            PsiElement[] children = context.getChildren();
-        //            for (PsiElement child : children) {
-        //                if (!(child instanceof PsiDirectory) || ((PsiDirectory) child).getName().matches
-        // (PACKAGE_VERSION_REGEX)) {
-        //                    continue;
-        //                }
-        //                results.add(BallerinaCompletionUtil.createPackageLookupElement((PsiDirectory) child));
-        //            }
-        //        }
-        //
-        //        return results.toArray(new LookupElement[results.size()]);
     }
 }

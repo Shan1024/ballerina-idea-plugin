@@ -17,7 +17,6 @@
 
 package org.ballerinalang.plugins.idea.psi.reference;
 
-import com.intellij.openapi.fileTypes.FileType;
 import com.intellij.openapi.module.Module;
 import com.intellij.openapi.module.ModuleUtilCore;
 import com.intellij.openapi.project.Project;
@@ -28,7 +27,6 @@ import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.PsiFileSystemItem;
 import com.intellij.psi.PsiManager;
-import com.intellij.psi.PsiReferenceProvider;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReference;
 import com.intellij.psi.impl.source.resolve.reference.impl.providers.FileReferenceSet;
 import com.intellij.psi.util.PsiTreeUtil;
@@ -38,7 +36,6 @@ import org.ballerinalang.plugins.idea.psi.BallerinaImportDeclaration;
 import org.ballerinalang.plugins.idea.psi.BallerinaOrgName;
 import org.ballerinalang.plugins.idea.sdk.BallerinaSdkUtil;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -48,33 +45,6 @@ import java.util.LinkedHashSet;
  * Reference set used to resolve packages.
  */
 public class BallerinaCompletePackageNameReferenceSet extends FileReferenceSet {
-
-    public BallerinaCompletePackageNameReferenceSet(String str, @NotNull PsiElement element, int startInElement,
-                                                    PsiReferenceProvider provider, boolean caseSensitive,
-                                                    boolean endingSlashNotAllowed, @Nullable FileType[]
-                                                            suitableFileTypes) {
-        super(str, element, startInElement, provider, caseSensitive, endingSlashNotAllowed, suitableFileTypes);
-    }
-
-    public BallerinaCompletePackageNameReferenceSet(String str, @NotNull PsiElement element, int startInElement,
-                                                    PsiReferenceProvider provider, boolean caseSensitive,
-                                                    boolean endingSlashNotAllowed, @Nullable FileType[]
-                                                            suitableFileTypes,
-                                                    boolean init) {
-        super(str, element, startInElement, provider, caseSensitive, endingSlashNotAllowed, suitableFileTypes, init);
-    }
-
-    public BallerinaCompletePackageNameReferenceSet(String str, @NotNull PsiElement element, int startInElement,
-                                                    @Nullable PsiReferenceProvider provider, boolean isCaseSensitive) {
-        super(str, element, startInElement, provider, isCaseSensitive);
-    }
-
-    public BallerinaCompletePackageNameReferenceSet(@NotNull String str, @NotNull PsiElement element, int
-            startInElement,
-                                                    PsiReferenceProvider provider, boolean isCaseSensitive,
-                                                    boolean endingSlashNotAllowed) {
-        super(str, element, startInElement, provider, isCaseSensitive, endingSlashNotAllowed);
-    }
 
     public BallerinaCompletePackageNameReferenceSet(@NotNull PsiElement element) {
         super(element);
@@ -126,11 +96,6 @@ public class BallerinaCompletePackageNameReferenceSet extends FileReferenceSet {
     @Override
     protected Condition<PsiFileSystemItem> getReferenceCompletionFilter() {
         return psiFileSystemItem -> psiFileSystemItem.isDirectory() && !psiFileSystemItem.getName().startsWith(".");
-        //        //        if (!isRelativeImport()) {
-        //        // Note - This will disable suggestions since it will contain files as well.
-        //        return Conditions.alwaysFalse();
-        //        //        }
-        //        //        return super.getReferenceCompletionFilter();
     }
 
     public boolean absoluteUrlNeedsStartSlash() {

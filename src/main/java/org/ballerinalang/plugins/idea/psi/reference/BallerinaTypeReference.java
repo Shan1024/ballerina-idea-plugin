@@ -127,10 +127,6 @@ public class BallerinaTypeReference extends BallerinaCachedReference<BallerinaId
                 if (parent == null) {
                     return true;
                 }
-                //            PsiDirectory superParent = parent.getParent();
-                //            if (superParent == null) {
-                //                return true;
-                //            }
                 if (!isAContentRoot(parent)) {
                     return recursivelyFind(processor, parent, root);
                 }
